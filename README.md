@@ -91,3 +91,24 @@ Then, from within your project folder:
 npm run build
 surge public my-project.surge.sh
 ```
+
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-decoupled-document": "^16.0.0",
+    "d3": "^5.14.2",
+    "d3-drag": "^1.2.5",
+    "d3-force": "^2.0.1",
+    "d3-scale": "^3.2.1",
+    "d3-scale-chromatic": "^1.5.0",
+    "d3-selection": "^1.4.1",
+    "flatpickr": "^4.6.3",
+    "lodash.topath": "^4.5.2",
+    "path-to-regexp": "^6.1.0",
+    "qs": "^6.9.1",
+    "regexparam": "^1.3.0",
+    "s-date-range-picker": "^0.3.0",
+    "svelte-calendar": "^1.2.2",
+    "svelte-css-vars": "^0.0.1",
+    "svelte-loadable": "^1.3.1",
+  },
+  "devDependencies": {
+    "@rollup/plugin-json": "^4.0.0",

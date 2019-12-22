@@ -16,6 +16,10 @@
     "svelte": "^3.16.5"
   },
   "dependencies": {
+    "clsx": "^1.0.4",
+    "jsoneditor": "^8.1.0",
+    "ramda": "^0.26.1",
+    "ramda-adjunct": "^2.23.0",
     "sirv-cli": "^0.4.5",
     "svelte-routing": "^1.4.0"
   }
