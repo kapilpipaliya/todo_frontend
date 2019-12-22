@@ -2,14 +2,15 @@
   import qs from "qs";
   import {Table} from './components/index.js'
   import {getTableOptions} from './modules/table_options.js'
-  export let table;
+  export let currentRoute
   export let location;
   
   let queryParams;
   let options = {}
   $: {
 	//queryParams = qs.parse(location.search.substr(1));
-  queryParams = table
+  console.log(currentRoute)
+  queryParams = currentRoute.namedParams.table
   options = getTableOptions(queryParams)
   console.log(options)
   }

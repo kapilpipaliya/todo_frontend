@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store'
 
-import { notifier } from '../routes/_components/svelte-notifications/src/index.js'
+import { notifier } from '../routes/components/svelte-notifications/src/index.js'
 import { goto } from '@sapper/app'
 import { getCookieValue } from './functions.js'
 //fix when i press two times submit main table not show data

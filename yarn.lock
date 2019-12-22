@@ -1193,10 +1193,12 @@ supports-color@^6.1.0:
   dependencies:
     has-flag "^3.0.0"
 
-svelte-routing@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/svelte-routing/-/svelte-routing-1.4.0.tgz#09285f3c7b19f509dfb1289fbc1235b348aa7d80"
-  integrity sha512-09ypn0/vD2PcuyZEEocUHFgi7kvLOxSoUUuJZ4j3p4Y4sT/kMIWtHIRpnLdsr8bQ+sGo77sbEkO+av6yd1RjPg==
+svelte-router-spa@^5.1.1:
+  version "5.1.1"
+  resolved "https://registry.yarnpkg.com/svelte-router-spa/-/svelte-router-spa-5.1.1.tgz#95e11d6a8100277c435e5a6e7e58b4ceb0554e6f"
+  integrity sha512-iv++c/2HpWyHwzbHn26tyeysXh79GW01NI8BbA7yqkj3/pgP1K/n5dCFzj0+pTDO8+R7AQp1G77z+dtrv3F3yw==
+  dependencies:
+    url-params-parser "^1.0.1"
 
 svelte@^3.16.5:
   version "3.16.5"
@@ -1276,6 +1278,11 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/urix/-/urix-0.1.0.tgz#da937f7a62e21fec1fd18d49b35c2935067a6c72"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+url-params-parser@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/url-params-parser/-/url-params-parser-1.0.1.tgz#0cf144f60a6ad51710fa21e30239025111991e96"
+  integrity sha512-S2IaWGBTKqVktOada1jt9K2zCDKfCE5YST5eWMnk/1tSHn0aRRFN6w+xKoWfy/seiEkz7udWpQJdemckJiIvwg==
 
 use@^3.1.0:
   version "3.1.1"
