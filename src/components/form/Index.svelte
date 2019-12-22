@@ -1,0 +1,22 @@
+<script>
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray } from '../../_modules/functions.js'
+  import { Form, SubmitButton, CancelButton } from '../index.js'
+  export let mutateEvents = () => 0
+  export let key = 0
+  export let schema_key
+  const f = new FormArray(S, key, mutateEvents(key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled
+  onMount(() => {$mounted = true })
+  onDestroy(() => {f.onDestroy() })
+  $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }
+  function funcBindingOnce () {if (!$binded) {f.bindAll(); $binded = true; f.fetch();}  }
+</script>
+
+<Form
+	save={f.onSave}
+    {key}
+    isSaving={$isSaving}
+    form_disabled={$form_disabled}
+	bind:headers={$headers}
+	bind:form={$form}
+	on:close
+/>
