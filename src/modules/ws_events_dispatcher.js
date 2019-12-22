@@ -241,7 +241,8 @@ export class ServerEventsDispatcher {
   dispatch(event, message) {
     const chain = this.callbacks[JSON.stringify(event)]
     if (typeof chain == 'undefined') return // no callbacks for this event
-    for (let i = 0; i < chain.length; i++) {
+    const length = chain.length;
+    for (let i = 0; i < length; i++) {
       chain[i][1](message)
       if (chain[i][0] == 0) {
         this.callbacks[JSON.stringify(event)] = []
