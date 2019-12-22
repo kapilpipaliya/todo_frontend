@@ -29,7 +29,6 @@ css.subscribe(value => {
   console.log(value)
 })
 
-if (process.browser) {
   S.bind$(
     [et.get, e.account, e.css_event, 0],
     function(data) {
@@ -38,4 +37,3 @@ if (process.browser) {
     },
     1
   )
-}

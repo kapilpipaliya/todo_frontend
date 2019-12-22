@@ -10,9 +10,7 @@ account.subscribe(value => {
   console.log(value)
 })
 
-if (process.browser) {
 	S.bind$(events.cookie_event, (d) => {
     
   }, 1)
 
-}

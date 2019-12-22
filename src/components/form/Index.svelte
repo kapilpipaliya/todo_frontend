@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray } from '../../_modules/functions.js'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray } from '../../modules/functions.js'
   import { Form, SubmitButton, CancelButton } from '../index.js'
   export let mutateEvents = () => 0
   export let key = 0

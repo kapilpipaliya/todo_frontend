@@ -8,9 +8,7 @@ menu.subscribe(value => {
   console.log(value)
 })
 
-if (process.browser) {
   S.bind$(events.menu_event, (d) => {
     
   }, 1)
 
-}

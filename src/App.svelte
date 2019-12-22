@@ -1,5 +1,17 @@
 <script>
+	import Css from './components/Css.svelte'
+
+	import {account} from './modules/global_stores/account.js'
+	import {cookie} from './modules/global_stores/cookie.js'
+	import {member_settings} from './modules/global_stores/member_settings.js'
+	import {menu} from './modules/global_stores/menu.js'
+	import {navigation} from './modules/global_stores/navigation.js'
+	import {notification} from './modules/global_stores/notification.js'
+	import {current_time} from './modules/global_stores/time_store.js'
+	// subscribe here with 
+	// LoginStatus.
 	import { Router, Route, Link } from "svelte-routing"
+	import Page from './Page1.svelte'
 	// import qs from 'qs'
     // import * as R from 'ramda'
 
@@ -21,28 +33,40 @@
   */
 </script>
 
+<Css/>
+
 
 <Router>
   <nav>
     <Link to="/">Home</Link>
     <Link to="/about">About</Link>
-    <a href="/account/register">Register </a>
 
-	<a href="/account/login">Log in </a>
-	<a href="/account/logout">Logout </a>
+    <Link to="/account/register">Register </Link>
+	<Link to="/account/login">Log in </Link>
+	<Link to="/account/logout">Logout </Link>
 
 	<div>
-	  <a href="#/admin" >Admin </a>
-	  <a href="#/admin/design" >Design </a>
+	  <Link to="/admin" >Admin </Link>
+	  <Link to="/admin/design" >Design </Link>
 	  <br>Global:<br>
-	  <a href="#/page?page=schema" >Schema </a>
-	  <a href="#/page?page=confirm">Confirm </a>
-	  <a href="#/page?page=session">Session </a>
-	  <a href="#/page?page=translation" >Translation </a>
-	  <a href="#/page?page=user" >user </a>
+	  <Link to="/page/schema" >Schema </Link>
+	  <Link to="/page/confirm">Confirm </Link>
+	  <Link to="/page/session">Session </Link>
+	  <Link to="/page/translation" >Translation </Link>
+	  <Link to="/page/user" >user </Link>
 	</div>
   </nav>
   <main class="app">
+    <Route path="/account/register">Register</Route>
+    <Route path="/account/login">Login</Route>
+    <Route path="/account/logout">Logout</Route>
+
+    <Route path="/admin">Admin</Route>
+    <Route path="/admin/design">Design</Route>
+
+    <Route path="/page/:table" component="{Page}" />
+
+
     <Route path="/about">About</Route>
     <Route path="/">Home</Route>
   </main>

@@ -9,9 +9,8 @@ notification.subscribe(value => {
   console.log(value)
 })
 
-if (process.browser) {
+
 	S.bind$(events.notification_event, (d) => {
     
   }, 1)
 
-}

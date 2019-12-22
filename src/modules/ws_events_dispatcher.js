@@ -42,23 +42,13 @@ export class ServerEventsDispatcher {
     this.callbacks = {}
   }
   setupConnection() {
-    if (!process.browser) {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-    }
-    const c = process.browser
-      ? undefined
-      : { headers: { Cookie: this.req.headers.cookie || null } }
-
-    this.conn = new WebSocket(this.path, [], c)
+    this.conn = new WebSocket(this.path, [])
     // dispatch to the right handlers
     this.conn.onmessage = this.onmessage
 
     this.conn.onclose = this.onclose
     //this.conn.onopen = this.onopen;
     this.conn.addEventListener('open', this.onopen)
-    if (!process.browser) {
-      console.log("Avoid using this on server")
-    }
   }
   destroy() {
     this.conn.onmessage = undefined

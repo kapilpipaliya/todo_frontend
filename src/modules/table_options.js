@@ -1,9 +1,9 @@
 
 import {event_type as et, events as e} from './events.js'
 // the component cant include this file because of cyclic depandancy
-import SchemaForm from '../global/_SchemaForm.svelte'
-import TranslationForm from '../global/_TranslationForm.svelte'
-import GeneralForm from '../_components/form/Index.svelte'
+import SchemaForm from '../global/SchemaForm.svelte'
+import TranslationForm from '../global/TranslationForm.svelte'
+import GeneralForm from '../components/form/Index.svelte'
 
 // global events
 // fix this functions to accept arguments, based on it return get or subscription
@@ -164,7 +164,7 @@ export const tableOptions = {
 }
 
 export const getTableOptions =  (query) => { 
-  const o = tableOptions[query.page || query.table];
+  const o = tableOptions[query.page || query.table || query];
   if (o) {
     o.table.query = query
     return o

@@ -15,7 +15,6 @@ function saveCookie(name, value, max_age) {
 	document.cookie = `${name}=${value}; path=/; max-age=${max_age}`
 }
 
-if (process.browser) {
   S.bind$(
     [et.get, e.account, e.cookie_event, 0],
     function(data) {
@@ -25,4 +24,3 @@ if (process.browser) {
     },
     1
   )
-}

@@ -4,7 +4,7 @@
   import { flip } from 'svelte/animate'
 
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { S, event_type, events as e } from '../../_modules/functions.js'
+  import { S, event_type, events as e } from '../../modules/functions.js'
 
   import SubmitButton from '../_SubmitButton.svelte'
   import CancelButton from '../_CancelButton.svelte'

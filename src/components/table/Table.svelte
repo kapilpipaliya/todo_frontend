@@ -10,8 +10,8 @@
   const dp = createEventDispatcher()
   import * as R from 'ramda'
 
-  import { S, ws_connected, event_type, events as e } from '../../_modules/functions.js'
-  import { css } from '../../_modules/global_stores/css.js'
+  import { S, ws_connected, event_type, events as e } from '../../modules/functions.js'
+  import { css } from '../../modules/global_stores/css.js'
   // import Card from "../components/Card.svelte";
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
@@ -87,11 +87,9 @@
     $css.table.css.count = $css.table.css.count + 1
   })
   onDestroy(() => {
-    if (process.browser) {
       S.trigger([[unsub, {}]])
       S.unbind_(events)
       $css.table.css.count = $css.table.css.count - 1
-    }
   })
 
   const bindOnce = () => {

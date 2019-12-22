@@ -31,8 +31,8 @@ const prod_conf = {
 }
 export const domainName = 'k.com:3000'
 
-export const server =
-  process.env.NODE_ENV === 'development' ? dev_conf : prod_conf
+// export const server = process.env.NODE_ENV === 'development' ? dev_conf : prod_conf
+export const server = dev_conf
 
 export const product_img_url = `${server.http_proto}://${server.domain}:${server.port}/http/v1/user/download_id`
 export const thumb_url = `${server.http_proto}://${server.domain}:${server.port}/http/v1/user/thumb_id`
@@ -42,47 +42,15 @@ export const ws_madmin = `${server.ws_proto}://${server.domain}:${server.port}/m
 export const ws_todo = `${server.ws_proto}://${server.domain}:${server.port}/todo`
 
 let ws_
-if (process.browser) {
-  ws_ = new ServerEventsDispatcher(ws_todo)
-  ws_.bind(
-    ['take_image_meta'],
-    function(data) {
-      ws_.event = data[0] // save value on class.
-    },
-    1
-  )
-
-} else {
-  ws_ = ServerEventsDispatcher
-}
+ws_ = new ServerEventsDispatcher(ws_todo)
+ws_.bind(
+  ['take_image_meta'],
+  function(data) {
+    ws_.event = data[0] // save value on class.
+  },
+  1
+)
 export const S = ws_
-
-const e_category = all('category', 111)
-export const menuCategories = S =>
-  new Promise((resolve, reject) => {
-    S.bind_(
-      e_category,
-      ([d]) => {
-        resolve(d)
-      },
-      [
-        [null, '=NULL'],
-        [null, null, null, null, 0],
-      ]
-    )
-  })
-const e_entity = all('entity', 100)
-export const getUser = (S, id) =>
-  new Promise((resolve, reject) => {
-    S.bind_(
-      e_entity,
-      ([d]) => {
-        resolve(d)
-        S.unbind(e_entity)
-      },
-      [[`=${id}`]]
-    )
-  })
 
 export const productImageBase = async (S, id, version = 0) => {
   if (false && process.browser) {
@@ -441,10 +409,8 @@ class FormBasic {
     this.er.set('')
   }
   onDestroy() {
-    if (process.browser) {
       if (this.key && this.unsub_evt) this.S.trigger([[this.unsub_evt, {}]])
       this.S.unbind_(this.events)
-    }
   }
   fetch() {
     const filter = [`="${this.key}"`]
