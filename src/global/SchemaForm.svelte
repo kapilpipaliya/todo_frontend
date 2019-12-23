@@ -46,9 +46,7 @@
     f.onSave()
   }
 </script>
-<svelte:head>
-    <link href="jsoneditor.min.css" rel="stylesheet" type="text/css">
-</svelte:head>
+
 <form on:submit|preventDefault={onSave}>
   <label>
     <span>Key</span>
