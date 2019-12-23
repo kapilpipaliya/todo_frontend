@@ -3,7 +3,7 @@
   import {Table} from './components/index.js'
   import {getTableOptions} from './modules/table_options.js'
   export let currentRoute
-  export let location;
+  //export let location;
   
   let queryParams;
   let options = {}

@@ -11,7 +11,114 @@
 	// subscribe here with 
 	// LoginStatus.
 	import { Router } from 'svelte-router-spa'
-    import { routes } from './routes'
+	import Login from './account/login.svelte'
+	import PublicIndex from './views/public/index.svelte'
+	import PublicLayout from './views/public/layout.svelte'
+	import AdminLayout from './views/admin/layout.svelte'
+	import AdminIndex from './views/admin/index.svelte'
+	import EmployeesIndex from './views/admin/employees/index.svelte'
+  	import Page from './Page.svelte'
+	import * as R from 'ramda'
+	function userIsAdmin() {
+	  return true
+	  //check if user is admin and returns true or false
+	}
+	let routes = [
+	  {
+	    name: '/',
+	    component: "PublicLayout"
+	  },
+	  { name: 'login', component: "Login", layout: "PublicLayout" },
+	  {
+	    name: 'admin',
+	    component: "AdminLayout",
+	    onlyIf: { guard: "userIsAdmin", redirect: '/login' },
+	    nestedRoutes: [
+	      { name: 'index', component: "AdminIndex" },
+	      {
+	        name: 'employees',
+	        component: '',
+	        nestedRoutes: [
+	          { name: 'index', component: "EmployeesIndex" }
+	        ]
+	      },
+	      {name: '/design', component: "Login"},
+
+	    ]
+	  },
+	  {name: 'account/login', component: "Login"},
+	  {name: 'account/register', component: "Login"},
+	  {name: 'account/logout', component: "Login"},
+
+	  {name: 'page/:table', component: "Page"},
+	]
+	const modifyComp = (obj)=> {
+	    switch (obj.component) {
+	    case "PublicLayout":
+	      obj.component = PublicLayout;
+	      break;
+	    case "AdminLayout":
+	      obj.component = AdminLayout;
+	      break;
+	    case "Login":
+	      obj.component = Login;
+	      break;
+	    case "AdminIndex":
+	      obj.component = AdminIndex;
+	      break;
+	    case "EmployeesIndex":
+	      obj.component = EmployeesIndex;
+	      break;      
+	    case "Page":
+	      obj.component = Page;
+	      break;  
+	  }
+	  return obj
+	}
+	const modifyLayout = (obj)=>{
+	      switch (obj.layout) {
+	    case "PublicLayout":
+	      obj.layout = PublicLayout;
+	      break;
+	    case "AdminLayout":
+	      obj.component = AdminLayout;
+	      break;
+	    case "Login":
+	      obj.layout = Login;
+	      break;
+	    case "AdminIndex":
+	      obj.layout = AdminIndex;
+	      break;
+	    case "EmployeesIndex":
+	      obj.layout = EmployeesIndex;
+	      break;      
+	    case "Page":
+	      obj.component = Page;
+	      break;  
+	  }
+	  return obj
+	}
+	const modifyGuard = (obj) => {
+	  if(obj.onlyIf) {
+	    switch (obj.onlyIf.guard) {
+	      case "userIsAdmin":
+	        obj.onlyIf.guard = userIsAdmin;
+	        break;    
+	    }
+	  }
+	  return obj
+	}
+	const modifyObj = (obj) => {
+		obj = modifyComp(obj)
+	  obj = modifyLayout(obj)
+	  obj = modifyGuard(obj)
+	  if(obj.nestedRoutes){
+	    obj.nestedRoutes = R.map((x)=> modifyObj(x), obj.nestedRoutes)
+	  }
+	  return obj
+	}
+
+	routes = R.map((x)=> modifyObj(x), routes)
 	
 
 	// import qs from 'qs'
