@@ -16,6 +16,8 @@
 	import { Router } from 'svelte-router-spa'
 	// Routes:
 	import Login from './account/login.svelte'
+	import Logout from './account/logout.svelte'
+	import Register from './account/register.svelte'
 	import PublicIndex from './views/public/index.svelte'
 	import PublicLayout from './views/public/layout.svelte'
 	import AdminLayout from './views/admin/layout.svelte'
@@ -49,11 +51,11 @@
 	      	}
 	      }, 1)
 	      binded = true
-	    }
-	    S.trigger([
+          S.trigger([
 	    	[form_evt, ['routes']],
 	    	[menu_evt, ['menu']],
 	    	]) 
+	    }
   	}
 
 	function userIsAdmin() {
@@ -61,49 +63,16 @@
 	  return true
 	}
 
-	const modifyComp = (obj)=> {
-	    switch (obj.component) {
-	    case "PublicLayout":
-	      obj.component = PublicLayout;
-	      break;
-	    case "AdminLayout":
-	      obj.component = AdminLayout;
-	      break;
-	    case "Login":
-	      obj.component = Login;
-	      break;
-	    case "AdminIndex":
-	      obj.component = AdminIndex;
-	      break;
-	    case "EmployeesIndex":
-	      obj.component = EmployeesIndex;
-	      break;      
-	    case "Page":
-	      obj.component = Page;
-	      break;  
-	  }
-	  return obj
-	}
-	const modifyLayout = (obj)=>{
-	      switch (obj.layout) {
-	    case "PublicLayout":
-	      obj.layout = PublicLayout;
-	      break;
-	    case "AdminLayout":
-	      obj.component = AdminLayout;
-	      break;
-	    case "Login":
-	      obj.layout = Login;
-	      break;
-	    case "AdminIndex":
-	      obj.layout = AdminIndex;
-	      break;
-	    case "EmployeesIndex":
-	      obj.layout = EmployeesIndex;
-	      break;      
-	    case "Page":
-	      obj.component = Page;
-	      break;  
+	const modifyComp = (key, obj)=> {
+	    switch (obj[key]) {
+	    case "PublicLayout": obj[key] = PublicLayout; break;
+	    case "AdminLayout": obj[key] = AdminLayout; break;
+	    case "Register": obj[key] = Register; break;
+	    case "Login": obj[key] = Login; break;
+	    case "Logout": obj[key] = Logout; break;
+	    case "AdminIndex": obj[key] = AdminIndex; break;
+	    case "EmployeesIndex": obj[key] = EmployeesIndex; break;      
+	    case "Page": obj[key] = Page; break;  
 	  }
 	  return obj
 	}
@@ -118,8 +87,8 @@
 	  return obj
 	}
 	const modifyObj = (obj) => {
-		obj = modifyComp(obj)
-	  obj = modifyLayout(obj)
+	  obj = modifyComp('component', obj)
+	  obj = modifyComp('layout', obj)
 	  obj = modifyGuard(obj)
 	  if(obj.nestedRoutes){
 	    obj.nestedRoutes = R.map((x)=> modifyObj(x), obj.nestedRoutes)

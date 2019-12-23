@@ -6,7 +6,7 @@
     isLoggedIn,
     event_type,
     events,
-  } from '../_modules/functions.js'
+  } from '../modules/functions.js'
 
   export async function preload(page, session) {
     let S
@@ -41,10 +41,10 @@
 
 <script>
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import GeneralForm from '../_components/form/Index.svelte'
+  import GeneralForm from '../components/form/Index.svelte'
 
   const dp = createEventDispatcher()
-  import { S } from '../_modules/functions.js'
+  import { S } from '../modules/functions.js'
 
   export let query = {}
   export let headerData = {}

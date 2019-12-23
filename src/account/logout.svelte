@@ -6,7 +6,7 @@
     isLoggedIn,
     event_type,
     events,
-  } from '../_modules/functions.js'
+  } from '../modules/functions.js'
   export async function preload(page, session) {
     let S
     if (typeof S_ == 'function') {
@@ -21,9 +21,8 @@
 <script>
   // same as confirm page.
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { goto } from '@sapper/app'
 
-  import { S, ws_connected } from '../_modules/functions.js'
+  import { S, ws_connected } from '../modules/functions.js'
 
   // export let categories = [];
   // export let footerData = {};
@@ -72,15 +71,13 @@
     er = 'Please wait ...'
   })
   onDestroy(() => {
-    if (process.browser) {
       S.unbind_(fns)
-    }
   })
 
   // some functions:============
   function saveCookie(d) {
     document.cookie = `time=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
-    goto(d.redirect_url)
+    //goto(d.redirect_url) // fix this
   }
 
   function onLogout([d]) {
@@ -107,7 +104,7 @@
   <div class="signin">
     <p>
       Sign in
-      <a href="account/login">Sign in</a>
+      <a href="/account/login">Sign in</a>
       .
     </p>
   </div>
