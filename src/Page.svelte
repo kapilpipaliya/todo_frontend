@@ -9,11 +9,15 @@
   let options = {}
   $: {
 	//queryParams = qs.parse(location.search.substr(1));
-  console.log(currentRoute)
   queryParams = currentRoute.namedParams.table
   options = getTableOptions(queryParams)
-  console.log(options)
   }
+  /*
+  export let accountFilter = {};
+  let customFilter = {
+  1 : accountFilter
+  };
+  */
 </script>
 
 <svelte:head>
