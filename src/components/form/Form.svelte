@@ -62,33 +62,12 @@ $: {
 onMount(()=> {
    mounted = true
 })
-
-</script>
-<form on:submit|preventDefault={save}>
-{#each form as f, i}
-  <label>
+/*
 			{#if types[i] === 'button'}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
 					 type='button'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'color'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='color'
 					 bind:value={form[i]}
 					 required={required[i]} 
 					 placeholder={placeholder[i]}
@@ -134,57 +113,7 @@ onMount(()=> {
 					 style={style[i]} 
 					 class={clsx(classe[i])}
 					 {...props[i]}
-				/>
-				{:else if types[i] === 'email'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='email'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'file'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='file'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'hidden'}
-    			<input 
-					 name={labels[i]}
-					 type='hidden'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
+				/>	
 				{:else if types[i] === 'image'}
 				<span>{labels[i]}</span>
     			<input 
@@ -220,129 +149,11 @@ onMount(()=> {
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'number'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='number'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'password'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='password'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'range'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='range'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'reset'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='reset'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'search'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='search'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'submit'}
-    			<input 
-					 name={labels[i]}
-					 type='submit'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
 				{:else if types[i] === 'tel'}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
 					 type='tel'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'text'}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='text'
 					 bind:value={form[i]}
 					 required={required[i]} 
 					 placeholder={placeholder[i]}
@@ -406,6 +217,181 @@ onMount(()=> {
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
+				{:else if types[i] === 'submit'}
+    			<input 
+					 name={labels[i]}
+					 type='submit'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+*/
+</script>
+<form on:submit|preventDefault={save}>
+{#each form as f, i}
+  <label>
+				{#if types[i] === 'color'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='color'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'email'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='email'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'file'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='file'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'hidden'}
+    			<input 
+					 name={labels[i]}
+					 type='hidden'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'number'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='number'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'password'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='password'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'range'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='range'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+				{:else if types[i] === 'search'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='search'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+
+				{:else if types[i] === 'text'}
+				<span>{labels[i]}</span>
+    			<input 
+					 name={labels[i]}
+					 type='text'
+					 bind:value={form[i]}
+					 required={required[i]} 
+					 placeholder={placeholder[i]}
+					 autocomplete={false}
+					 disabled={form_disabled ? true : disabled[i]}
+					 readonly={readonly[i]}
+					 title={title[i]}
+					 bind:this={doms[i]}
+					 style={style[i]} 
+					 class={clsx(classe[i])}
+					 {...props[i]}
+				/>
+
 				{:else if types[i] === 'checkbox' && !Array.isArray(form[i])}
 				<span>{labels[i]}</span>
     			<input 
@@ -418,23 +404,6 @@ onMount(()=> {
 					 disabled={form_disabled ? true : disabled[i]}
 					 readonly={readonly[i]}
 					 title={title[i]+'a'}
-					 bind:this={doms[i]}
-					 style={style[i]} 
-					 class={clsx(classe[i])}
-					 {...props[i]}
-				/>
-				{:else if types[i] === 'radio' && !Array.isArray(form[i])}
-				<span>{labels[i]}</span>
-    			<input 
-					 name={labels[i]}
-					 type='radio'
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 placeholder={placeholder[i]}
-					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
-					 title={title[i]}
 					 bind:this={doms[i]}
 					 style={style[i]} 
 					 class={clsx(classe[i])}
