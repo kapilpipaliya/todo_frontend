@@ -19,6 +19,29 @@
 	import EmployeesIndex from './views/admin/employees/index.svelte'
   	import Page from './Page.svelte'
 	import * as R from 'ramda'
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from './modules/functions.js'
+
+	let mounted = false
+	let er = ''
+	let binded = false
+	let form_evt = [et.get, e.my, e.my_form_schema_get, 9999 ]
+	onMount(async () => {
+    	mounted = true
+  	})
+  	onDestroy(() => {S.trigger([[form_evt, {}]]) })
+  	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
+  	const funcBindingOnce = () => {
+	    if (!binded) {
+	      S.bind$(form_evt, (d) => {
+	      	if(d.length && d[0].routes){
+	      		
+	      	}
+	      }, 1)
+	      binded = true
+	    }
+	    S.trigger([[form_evt, ['routes']]]) 
+  	}
+
 	function userIsAdmin() {
 	  return true
 	  //check if user is admin and returns true or false
@@ -162,5 +185,6 @@
 	  <a href="/page/session">Session </a>
 	  <a href="/page/translation" >Translation </a>
 	  <a href="/page/user" >user </a>
+	  <a href="/page/note" >note </a>
 	</div>
   </nav>
