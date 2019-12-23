@@ -2,6 +2,7 @@
 	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from './modules/functions.js'
 	import * as R from 'ramda'
 	import Css from './components/Css.svelte'
+	import MenuF from './components/MenuF.svelte'
 
 	// subscribe here with  LoginStatus too.
 	import {account} from './modules/global_stores/account.js'
@@ -42,8 +43,9 @@
 	      	}
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
-	      	if(d[0].length && d[0][0].menu){
-	      		console.log(d[0][0].menu)
+	      	if(d[0].length && d[0][0]){
+	      		menus = d[0][0]
+	      		console.log(menus)
 	      	}
 	      }, 1)
 	      binded = true
@@ -134,28 +136,25 @@
 
 <Css/>
 
+<nav>
+	<div>
+		<a href="/">Home</a>
+		<a href="/about">About</a>
+	</div>
+
+	{#if menus.navData}
+		<MenuF menu={menus.navData.account}/>
+	{/if}
+
+	{#if menus.navData}
+		<MenuF menu={menus.navData.global}/>
+	{/if}
+
+	{#if menus.navData}
+		<MenuF menu={menus.navData.admin}/>
+	{/if}
+</nav>
+
 {#if routes.length}
 	<Router {routes} />
 {/if}
-
-
-<nav>
-<a href="/">Home</a>
-<a href="/about">About</a>
-
-<a href="/account/register">Register </a>
-<a href="/account/login">Log in </a>
-<a href="/account/logout">Logout </a>
-
-<div>
-  <a href="/admin" >Admin </a>
-  <a href="/admin/design" >Design </a>
-  <br>Global:<br>
-  <a href="/page/schema" >Schema </a>
-  <a href="/page/confirm">Confirm </a>
-  <a href="/page/session">Session </a>
-  <a href="/page/translation" >Translation </a>
-  <a href="/page/user" >user </a>
-  <a href="/page/note" >note </a>
-</div>
-</nav>
