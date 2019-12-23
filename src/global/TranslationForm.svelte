@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, schemaMutateEvents, Form } from '../modules/functions.js'
-  import JSONEditor from 'jsoneditor'
+  import { beforeUpdate, tick } from 'svelte';
   import { SubmitButton, CancelButton } from '../components/index.js'
   export let key = 0
   const f = new Form(S, key, schemaMutateEvents(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
@@ -12,6 +12,10 @@
             mode: 'code',
             modes: ["code", "tree"],
           };
+    await import(
+      "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js"
+    );
+    await tick();
     editorform = new JSONEditor(jsoneditorformDom, options, $form.form || {})
     $mounted = true
   })
@@ -35,7 +39,9 @@
     f.onSave()
   }
 </script>
-
+<svelte:head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.css" rel="stylesheet" type="text/css">
+</svelte:head>
 <form on:submit|preventDefault={onSave}>
   <label>
     <span>Key</span>

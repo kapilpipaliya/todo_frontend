@@ -21,7 +21,4 @@
 		{/if}
 {/each}
 
-
-    <link href="/jsoneditor.min.css" rel="stylesheet" type="text/css">
-
 </svelte:head>

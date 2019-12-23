@@ -1,7 +1,7 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, schemaMutateEvents, Form } from '../modules/functions.js'
-  import JSONEditor from 'jsoneditor'
   import { SubmitButton, CancelButton } from '../components/index.js'
+  import { beforeUpdate, tick } from 'svelte';
   export let key = 0
   const f = new Form(S, key, schemaMutateEvents(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   // should make seperate json component
@@ -17,6 +17,12 @@
             mode: 'code',
             modes: ["code", "tree"],
           };
+
+    await import(
+      "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js"
+    );
+    await tick();
+
     editorform = new JSONEditor(jsoneditorformDom, options, $form.form || {})
     editorFields = new JSONEditor(jsoneditorFieldsDom, options, $form.columns || {})
     editorcolumns = new JSONEditor(jsoneditorcolumnsDom, options, $form.columns || {})
@@ -46,7 +52,9 @@
     f.onSave()
   }
 </script>
-
+<svelte:head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.css" rel="stylesheet" type="text/css">
+</svelte:head>
 <form on:submit|preventDefault={onSave}>
   <label>
     <span>Key</span>
@@ -60,11 +68,11 @@
     <span>Index</span>
     <input name='index' type="number" bind:value={$form.index} />
   </label>
+  <div>
+    <div>Form Object:</div>
+    <div name='form' bind:this={jsoneditorformDom} style="width: 1200px; height: 400px;" />
+  </div>
   <div style="display: flex;">
-    <div>
-      <div>Form Object:</div>
-      <div name='form' bind:this={jsoneditorformDom} style="width: 400px; height: 400px;" />
-    </div>
     <div>
       <div>Fields Array:</div>
       <div name='fields' bind:this={jsoneditorFieldsDom} style="width: 400px; height: 400px;" />
