@@ -34,7 +34,9 @@
 
   export let schema_key = ''
 
-  setContext('items', items)
+  $: {
+    setContext('items', items)
+  }
 
   // headers
   let formLabels = []
@@ -81,7 +83,56 @@
   let config = false
   let contextmenu = false
 
-  const [header_evt, data_evt, unsub, mutate_evt] = events
+  let [header_evt, data_evt, unsub, mutate_evt] = events
+
+  $: query, customFilter, requiredFilter, schema_key, mutateEvents, reset()
+  function reset() {
+  headers = []
+  items = []
+  count = 0
+  // headers
+  formLabels = []
+  headerColTypes = []
+  visible_columns = []
+  offset_columns = []
+  tooltip_offset_columns = []
+  options = {}
+
+  // internal:
+  // hiddenColumns = [ARRAY, OBJECT, BINARY]
+  filterSettings = []
+  sortSettings = []
+  quickview = []
+  selectedRowsKeys = []
+  first_visibile_column = 0
+  fetchConfig = { type: 'a' }
+  // pagination:
+  limit = Number(query.limit) || 0
+  pages = [1, 2]
+  current_page = Number(query.page) || 1
+
+  total_pages = Math.max(current_page, 1)
+
+  mounted = true
+  binded = false
+  er = ''
+
+  doms = {}
+  addnewform = false
+  headerFetched = false
+  modalIsVisible = false
+  item = []
+  config = false
+  contextmenu = false
+
+  header_evt = events[0]
+  data_evt = events[1]
+  unsub = events[2]
+  mutate_evt = events[3]
+  console.log('reset complete')
+  }
+
+  
   onMount(async () => {
     mounted = true
     $css.table.css.count = $css.table.css.count + 1
@@ -102,7 +153,7 @@
           S.trigger([e1])
         }
       }
-      binded = true
+      //binded = true
     }
   }
   const onWSConnect = () => {
@@ -112,9 +163,11 @@
   }
   // this function send subscription request everytime ws connection open
   $: {
+      console.log(binded)
     if (mounted) {
       if ($ws_connected) {
         bindOnce()
+        binded = true
         er = ''
         onWSConnect()
       } else {
