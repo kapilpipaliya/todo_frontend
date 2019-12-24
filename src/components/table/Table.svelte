@@ -678,7 +678,7 @@
               {#if headerColTypes[index] === INT}
                 <th>
                   <input
-                    type="text"
+                    type="search"
                     bind:value={filterSettings[index]}
                     on:input={handleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
@@ -686,7 +686,7 @@
               {:else if headerColTypes[index] === TEXT}
                 <th>
                   <input
-                    type="text"
+                    type="search"
                     bind:value={filterSettings[index]}
                     on:input={handleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
@@ -694,7 +694,7 @@
               {:else if headerColTypes[index] === DOUBLE}
                 <th>
                   <input
-                    type="text"
+                    type="search"
                     bind:value={filterSettings[index]}
                     on:input={handleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext}
@@ -716,8 +716,8 @@
     <tbody>
       {#each items as l, cindex (l[0])}
         <tr
-          in:fade={{ y: 200, duration: 400 }}
-          out:fade={{ y: 2000, duration: 400 }}
+          in:fade={{ y: 200, duration: 200 }}
+          out:fade={{ y: 2000, duration: 150 }}
           draggable="true"
           on:mouseenter={e => {}}
           on:mouseleave={e => {}}

@@ -53,10 +53,9 @@
 
   export const registerMutateEvents = (id=0) => {
     return [
+      null,
       [event_type.get, events.my, events.my_form_schema_get, id ],
-      null,
       [event_type.mutate, events.account, events.register_user, id],
-      null,
     ]
 }
 </script>
@@ -69,7 +68,7 @@
   <span class={query.type}>{query.message}</span>
 {/if}
 
-<GeneralForm mutateEvents={registerMutateEvents} key={null} schema_key={'register'} />
+<GeneralForm eventsFn={registerMutateEvents} key={null} schema_key={'register'} />
 <p>
   By creating an account you agree to our
   <a href="page/privacy">Terms & Privacy</a>

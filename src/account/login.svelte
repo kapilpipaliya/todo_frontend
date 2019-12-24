@@ -49,10 +49,9 @@
 
   export const loginMutateEvents = (id=0) => {
     return [
+      null,
       [event_type.get, events.my, events.my_form_schema_get, id ],
-      null,
       [event_type.mutate, events.account, events.login, id],
-      null,
     ]
 }
 
@@ -67,4 +66,4 @@
   <span class={query.type}>{query.message}</span>
 {/if}
 
-<GeneralForm mutateEvents={loginMutateEvents} key={null} schema_key={'login'} />
+<GeneralForm eventsFn={loginMutateEvents} key={null} schema_key={'login'} />

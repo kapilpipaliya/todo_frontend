@@ -48,16 +48,6 @@ export const schemaEvents = (id=0, schema) => {
 }
 
 export const tableOptions = {
-  user: {
-    title: 'user_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key: 'user',
-    }
-  },
   schema: {
     title: 'schema_title',
     table: {
@@ -80,53 +70,26 @@ export const tableOptions = {
       // object form
     }
   },
-  session: {
-    title: 'session_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key: 'session',
-    }
-  },
-  confirm: {
-    title: 'confirm_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key: 'confirm',
-    }
-  },
-    note: {
-    title: 'note_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key: 'note'
-    }
-  },
-  org: {
-    title: 'org_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key: 'org',
-    }
-  }
 }
 
 export const getTableOptions =  (query) => { 
-  const o = tableOptions[query.page || query.table || query];
+  const schema_key = query.page || query.table || query
+  const o = tableOptions[schema_key];
   if (o) {
     o.table.query = query
     return o
+  } else {
+    // user, session, note, confirm, org, 
+    return {
+    title: 'genaric',
+    table: {
+      eventsFn: schemaEvents,
+      customFilter: {},
+      modelcomponent: GeneralForm,
+      quickcomponent: GeneralForm,
+      schema_key,
+      query
+    }
   }
-  return {}
+  }
 }
