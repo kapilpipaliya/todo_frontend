@@ -4,7 +4,7 @@
   import { beforeUpdate, tick } from 'svelte';
   export let key = 0
   export let eventsFn = () => 0
-  const f = new Form(S, key, eventsFn(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
+  const f = new Form(S, key, eventsFn(key, 'schema'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   // should make seperate json component
   let jsoneditorformDom = null
   let jsoneditorFieldsDom = null

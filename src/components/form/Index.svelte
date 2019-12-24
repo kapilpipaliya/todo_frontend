@@ -4,7 +4,7 @@
   export let eventsFn = () => 0
   export let key = 0
   export let schema_key
-  const f = new FormArray(S, key, eventsFn(key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled
+  const f = new FormArray(S, key, eventsFn(key, schema_key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled
   onMount(() => {$mounted = true })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }

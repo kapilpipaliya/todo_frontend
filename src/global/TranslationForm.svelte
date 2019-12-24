@@ -4,7 +4,7 @@
   import { SubmitButton, CancelButton } from '../components/index.js'
   export let key = 0
   export let eventsFn = () => 0
-  const f = new Form(S, key, eventsFn(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
+  const f = new Form(S, key, eventsFn(key, 'translation'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   let jsoneditorformDom = null
   let editorform
   $: $form._key = $form._key || '';

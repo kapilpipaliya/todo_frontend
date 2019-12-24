@@ -6,9 +6,8 @@ import SchemaForm from '../global/SchemaForm.svelte'
 import TranslationForm from '../global/TranslationForm.svelte'
 import GeneralForm from '../components/form/Index.svelte'
 
-// global events
-// fix this functions to accept arguments, based on it return get or subscription
-// save all this config on server, ramda will help
+/* process events from database:
+//sample
 export const schemaEvents = (id=0) => {
   const ev = [
       [et.subscribe, e.e_global, e.global_schema_header],
@@ -17,7 +16,6 @@ export const schemaEvents = (id=0) => {
     ]
   return  R.map(x=>{x.push(id); return x}, ev)
 }
-
 const processEvent = (id, evt) => {
   evt[0] = et[evt[0]]
   evt[1] = e[evt[1]]
@@ -28,62 +26,32 @@ const processEvent = (id, evt) => {
 export const schemaEvents2 = (id=0, schema) => {
   return R.map(R.curry(processEvent)(id), schema)
 }
-
-
-export const userEvents = (id=0) => {
-  const ev = [
-        [et.subscribe, e.e_global, e.global_user_header],
-        [et.subscribe, e.e_global, e.global_user_list],
-        [et.mutate, e.e_global, e.global_user_mutate],
-      ]
-      return  R.map(x=>{x.push(id); return x}, ev)
-}
-export const translationEvents = (id=0) => {
-  const ev = [
-        [et.subscribe, e.e_global, e.global_translation_header],
-        [et.subscribe, e.e_global, e.global_translation_list],
-        [et.mutate, e.e_global, e.global_translation_mutate],
-      ]
-      return  R.map(x=>{x.push(id); return x}, ev)
-}
-export const sessionEvents = (id=0) => {
-  const ev = [
-        [et.subscribe, e.e_global, e.global_session_header],
-        [et.subscribe, e.e_global, e.global_session_list],
-        [et.mutate, e.e_global, e.global_session_mutate],
-      ]
-      return  R.map(x=>{x.push(id); return x}, ev)
-}
-export const confirmEvents = (id=0) => {
-  const ev = [
-        [et.subscribe, e.e_global, e.global_confirm_header],
-        [et.subscribe, e.e_global, e.global_confirm_list],
-        [et.mutate, e.e_global, e.global_confirm_mutate],
-      ]
-      return  R.map(x=>{x.push(id); return x}, ev)
-}
-export const noteEvents = (id=0) => {
-  const ev = [
-        [et.subscribe, e.e_global, e.global_note_header],
-        [et.subscribe, e.e_global, e.global_note_list],
-        [et.mutate, e.e_global, e.global_note_mutate],
-      ]
-      return  R.map(x=>{x.push(id); return x}, ev)
-}
-export const orgEvents = (id=0) => {
-  const ev = [
-      [et.subscribe, e.admin, e.admin_org_header],
-      [et.subscribe, e.admin, e.admin_org_list],
-      [et.mutate, e.admin, e.admin_org_mutate],
+*/
+// generate event from schema:
+export const schemaEvents = (id=0, schema) => {
+  const h = e[`global_${schema}_header`]
+  let e0 = 0
+  if(h > 49 && h < 100){
+    e0 = e.e_global
+  } else if (h > 100 && h < 200) {
+    e0 = e.account
+  } else if (h > 200 && h < 300) {
+    e0 = e.admin
+  } else if (h > 300 && h < 400) {
+    e0 = e.my
+  }
+  return [
+      [et.subscribe, e0, h, id],
+      [et.subscribe, e0, e[`global_${schema}_list`], id],
+      [et.mutate, e0, e[`global_${schema}_mutate`], id],
     ]
-    return  R.map(x=>{x.push(id); return x}, ev)
 }
 
 export const tableOptions = {
   user: {
     title: 'user_title',
     table: {
-      eventsFn: userEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
@@ -104,7 +72,7 @@ export const tableOptions = {
   translation: {
     title: 'translation_title',
     table: {
-      eventsFn: translationEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: TranslationForm,
       quickcomponent: TranslationForm,
@@ -115,7 +83,7 @@ export const tableOptions = {
   session: {
     title: 'session_title',
     table: {
-      eventsFn: sessionEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
@@ -125,7 +93,7 @@ export const tableOptions = {
   confirm: {
     title: 'confirm_title',
     table: {
-      eventsFn: confirmEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
@@ -135,7 +103,7 @@ export const tableOptions = {
     note: {
     title: 'note_title',
     table: {
-      eventsFn: noteEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
@@ -145,7 +113,7 @@ export const tableOptions = {
   org: {
     title: 'org_title',
     table: {
-      eventsFn: orgEvents,
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,

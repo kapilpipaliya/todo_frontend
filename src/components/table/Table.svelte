@@ -92,7 +92,7 @@
   $: query, eventsFn, requiredFilter, schema_key, reset()
 
   function reset() {
-  events = eventsFn(0)
+  events = eventsFn(0, schema_key)
   headers = []
   items = []
   count = 0
@@ -123,7 +123,7 @@
   binded = false
   er = ''
 
-  doms = {}
+  // doms = {}
   addnewform = false
   headerFetched = false
   modalIsVisible = false
@@ -577,6 +577,7 @@
 <br>
 {JSON.stringify(selectedRowsKeys)}
   */
+
 </script>
 
 {er}
