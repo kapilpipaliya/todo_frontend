@@ -133,8 +133,8 @@
 
   header_evt = events[0]
   data_evt = events[1]
-  unsub = events[2]
-  mutate_evt = events[3]
+  unsub = [event_type.unsubscribe, ...events[1].slice(1)]
+  mutate_evt = events[2]
   console.log('reset complete')
   }
 
@@ -169,7 +169,7 @@
   }
   // this function send subscription request everytime ws connection open
   $: {
-      console.log(binded)
+      (binded)
     if (mounted) {
       if ($ws_connected) {
         bindOnce()

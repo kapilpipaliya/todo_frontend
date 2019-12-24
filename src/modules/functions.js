@@ -393,7 +393,7 @@ class FormBasic {
       e[1][0] = event_type.get
     }
     this.data_evt = e[1]
-    this.mutate_evt = e[3]
+    this.mutate_evt = e[2]
     this.unsub_evt = [event_type.unsubscribe, ...e[1].slice(1)]
     this.isUpdate = false
     
@@ -553,21 +553,4 @@ export class FormArray extends FormBasic {
       //
     }
   }
-}
-export const orgMutateEvents = (id=0) => {
-    return [
-      [event_type.get, events.admin, events.admin_org_list, id ],
-      [event_type.subscribe, events.admin, events.admin_org_list, id ],
-      [event_type.mutate, events.admin, events.admin_org_mutate, id],
-      [event_type.unsubscribe, events.admin, events.admin_org_list, id],
-    ]
-}
-
-export const schemaMutateEvents = (id=0) => {
-  return [
-      [event_type.get, events.e_global, events.global_schema_list, id, ],
-      [event_type.subscribe, events.e_global, events.global_schema_list, id, ],
-      [event_type.mutate, events.e_global, events.global_schema_mutate, id],
-      [event_type.unsubscribe, events.e_global, events.global_schema_list, id],
-    ]
 }

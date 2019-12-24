@@ -13,7 +13,6 @@ export const schemaEvents = (id=0) => {
   const ev = [
       [et.subscribe, e.e_global, e.global_schema_header],
       [et.subscribe, e.e_global, e.global_schema_list],
-      [et.unsubscribe, e.e_global, e.global_schema_list],
       [et.mutate, e.e_global, e.global_schema_mutate],
     ]
   return  R.map(x=>{x.push(id); return x}, ev)
@@ -35,7 +34,6 @@ export const userEvents = (id=0) => {
   const ev = [
         [et.subscribe, e.e_global, e.global_user_header],
         [et.subscribe, e.e_global, e.global_user_list],
-        [et.unsubscribe, e.e_global, e.global_user_list],
         [et.mutate, e.e_global, e.global_user_mutate],
       ]
       return  R.map(x=>{x.push(id); return x}, ev)
@@ -44,7 +42,6 @@ export const translationEvents = (id=0) => {
   const ev = [
         [et.subscribe, e.e_global, e.global_translation_header],
         [et.subscribe, e.e_global, e.global_translation_list],
-        [et.unsubscribe, e.e_global, e.global_translation_list],
         [et.mutate, e.e_global, e.global_translation_mutate],
       ]
       return  R.map(x=>{x.push(id); return x}, ev)
@@ -53,7 +50,6 @@ export const sessionEvents = (id=0) => {
   const ev = [
         [et.subscribe, e.e_global, e.global_session_header],
         [et.subscribe, e.e_global, e.global_session_list],
-        [et.unsubscribe, e.e_global, e.global_session_list],
         [et.mutate, e.e_global, e.global_session_mutate],
       ]
       return  R.map(x=>{x.push(id); return x}, ev)
@@ -62,7 +58,6 @@ export const confirmEvents = (id=0) => {
   const ev = [
         [et.subscribe, e.e_global, e.global_confirm_header],
         [et.subscribe, e.e_global, e.global_confirm_list],
-        [et.unsubscribe, e.e_global, e.global_confirm_list],
         [et.mutate, e.e_global, e.global_confirm_mutate],
       ]
       return  R.map(x=>{x.push(id); return x}, ev)
@@ -71,7 +66,6 @@ export const noteEvents = (id=0) => {
   const ev = [
         [et.subscribe, e.e_global, e.global_note_header],
         [et.subscribe, e.e_global, e.global_note_list],
-        [et.unsubscribe, e.e_global, e.global_note_list],
         [et.mutate, e.e_global, e.global_note_mutate],
       ]
       return  R.map(x=>{x.push(id); return x}, ev)
@@ -80,15 +74,6 @@ export const orgEvents = (id=0) => {
   const ev = [
       [et.subscribe, e.admin, e.admin_org_header],
       [et.subscribe, e.admin, e.admin_org_list],
-      [et.unsubscribe, e.admin, e.admin_org_list],
-      [et.mutate, e.admin, e.admin_org_mutate],
-    ]
-    return  R.map(x=>{x.push(id); return x}, ev)
-}
-
-export const orgMutateEvents = (id=0) => {
-    return [
-      [et.get, e.admin, e.admin_org_list, id ],
       [et.mutate, e.admin, e.admin_org_mutate],
     ]
     return  R.map(x=>{x.push(id); return x}, ev)
@@ -98,18 +83,17 @@ export const tableOptions = {
   user: {
     title: 'user_title',
     table: {
-      events: userEvents(0),
+      eventsFn: userEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
       schema_key: 'user',
-      mutateEvents: orgMutateEvents
     }
   },
   schema: {
     title: 'schema_title',
     table: {
-      events: schemaEvents(0),
+      eventsFn: schemaEvents,
       customFilter: {},
       modelcomponent: SchemaForm,
       quickcomponent: SchemaForm,
@@ -120,7 +104,7 @@ export const tableOptions = {
   translation: {
     title: 'translation_title',
     table: {
-      events: translationEvents(0),
+      eventsFn: translationEvents,
       customFilter: {},
       modelcomponent: TranslationForm,
       quickcomponent: TranslationForm,
@@ -131,23 +115,21 @@ export const tableOptions = {
   session: {
     title: 'session_title',
     table: {
-      events: sessionEvents(0),
+      eventsFn: sessionEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
       schema_key: 'session',
-      mutateEvents: orgMutateEvents
     }
   },
   confirm: {
     title: 'confirm_title',
     table: {
-      events: confirmEvents(0),
+      eventsFn: confirmEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
       schema_key: 'confirm',
-      mutateEvents: orgMutateEvents
     }
   },
     note: {
@@ -163,12 +145,11 @@ export const tableOptions = {
   org: {
     title: 'org_title',
     table: {
-      events: orgEvents(0),
+      eventsFn: orgEvents,
       customFilter: {},
       modelcomponent: GeneralForm,
       quickcomponent: GeneralForm,
       schema_key: 'org',
-      mutateEvents: orgMutateEvents
     }
   }
 }

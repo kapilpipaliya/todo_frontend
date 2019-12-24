@@ -1,9 +1,10 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, schemaMutateEvents, Form } from '../modules/functions.js'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form } from '../modules/functions.js'
   import { SubmitButton, CancelButton } from '../components/index.js'
   import { beforeUpdate, tick } from 'svelte';
   export let key = 0
-  const f = new Form(S, key, schemaMutateEvents(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
+  export let eventsFn = () => 0
+  const f = new Form(S, key, eventsFn(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   // should make seperate json component
   let jsoneditorformDom = null
   let jsoneditorFieldsDom = null
