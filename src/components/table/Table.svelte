@@ -716,8 +716,7 @@
     <tbody>
       {#each items as l, cindex (l[0])}
         <tr
-          in:fade={{ y: 200, duration: 200 }}
-          out:fade={{ y: 2000, duration: 150 }}
+
           draggable="true"
           on:mouseenter={e => {}}
           on:mouseleave={e => {}}
