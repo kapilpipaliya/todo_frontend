@@ -17,18 +17,18 @@
   import Config from './Config.svelte'
   import { fade, fly } from 'svelte/transition'
 
-  export let events = []
+  export let eventsFn = () => 0
+  let events
 
-  let headers = []
-  let items = []
-  let count = 0
+  let headers
+  let items
+  let count
 
   export let customFilter = {}
   export let requiredFilter = {} // always add this filter when fetch
 
   export let modelcomponent = false
   export let quickcomponent = false
-  export let mutateEvents=()=>0
 
   export let query = {} // To get arguments from ?limit=25&page=2
 
@@ -83,10 +83,16 @@
   let config = false
   let contextmenu = false
 
-  let [header_evt, data_evt, unsub, mutate_evt] = events
+  let header_evt
+  let data_evt
+  let unsub
+  let mutate_evt
 
-  $: query, customFilter, requiredFilter, schema_key, mutateEvents, reset()
+  // customFilter, not work with filter..
+  $: query, eventsFn, requiredFilter, schema_key, reset()
+
   function reset() {
+  events = eventsFn(0)
   headers = []
   items = []
   count = 0
@@ -589,7 +595,7 @@
       this={quickcomponent}
       key={null}
       {schema_key}
-      {mutateEvents}
+      {eventsFn}
       on:close={toogleAddForm}
       on:successSave={successSave} />
   {/if}
@@ -780,7 +786,7 @@
                   this={quickcomponent}
                   key={l[0]}
                   {schema_key}
-                  {mutateEvents}
+                  {eventsFn}
                   on:close={onCancel}
                   on:successSave={successSave}
                   on:deleteRow={deleteRow} />

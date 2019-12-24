@@ -387,9 +387,14 @@ class FormBasic {
     this.type = type
 
     this.events = e;
-    this.data_evt = key ? e[1] : e[0]
-    this.mutate_evt = e[2]
-    this.unsub_evt = e[3]
+    if(this.key) {
+      e[1][0] = event_type.subscribe
+    } else {
+      e[1][0] = event_type.get
+    }
+    this.data_evt = e[1]
+    this.mutate_evt = e[3]
+    this.unsub_evt = [event_type.unsubscribe, ...e[1].slice(1)]
     this.isUpdate = false
     
     this.mounted = writable(false)
