@@ -18,9 +18,9 @@
   	const funcBindingOnce = () => {
 	    if (!binded) {
 	      S.bind$(menu_evt, (d) => {
-	      	console.log(d)
 	      	if(d[0].length && d[0][0]){
 	      		menus = d[0][0]
+	      		console.log(menus)
 	      	}
 	      }, 1)
 	      binded = true
@@ -34,8 +34,8 @@
 <h1>Admin Layout</h1>
 <div style="display: flex">
   <div>
-    {#if menus.navData}
-		<TreeSidebar menu={menus.navData.admin}/>
+    {#if menus.admin}
+		<TreeSidebar menu={menus.admin}/>
 	{/if}
   </div>
   <Route {currentRoute} {params}/>
