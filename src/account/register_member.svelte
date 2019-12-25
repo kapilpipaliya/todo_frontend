@@ -86,7 +86,7 @@
     }, 100)
   })
   onDestroy(() => {
-    if (process.browser) S.unbind_(fns)
+    S.unbind_(fns)
   })
 
   const save = async () => {
