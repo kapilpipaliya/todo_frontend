@@ -72,7 +72,7 @@ export const tableOptions = {
   },
 }
 
-export const getTableOptions =  (query) => { 
+export const getTableOptions =  (query = {}) => { 
   const schema_key = query.page || query.table || query
   const o = tableOptions[schema_key];
   if (o) {

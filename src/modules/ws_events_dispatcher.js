@@ -63,7 +63,7 @@ export class ServerEventsDispatcher {
     this.callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
     return this // chainable
   }
-  unbind_(event_names) {
+  unbind_(event_names = []) {
     R.map(event => {
       this.unbind(JSON.stringify(event))
     }, event_names)

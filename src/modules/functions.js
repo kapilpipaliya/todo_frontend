@@ -5,8 +5,9 @@ import { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher.js'
 export { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher.js'
 export { onMount, onDestroy, createEventDispatcher } from 'svelte'
 import * as R from 'ramda'
-import {event_type, events} from './events.js'
+import {event_type as et, events as e} from './events.js'
 export * from './events.js'
+import * as RA from 'ramda-adjunct'
 // import {account} from './global_stores/account.js'
 // import {cookie} from './global_stores/cookie.js'
 // import {member_settings} from './global_stores/member_settings.js'
@@ -53,7 +54,7 @@ ws_.bind(
 export const S = ws_
 
 export const productImageBase = async (S, id, version = 0) => {
-  if (false && process.browser) {
+  if (false) {
     const url = await new Promise((resolve, reject) => {
       S.bind_(
         ['product', 'attachment_data', 0],
@@ -245,7 +246,7 @@ export const getTotalArray = p => {
 export const isLoggedIn = async S => {
   const auth = await new Promise((resolve, reject) => {
     S.bind_(
-      [event_type.get, events.account, events.is_logged_in, 0],
+      [et.get, e.account, e.is_logged_in, 0],
       ([d]) => {
         resolve(d)
       },
@@ -388,13 +389,13 @@ class FormBasic {
 
     this.events = e;
     if(this.key) {
-      e[1][0] = event_type.subscribe
+      e[1][0] = et.subscribe
     } else {
-      e[1][0] = event_type.get
+      e[1][0] = et.get
     }
     this.data_evt = e[1]
     this.mutate_evt = e[2]
-    this.unsub_evt = [event_type.unsubscribe, ...e[1].slice(1)]
+    this.unsub_evt = [et.unsubscribe, ...e[1].slice(1)]
     this.isUpdate = false
     
     this.mounted = writable(false)
@@ -488,14 +489,14 @@ export class Form extends FormBasic {
   }
 }
 export class FormArray extends FormBasic {
-  constructor(S, key, e, dp, schema_key, type='a') {
-    super(S, key, e, dp, type);
+  constructor(S, key, ev, dp, schema_key, type='a') {
+    super(S, key, ev, dp, type);
     this.schema_key = schema_key
     this.form.set([])
     this.headers = writable([])
     this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
     this.onFormDataGet = this.onFormDataGet.bind(this)
-    this.schemaGetEvt = [event_type.get, events.my, events.my_fields_schema_get, key ]
+    this.schemaGetEvt = [et.get, e.my, e.my_fields_schema_get, key ]
   }
   bindAll(){
     this.bindSchemaDataGet()
@@ -554,3 +555,13 @@ export class FormArray extends FormBasic {
     }
   }
 }
+
+export function i18n(name, lang = en){
+  if (RA.isString(name)) {
+    return name
+  } else if(RA.isObject(name)) {
+    return name[lang]
+  }
+  return "i18n Error"
+}
+export const form_schema_evt = (id) => [et.get, e.my, e.my_form_schema_get, id ]
