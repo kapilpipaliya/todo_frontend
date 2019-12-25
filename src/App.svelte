@@ -28,18 +28,16 @@
 	let mounted = false
 	let er = ''
 	let binded = false
-	let form_evt = [et.get, e.my, e.my_form_schema_get, 9999 ]
+	let form_schema_evt = [et.get, e.my, e.my_form_schema_get, 9999 ]
 	let menu_evt = [et.get, e.my, e.my_form_schema_get, 8888 ]
 	let routes  = []
 	let menus  = []
-	onMount(async () => {
-    	mounted = true
-  	})
-  	onDestroy(() => {S.trigger([[form_evt, {}]]) })
+	onMount(() => {mounted = true})
+  	onDestroy(() => {S.unbind_([form_schema_evt, menu_evt]) })
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
   	const funcBindingOnce = () => {
 	    if (!binded) {
-	      S.bind$(form_evt, (d) => {
+	      S.bind$(form_schema_evt, (d) => {
 	      	if(d[0].length && d[0][0].routes){
 	      		routes = R.map((x)=> modifyObj(x), d[0][0].routes)
 	      	}
@@ -47,12 +45,11 @@
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
 	      		menus = d[0][0]
-	      		console.log(menus)
 	      	}
 	      }, 1)
 	      binded = true
           S.trigger([
-	    	[form_evt, ['routes']],
+	    	[form_schema_evt, ['routes']],
 	    	[menu_evt, ['menu']],
 	    	]) 
 	    }
