@@ -9,6 +9,7 @@
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!$binded) {f.bindAll(); $binded = true; f.fetch();}  }
+  //console.log($$props)
 </script>
 
 <Form

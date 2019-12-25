@@ -1,5 +1,5 @@
 <script>
-  import {S as S_, ws_connected, event_type as et, events as e, } from '../modules/functions.js'
+  import {S, ws_connected, event_type as et, events as e, } from '../modules/functions.js'
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   export let query = {}
 

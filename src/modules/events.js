@@ -10,6 +10,7 @@ events['css_event'] = ++e
 events['notification_event'] = ++e
 events['cookie_event'] = ++e
 events['redirection_event'] = ++e
+events['translation_event'] = ++e
 
 e = 49
 events['e_global'] = ++e

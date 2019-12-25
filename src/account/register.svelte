@@ -15,11 +15,13 @@
   onMount(()=> {
     // 1. If subdomain open this page move to main page:
     // i found logic from: https://github.com/vemarav/subdomains/blob/master/plugin/index.js
+    /*
     let hostNameArray = page.host.split('.')
     const sliceLength = domainName ? domainName.split('.').length : 2
     hostNameArray = hostNameArray.slice(0, hostNameArray.length - sliceLength)
     if (hostNameArray.length)
       navigateTo('http://' + domainName + '/account/register')
+    */
   })
 </script>
 

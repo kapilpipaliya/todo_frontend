@@ -91,51 +91,56 @@
   // customFilter, not work with filter..
   $: query, eventsFn, requiredFilter, schema_key, reset()
 
+  function unRegister() {
+    unsub && S.trigger([[unsub, {}]])
+    events && S.unbind_(events)
+  }
   function reset() {
-  events = eventsFn(0, schema_key)
-  headers = []
-  items = []
-  count = 0
-  // headers
-  formLabels = []
-  headerColTypes = []
-  visible_columns = []
-  offset_columns = []
-  tooltip_offset_columns = []
-  options = {}
+    unRegister()
+    events = eventsFn(0, schema_key)
+    headers = []
+    items = []
+    count = 0
+    // headers
+    formLabels = []
+    headerColTypes = []
+    visible_columns = []
+    offset_columns = []
+    tooltip_offset_columns = []
+    options = {}
 
-  // internal:
-  // hiddenColumns = [ARRAY, OBJECT, BINARY]
-  filterSettings = []
-  sortSettings = []
-  quickview = []
-  selectedRowsKeys = []
-  first_visibile_column = 0
-  fetchConfig = { type: 'a' }
-  // pagination:
-  limit = Number(query.limit) || 0
-  pages = [1, 2]
-  current_page = Number(query.page) || 1
+    // internal:
+    // hiddenColumns = [ARRAY, OBJECT, BINARY]
+    filterSettings = []
+    sortSettings = []
+    quickview = []
+    selectedRowsKeys = []
+    first_visibile_column = 0
+    fetchConfig = { type: 'a' }
+    // pagination:
+    limit = Number(query.limit) || 0
+    pages = [1, 2]
+    current_page = Number(query.page) || 1
 
-  total_pages = Math.max(current_page, 1)
+    total_pages = Math.max(current_page, 1)
 
-  mounted = true
-  binded = false
-  er = ''
+    mounted = true
+    binded = false
+    er = ''
 
-  // doms = {}
-  addnewform = false
-  headerFetched = false
-  modalIsVisible = false
-  item = []
-  config = false
-  contextmenu = false
+    // doms = {}
+    addnewform = false
+    headerFetched = false
+    modalIsVisible = false
+    item = []
+    config = false
+    contextmenu = false
 
-  header_evt = events[0]
-  data_evt = events[1]
-  unsub = [event_type.unsubscribe, ...events[1].slice(1)]
-  mutate_evt = events[2]
-  console.log('reset complete')
+    header_evt = events[0]
+    data_evt = events[1]
+    unsub = [event_type.unsubscribe, ...events[1].slice(1)]
+    mutate_evt = events[2]
+    console.log('reset complete')
   }
 
   
@@ -144,8 +149,7 @@
     $css.table.css.count = $css.table.css.count + 1
   })
   onDestroy(() => {
-      S.trigger([[unsub, {}]])
-      S.unbind_(events)
+      unRegister();
       $css.table.css.count = $css.table.css.count - 1
   })
 

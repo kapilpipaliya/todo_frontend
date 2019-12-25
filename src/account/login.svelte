@@ -13,10 +13,12 @@
   }
   onMount(()=> {
     // i found logic from: https://github.com/vemarav/subdomains/blob/master/plugin/index.js
+    /*
     let hostNameArray = page.host.split('.')
     const sliceLength = domainName ? domainName.split('.').length : 2
     hostNameArray = hostNameArray.slice(0, hostNameArray.length - sliceLength)
     const server = hostNameArray.length ? hostNameArray[0] : ''
+    */
   })
   // Todo: When login on subdomain, server field do not show.
 </script>
