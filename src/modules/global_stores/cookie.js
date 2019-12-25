@@ -5,9 +5,6 @@ import {event_type as et, events as e} from '../events.js'
 
 export const cookie = new writable()
 
-cookie.subscribe(value => {
-  console.log(value)
-})
 
 
 function saveCookie(name, value, max_age) {

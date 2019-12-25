@@ -25,9 +25,7 @@ export const css = writable(
   }
 ]
 */
-css.subscribe(value => {
-  console.log(value)
-})
+
 
   S.bind$(
     [et.get, e.account, e.css_event, 0],
