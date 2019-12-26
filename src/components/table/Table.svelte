@@ -593,7 +593,7 @@
     on:click={toogleAddForm}
     bind:this={doms.addbutton}
     class={addnewform ? 'pressed' : ''}>
-    Add New
+    {!addnewform ? 'Add New' : 'Close'}
   </button>
   {#if addnewform}
     <svelte:component
@@ -784,7 +784,7 @@
         </tr>
         {#if quickview.includes(l[0])}
           <tr>
-            <td colspan={l.length + 1}>
+            <td colspan={l.length + 3}>
               {#if quickcomponent}
                 <svelte:component
                   this={quickcomponent}

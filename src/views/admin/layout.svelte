@@ -10,7 +10,7 @@
     let mounted = false
 	let er = ''
 	let binded = false
-	let menu_evt = [et.get, e.my, e.my_form_schema_get, 'side_admin_menu' ]
+	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_admin_menu' ]
 	let menus  = []
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_evt]) })

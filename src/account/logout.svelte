@@ -4,8 +4,8 @@
     ws_todo,
     domainName,
     isLoggedIn,
-    event_type,
-    events,
+    event_type as et,
+    events as e,
   } from '../modules/functions.js'
   export async function preload(page, session) {
     let S
@@ -39,7 +39,7 @@
 
   let loging_out = true
 
-  const fns = [[event_type.mutate, events.account, events.logout, 0]],
+  const fns = [[et.mutate, e.account, e.logout, 0]],
     [logout] = fns
 
   const bindOnce = () => {

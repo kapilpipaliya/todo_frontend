@@ -27,18 +27,22 @@
   1 : accountFilter
   };
   */
+  $: title    = R.view(R.lensPath([schema_key, 'title']), $translation);
+  $: subtitle = R.view(R.lensPath([schema_key, 'subtitle']), $translation);
 </script>
 
 <svelte:head>
-  <title>{R.view(R.lensPath([schema_key, 'title']), $translation)}</title>
+  <title>{title}</title>
 </svelte:head>
   <div>
   <div>
-    <h1>{R.view(R.lensPath([schema_key, 'title']), $translation)}</h1>
+    <h1>{title}</h1>
   </div>
+  {#if subtitle}
   <div>
-    <h2>{R.view(R.lensPath([schema_key, 'subtitle']), $translation)}</h2>
+    <h2>{subtitle}</h2>
   </div>
+  {/if}
   <Table
     {...options.table} />
   </div>

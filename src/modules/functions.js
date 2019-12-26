@@ -431,6 +431,7 @@ class FormBasic {
     this.S.trigger([[this.mutate_evt, [form, filter]]])
   }
   onMutateGet([d]) {
+    this.isSaving.set(false)
     let er
     if (d.ok) {
       er = ''
@@ -496,7 +497,7 @@ export class FormArray extends FormBasic {
     this.headers = writable([])
     this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
     this.onFormDataGet = this.onFormDataGet.bind(this)
-    this.schemaGetEvt = [et.get, e.my, e.my_fields_schema_get, key ]
+    this.schemaGetEvt = [et.get, e.my, e.fields_schema_get, key ]
   }
   bindAll(){
     this.bindSchemaDataGet()
@@ -564,4 +565,4 @@ export function i18n(name, lang = en){
   }
   return "i18n Error"
 }
-export const form_schema_evt = (id) => [et.get, e.my, e.my_form_schema_get, id ]
+export const form_schema_evt = (id) => [et.get, e.my, e.form_schema_get, id ]

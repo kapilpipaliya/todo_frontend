@@ -31,7 +31,7 @@
 	let er = ''
 	let binded = false
 	const menu_form_evt = form_schema_evt(9999)
-	const menu_evt = [et.get, e.my, e.my_form_schema_get, 8888 ]
+	const menu_evt = [et.get, e.my, e.form_schema_get, 8888 ]
 	let routes  = []
 	let menus  = []
 	onMount(() => {mounted = true})

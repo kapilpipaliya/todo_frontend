@@ -21,3 +21,4 @@
 	bind:form={$form}
 	on:close
 />
+{$er}

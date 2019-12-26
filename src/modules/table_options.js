@@ -10,9 +10,9 @@ import GeneralForm from '../components/form/Index.svelte'
 //sample
 export const schemaEvents = (id=0) => {
   const ev = [
-      [et.subscribe, e.e_global, e.global_schema_header],
-      [et.subscribe, e.e_global, e.global_schema_list],
-      [et.mutate, e.e_global, e.global_schema_mutate],
+      [et.subscribe, e.e_global, e.schema_header],
+      [et.subscribe, e.e_global, e.schema_list],
+      [et.mutate, e.e_global, e.schema_mutate],
     ]
   return  R.map(x=>{x.push(id); return x}, ev)
 }
@@ -29,7 +29,7 @@ export const schemaEvents2 = (id=0, schema) => {
 */
 // generate event from schema:
 export const schemaEvents = (id=0, schema) => {
-  const h = e[`global_${schema}_header`]
+  const h = e[`${schema}_header`]
   let e0 = 0
   if(h > 49 && h < 100){
     e0 = e.e_global
@@ -42,8 +42,8 @@ export const schemaEvents = (id=0, schema) => {
   }
   return [
       [et.subscribe, e0, h, id],
-      [et.subscribe, e0, e[`global_${schema}_list`], id],
-      [et.mutate, e0, e[`global_${schema}_mutate`], id],
+      [et.subscribe, e0, e[`${schema}_list`], id],
+      [et.mutate, e0, e[`${schema}_mutate`], id],
     ]
 }
 
