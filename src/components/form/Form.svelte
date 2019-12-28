@@ -18,9 +18,7 @@ let types = []
 let required = []
 let placeholder = []
 let disabled = []
-let readonly = []
 let title = []
-let style = []
 let classe = []
 let description = []
 let props = []
@@ -34,12 +32,10 @@ $: {
 	required = headers[2] || []
 	placeholder = headers[3] || []
 	disabled = headers[4] || []
-	readonly = headers[5] || []
-	title = headers[6] || []
-	style = headers[7] || []
-	classe = headers[8] || []
-	description = headers[9] || []
-	props = headers[10] || []
+	title = headers[5] || []
+	classe = headers[6] || []
+	description = headers[7] || []
+	props = headers[8] || []
 }
 
 $: {
@@ -47,7 +43,7 @@ $: {
 		let index = -1
 		let i = -1
 	    for (i = 0; i < disabled.length; i++) {
-	      if (!disabled[i] && !readonly[i]) {
+	      if (!disabled[i]) {
 	        index = i
 	        break
 	      }
@@ -73,10 +69,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -90,10 +86,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -107,10 +103,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>	
@@ -124,10 +120,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 					 alt='image'
@@ -142,10 +138,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -159,10 +155,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -176,10 +172,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -193,10 +189,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -210,10 +206,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -226,10 +222,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -248,10 +244,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -265,10 +261,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -282,10 +278,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -298,10 +294,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -315,10 +311,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -332,10 +328,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -349,10 +345,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -366,10 +362,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -384,10 +380,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -402,10 +398,10 @@ onMount(()=> {
 					 placeholder={placeholder[i]}
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]+'a'}
 					 bind:this={doms[i]}
-					 style={style[i]} 
+					 
 					 class={clsx(classe[i])}
 					 {...props[i]}
 				/>
@@ -419,10 +415,10 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 
 					 disabled={form_disabled ? true : disabled[i]}
-					 readonly={readonly[i]}
+					 
 					 title={title[i]}
 					 
-					 style={style[i]} 
+					 
 					 classe={clsx(classe[i])} 
 					 props={props[i]}						 
 					/>
@@ -438,10 +434,10 @@ onMount(()=> {
 							 placeholder={placeholder[i]}
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
-							 readonly={readonly[i]}
+							 
 							 title={title[i]}
 							 bind:this={doms[i]}
-							 style={style[i]} 
+							 
 							 class={clsx(classe[i])}
 							 {...props[i]}
 						/>
