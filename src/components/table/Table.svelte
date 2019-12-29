@@ -300,20 +300,21 @@
       quickview = quickview
     }
   }
-  const successSave = async (e) => {
-    const { key, d } = e.detail
-    if (key === null) {
-      toogleAddForm()
-      // refresh(); // should be automatic
-      doms.addbutton.focus()
-    } else {
-      closeForm_(key)
-      // reFetchRow(key); // should be automatic
-      await tick();
-      const element = document.querySelector(`button[key='${key}'][name='edit']`);
+  const editButtonFocus = async(key) => {
+    await tick();
+    const element = document.querySelector(`button[key='${key}'][name='edit']`);
       if(element) {
         element.focus()
       }
+  }
+  const successSave = e => {
+    const { key, d } = e.detail
+    if (key === null) {
+      toogleAddForm()
+      doms.addbutton.focus()
+    } else {
+      closeForm_(key)
+      editButtonFocus(key)
     }
   }
   // Great function but now not used
@@ -332,7 +333,9 @@
   }*/
 
   const onCancel = event => {
-    closeForm_(event.detail)
+    const key = event.detail
+    closeForm_(key)
+    editButtonFocus(key)
   }
   // ============================================================================
   // ================================Delete Row =================================
