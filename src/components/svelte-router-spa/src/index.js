@@ -1,14 +1,10 @@
-const SpaRouter = require('./router').SpaRouter
-const navigateTo = require('./router').navigateTo
-const routeIsActive = require('./router').routeIsActive
-const Route = require('./components/route.svelte')
-const Router = require('./components/router.svelte')
-const Navigate = require('./components/navigate.svelte')
 
-module.exports = {
-  SpaRouter,
-  navigateTo,
-  routeIsActive,
+export {SpaRouter,navigateTo,routeIsActive  } from './router'
+import Route from './components/route.svelte'
+import Router from './components/router.svelte'
+import Navigate from './components/navigate.svelte'
+
+export  {
   Route,
   Router,
   Navigate

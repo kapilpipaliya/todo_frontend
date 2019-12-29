@@ -1,6 +1,6 @@
-const { UrlParser } = require('url-params-parser')
-const { activeRoute } = require('./store')
-const { anyEmptyNestedRoutes, compareRoutes, getNamedParams, nameToPath, pathWithSearch } = require('./lib/utils')
+import { UrlParser } from 'url-params-parser'
+import { activeRoute } from './store'
+import { anyEmptyNestedRoutes, compareRoutes, getNamedParams, nameToPath, pathWithSearch } from './lib/utils'
 
 const NotFoundPage = '/404.html'
 let userDefinedRoutes = []
@@ -13,7 +13,7 @@ let currentActiveRoute = ''
  * @param currentUrl current url
  * @param options configuration options
  **/
-async function SpaRouter(routes, currentUrl, options = {}) {
+export async function SpaRouter(routes, currentUrl, options = {}) {
   let redirectTo = ''
   routerOptions = options
   if (typeof currentUrl === 'undefined' || currentUrl === '') {
@@ -186,7 +186,7 @@ async function SpaRouter(routes, currentUrl, options = {}) {
  * Updates the current active route and updates the browser pathname
  * @param pathName
  **/
-function navigateTo(pathName) {
+export function navigateTo(pathName) {
   if (pathName.trim().length > 1 && pathName[0] === '/') {
     pathName = pathName.slice(1)
   }
@@ -200,7 +200,7 @@ function navigateTo(pathName) {
  * Returns true if pathName is current active route
  * @param pathName
  **/
-function routeIsActive(queryPath, includePath = false) {
+export function routeIsActive(queryPath, includePath = false) {
   if (queryPath[0] !== '/') {
     queryPath = '/' + queryPath
   }
@@ -236,5 +236,3 @@ if (typeof window !== 'undefined') {
     navigateTo(window.location.pathname + window.location.search)
   }
 }
-
-module.exports = { SpaRouter, navigateTo, routeIsActive }

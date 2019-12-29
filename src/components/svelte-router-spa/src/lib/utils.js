@@ -2,7 +2,7 @@
  * Returns true if object has any nested routes empty
  * @param routeObject
  **/
-function anyEmptyNestedRoutes(routeObject) {
+export function anyEmptyNestedRoutes(routeObject) {
   let result = false
   if (Object.keys(routeObject).length === 0) {
     return true
@@ -23,7 +23,7 @@ function anyEmptyNestedRoutes(routeObject) {
  * @param pathNames array
  * @param route object
  **/
-function compareRoutes(basePath, pathNames, route) {
+export function compareRoutes(basePath, pathNames, route) {
   if (basePath === '/' || basePath.trim().length === 0) return basePath
   let basePathResult = basePath
   let routeName = route.name
@@ -59,7 +59,7 @@ function compareRoutes(basePath, pathNames, route) {
  * Return all the consecutive named param (placeholders) of a pathname
  * @param pathname
  **/
-function getNamedParams(pathName = '') {
+export function getNamedParams(pathName = '') {
   if (pathName.trim().length === '') return []
 
   const namedUrlParams = getPathNames(pathName)
@@ -76,7 +76,7 @@ function getNamedParams(pathName = '') {
  * @param pathName
  * Private method
  **/
-function getPathNames(pathName) {
+export function getPathNames(pathName) {
   if (pathName === '/' || pathName.trim().length === 0) return [pathName]
   if (pathName.slice(-1) === '/') {
     pathName = pathName.slice(0, -1)
@@ -92,7 +92,7 @@ function getPathNames(pathName) {
  * Return the first part of a pathname until the first named param
  * @param name
  **/
-function nameToPath(name = '') {
+export function nameToPath(name = '') {
   let routeName
   if (name === '/' || name.trim().length === 0) return name
   if (name[0] === '/') {
@@ -111,7 +111,7 @@ function nameToPath(name = '') {
  * Return the path name including query params
  * @param name
  **/
-function pathWithSearch(currentRoute) {
+export function pathWithSearch(currentRoute) {
   let queryParams = []
   if (currentRoute.queryParams) {
     for (let [key, value] of Object.entries(currentRoute.queryParams)) {
@@ -123,13 +123,4 @@ function pathWithSearch(currentRoute) {
   } else {
     return currentRoute.path
   }
-}
-
-module.exports = {
-  anyEmptyNestedRoutes,
-  compareRoutes,
-  getNamedParams,
-  getPathNames,
-  nameToPath,
-  pathWithSearch
 }
