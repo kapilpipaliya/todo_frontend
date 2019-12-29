@@ -6,6 +6,7 @@
     onMount,
     onDestroy,
     beforeUpdate,
+    tick
   } from 'svelte'
   const dp = createEventDispatcher()
   import * as R from 'ramda'
@@ -299,16 +300,21 @@
       quickview = quickview
     }
   }
-  const successSave = e => {
+  const successSave = async (e) => {
     const { key, d } = e.detail
     if (key === null) {
       toogleAddForm()
       // refresh(); // should be automatic
+      doms.addbutton.focus()
     } else {
       closeForm_(key)
       // reFetchRow(key); // should be automatic
+      await tick();
+      const element = document.querySelector(`button[key='${key}'][name='edit']`);
+      if(element) {
+        element.focus()
+      }
     }
-    doms.addbutton.focus()
   }
   // Great function but now not used
   /*const reFetchRow = async(key) => {

@@ -79,7 +79,7 @@
       <div name='fields' bind:this={jsoneditorFieldsDom} style="width: 400px; height: 400px;" />
     </div>
     <div>
-      <div>Columns Array:</div>
+      <div>Columns Object:</div>
       <div name='columns' bind:this={jsoneditorcolumnsDom} style="width: 400px; height: 400px;" />
     </div>
   </div>
