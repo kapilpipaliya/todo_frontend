@@ -423,7 +423,7 @@
         arr.push(i)
       }
       pages = arr
-      if (pages.indexOf(current_page) === -1) {
+      if (!pages.includes(current_page)) {
         current_page = 1
       }
     }

@@ -2,7 +2,7 @@
   import { S, domainName, event_type as et, events as e } from '../modules/functions.js'
   import { onMount } from 'svelte'
   import GeneralForm from '../components/form/Index.svelte'
-  import { navigateTo } from 'svelte-router-spa'
+  import { navigateTo } from '../components/svelte-router-spa/src/index.js'
   export let query = {}
   //let form = { email: '', pass: '' }
   export const registerMutateEvents = (id=0) => {

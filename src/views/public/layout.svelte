@@ -1,5 +1,5 @@
 <script>
-  import { Route } from 'svelte-router-spa'
+  import { Route } from "../../components/svelte-router-spa/src/index.js";
   //import TopHeader from './top_header.svelte'
   export let currentRoute
   export let params

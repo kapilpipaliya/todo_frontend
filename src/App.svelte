@@ -14,7 +14,7 @@
 	import {current_time} from './modules/global_stores/time_store.js'
 	import {translation} from './modules/global_stores/translation.js'
 
-	import { Router } from 'svelte-router-spa'
+	import { Router } from './components/svelte-router-spa/src/index.js'
 	// Routes:
 	import Login from './account/login.svelte'
 	import Logout from './account/logout.svelte'

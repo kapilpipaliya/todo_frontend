@@ -1,5 +1,5 @@
 <script>
-  import { Route } from "svelte-router-spa";
+  import { Route } from "../../components/svelte-router-spa/src/index.js";
   	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from '../../modules/functions.js'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
