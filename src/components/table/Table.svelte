@@ -42,8 +42,8 @@
   let formLabels = []
   let headerColTypes = []
   let visible_columns = []
-  let offset_columns = []
-  let tooltip_offset_columns = []
+
+
   let options = {}
 
   // internal:
@@ -105,8 +105,8 @@
     formLabels = []
     headerColTypes = []
     visible_columns = []
-    offset_columns = []
-    tooltip_offset_columns = []
+
+
     options = {}
 
     // internal:
@@ -216,9 +216,9 @@
         break
       }
     }
-    offset_columns = d[4]
-    tooltip_offset_columns = d[5]
-    options = d[6]
+
+
+    options = d[4]
     resetFilter_() // Take care....
   }
   function onDataGet([d]) {
@@ -704,6 +704,15 @@
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
+              {:else if headerColTypes[index] === BOOL}
+                <th>
+                  <input
+                    type="checkbox"
+                    bind:checked={filterSettings[index]}
+                    on:change={handleFilter(index)}
+                    on:contextmenu|preventDefault={onTextInputContext}
+                    step="any" />
+                </th>
               {:else if headerColTypes[index] === UTCTIME}
                 <th>Date</th>
               {:else}
@@ -755,11 +764,11 @@
           </td>
           {#each l as c, index}
             {#if visible_columns[index]}
-              <td title={l[index + (tooltip_offset_columns[index] || 0)]}>
-                {#if l[index + (offset_columns[index] || 0)] != null}
+              <td>
+                {#if l[index] != null}
                   {#if headerColTypes[index] === 1114}
-                    {new Date(l[index + (offset_columns[index] || null)]).toLocaleString()}
-                  {:else}{l[index + (offset_columns[index] || 0)]}{/if}
+                    {new Date(l[index]).toLocaleString()}
+                  {:else}{l[index]}{/if}
                 {/if}
               </td>
             {/if}
