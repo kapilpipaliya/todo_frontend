@@ -31,7 +31,6 @@
   	}
 </script>
 
-<h1>Admin Layout</h1>
 <div style="display: flex">
   <div>
     {#if menus.admin}
