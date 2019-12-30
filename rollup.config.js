@@ -19,7 +19,8 @@ const plugins = [
   html({
     template: "src/index.html",
     dest: "dist",
-    filename: "index.html"
+    filename: "index.html",
+    absolute: true
   }),
   css({
     dest: 'dist/index.css',
