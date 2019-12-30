@@ -282,7 +282,7 @@ export function getCookieValue(a) {
 class FormBasic {
   public S: ServerEventsDispatcher
   public key: string
-  public dp = () => 0
+  public dp:  (type: string, detail?: any) => void
   public type: string
   public events: Array<[]>
   public data_evt: []
@@ -351,7 +351,7 @@ class FormBasic {
     let er
     if (d.ok) {
       er = ''
-      //this.dp('successSave', { key: this.key, d }) //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+      this.dp('successSave', { key: this.key, d })
     } else {
       er = d.error
     }
