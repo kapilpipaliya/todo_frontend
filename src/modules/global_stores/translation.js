@@ -1,7 +1,7 @@
 // use function directly on ws_dispatcher..
 import { writable } from 'svelte/store'
-import { S, form_schema_evt } from '../functions.js'
-import {event_type as et, events as e } from '../events.js'
+import { S, form_schema_evt } from '../functions.ts'
+import {event_type as et, events as e } from '../events.ts'
 
 export const translation = new writable({})
 

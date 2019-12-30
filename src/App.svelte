@@ -1,5 +1,5 @@
-<script>
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn } from './modules/functions.js'
+<script lang='ts'>
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn } from './modules/functions.ts'
 	import * as R from 'ramda'
 	import Css from './components/Css.svelte'
 	import MenuF from './components/MenuF.svelte'
@@ -37,7 +37,7 @@
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_form_evt, menu_evt]) })
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	const funcBindingOnce = () => {
+  	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(menu_form_evt, (d) => {
 	      	if(d[0].length && d[0][0].routes){

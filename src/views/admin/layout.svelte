@@ -1,6 +1,6 @@
-<script>
+<script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.js";
-  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from '../../modules/functions.js'
+  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
 
@@ -15,7 +15,7 @@
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_evt]) })
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	const funcBindingOnce = () => {
+  	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){

@@ -6,7 +6,7 @@
     isLoggedIn,
     event_type as et,
     events as e,
-  } from '../modules/functions.js'
+  } from '../modules/functions.ts'
   export async function preload(page, session) {
     let S
     if (typeof S_ == 'function') {
@@ -22,7 +22,7 @@
   // same as confirm page.
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
 
-  import { S, ws_connected } from '../modules/functions.js'
+  import { S, ws_connected } from '../modules/functions.ts'
 
   // export let categories = [];
   // export let footerData = {};

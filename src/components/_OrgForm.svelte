@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, orgMutateEvents, Form } from '../modules/functions.js'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, orgMutateEvents, Form } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.js'
   export let key = 0
   const f = new Form(S, key, orgMutateEvents(key), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded

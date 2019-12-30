@@ -1,7 +1,7 @@
-<script>
+<script lang='ts'>
   import qs from "qs";
   import {Table} from './components/index.js'
-  import {getTableOptions} from './modules/table_options.js'
+  import {getTableOptions} from './modules/table_options.ts'
   import {translation} from './modules/global_stores/translation.js'
   import * as R from 'ramda'
 

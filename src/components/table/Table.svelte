@@ -11,7 +11,7 @@
   const dp = createEventDispatcher()
   import * as R from 'ramda'
 
-  import { S, ws_connected, event_type, events as e } from '../../modules/functions.js'
+  import { S, ws_connected, event_type, events as e } from '../../modules/functions.ts'
   import { css } from '../../modules/global_stores/css.js'
   // import Card from "../components/Card.svelte";
   import Modal from './Model.svelte'

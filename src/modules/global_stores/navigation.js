@@ -1,7 +1,7 @@
 // use function directly on ws_dispatcher..
 import { writable } from 'svelte/store'
-import { S } from '../functions.js'
-import {event_type as et, events as e } from '../events.js'
+import { S } from '../functions.ts'
+import {event_type as et, events as e } from '../events.ts'
 import { navigateTo } from '../../components/svelte-router-spa/src/index.js'
 
 // when logout every pages should be redirect to login page.
@@ -15,3 +15,11 @@ S.bind$( [et.get, e.account, e.redirection_event, 0],
 	},
 	1
 )
+
+/*export function goBackOrNavigate(path) {
+  if (window.history.length === 1) {
+    goto('/admin/users')
+  } else {
+    window.history.back()
+  }
+}*/

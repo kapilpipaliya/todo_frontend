@@ -1,13 +1,13 @@
 import { writable } from 'svelte/store'
 import { get } from 'svelte/store'; // not recommanded
 import StorageDB from './indexdb/storage.js'
-import { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher.js'
-export { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher.js'
-export { onMount, onDestroy, createEventDispatcher } from 'svelte'
 import * as R from 'ramda'
-import {event_type as et, events as e} from './events.js'
-export * from './events.js'
 import * as RA from 'ramda-adjunct'
+import { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
+export { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
+export { onMount, onDestroy, createEventDispatcher } from 'svelte'
+import {event_type as et, events as e} from './events'
+export * from './events'
 // import {account} from './global_stores/account.js'
 // import {cookie} from './global_stores/cookie.js'
 // import {member_settings} from './global_stores/member_settings.js'
@@ -43,7 +43,7 @@ export const ws_madmin = `${server.ws_proto}://${server.domain}:${server.port}/m
 export const ws_todo = `${server.ws_proto}://${server.domain}:${server.port}/todo`
 
 let ws_
-ws_ = new ServerEventsDispatcher(ws_todo)
+ws_ = new ServerEventsDispatcher(ws_todo, {}, {})
 ws_.bind(
   ['take_image_meta'],
   function(data) {
@@ -255,116 +255,11 @@ export const isLoggedIn = async S => {
   })
   return auth
 }
-export const getPost = async (S, slug = 'home') => {
-  const page = await new Promise((resolve, reject) => {
-    S.bind_(
-      all('post', 112),
-      ([d]) => {
-        S.unbind(all('post', 112))
-        resolve(d)
-      },
-      [[null, 'post', null, null, `=${slug}`]]
-    ) // 6=code // = means excact
-  })
-  return page
-}
-export const getSetting = async S => {
-  const setting = await new Promise((resolve, reject) => {
-    S.bind_(
-      all('setting', 112),
-      ([d]) => {
-        resolve(d)
-      },
-      [[]]
-    )
-  })
-  return setting
-}
-export const getSettingKey = async (S, key = 'mobile') => {
-  const setting = await new Promise((resolve, reject) => {
-    S.bind_(
-      all('setting', 112),
-      ([d]) => {
-        resolve(d)
-      },
-      [[`=${key}`]]
-    )
-  })
-  return setting
-}
+
 export const getSettingCache = async key => {
   const db = new StorageDB('setting', 1)
   const setting = await db.getItem(key)
   return setting
-}
-export const getFooterData = async S => {
-  const mobile = await getSettingKey(S, 'mobile')
-  return { mobile }
-}
-export const getHeaderData = async S => {
-  const company = await getSettingKey(S, 'company_name')
-  return { company }
-}
-export async function getTableData(S_, path, url, filterSettings = []) {
-  let S
-  if (typeof S_ == 'function') {
-    S = new S_(path, this.req, this.res)
-  } else {
-    S = S_
-  }
-
-  let h = []
-  let data = []
-  let isAuth = false
-  await new Promise((resolve, reject) => {
-    const batch1 = []
-    let r1 = false,
-      r2 = false,
-      r3 = false
-    const myResolve = () => {
-      if (r1 && r2 && r3) resolve(1)
-    }
-    batch1.push([
-      ['user', 'is_logged_in', 0],
-      ([d]) => {
-        r1 = true
-        isAuth = d
-        myResolve()
-      },
-      [[]],
-    ])
-    batch1.push([
-      all_h(url),
-      ([d]) => {
-        h = d
-        r2 = true
-        myResolve()
-      },
-      [[]],
-    ])
-    batch1.push([
-      all(url),
-      ([d]) => {
-        data = d
-        r3 = true
-        myResolve()
-      },
-      [filterSettings],
-    ])
-    S.batchBind_T(batch1)
-  })
-  if (!isAuth) {
-    this.redirect(302, './admin/account/Login')
-  }
-  return { url, h, data, isAuth }
-}
-
-export function goBackOrNavigate(path) {
-  if (window.history.length === 1) {
-    goto('/admin/users')
-  } else {
-    window.history.back()
-  }
 }
 
 export function uPath() {
@@ -381,6 +276,22 @@ export function getCookieValue(a) {
   return b ? b.pop() : ''
 }
 class FormBasic {
+  public S: ServerEventsDispatcher
+  public key: string
+  public dp = () => 0
+  public type: string
+  public events: Array<[]>
+  public data_evt: []
+  public mutate_evt: []
+  public unsub_evt: Array<[]>
+  public isUpdate: boolean
+  public mounted: boolean
+  public binded: boolean
+  public form: {}
+  public er: string
+  public isSaving: boolean
+  public form_disabled: boolean
+
   constructor(S, key, e, dp, type='o') {
     this.S = S
     this.key = key
@@ -490,6 +401,10 @@ export class Form extends FormBasic {
   }
 }
 export class FormArray extends FormBasic {
+  public schema_key: string
+  public headers: []
+  public form: []
+  public schemaGetEvt: number[]
   constructor(S, key, ev, dp, schema_key, type='a') {
     super(S, key, ev, dp, type);
     this.schema_key = schema_key

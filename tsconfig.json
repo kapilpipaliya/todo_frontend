@@ -1,9 +1,9 @@
 {
+  "include": [ "src/**/*" ],
   "compilerOptions": {
-    "target": "es6",
-    "baseUrl": "./"
+    "target": "ESNEXT",
+    "baseUrl": "./",
+    "types": ["svelte"],                           /* Type declaration files to be included in compilation. */
   },
-  "include": [
-    "src/**/*"
-  ]
+
 }

@@ -1,5 +1,5 @@
 
-import {event_type as et, events as e} from './events.js'
+import {event_type as et, events as e} from './events'
 import * as R from 'ramda'
 // the component cant include this file because of cyclic depandancy
 import SchemaForm from '../global/SchemaForm.svelte'
@@ -72,7 +72,7 @@ export const tableOptions = {
   },
 }
 
-export const getTableOptions =  (query = {}) => { 
+export const getTableOptions =  (query) => { 
   const schema_key = query.page || query.table || query
   const o = tableOptions[schema_key];
   if (o) {

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
-import { S } from '../functions.js'
-import {event_type as et, events as e } from '../events.js'
+import { S } from '../functions.ts'
+import {event_type as et, events as e } from '../events.ts'
 //write me
 export const menu = writable({})
 

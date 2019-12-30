@@ -1,5 +1,5 @@
 <script>
-  import {S as S_,domainName, event_type as et, events as e, } from '../modules/functions.js'
+  import {S as S_,domainName, event_type as et, events as e, } from '../modules/functions.ts'
   import { onMount } from 'svelte'
   import GeneralForm from '../components/form/Index.svelte'
   export let query = {}

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form } from '../modules/functions.js'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.js'
   import { beforeUpdate, tick } from 'svelte';
   export let key = 0

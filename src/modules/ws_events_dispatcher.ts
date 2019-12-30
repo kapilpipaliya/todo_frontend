@@ -18,15 +18,21 @@ class WsBase {
   
 }
 export class ServerEventsDispatcher {
+  private path: string;
+  private req: {}
+  private res: {}
+  private callbacks: {}
+  private conn: WebSocket
+
   constructor(path, req, res) {
     this.bind = this.bind.bind(this)
     this.bind$ = this.bind$.bind(this)
     this.bind_ = this.bind_.bind(this)
-    this.bind_F = this.bind_F.bind(this)
+    //this.bind_F = this.bind_F.bind(this)
     this.unbind = this.unbind.bind(this)
     this.unbind_ = this.unbind_.bind(this)
     this.trigger = this.trigger.bind(this)
-    this.triggerFile = this.triggerFile.bind(this)
+    //this.triggerFile = this.triggerFile.bind(this)
     this.onmessage = this.onmessage.bind(this)
     this.onclose = this.onclose.bind(this)
     this.onopen = this.onopen.bind(this)
@@ -54,20 +60,20 @@ export class ServerEventsDispatcher {
     this.conn.onmessage = undefined
     this.conn.onclose = undefined
     this.conn.removeEventListener('open', this.onopen)
-    this.conn.terminate()
+    this.conn.close()
   }
 
   bind(event, callback, handleMultiple = 0) {
     this.callbacks[JSON.stringify(event)] =
       this.callbacks[JSON.stringify(event)] || []
     this.callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
-    return this // chainable
+    return this
   }
   unbind_(event_names = []) {
     R.map(event => {
       this.unbind(JSON.stringify(event))
     }, event_names)
-    return this // chainable
+    return this
   }
   batchBind(events) {
     const payload = []
@@ -76,28 +82,28 @@ export class ServerEventsDispatcher {
       this.bind(e[0], e[1])
       payload.push([e[0], e[2]])
     }
-    return payload // chainable
+    return payload
   }
   batchBind_T(events) {
     const payload = this.batchBind(events)
     this.trigger(payload)
-    return this // chainable
+    return this
   }
   bind$(event, callback, handleMultiple) {
     this.unbind(event)
     this.bind(event, callback, handleMultiple)
-    return this // chainable
+    return this
   }
   bind_(event, callback, data, handleMultiple) {
     this.bind$(event, callback, handleMultiple)
     this.trigger([[event, data]])
-    return this // chainable
+    return this
   }
-  bind_F(event, callback, data, handleMultiple, beforeEvent, changeNotice) {
+  /*bind_F(event, callback, data, handleMultiple, beforeEvent, changeNotice) {
     this.bind$(event, callback, handleMultiple)
     this.triggerFile(event, data, beforeEvent, changeNotice)
-    return this // chainable
-  }
+    return this
+  }*/
   unbind(event) {
     this.callbacks[JSON.stringify(event)] = []
   }
@@ -127,6 +133,7 @@ export class ServerEventsDispatcher {
       // code block
     }
   }
+  /* todo: fix typescript errors
   triggerFile(
     event,
     data,
@@ -144,9 +151,9 @@ export class ServerEventsDispatcher {
         })
         return this
       case 1: // OPEN
-        var file = data
-        var reader = new FileReader()
-        var rawData = new ArrayBuffer()
+        let file = data
+        let reader = new FileReader()
+        let rawData = new ArrayBuffer()
         const conn = this.conn
         const bind$ = this.bind$
         reader.loadend = function() {}
@@ -159,7 +166,7 @@ export class ServerEventsDispatcher {
             conn.send(rawData)
 
             if (callback) {
-              var interval = setInterval(() => {
+              let interval = setInterval(() => {
                 if (conn.bufferedAmount > 0) {
                   callback(conn.bufferedAmount)
                 } else {
@@ -179,7 +186,7 @@ export class ServerEventsDispatcher {
       case 2: // CLOSING
       case 3: //CLOSED
         // try to reconnect/logout
-        this.conn = new IsomorphicWs(this.path)
+        this.conn = new WebSocket(this.path)
         this.conn.addEventListener('open', function() {
           f(event, data)
         })
@@ -188,7 +195,7 @@ export class ServerEventsDispatcher {
         return this
       // code block
     }
-  }
+  }*/
 
   onmessage(evt) {
     if (typeof evt.data === 'string') {
@@ -208,8 +215,8 @@ export class ServerEventsDispatcher {
     // if(evt.data instanceof ArrayBuffer ){
     else {
       const buffer = evt.data
-      console.log('Received arraybuffer')
-      this.dispatch(this.event, buffer)
+      //console.log('Received arraybuffer')
+      //this.dispatch(this.event, buffer) // uncomment
     }
     // if(evt.data instanceof Blob ){
     //   const buffer = event.data;

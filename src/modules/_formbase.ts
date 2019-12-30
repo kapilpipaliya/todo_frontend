@@ -2,7 +2,7 @@ import { writable, get } from 'svelte/store'
 
 import { notifier } from '../routes/components/svelte-notifications/src/index.js'
 import { goto } from '@sapper/app'
-import { getCookieValue } from './functions.js'
+import { getCookieValue } from './functions.ts'
 //fix when i press two times submit main table not show data
 //on Edit page if error happens its not displayed.
 //extra : when delete button should be disables

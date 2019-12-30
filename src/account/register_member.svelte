@@ -1,5 +1,5 @@
 <script context="module">
-  import { S as S_, ws_todo, domainName } from '../_modules/functions.js'
+  import { S as S_, ws_todo, domainName } from '../_modules/functions.ts'
   export async function preload(page, session) {
     // let S; if (typeof S_ == "function") { S = new S_(ws_todo, this.req, this.res); } else { S = S_; }
     // let user = session.user; if(!!user){ this.redirect(302, '/confirmation') }
@@ -28,7 +28,7 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { goto } from '@sapper/app'
   const dp = createEventDispatcher()
-  import { S } from '../_modules/functions.js'
+  import { S } from '../_modules/functions.ts'
 
   export let isAuth = false
   export let redirect_url = '/'

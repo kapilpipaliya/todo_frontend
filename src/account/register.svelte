@@ -1,5 +1,5 @@
 <script>
-  import { S, domainName, event_type as et, events as e } from '../modules/functions.js'
+  import { S, domainName, event_type as et, events as e } from '../modules/functions.ts'
   import { onMount } from 'svelte'
   import GeneralForm from '../components/form/Index.svelte'
   import { navigateTo } from '../components/svelte-router-spa/src/index.js'
