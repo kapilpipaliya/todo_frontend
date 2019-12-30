@@ -1,6 +1,5 @@
 <script>
-  import {S, ws_connected, event_type as et, events as e, } from '../modules/functions.ts'
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, } from '../modules/functions.ts'
   export let query = {}
 
   let mounted = false

@@ -1,5 +1,4 @@
 <script>
-	import { onMount } from 'svelte';
 	import clsx from "clsx";
 
 	export let name;

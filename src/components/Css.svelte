@@ -1,5 +1,5 @@
 <script>
-	import { css, css_frameworks, selected_frameworks } from '../modules/global_stores/css.js'
+	import { css, css_frameworks, selected_frameworks } from '../modules/global_stores/css.ts'
 </script>
 
 

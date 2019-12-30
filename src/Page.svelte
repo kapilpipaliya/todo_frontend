@@ -1,8 +1,8 @@
 <script lang='ts'>
   import qs from "qs";
-  import {Table} from './components/index.js'
+  import {Table} from './components/index.ts'
   import {getTableOptions} from './modules/table_options.ts'
-  import {translation} from './modules/global_stores/translation.js'
+  import {translation} from './modules/global_stores/translation.ts'
   import * as R from 'ramda'
 
   export let currentRoute

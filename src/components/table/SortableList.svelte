@@ -1,7 +1,6 @@
 <script>
-  import { quintOut } from 'svelte/easing'
-  import { crossfade } from 'svelte/transition'
-  import { flip } from 'svelte/animate'
+  import { quintOut,crossfade, flip  } from '../../modules/functions.ts'
+
   // FLIP ANIMATION
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),

@@ -1,9 +1,9 @@
 <script>
-  import { onMount } from 'svelte'
+  import { onMount } from '../../../../modules/functions.ts'
 
-  import { SpaRouter } from '../router'
+  import { SpaRouter } from '../router.js'
   import Route from './route.svelte'
-  import { activeRoute } from '../store'
+  import { activeRoute } from '../store.ts'
 
   export let routes = []
   export let options = {}

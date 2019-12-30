@@ -1,9 +1,8 @@
 // use function directly on ws_dispatcher..
-import { writable } from 'svelte/store'
-import { S, form_schema_evt } from '../functions.ts'
-import {event_type as et, events as e } from '../events.ts'
+import { Writable, writable,S, form_schema_evt } from '../functions'
+import {event_type as et, events as e } from '../events'
 
-export const translation = new writable({})
+export const translation = writable({})
 
 export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) => {

@@ -5,16 +5,16 @@
 	import MenuF from './components/MenuF.svelte'
 
 	// subscribe here with  LoginStatus too.
-	import {account} from './modules/global_stores/account.js'
-	import {cookie} from './modules/global_stores/cookie.js'
-	import {member_settings} from './modules/global_stores/member_settings.js'
-	import {menu} from './modules/global_stores/menu.js'
-	import {navigation} from './modules/global_stores/navigation.js'
-	import {notification} from './modules/global_stores/notification.js'
-	import {current_time} from './modules/global_stores/time_store.js'
-	import {translation} from './modules/global_stores/translation.js'
+	import {account} from './modules/global_stores/account.ts'
+	import {cookie} from './modules/global_stores/cookie.ts'
+	import {member_settings} from './modules/global_stores/member_settings.ts'
+	import {menu} from './modules/global_stores/menu.ts'
+	import {navigation} from './modules/global_stores/navigation.ts'
+	import {notification} from './modules/global_stores/notification.ts'
+	import {current_time} from './modules/global_stores/time_store.ts'
+	import {translation} from './modules/global_stores/translation.ts'
 
-	import { Router } from './components/svelte-router-spa/src/index.js'
+	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
 	import Login from './account/login.svelte'
 	import Logout from './account/logout.svelte'

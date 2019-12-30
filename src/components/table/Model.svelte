@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher } from '../../modules/functions.ts'
   const dp = createEventDispatcher()
 </script>
 

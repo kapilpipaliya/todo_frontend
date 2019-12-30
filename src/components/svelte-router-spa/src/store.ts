@@ -1,5 +1,5 @@
-import { writable } from 'svelte/store'
 
+import { writable } from '../../../modules/functions'
 const router = writable({})
 
 function set(route) {

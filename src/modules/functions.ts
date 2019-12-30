@@ -1,11 +1,15 @@
-import { writable } from 'svelte/store'
-import { get } from 'svelte/store'; // not recommanded
+import { Writable, writable, get } from '../../svelte/src/runtime/store/index'; // not recommanded
 import StorageDB from './indexdb/storage.js'
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 import { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
 export { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
-export { onMount, onDestroy, createEventDispatcher } from 'svelte'
+export { onMount, onDestroy, createEventDispatcher, beforeUpdate, tick, setContext } from '../../svelte/src/runtime/index'
+export * from '../../svelte/src/runtime/store/index'
+export * from '../../svelte/src/runtime/easing/index'
+export * from '../../svelte/src/runtime/transition/index'
+export * from '../../svelte/src/runtime/transition/index'
+export * from '../../svelte/src/runtime/animate/index'
 import {event_type as et, events as e} from './events'
 export * from './events'
 // import {account} from './global_stores/account.js'
@@ -285,12 +289,13 @@ class FormBasic {
   public mutate_evt: []
   public unsub_evt: Array<[]>
   public isUpdate: boolean
-  public mounted: boolean
-  public binded: boolean
-  public form: {}
-  public er: string
-  public isSaving: boolean
-  public form_disabled: boolean
+  public mounted: Writable<boolean>
+  public binded: Writable<boolean>
+  public form: Writable<{}>
+  public er: Writable<string>
+  public isSaving: Writable<boolean>
+  public form_disabled: Writable<boolean>
+  public schema_key: string
 
   constructor(S, key, e, dp, type='o') {
     this.S = S
@@ -311,7 +316,7 @@ class FormBasic {
     
     this.mounted = writable(false)
     this.binded = writable(false)
-    this.form = writable()
+    this.form = writable({})
     this.er = writable('')
     this.isSaving = writable(false)
     this.form_disabled = writable(true)
@@ -346,7 +351,7 @@ class FormBasic {
     let er
     if (d.ok) {
       er = ''
-      this.dp('successSave', { key: this.key, d })
+      //this.dp('successSave', { key: this.key, d }) //FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
     } else {
       er = d.error
     }
@@ -401,9 +406,8 @@ export class Form extends FormBasic {
   }
 }
 export class FormArray extends FormBasic {
-  public schema_key: string
-  public headers: []
-  public form: []
+  public headers: Writable<[]>
+  public form: Writable<[]>
   public schemaGetEvt: number[]
   constructor(S, key, ev, dp, schema_key, type='a') {
     super(S, key, ev, dp, type);
@@ -472,7 +476,7 @@ export class FormArray extends FormBasic {
   }
 }
 
-export function i18n(name, lang = en){
+export function i18n(name, lang = 'en'){
   if (RA.isString(name)) {
     return name
   } else if(RA.isObject(name)) {

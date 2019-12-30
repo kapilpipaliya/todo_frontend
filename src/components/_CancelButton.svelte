@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
+  import { createEventDispatcher } from '../modules/functions.ts'
   const dp = createEventDispatcher()
 
   export let isSaving = false

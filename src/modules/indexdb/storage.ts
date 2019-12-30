@@ -1,4 +1,3 @@
-import idb from './idb.js'
 // https://github.com/weyos/storage-db
 // https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API#See_also
 // https://github.com/mdn/indexeddb-examples
@@ -16,16 +15,19 @@ const removeDB = Symbol('removeDB')
  * @description Initialize indexDB
  */
 export default class Storage {
-  constructor(dbName, version) {
+  public dbName: string
+  public storeName: string
+  public dbVersion: number
+  constructor(dbName, dbVersion) {
     this.dbName = dbName
     this.storeName = dbName
-    this.version = version
+    this.dbVersion = dbVersion
     this[db] = null
   }
   // Open or create a database
   [openDB]() {
     return new Promise((resolve, reject) => {
-      const request = idb.open(this.dbName, this.dbVersion)
+      const request = indexedDB.open(this.dbName, this.dbVersion)
       request.onerror = err => {
         reject(err)
       }
@@ -34,7 +36,7 @@ export default class Storage {
         resolve(this[db])
       }
       request.onupgradeneeded = event => {
-        this[db] = event.target.result
+        this[db] = event.target["result"]
         if (!this[db].objectStoreNames.contains(this.storeName)) {
           const newStore = this[db].createObjectStore(this.storeName, {
             keyPath: 'id',
@@ -92,15 +94,15 @@ export default class Storage {
       .objectStore(this.storeName)
     const request = store.delete(key)
     request.onsuccess = e => {
-      resolve(this[db])
+      /// resolve(this[db])  //// must fix this
     }
     request.onerror = err => {
-      reject(err)
+      /// reject(err) /// must fix this
     }
   }
   // delete the database
   [removeDB](dbName) {
-    idb.deleteDatabase(dbName)
+    indexedDB.deleteDatabase(dbName)
   }
   /**
    * @param {key} string

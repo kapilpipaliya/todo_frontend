@@ -1,7 +1,7 @@
 
 
 <script>
-import { onMount } from 'svelte'
+import { onMount } from '../../modules/functions.ts'
 import clsx from "clsx";
 import Checkboxes from './Checkboxes.svelte';
 import SubmitButton from '../_SubmitButton.svelte'

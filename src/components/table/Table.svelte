@@ -1,22 +1,12 @@
 <script>
   // import * as _ from "lamb";
-  import {
-    createEventDispatcher,
-    setContext,
-    onMount,
-    onDestroy,
-    beforeUpdate,
-    tick
-  } from 'svelte'
-  const dp = createEventDispatcher()
   import * as R from 'ramda'
-
-  import { S, ws_connected, event_type, events as e } from '../../modules/functions.ts'
-  import { css } from '../../modules/global_stores/css.js'
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly } from '../../modules/functions.ts'
+  const dp = createEventDispatcher()
+  import { css } from '../../modules/global_stores/css.ts'
   // import Card from "../components/Card.svelte";
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
-  import { fade, fly } from 'svelte/transition'
 
   export let eventsFn = () => 0
   let events

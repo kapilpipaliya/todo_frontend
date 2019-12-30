@@ -1,28 +1,10 @@
 <script context="module">
-  import {
-    S as S_,
-    ws_todo,
-    domainName,
-    isLoggedIn,
-    event_type as et,
-    events as e,
-  } from '../modules/functions.ts'
-  export async function preload(page, session) {
-    let S
-    if (typeof S_ == 'function') {
-      S = new S_(ws_todo, this.req, this.res)
-    } else {
-      S = S_
-    }
-    return { query: page.query }
-  }
+  import {S as S_, ws_todo, domainName, isLoggedIn, event_type as et, events as e, } from '../modules/functions.ts'
 </script>
 
 <script>
   // same as confirm page.
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-
-  import { S, ws_connected } from '../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected } from '../modules/functions.ts'
 
   // export let categories = [];
   // export let footerData = {};

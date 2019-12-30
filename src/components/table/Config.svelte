@@ -1,10 +1,5 @@
 <script>
-  import { quintOut } from 'svelte/easing'
-  import { crossfade } from 'svelte/transition'
-  import { flip } from 'svelte/animate'
-
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { S, event_type, events as e } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip  } from '../../modules/functions.ts'
 
   import SubmitButton from '../_SubmitButton.svelte'
   import CancelButton from '../_CancelButton.svelte'

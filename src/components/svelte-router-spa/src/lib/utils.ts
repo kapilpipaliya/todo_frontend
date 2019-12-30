@@ -60,7 +60,7 @@ export function compareRoutes(basePath, pathNames, route) {
  * @param pathname
  **/
 export function getNamedParams(pathName = '') {
-  if (pathName.trim().length === '') return []
+  if (pathName.trim().length === 0) return []
 
   const namedUrlParams = getPathNames(pathName)
   return namedUrlParams.reduce((validParams, param, index) => {

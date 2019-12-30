@@ -1,5 +1,4 @@
-import { readable } from 'svelte/store'
-
+import { readable } from '../functions'
 export const current_time = readable(new Date(), function start(set) {
   const interval = setInterval(() => {
     set(new Date())

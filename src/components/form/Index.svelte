@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray } from '../../modules/functions.ts'
-  import { Form, SubmitButton, CancelButton } from '../index.js'
+  import { Form, SubmitButton, CancelButton } from '../index.ts'
   export let eventsFn = () => 0
   export let key = 0
   export let schema_key

@@ -1,11 +1,11 @@
 <script>
-  import { onMount, onDestroy } from 'svelte'
-  import { goto } from '@sapper/app'
+
+
 
   //export let menu_name
   //let menu_data = []
 
-  onMount(() => {
+  //onMount(() => {
     // const adminService = new AdminServiceClient('http://localhost:8090', null, null);
     // const request = new messages.MenuRequest();
     // request.setName(menu_name);
@@ -24,13 +24,13 @@
     //     menu_data = getMenu(menu);
     //   }
     // });
-  })
+  //})
 
   const onHeaderClick = m => () => {
     //const response = new messages.MenuResponse;
     //const m = response.getMenuList()[0]
     if (!m.children.length) {
-      goto(m.path)
+      ///goto(m.path)
     }
   }
 </script>

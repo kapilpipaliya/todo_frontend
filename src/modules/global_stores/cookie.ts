@@ -1,9 +1,9 @@
 // use function directly on ws_dispatcher..
-import { writable } from 'svelte/store'
-import { S } from '../functions.ts'
-import {event_type as et, events as e} from '../events.ts'
 
-export const cookie = new writable()
+import { Writable, writable,S } from '../functions'
+import {event_type as et, events as e} from '../events'
+
+export const cookie = writable({})
 
 
 

@@ -4,6 +4,8 @@
     "target": "ESNEXT",
     "baseUrl": "./",
     "types": ["svelte"],                           /* Type declaration files to be included in compilation. */
+     /* Strict Type-Checking Options */
+    "strict": false, /* Enable all strict type-checking options. */
   },
 
 }

@@ -1,5 +1,5 @@
 <script context="module">
-  import { S as S_, ws_todo, domainName } from '../_modules/functions.ts'
+  import { S as S_, ws_todo, domainName } from '../_modules/functions'
   export async function preload(page, session) {
     // let S; if (typeof S_ == "function") { S = new S_(ws_todo, this.req, this.res); } else { S = S_; }
     // let user = session.user; if(!!user){ this.redirect(302, '/confirmation') }
@@ -25,10 +25,9 @@
 </script>
 
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { goto } from '@sapper/app'
+  import { onMount, onDestroy, createEventDispatcher, S } from '../_modules/functions'
+  // import { goto } from '@sapper/app'
   const dp = createEventDispatcher()
-  import { S } from '../_modules/functions.ts'
 
   export let isAuth = false
   export let redirect_url = '/'
@@ -47,7 +46,7 @@
   $: isAuth = formSave
   $: {
     if (isAuth) {
-      goto(redirect_url)
+      /////goto(redirect_url)
     }
   }
   function saveCookie(d) {

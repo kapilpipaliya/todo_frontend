@@ -1,7 +1,6 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form } from '../modules/functions.ts'
-  import { beforeUpdate, tick } from 'svelte';
-  import { SubmitButton, CancelButton } from '../components/index.js'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick  } from '../modules/functions.ts'
+  import { SubmitButton, CancelButton } from '../components/index.ts'
   export let key = 0
   export let eventsFn = () => 0
   const f = new Form(S, key, eventsFn(key, 'translation'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
@@ -13,9 +12,7 @@
             mode: 'code',
             modes: ["code", "tree"],
           };
-    await import(
-      "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js"
-    );
+    await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
     editorform = new JSONEditor(jsoneditorformDom, options, $form.form || {})
     $mounted = true
