@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "rm -rf ./dist && NODE_ENV=development rollup --config --watch",
     "build": "rm -rf ./dist && NODE_ENV=production rollup --config",
-    "start": "sirv public  --single"
+    "start": "sirv dist  --single"
   },
   "dependencies": {
     "clsx": "^1.0.4",

@@ -1,7 +1,7 @@
 export enum event_type { get = 1, mutate, subscribe, unsubscribe };
 
 export enum events {
-   css_event = 1,
+  css_event = 1,
   notification_event,
   cookie_event,
   redirection_event,
@@ -31,6 +31,14 @@ export enum events {
   note_header,
   note_list,
   note_mutate,
+
+  global_color_header,
+  global_color_list,
+  global_color_mutate,
+
+  global_permission_header,
+  global_permission_list,
+  global_permission_mutate,
 
   account = 100,
 
