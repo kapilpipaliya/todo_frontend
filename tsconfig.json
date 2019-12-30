@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "ESNEXT",
     "baseUrl": "./",
+    "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "types": ["svelte"],                           /* Type declaration files to be included in compilation. */
      /* Strict Type-Checking Options */
     "strict": false, /* Enable all strict type-checking options. */
