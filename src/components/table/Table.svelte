@@ -1,6 +1,7 @@
 <script lang='ts'>
   // import * as _ from "lamb";
   import * as R from 'ramda'
+  import * as RA from 'ramda-adjunct'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -474,7 +475,7 @@
     const left = event.clientX
     const top = event.clientY
 
-    const menuBox = window.document.querySelector('.menu')
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu')
     if (menuBox) {
       menuBox.style.left = left + 'px'
       menuBox.style.top = top + 'px'
@@ -492,7 +493,7 @@
     const left = event.clientX
     const top = event.clientY
 
-    const menuBox = window.document.querySelector('.menu-input')
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
     if (menuBox) {
       menuBox.style.left = left + 'px'
       menuBox.style.top = top + 'px'
@@ -580,7 +581,27 @@
 <br>
 {JSON.stringify(selectedRowsKeys)}
   */
-
+function getValue(v) {
+  if(RA.isArray(v)) {
+    if(v.length > 0) {
+      return v[0]
+    } else {
+      console.log("Array Must has one element")
+      return v
+    }
+  } else {
+    return v
+  }
+}
+function isGlobal(v) {
+  //return v?.[1] == 'global'
+  if(RA.isArray(v)) {
+    if(v.length >= 2) {
+      return v[1] === 'global'
+    }
+  }
+  return false
+}
 </script>
 
 {er}
@@ -726,40 +747,46 @@
       </tr>
     </thead>
     <tbody>
-      {#each items as l, cindex (l[0])}
+      {#each items as l, cindex (getValue(l[0]))}
         <tr
 
           draggable="true"
           on:mouseenter={e => {}}
           on:mouseleave={e => {}}
-          class="{selectedRowsKeys.includes(l[0]) ? $css.table.class.selected || 'selected' : ''}"
+          class="{selectedRowsKeys.includes(getValue(l[0])) ? $css.table.class.selected || 'selected' : ''}"
           >
           <td>
+              {#if !isGlobal(l[0])}
               {#if false}
-                <span>ID: {l[0]}</span>
+                <span>ID: {getValue(l[0])}</span>
               {/if}
               <input
                 type="checkbox"
-                value={l[0]}
-                checked={selectedRowsKeys.includes(l[0])}
+                value={getValue(l[0])}
+                checked={selectedRowsKeys.includes(getValue(l[0]))}
                 on:click={onSelectRowClick} />
+              {/if}
           </td>
           <td>
-              {#if quickcomponent && !quickview.includes(l[0])}
+              {#if !isGlobal(l[0])}
+              {#if quickcomponent && !quickview.includes(getValue(l[0]))}
                 <button
                   name='edit'
-                  key={l[0]}
+                  key={getValue(l[0])}
                   type="button"
                   on:click={() => {
-                    quickview.push(l[0])
+                    quickview.push(getValue(l[0]))
                     quickview = quickview
                   }}>
                   Edit
                 </button>
               {/if}
+              {/if}
           </td>
           <td>
-              <button name='delete' key={l[0]} type="button" on:click={onDeleteRow(l[0])}>D</button>
+              {#if !isGlobal(l[0])}
+              <button name='delete' key={getValue(l[0])} type="button" on:click={onDeleteRow(getValue(l[0]))}>D</button>
+              {/if}
           </td>
           {#each l as c, index}
             {#if visible_columns[index]}
@@ -767,7 +794,7 @@
                 {#if l[index] != null}
                   {#if headerColTypes[index] === 1114}
                     {new Date(l[index]).toLocaleString()}
-                  {:else}{l[index]}{/if}
+                  {:else}{getValue(l[index])}{/if}
                 {/if}
               </td>
             {/if}
@@ -790,13 +817,13 @@
           {/if}
           <!-- </td> -->
         </tr>
-        {#if quickview.includes(l[0])}
+        {#if quickview.includes(getValue(l[0]))}
           <tr>
             <td colspan={l.length + 3}>
               {#if quickcomponent}
                 <svelte:component
                   this={quickcomponent}
-                  key={l[0]}
+                  key={getValue(l[0])}
                   {schema_key}
                   {eventsFn}
                   on:close={onCancel}
