@@ -12,6 +12,7 @@ export * from '../../svelte/src/runtime/transition/index'
 export * from '../../svelte/src/runtime/animate/index'
 import {event_type as et, events as e} from './events'
 export * from './events'
+export enum form_type { object = 1, array };
 // import {account} from './global_stores/account.js'
 // import {cookie} from './global_stores/cookie.js'
 // import {member_settings} from './global_stores/member_settings.js'
@@ -283,7 +284,7 @@ class FormBasic {
   public S: ServerEventsDispatcher
   public key: string
   public dp:  (type: string, detail?: any) => void
-  public type: string
+  public type: form_type
   public events: Array<[]>
   public data_evt: []
   public mutate_evt: []
@@ -297,7 +298,7 @@ class FormBasic {
   public form_disabled: Writable<boolean>
   public schema_key: string
 
-  constructor(S, key, e, dp, type='o') {
+  constructor(S, key, e, dp, type=form_type.object) {
     this.S = S
     this.key = key
     this.dp = dp
@@ -336,14 +337,14 @@ class FormBasic {
   }
   fetch() {
     const filter = [`="${this.key}"`]
-    const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
+    const args = [filter, [], [], { type: this.type, schema: this.schema_key }]
     const e1 = [this.data_evt, args]
     this.S.trigger([e1])
   }
   onSave() {
     const form = get(this.form) // not recommaned to use get
     this.isSaving.set(true)
-    const filter = this.isUpdate ? [`="${this.type == 'o' ? form._key : form[0]}"`] : null
+    const filter = this.isUpdate ? [`="${this.type == form_type.object ? form._key : form[0]}"`] : null
     this.S.trigger([[this.mutate_evt, [form, filter]]])
   }
   onMutateGet([d]) {
@@ -360,7 +361,7 @@ class FormBasic {
 }
 
 export class Form extends FormBasic {
-  constructor(S, key, e, dp, type='o') {
+  constructor(S, key, e, dp, type=form_type.object) {
     super(S, key, e, dp, type);
     this.form.set({})
     this.onFormDataGet = this.onFormDataGet.bind(this)
@@ -409,7 +410,7 @@ export class FormArray extends FormBasic {
   public headers: Writable<[]>
   public form: Writable<[]>
   public schemaGetEvt: number[]
-  constructor(S, key, ev, dp, schema_key, type='a') {
+  constructor(S, key, ev, dp, schema_key, type=form_type.array) {
     super(S, key, ev, dp, type);
     this.schema_key = schema_key
     this.form.set([])

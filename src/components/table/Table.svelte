@@ -1,14 +1,14 @@
-<script>
+<script lang='ts'>
   // import * as _ from "lamb";
   import * as R from 'ramda'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
   // import Card from "../components/Card.svelte";
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
 
-  export let eventsFn = () => 0
+  export let eventsFn: (id:number, schema: string) => Array<[]>
   let events
 
   let headers
@@ -21,7 +21,7 @@
   export let modelcomponent = false
   export let quickcomponent = false
 
-  export let query = {} // To get arguments from ?limit=25&page=2
+  export let query = {limit: 0, page: 1} // To get arguments from ?limit=25&page=2
 
   export let schema_key = ''
 
@@ -54,7 +54,7 @@
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
-  let fetchConfig = { type: 'a' }
+  let fetchConfig = { type: form_type.array }
   // pagination:
   let limit = Number(query.limit) || 0
   let pages = [1, 2]
@@ -66,7 +66,7 @@
   let binded = false
   let er = ''
 
-  let doms = {}
+  let doms = {addbutton: null}
   let addnewform = false
   let headerFetched = false
   let modalIsVisible = false
@@ -107,7 +107,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = { type: 'a' }
+    fetchConfig = { type: form_type.array }
     // pagination:
     limit = Number(query.limit) || 0
     pages = [1, 2]
@@ -370,7 +370,7 @@
           },
           ['DEL', filter]
         )
-      }, 0)
+      })
       if (d.ok) {
         deleteRows_([key])
       } else {
@@ -393,7 +393,7 @@
           },
           ['DEL', filter]
         )
-      }, 0)
+      })
       if (d.ok) {
         deleteRows_(selectedRowsKeys)
       } else {
@@ -545,7 +545,7 @@
   }
   const onConfigApply = e => {
     const { list } = e.detail
-    fetchConfig.columns = list
+    fetchConfig['columns'] = list
     config = false
     const e1 = [header_evt, fetchConfig]
     S.trigger([e1])
