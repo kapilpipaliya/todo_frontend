@@ -16,16 +16,24 @@
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
+  	import Page from './Page.svelte'
+	// account:
 	import Login from './account/login.svelte'
 	import Logout from './account/logout.svelte'
 	import Register from './account/register.svelte'
 	import Confirm from './account/confirm.svelte'
+
+	// admin:
 	import PublicIndex from './views/public/index.svelte'
 	import PublicLayout from './views/public/layout.svelte'
 	import AdminLayout from './views/admin/layout.svelte'
 	import AdminIndex from './views/admin/index.svelte'
 	import EmployeesIndex from './views/admin/employees/index.svelte'
-  	import Page from './Page.svelte'
+
+	// organization:
+	import OrganizationLayout from './views/organization/layout.svelte'
+	import OrganizationIndex from './views/organization/index.svelte'
+
 
 	let mounted = false
 	let er = ''
@@ -76,15 +84,17 @@
 
 	const modifyComp = (key, obj)=> {
 	    switch (obj[key]) {
+	    case "Page": obj[key] = Page; break;  
 	    case "PublicLayout": obj[key] = PublicLayout; break;
-	    case "AdminLayout": obj[key] = AdminLayout; break;
 	    case "Register": obj[key] = Register; break;
 	    case "Login": obj[key] = Login; break;
 	    case "Logout": obj[key] = Logout; break;
+	    case "Confirm": obj[key] = Confirm; break;
+	    case "AdminLayout": obj[key] = AdminLayout; break;
 	    case "AdminIndex": obj[key] = AdminIndex; break;
 	    case "EmployeesIndex": obj[key] = EmployeesIndex; break;
-	    case "Confirm": obj[key] = Confirm; break;
-	    case "Page": obj[key] = Page; break;  
+	    case "OrganizationLayout": obj[key] = OrganizationLayout; break;
+	    case "OrganizationIndex": obj[key] = OrganizationIndex; break;
 	  }
 	  return obj
 	}

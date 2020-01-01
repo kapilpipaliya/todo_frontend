@@ -1,6 +1,6 @@
 <script>
 import * as R from 'ramda'
-export let menu = {}
+export let menu = []
 </script>
 <ul>
 {#each menu as m}
