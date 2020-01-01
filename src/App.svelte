@@ -14,7 +14,7 @@
 	import {current_time} from './modules/global_stores/time_store.ts'
 	import {translation} from './modules/global_stores/translation.ts'
 	import {default_filter} from './modules/global_stores/default_filter.ts'
-	import {organization} from './modules/global_stores/organization.ts'
+	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
@@ -127,7 +127,7 @@
 	// }
 	$: {
 		$default_filter = {
-		  project: [null, $organization || null]
+		  project: [null, $organization_data._key || null]
 		}
 	}
 </script>

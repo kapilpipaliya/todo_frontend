@@ -3,7 +3,7 @@
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
-  import {organization} from '../../modules/global_stores/organization.ts'
+  //import {organization_id} from '../../modules/global_stores/organization.ts' // will need to make url.
   import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
