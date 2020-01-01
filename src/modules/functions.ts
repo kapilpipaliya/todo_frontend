@@ -20,6 +20,7 @@ export enum form_type { object = 1, array };
 // import {navigation} from './global_stores/navigation.js'
 // import {notification} from './global_stores/notification.js'
 // import {current_time} from './global_stores/time_store.js'
+import {default_form} from './global_stores/default_form'
 
 const dev_conf = {
   domain: 'localhost',
@@ -445,7 +446,7 @@ export class FormArray extends FormBasic {
   }
   onFormDataGet(d){
     this.isSaving.set(false)
-    const form = FormArray.onFormDataGetStatic(d)
+    const form = this.onFormDataGetStatic(d)
     if (form[0]) {
      this.isUpdate = true
     }
@@ -453,11 +454,24 @@ export class FormArray extends FormBasic {
     this.form_disabled.set(false)
   }
   //static functions:
-  static onFormDataGetStatic([d]) {
+  mergeFormValues(f) {
+    if(!this.isUpdate){
+      const s = get(default_form)[this.schema_key]
+      if(s) {
+        for (let i = 0; i < f.length; i++) {
+          if (s[i]) {
+            f[i] = s[i]
+          }
+        }
+      }
+      return f    
+    }
+  }
+  onFormDataGetStatic([d]) {
     if (d.r) {
       const r = d.r.result
       if(r.length){
-        return r[0]
+        return this.mergeFormValues(r[0])
       } else {
         return {}
       }

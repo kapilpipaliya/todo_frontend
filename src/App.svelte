@@ -14,6 +14,7 @@
 	import {current_time} from './modules/global_stores/time_store.ts'
 	import {translation} from './modules/global_stores/translation.ts'
 	import {default_filter} from './modules/global_stores/default_filter.ts'
+	import {default_form} from './modules/global_stores/default_form.ts'
 	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
@@ -130,6 +131,11 @@
 		  project: [null, $organization_data._key || null]
 		}
 	}
+	$: {
+		$default_form = {
+		  project: [null, $organization_data._key || null]
+		}
+	}
 </script>
 
 <Css/>
@@ -158,3 +164,6 @@
 {/if}
 default_filter:
 {JSON.stringify($default_filter)}
+<br>
+default_form:
+{JSON.stringify($default_form)}

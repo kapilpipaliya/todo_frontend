@@ -22,3 +22,4 @@
 	on:close
 />
 {$er}
+{JSON.stringify($form)}
