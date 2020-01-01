@@ -13,6 +13,8 @@
 	import {notification} from './modules/global_stores/notification.ts'
 	import {current_time} from './modules/global_stores/time_store.ts'
 	import {translation} from './modules/global_stores/translation.ts'
+	import {default_filter} from './modules/global_stores/default_filter.ts'
+	import {organization} from './modules/global_stores/organization.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
@@ -123,6 +125,11 @@
 	// const onClickHandle = e => {
 	//   goto(e.target.href, { replaceState: true })
 	// }
+	$: {
+		$default_filter = {
+		  project: [null, $organization || null]
+		}
+	}
 </script>
 
 <Css/>
@@ -149,3 +156,5 @@
 {#if routes.length}
 	<Router {routes} />
 {/if}
+default_filter:
+{JSON.stringify($default_filter)}

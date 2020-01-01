@@ -7,6 +7,7 @@
   import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
+  import { default_filter } from '../../modules/global_stores/default_filter.ts'
   // import Card from "../components/Card.svelte";
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
@@ -182,9 +183,20 @@
     }
   }
   // ================================Re Fetch Data ===============================
+  function mergeFilter(f) {
+    const s = $default_filter[schema_key]
+    if(s) {
+      for (let i = 0; i < f.length; i++) {
+        if (s[i]) {
+          f[i] = s[i]
+        }
+      }
+    }
+    return f      
+  }
   export const refresh = () => {
     const args = [
-      filterSettings,
+      mergeFilter(filterSettings),
       sortSettings,
       [limit, 0, current_page],
       fetchConfig,

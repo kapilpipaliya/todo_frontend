@@ -17,7 +17,7 @@
 	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_org_menu' ]
 	let menus  = []
 	onMount(() => {mounted = true})
-  	onDestroy(() => {S.unbind_([menu_evt]) })
+  	onDestroy(() => {S.unbind_([menu_evt]); $organization = "" })
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
   	class Menu {
   		public menu = []
