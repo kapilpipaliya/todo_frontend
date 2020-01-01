@@ -3,6 +3,8 @@
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
+  import {organization} from '../../modules/global_stores/organization.ts'
+  import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
   // import Card from "../components/Card.svelte";
@@ -12,7 +14,7 @@
   export let eventsFn: (id:number, schema: string) => Array<[]>
   let events
 
-  let headers
+  let headerTitlesRow
   let items
   let count
 
@@ -31,25 +33,27 @@
   }
 
   // headers
-  let formLabels = []
-  let headerColTypes = []
-  let visible_columns = []
+  let headerVisibleColTypesRow = []
+  let headerIsvisibleColumnsRow = []
+  let headerColumnPropsRow = []
 
 
   let options = {}
 
   // internal:
+  enum DisplayType {
+    BOOL=1,
+    INT,
+    TEXT,
+    DOUBLE,
+    UTCTIME,
+    ARRAY,
+    OBJECT,
+    BINARY,
+    URL
+  };
 
-  const BOOL = 10,
-    INT = 20,
-    TEXT = 30,
-    DOUBLE = 40,
-    UTCTIME = 50,
-    ARRAY = 60,
-    OBJECT = 70,
-    BINARY = 80
-
-  const hiddenColumns = [ARRAY, OBJECT, BINARY]
+  const hiddenColumns = [DisplayType.ARRAY, DisplayType.OBJECT, DisplayType.BINARY]
   let filterSettings = []
   let sortSettings = []
   let quickview = []
@@ -90,13 +94,13 @@
   function reset() {
     unRegister()
     events = eventsFn(0, schema_key)
-    headers = []
+    headerTitlesRow = []
     items = []
     count = 0
     // headers
-    formLabels = []
-    headerColTypes = []
-    visible_columns = []
+    headerVisibleColTypesRow = []
+    headerIsvisibleColumnsRow = []
+    headerColumnPropsRow = []
 
 
     options = {}
@@ -197,13 +201,13 @@
   }
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
-    headers = d[0] || []
-    formLabels = d[1] || []
-    headerColTypes = d[2] || []
-    visible_columns = d[3] || []
+    headerTitlesRow = d[0] || []
+    headerVisibleColTypesRow = d[1] || []
+    headerIsvisibleColumnsRow = d[2] || []
+    headerColumnPropsRow = d[3] || []
     let i
-    for (i = 0; i < visible_columns.length; i++) {
-      if (visible_columns[i]) {
+    for (i = 0; i < headerIsvisibleColumnsRow.length; i++) {
+      if (headerIsvisibleColumnsRow[i]) {
         first_visibile_column = i
         break
       }
@@ -254,7 +258,7 @@
     refresh()
   }
   const resetFilter_ = () => {
-    const array = new Array(headers.length)
+    const array = new Array(headerTitlesRow.length)
     array.fill(null)
     for (let key in requiredFilter) {
       array[key] = requiredFilter[key]
@@ -293,7 +297,7 @@
   }
   const editButtonFocus = async(key) => {
     await tick();
-    const element = document.querySelector(`button[key='${key}'][name='edit']`);
+    const element: HTMLElement | null = document.querySelector(`button[key='${key}'][name='edit']`);
       if(element) {
         element.focus()
       }
@@ -508,7 +512,7 @@
     //     }
   }
   const closeInputMenu = event => {
-    const menuBox = window.document.querySelector('.menu-input')
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
     if (inputMenuDisplayed == true) {
       menuBox.style.display = 'none'
     }
@@ -602,6 +606,9 @@ function isGlobal(v) {
   }
   return false
 }
+function makeUrl(props, id){
+  return new UrlPattern(props.pattern).stringify({id})
+}
 </script>
 
 {er}
@@ -666,8 +673,8 @@ function isGlobal(v) {
             on:click={onSelectAllClick} />
           Actions
         </th>
-        {#each headers as h, index}
-          {#if visible_columns[index]}
+        {#each headerTitlesRow as h, index}
+          {#if headerIsvisibleColumnsRow[index]}
             <th
               on:click={e => handleSort(e, index)}
               on:contextmenu|preventDefault={onHeaderContext}>
@@ -686,8 +693,8 @@ function isGlobal(v) {
       </tr>
       <tr>
         <th colspan="3"/>
-        {#each headers as h, index}
-          {#if visible_columns[index]}
+        {#each headerTitlesRow as h, index}
+          {#if headerIsvisibleColumnsRow[index]}
             {#if customFilter[index]}
               <th>
                 <select
@@ -698,8 +705,8 @@ function isGlobal(v) {
                   {/each}
                 </select>
               </th>
-            {:else if !hiddenColumns.includes(headerColTypes[index])}
-              {#if headerColTypes[index] === INT}
+            {:else if !hiddenColumns.includes(headerVisibleColTypesRow[index])}
+              {#if headerVisibleColTypesRow[index] === DisplayType.INT}
                 <th>
                   <input
                     type="search"
@@ -707,7 +714,7 @@ function isGlobal(v) {
                     on:input={handleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
-              {:else if headerColTypes[index] === TEXT}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.TEXT}
                 <th>
                   <input
                     type="search"
@@ -715,7 +722,7 @@ function isGlobal(v) {
                     on:input={handleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
-              {:else if headerColTypes[index] === DOUBLE}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.DOUBLE}
                 <th>
                   <input
                     type="search"
@@ -724,7 +731,7 @@ function isGlobal(v) {
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
-              {:else if headerColTypes[index] === BOOL}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.BOOL}
                 <th>
                   <input
                     type="checkbox"
@@ -733,10 +740,12 @@ function isGlobal(v) {
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
-              {:else if headerColTypes[index] === UTCTIME}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
                 <th>Date</th>
+              {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
+                <th></th>
               {:else}
-                <th>Unknown Type</th>
+                <th>Unknown Type {headerVisibleColTypesRow[index]}</th>
               {/if}
             {:else}
               <th />
@@ -789,11 +798,13 @@ function isGlobal(v) {
               {/if}
           </td>
           {#each l as c, index}
-            {#if visible_columns[index]}
+            {#if headerIsvisibleColumnsRow[index]}
               <td>
                 {#if l[index] != null}
-                  {#if headerColTypes[index] === 1114}
+                  {#if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
                     {new Date(l[index]).toLocaleString()}
+                  {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
+                    <a href={makeUrl(headerColumnPropsRow[index], l[index])}>{headerColumnPropsRow[index].label}</a>
                   {:else}{getValue(l[index])}{/if}
                 {/if}
               </td>
@@ -889,7 +900,7 @@ function isGlobal(v) {
       this={modelcomponent}
       on:close={closeModal}
       on:successSave={refresh}
-      {headers}
+      {headerTitlesRow}
       {items} />
   </Modal>
 {/if}

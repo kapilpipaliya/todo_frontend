@@ -20,7 +20,6 @@
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
 	      		menus = d[0][0]
-	      		console.log(menus)
 	      	}
 	      }, 1)
 	      binded = true
