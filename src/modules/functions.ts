@@ -337,7 +337,7 @@ class FormBasic {
   }
   fetch() {
     const filter = [`="${this.key}"`]
-    const args = [filter, [], [], { type: this.type, schema: this.schema_key }]
+    const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
     const e1 = [this.data_evt, args]
     this.S.trigger([e1])
   }
