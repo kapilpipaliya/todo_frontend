@@ -794,9 +794,9 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
       {#each items as l, cindex (getValue(l[0]))}
         <tr
 
-          draggable="true"
-          on:mouseenter={e => {}}
-          on:mouseleave={e => {}}
+          
+          
+          
           class="{selectedRowsKeys.includes(getValue(l[0])) ? $css.table.class.selected || 'selected' : ''}"
           >
           {#if showRowNum}
