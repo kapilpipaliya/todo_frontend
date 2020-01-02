@@ -232,6 +232,18 @@
     options = d[4]
     resetFilter_() // Take care....
   }
+  function dropNotExisting(a1: string[], b1:string[]) {
+    // if a1 not contains element in b1 remove it from a1 and return it.
+    let newa1 = []
+    for(let x of a1){
+      const idx = b1.indexOf(x)
+      // if(idx == -1){a1.splice(idx, 1) } } // cant modify array in loop
+      if(idx != -1) {
+        newa1.push(x)
+      }
+    }
+    return newa1
+  }
   function onDataGet([d]) {
     if (d.r) {
       // reset quickview with empty array:
@@ -242,7 +254,8 @@
       count = d.r.extra.stats.fullCount
       current_page = d.r.pagination[2] // change page if not same.
       calc_pagination()
-      selectAll_(false)
+      // selectAll_(false)
+      selectedRowsKeys = dropNotExisting(selectedRowsKeys, items.map(x=>getValue(x[0])))
     } else if (d.n) {
       items.push(...d.n.result)
       count = count + 1
@@ -548,7 +561,7 @@
     //e.preventDefault();
     //e.stopPropagation();
   }
-  const selectAll_ = v => {
+  const selectAll_ = (v: boolean) => {
     if (v) {
       selectedRowsKeys = items.map(x => x[0])
     } else {
