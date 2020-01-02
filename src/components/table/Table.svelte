@@ -80,11 +80,13 @@
   let item = []
   let config = false
   let contextmenu = false
+  let showRowNum = true
 
   let header_evt
   let data_evt
   let unsub
   let mutate_evt
+
 
   // customFilter, not work with filter..
   $: query, eventsFn, requiredFilter, schema_key, reset()
@@ -622,6 +624,10 @@ function isGlobal(v) {
 function makeUrl(props, id){
   return new UrlPattern(props.pattern).stringify({id, org: $organization_id, project: $project_id})
 }
+function onShowRowNum(){
+  showRowNum = !showRowNum
+}
+$: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
 </script>
 
 {er}
@@ -668,6 +674,9 @@ function makeUrl(props, id){
   {#if multipleSelected}
     <button type="button" on:click={onDeleteSelected}>Delete</button>
   {/if}
+
+  <button type="button" on:click={onShowRowNum}>Row Numbers</button>
+
   <button type="button" on:click={onConfigClicked}>Config</button>
   {#if config}
     <Config
@@ -679,7 +688,7 @@ function makeUrl(props, id){
   <table>
     <thead>
       <tr>
-        <th colspan="3">
+        <th colspan={mergeRowsCount}>
           <input
             type="checkbox"
             bind:checked={allSelected}
@@ -705,7 +714,7 @@ function makeUrl(props, id){
         <!-- <th width="100px">Actions</th> -->
       </tr>
       <tr>
-        <th colspan="3"/>
+        <th colspan={mergeRowsCount}/>
         {#each headerTitlesRow as h, index}
           {#if headerIsvisibleColumnsRow[index]}
             {#if customFilter[index]}
@@ -777,6 +786,9 @@ function makeUrl(props, id){
           on:mouseleave={e => {}}
           class="{selectedRowsKeys.includes(getValue(l[0])) ? $css.table.class.selected || 'selected' : ''}"
           >
+          {#if showRowNum}
+            <td>{cindex + 1}</td>
+          {/if}
           <td>
               {#if !isGlobal(l[0])}
               {#if false}
