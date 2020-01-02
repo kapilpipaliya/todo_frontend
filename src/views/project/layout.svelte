@@ -4,22 +4,24 @@
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
   	import {organization_id, organization_data} from '../../modules/global_stores/organization.ts'
+  	import {project_id, project_data} from '../../modules/global_stores/project.ts'
   	import UrlPattern from 'url-pattern'
 
     export let currentRoute;
     export let params
 
-    $organization_id = currentRoute.namedParams.org
+    // $organization_id = currentRoute.namedParams.org
+    $project_id = currentRoute.namedParams.project
 
     let mounted = false
 	let er = ''
 	let binded = false
 	let fetch_data = false
-	let org_fetch_evt = [et.get, e.admin, e.organization_list, 'org_fetch' ]
-	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_org_menu' ]
+	let project_fetch_evt = [et.get, e.admin, e.project_list, 'project_fetch' ]
+	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_pro_menu' ]
 	let menus  = []
 	onMount(() => {mounted = true})
-  	onDestroy(() => {S.unbind_([menu_evt]); $organization_id = ""; $organization_data = {} })
+  	onDestroy(() => {S.unbind_([menu_evt]); $project_id = ""; $project_data = {} })
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
   	class Menu {
   		public menu = []
@@ -27,36 +29,39 @@
   	const m = new Menu;
   	function funcBindingOnce() {
 	    if (!binded) {
-	      S.bind$(org_fetch_evt, (d) => {
-	      	$organization_data = d[0].r.result[0]
+	      S.bind$(project_fetch_evt, (d) => {
+	      	if(d[0].r.result.length == 0) {
+	      		console.log('no project found')
+	      	}
+	      	$project_data = d[0].r.result[0]
 	      	fetch_data = true
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
 	      		if(d[0][0]){
-	      			m.menu = d[0][0].organization
-	      			menus = processMenu(R.clone(m.menu), $organization_id)
+	      			m.menu = d[0][0].project
+	      			menus = processMenu(R.clone(m.menu), $organization_id, $project_id)
 	      		}
 	      	}
 	      }, 1)
 	      binded = true
           const args = [
-		      [null, `="${$organization_id}"`],
+		      [null, null, `="${$project_id}"`],
 		      [],
 		      [0, 0, 1],
 		      {type: form_type.object},
 		    ]
           S.trigger([
-          	[org_fetch_evt, args],
+          	[project_fetch_evt, args],
 	    	[menu_evt, ['side_menu']],
 	    	]) 
 	    }
   	}
-  	function processMenu(menu_, org) {
+  	function processMenu(menu_, org, project) {
 		for(let x of menu_) {
-			x.path = new UrlPattern(x.path).stringify({org})
+			x.path = new UrlPattern(x.path).stringify({org, project})
 			if(x.children){
-				x.children = processMenu(x.children, org)
+				x.children = processMenu(x.children, org, project)
 			}
 		}
 		return menu_
@@ -64,10 +69,10 @@
 
   	// when organization_id change or organization_data is change just refresh the component.
 
-  	$: {menus = processMenu(R.clone(m.menu), $organization_id) }
+  	$: {menus = processMenu(R.clone(m.menu), $organization_id, $project_id) }
 </script>
 
-<h4>Selected Organization: {$organization_id}</h4>
+<h4>Selected Project: {$project_id}</h4>
 <div style="display: flex">
   <div>
 	<TreeSidebar menu={menus}/>

@@ -16,6 +16,7 @@
 	import {default_filter} from './modules/global_stores/default_filter.ts'
 	import {default_form} from './modules/global_stores/default_form.ts'
 	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
+	import {project_id, project_data} from './modules/global_stores/project.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
@@ -36,6 +37,10 @@
 	// organization:
 	import OrganizationLayout from './views/organization/layout.svelte'
 	import OrganizationIndex from './views/organization/index.svelte'
+
+	// project:
+	import ProjectLayout from './views/project/layout.svelte'
+	import ProjectIndex from './views/project/index.svelte'
 
 
 	let mounted = false
@@ -98,6 +103,8 @@
 	    case "EmployeesIndex": obj[key] = EmployeesIndex; break;
 	    case "OrganizationLayout": obj[key] = OrganizationLayout; break;
 	    case "OrganizationIndex": obj[key] = OrganizationIndex; break;
+	    case "ProjectLayout": obj[key] = ProjectLayout; break;
+	    case "ProjectIndex": obj[key] = ProjectIndex; break;
 	  }
 	  return obj
 	}
@@ -128,12 +135,14 @@
 	// }
 	$: {
 		$default_filter = {
-		  project: [null, $organization_data._key || null]
+		  project: [null, $organization_data._key || null],
+		  work_package: [null, $organization_data._key || null, $project_data._key || null],
 		}
 	}
 	$: {
 		$default_form = {
-		  project: [null, $organization_data._key || null]
+		  project: [null, $organization_data._key || null],
+		  work_package: [null, $organization_data._key || null, $project_data._key || null]
 		}
 	}
 </script>

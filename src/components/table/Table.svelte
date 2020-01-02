@@ -3,7 +3,8 @@
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
-  //import {organization_id} from '../../modules/global_stores/organization.ts' // will need to make url.
+  import {organization_id} from '../../modules/global_stores/organization.ts'
+  import {project_id} from '../../modules/global_stores/project.ts'
   import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -619,7 +620,7 @@ function isGlobal(v) {
   return false
 }
 function makeUrl(props, id){
-  return new UrlPattern(props.pattern).stringify({id})
+  return new UrlPattern(props.pattern).stringify({id, org: $organization_id, project: $project_id})
 }
 </script>
 
