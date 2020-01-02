@@ -1,8 +1,7 @@
 
 
-<script>
+<script lang='ts'>
 import { onMount } from '../../modules/functions.ts'
-import clsx from "clsx";
 import Checkboxes from './Checkboxes.svelte';
 import SubmitButton from '../_SubmitButton.svelte'
 import CancelButton from '../_CancelButton.svelte'
@@ -18,10 +17,9 @@ let types = []
 let required = []
 let placeholder = []
 let disabled = []
-let title = []
-let classe = []
 let description = []
 let props = []
+
 let doms = {}
 let mounted = false
 let once = true
@@ -32,10 +30,8 @@ $: {
 	required = headers[2] || []
 	placeholder = headers[3] || []
 	disabled = headers[4] || []
-	title = headers[5] || []
-	classe = headers[6] || []
-	description = headers[7] || []
-	props = headers[8] || []
+	description = headers[5] || []
+	props = headers[6] || []
 }
 
 $: {
@@ -70,10 +66,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'date'}
@@ -87,10 +83,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'datetime-local'}
@@ -104,10 +100,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>	
 				{:else if types[i] === 'image'}
@@ -121,10 +117,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 					 alt='image'
 				/>
@@ -139,10 +135,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'tel'}
@@ -156,10 +152,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'time'}
@@ -173,10 +169,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'url'}
@@ -190,10 +186,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'week'}
@@ -207,10 +203,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'submit'}
@@ -223,10 +219,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 */
@@ -245,10 +241,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'email'}
@@ -262,10 +258,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'file'}
@@ -279,10 +275,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'hidden'}
@@ -295,10 +291,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'number'}
@@ -312,10 +308,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'password'}
@@ -329,10 +325,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'range'}
@@ -346,10 +342,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'search'}
@@ -363,10 +359,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 
@@ -381,10 +377,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 
@@ -399,10 +395,10 @@ onMount(()=> {
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]+'a'}
+					 
 					 bind:this={doms[i]}
 					 
-					 class={clsx(classe[i])}
+					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'checkbox'}
@@ -416,10 +412,10 @@ onMount(()=> {
 					 
 					 disabled={form_disabled ? true : disabled[i]}
 					 
-					 title={title[i]}
 					 
 					 
-					 classe={clsx(classe[i])} 
+					 
+					  
 					 props={props[i]}						 
 					/>
 				{:else if types[i] === 'radio'}
@@ -435,10 +431,10 @@ onMount(()=> {
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
 							 
-							 title={title[i]}
+							 
 							 bind:this={doms[i]}
 							 
-							 class={clsx(classe[i])}
+							 
 							 {...props[i]}
 						/>
 						{v}
