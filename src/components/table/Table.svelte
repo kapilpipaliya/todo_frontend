@@ -279,11 +279,17 @@
   }
   // ============================================================================
   // ================================Filter ======================================
-  const handleFilter = col => event => {
+  const delay_refresh = () => {
     // when filter applied, change current_page to 1 before fetching data, to prevent
     // empty result
     current_page = 1
     refresh()
+  };
+  //store the timeout, cancel it on each change, then set a new one
+  let filter_timeout
+  const onHandleFilter = col => event => {
+    clearTimeout(filter_timeout);
+    filter_timeout = setTimeout(delay_refresh, 250);
   }
   const resetFilter_ = () => {
     const array = new Array(headerTitlesRow.length)
@@ -734,7 +740,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
               <th>
                 <select
                   bind:value={filterSettings[index]}
-                  on:change={handleFilter(index)}>
+                  on:change={onHandleFilter(index)}>
                   {#each customFilter[index] as f}
                     <option value={f[1]}>{f[0]}</option>
                   {/each}
@@ -746,7 +752,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
                   <input
                     type="search"
                     bind:value={filterSettings[index]}
-                    on:input={handleFilter(index)}
+                    on:input={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.TEXT}
@@ -754,7 +760,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
                   <input
                     type="search"
                     bind:value={filterSettings[index]}
-                    on:input={handleFilter(index)}
+                    on:input={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.DOUBLE}
@@ -762,7 +768,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
                   <input
                     type="search"
                     bind:value={filterSettings[index]}
-                    on:input={handleFilter(index)}
+                    on:input={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
@@ -771,7 +777,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
                   <input
                     type="checkbox"
                     bind:checked={filterSettings[index]}
-                    on:change={handleFilter(index)}
+                    on:change={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
