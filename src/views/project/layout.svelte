@@ -6,6 +6,7 @@
   	import {organization_id, organization_data} from '../../modules/global_stores/organization.ts'
   	import {project_id, project_data} from '../../modules/global_stores/project.ts'
   	import UrlPattern from 'url-pattern'
+  	 import Skeleton from '../../components/Skeleton.svelte'
 
     export let currentRoute;
     export let params
@@ -79,6 +80,8 @@
   </div>
   {#if fetch_data}
   	<Route {currentRoute} {params}/>
+  {:else}
+  	<Skeleton/>
   {/if}
 
 </div>

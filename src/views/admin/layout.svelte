@@ -1,8 +1,9 @@
-<script >
+<script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.ts";
   	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
+  	import Skeleton from '../../components/Skeleton.svelte'
 
     export let currentRoute;
     export let params
@@ -10,6 +11,7 @@
     let mounted = false
 	let er = ''
 	let binded = false
+	let fetch_data = false
 	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_admin_menu' ]
 	let menus  = []
 	onMount(() => {mounted = true})
@@ -20,6 +22,7 @@
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
 	      		menus = d[0][0]
+	      		fetch_data = true // not important on menu
 	      	}
 	      }, 1)
 	      binded = true
@@ -36,7 +39,11 @@
 		<TreeSidebar menu={menus.admin}/>
 	{/if}
   </div>
-  <Route {currentRoute} {params}/>
+  {#if fetch_data}
+  	<Route {currentRoute} {params}/>
+  {:else}
+  	<Skeleton/>
+  {/if}
 
 
 </div>
