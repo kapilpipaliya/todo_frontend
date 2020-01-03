@@ -6,7 +6,7 @@
       "calculated": "",
       "prefix": "",
       "selector": "_key",
-      "title": "Key",
+      "label": "Key",
       "type": "text",
       "visible_type": "text"
     }
@@ -46,12 +46,12 @@
 <div>
 	Columns:
 	<br>
-	Enter selector, title, type, visible_type
+	Enter selector, label, type, visible_type
 </div>
 {#each columns as c, index}
 <div style='display: flex'>
-	<input bind:value={c.selector} on:change={()=>{c.title = c.selector; columns=columns}}/>
-	<input bind:value={c.title}>
+	<input bind:value={c.selector} on:change={()=>{c.label = c.selector; columns=columns}}/>
+	<input bind:value={c.label}>
 	<select bind:value={c.type} >
 			{#each types as t}
 				<option>{t}</option>

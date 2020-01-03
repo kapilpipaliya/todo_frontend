@@ -42,6 +42,9 @@
 	import ProjectLayout from './views/project/layout.svelte'
 	import ProjectIndex from './views/project/index.svelte'
 
+	// other
+	import SchemaGenerator from  './components/SchemaGenerate.svelte'
+
 
 	let mounted = false
 	let er = ''
@@ -73,12 +76,11 @@
 	    }
   	}
 
-
   	async function isLoggedIn() {
   		const auth = await isLoggedInFn(S)
     	return auth.ok
   	}
-    
+
   	async function isNotLoggedIn() {
   		const auth = await isLoggedInFn(S)
   		console.log(!auth.ok)
@@ -105,6 +107,7 @@
 	    case "OrganizationIndex": obj[key] = OrganizationIndex; break;
 	    case "ProjectLayout": obj[key] = ProjectLayout; break;
 	    case "ProjectIndex": obj[key] = ProjectIndex; break;
+	    case "SchemaGenerator": obj[key] = SchemaGenerator; break;
 	  }
 	  return obj
 	}
