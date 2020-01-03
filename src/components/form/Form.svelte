@@ -15,7 +15,7 @@ export let save = ()=>0
 let labels = []
 let types = []
 let required = []
-let placeholder = []
+
 let disabled = []
 let description = []
 let props = []
@@ -28,10 +28,10 @@ $: {
 	labels = headers[0] || []
 	types = headers[1] || []
 	required = headers[2] || []
-	placeholder = headers[3] || []
-	disabled = headers[4] || []
-	description = headers[5] || []
-	props = headers[6] || []
+
+	disabled = headers[3] || []
+	description = headers[4] || []
+	props = headers[5] || []
 }
 
 $: {
@@ -62,7 +62,7 @@ onMount(()=> {
 					 type='button'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -79,7 +79,7 @@ onMount(()=> {
 					 type='date'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -96,7 +96,7 @@ onMount(()=> {
 					 type='datetime-local'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -113,7 +113,7 @@ onMount(()=> {
 					 type='image'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -131,7 +131,7 @@ onMount(()=> {
 					 type='month'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -148,7 +148,7 @@ onMount(()=> {
 					 type='tel'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -165,7 +165,7 @@ onMount(()=> {
 					 type='time'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -182,7 +182,7 @@ onMount(()=> {
 					 type='url'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -199,7 +199,7 @@ onMount(()=> {
 					 type='week'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -215,7 +215,7 @@ onMount(()=> {
 					 type='submit'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -237,7 +237,7 @@ onMount(()=> {
 					 type='color'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -254,7 +254,7 @@ onMount(()=> {
 					 type='email'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -271,7 +271,7 @@ onMount(()=> {
 					 type='file'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -287,7 +287,7 @@ onMount(()=> {
 					 type='hidden'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -304,7 +304,7 @@ onMount(()=> {
 					 type='number'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -321,7 +321,7 @@ onMount(()=> {
 					 type='password'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -338,7 +338,7 @@ onMount(()=> {
 					 type='range'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -355,7 +355,7 @@ onMount(()=> {
 					 type='search'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -373,7 +373,7 @@ onMount(()=> {
 					 type='text'
 					 bind:value={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -391,7 +391,7 @@ onMount(()=> {
 					 type='checkbox'
 					 bind:checked={form[i]}
 					 required={required[i]} 
-					 placeholder={placeholder[i]}
+
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 
@@ -427,7 +427,7 @@ onMount(()=> {
 							 type='radio'
 							 bind:group={form[i]}
 							 required={required[i]} 
-							 placeholder={placeholder[i]}
+
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
 							 
