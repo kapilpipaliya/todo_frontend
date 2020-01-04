@@ -225,7 +225,7 @@ export const getPrice = (product, purity_idx, tone_id, clarityPrice) => {
   return (
     getPurityPrice(product, purity_idx, tone_id) +
     clarityPrice +
-    (product.p_cs_total_p_cs_total[0][2] || 0) +
+    (product.p_cs_total_p_cs_total[0][2] ?? 0) +
     product.p_making_charges
   )
 }
@@ -243,7 +243,7 @@ export const getWeight = (product, purity_idx, tone_id) => {
 }
 // purity price + clarity price + making amount + p_cs_total
 export const getTotalArray = p => {
-  const price = p[p.length - 1] + p[p.length - 2] + p[54] + (p[51][0][2] || 0)
+  const price = p[p.length - 1] + p[p.length - 2] + p[54] + (p[51][0][2] ?? 0)
   const dis = p[55] / 100
   const totalValue = price - price * dis
   return totalValue

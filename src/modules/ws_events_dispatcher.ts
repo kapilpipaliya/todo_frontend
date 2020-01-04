@@ -65,7 +65,7 @@ export class ServerEventsDispatcher {
 
   bind(event, callback, handleMultiple = 0) {
     this.callbacks[JSON.stringify(event)] =
-      this.callbacks[JSON.stringify(event)] || []
+      this.callbacks[JSON.stringify(event)] ?? []
     this.callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
     return this
   }
@@ -265,7 +265,7 @@ export const ServerEventsDispatcher = function(){
     const callbacks = {};
 
     this.bind = function(event_name, callback){
-      callbacks[event_name] = callbacks[event_name] || [];
+      callbacks[event_name] = callbacks[event_name] ?? [];
       callbacks[event_name].push(callback);
       return this;// chainable
     };

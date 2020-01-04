@@ -245,9 +245,9 @@ export class CRUDBase {
   setPaginate(history) {
     const params = new URLSearchParams(history.location.search.slice(1))
     //console.log(Object.fromEntries(params.entries()))
-    this.pageSize.set(Number(params.get('size')) || 25)
-    this.totalPages.set(Number(params.get('totalPages')) || 1)
-    this.currentPage.set(Number(params.get('currentPage')) || 1)
+    this.pageSize.set(Number(params.get('size')) ?? 25)
+    this.totalPages.set(Number(params.get('totalPages')) ?? 1)
+    this.currentPage.set(Number(params.get('currentPage')) ?? 1)
   }
 
   refetch(history) {

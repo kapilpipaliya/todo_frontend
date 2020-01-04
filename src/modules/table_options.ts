@@ -73,7 +73,7 @@ export const tableOptions = {
 }
 
 export const getTableOptions =  (query) => { 
-  const schema_key = query.page || query.table || query
+  const schema_key = query.page ?? query.table ?? query
   const o = tableOptions[schema_key];
   if (o) {
     o.table.query = query
