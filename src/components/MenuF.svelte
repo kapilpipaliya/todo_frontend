@@ -4,9 +4,9 @@ export let menu = {}
 const h = R.compose(R.length, R.filter(x=>!x.hidden) )
 $: tabsCount = h(menu.tabs);
 </script>
-<div>
 
 {#if menu.tabs}
+<div>
 {#each menu.tabs as tab}
 	{#if tabsCount > 1}&nbsp&nbsp{tab.title}:{/if}
 	<div>
@@ -20,5 +20,5 @@ $: tabsCount = h(menu.tabs);
 	{/each}
 	</div>
 {/each}
-{/if}
 </div>
+{/if}

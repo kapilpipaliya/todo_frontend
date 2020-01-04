@@ -500,3 +500,8 @@ export function i18n(name, lang = 'en'){
   return "i18n Error"
 }
 export const form_schema_evt = (id) => [et.get, e.my, e.form_schema_get, id ]
+
+
+export enum level_of_member {
+  predefined, super_admin, organization, project
+}

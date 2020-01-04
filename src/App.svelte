@@ -17,6 +17,7 @@
 	import {default_form} from './modules/global_stores/default_form.ts'
 	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
 	import {project_id, project_data} from './modules/global_stores/project.ts'
+	import {current_member} from './modules/global_stores/current_member.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
@@ -148,6 +149,8 @@
 		  work_package: [null, $organization_data._key ?? null, $project_data._key ?? null]
 		}
 	}
+
+	$: level = current_member?.level;
 </script>
 
 <Css/>
@@ -157,6 +160,7 @@
 		<a href="/">Home</a>
 		<a href="/about">About</a>
 	</div>
+	Current User Level: {level}
 
 	{#if menus.navData}
 		<MenuF menu={menus.navData.account}/>
