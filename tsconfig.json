@@ -1,12 +1,14 @@
 {
   "include": [ "src/**/*" ],
   "compilerOptions": {
-    "target": "ESNEXT",
+    "target": "ES2018",
     "baseUrl": "./",
     "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "types": ["svelte"],                           /* Type declaration files to be included in compilation. */
      /* Strict Type-Checking Options */
     "strict": false, /* Enable all strict type-checking options. */
+    /* Experimental Options */
+     "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
   },
 
 }

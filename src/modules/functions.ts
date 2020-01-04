@@ -192,7 +192,7 @@ export const product_clarity_price = (parray, clarity_id, fn) => {
   }
 }
 
-export const first = a => (a[0] && a[0][0]) || 0
+export const first = a => (a[0] && a[0][0]) ?? 0
 
 const getIndexValue = (arr, idx, pos) => {
   return idx > -1 && arr[idx] ? arr[idx][pos] : ''
