@@ -1,6 +1,6 @@
 import svelte from "rollup-plugin-svelte"
-import commonjs from "rollup-plugin-commonjs"
-import resolve from "rollup-plugin-node-resolve"
+import commonjs from "@rollup/plugin-commonjs"
+import resolve from "@rollup/plugin-node-resolve"
 //import serve from "rollup-plugin-serve"
 import html from "rollup-plugin-bundle-html"
 import css from "rollup-plugin-css-porter"
@@ -9,6 +9,8 @@ import typescriptCompiler from "typescript"
 import { terser } from "rollup-plugin-terser"
 import livereload from "rollup-plugin-livereload"
 import sveltePreprocessor from "svelte-preprocess"
+
+const extensions = [".ts", ".js"]
 
 const plugins = [
   svelte({
@@ -26,9 +28,13 @@ const plugins = [
     dest: 'dist/index.css',
     raw: false
   }),
-  typescript({ typescript: typescriptCompiler }),
+  resolve({
+          browser: true,
+          dedupe: importee => importee === 'svelte' || importee.startsWith('svelte/'),
+          extensions
+  }),
   commonjs({ include: "node_modules/**" }),
-  resolve()
+  typescript({ typescript: typescriptCompiler }),
 ];
 
 if (process.env.NODE_ENV === "development") {
