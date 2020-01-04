@@ -25,13 +25,13 @@ let mounted = false
 let once = true
 
 $: {
-	labels = headers[0] || []
-	types = headers[1] || []
-	required = headers[2] || []
+	labels = headers[0] ?? []
+	types = headers[1] ?? []
+	required = headers[2] ?? []
 
-	disabled = headers[3] || []
-	description = headers[4] || []
-	props = headers[5] || []
+	disabled = headers[3] ?? []
+	description = headers[4] ?? []
+	props = headers[5] ?? []
 }
 
 $: {

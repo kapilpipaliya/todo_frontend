@@ -63,9 +63,9 @@
   let first_visibile_column = 0
   let fetchConfig = { type: form_type.array }
   // pagination:
-  let limit = Number(query.limit) || 0
+  let limit = Number(query.limit) ?? 0
   let pages = [1, 2]
-  let current_page = Number(query.page) || 1
+  let current_page = Number(query.page) ?? 1
 
   let total_pages = Math.max(current_page, 1)
 
@@ -118,9 +118,9 @@
     first_visibile_column = 0
     fetchConfig = { type: form_type.array }
     // pagination:
-    limit = Number(query.limit) || 0
+    limit = Number(query.limit) ?? 0
     pages = [1, 2]
-    current_page = Number(query.page) || 1
+    current_page = Number(query.page) ?? 1
 
     total_pages = Math.max(current_page, 1)
 
@@ -216,10 +216,10 @@
   }
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
-    headerTitlesRow = d[0] || []
-    headerVisibleColTypesRow = d[1] || []
-    headerIsvisibleColumnsRow = d[2] || []
-    headerColumnPropsRow = d[3] || []
+    headerTitlesRow = d[0] ?? []
+    headerVisibleColTypesRow = d[1] ?? []
+    headerIsvisibleColumnsRow = d[2] ?? []
+    headerColumnPropsRow = d[3] ?? []
     let i
     for (i = 0; i < headerIsvisibleColumnsRow.length; i++) {
       if (headerIsvisibleColumnsRow[i]) {
@@ -250,7 +250,7 @@
       // [...Array(20)].map(_=>0)
       // quickview = Array.from({length: d.length}, ()=>0);
 
-      items = d.r.result || []
+      items = d.r.result ?? []
       count = d.r.extra.stats.fullCount
       current_page = d.r.pagination[2] // change page if not same.
       calc_pagination()

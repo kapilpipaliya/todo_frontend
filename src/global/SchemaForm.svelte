@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.ts'
   export let key = 0
@@ -11,7 +11,7 @@
   let editorform
   let editorFields
   let editorcolumns
-  $: $form._key = $form._key || '';
+  $: $form._key = $form._key ?? '';
   onMount(async () => {
     const options = {
             mode: 'code',
@@ -21,9 +21,9 @@
     await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
 
-    editorform = new JSONEditor(jsoneditorformDom, options, $form.form || {})
-    editorFields = new JSONEditor(jsoneditorFieldsDom, options, $form.columns || {})
-    editorcolumns = new JSONEditor(jsoneditorcolumnsDom, options, $form.columns || {})
+    editorform = new JSONEditor(jsoneditorformDom, options, $form.form ?? {})
+    editorFields = new JSONEditor(jsoneditorFieldsDom, options, $form.columns ?? {})
+    editorcolumns = new JSONEditor(jsoneditorcolumnsDom, options, $form.columns ?? {})
     $mounted = true
   })
   onDestroy(() => {f.onDestroy() })
@@ -33,9 +33,9 @@
       S.bind$(f.data_evt, (d) => {
         f.onFormDataGet(d)
         if (d[0].r) {
-          editorform.set($form.form || {})
-          editorFields.set($form.fields || [])
-          editorcolumns.set($form.columns || [])
+          editorform.set($form.form ?? {})
+          editorFields.set($form.fields ?? [])
+          editorcolumns.set($form.columns ?? [])
         }
       }, 1)
       f.bindMutate()

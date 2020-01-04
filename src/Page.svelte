@@ -16,7 +16,7 @@
     schema_key = currentRoute.params.table
     options = getTableOptions(schema_key)
   } else {
-    schema_key = currentRoute.namedParams.table || ''
+    schema_key = currentRoute.namedParams.table ?? ''
     options = getTableOptions(schema_key)
   }
   }

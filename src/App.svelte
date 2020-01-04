@@ -138,14 +138,14 @@
 	// }
 	$: {
 		$default_filter = {
-		  project: [null, $organization_data._key || null],
-		  work_package: [null, $organization_data._key || null, $project_data._key || null],
+		  project: [null, $organization_data._key ?? null],
+		  work_package: [null, $organization_data._key ?? null, $project_data._key ?? null],
 		}
 	}
 	$: {
 		$default_form = {
-		  project: [null, $organization_data._key || null],
-		  work_package: [null, $organization_data._key || null, $project_data._key || null]
+		  project: [null, $organization_data._key ?? null],
+		  work_package: [null, $organization_data._key ?? null, $project_data._key ?? null]
 		}
 	}
 </script>
