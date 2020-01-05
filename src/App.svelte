@@ -46,6 +46,9 @@
 	// other
 	import SchemaGenerator from  './components/SchemaGenerate.svelte'
 
+	//import { NotificationDisplay } from '@beyonk/svelte-notifications'
+	//<NotificationDisplay bind:this={n} />
+
 
 	let mounted = false
 	let er = ''
