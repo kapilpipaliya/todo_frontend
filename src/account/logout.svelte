@@ -57,17 +57,11 @@
   })
 
   // some functions:============
-  function saveCookie(d) {
-    document.cookie = `time=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
-    //goto(d.redirect_url) // fix this
-  }
-
   function onLogout([d]) {
     if (d.ok) {
       loging_out = false
       header = 'Logged out successfully!'
       er = 'Thank you for visiting. See you again soon.'
-      saveCookie(d)
     } else {
       header = 'Error'
       er = d.error

@@ -6,7 +6,7 @@ export enum events {
   cookie_event,
   redirection_event,
   translation_event,
-  current_member,
+  current_member_event,
 
   e_global = 50,
   user_header,

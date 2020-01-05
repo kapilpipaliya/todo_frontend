@@ -150,7 +150,7 @@
 		}
 	}
 
-	$: level = current_member?.level;
+	$: level = $current_member?.level;
 </script>
 
 <Css/>
@@ -183,3 +183,5 @@ default_filter:
 <br>
 default_form:
 {JSON.stringify($default_form)}
+<br>
+{JSON.stringify($current_member)}
