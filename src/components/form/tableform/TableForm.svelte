@@ -26,11 +26,11 @@
 {#if values.length}
 <table>
 	<tbody>
-			{#each values as v, i (i)}
+			{#each values as v, i (v)}
 				<tr>
 					<td><label></label></td>
 					<td>
-						<select bind:value={values[i]}  required on:change={onChange} disabled={i < values.length - 1} >
+						<select bind:value={v}  required on:change={onChange} disabled={i < values.length - 1} >
 								<Options {keyIdx} options={getOptions(i)}/>
 						</select>
 					</td>

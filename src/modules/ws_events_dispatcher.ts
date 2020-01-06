@@ -14,6 +14,10 @@ for $ prefix use always check if(mounted) first.
 //import m from "@msgpack/msgpack";
 //const {encode, decode} = m;
 // const data = decode(evt.data)
+
+// same library:
+//A WebSocket JavaScript library https://sarus.anephenix.com
+//https://github.com/anephenix/sarus
 class WsBase {
   
 }

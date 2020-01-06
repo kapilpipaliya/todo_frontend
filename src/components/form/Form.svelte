@@ -56,7 +56,7 @@ onMount(()=> {
 </script>
 <form on:submit|preventDefault={save}>
 {#each form as f, i}
-  <label>
+
 				{#if types[i] === 'color'}
 				<span>{labels[i]}</span>
     			<input 
@@ -226,15 +226,16 @@ onMount(()=> {
       bind:this={doms[i]}
       {...props[i]}
        />
-     {:else if types[i] = 'multi-select'}
-     	<span>{labels[i]}</span>
-     	<TableForm {...props[i]} />
+    {:else if types[i] === 'multi-select'}
+    	<div>
+     		<span>{labels[i]}</span>
+     		<TableForm {...props[i]} />
+     	</div>
     {/if}
     <!-- Description -->
     {#if description[i]}
       {description[i]}
     {/if}		
-  </label>
 {/each}
   <footer>
     <SubmitButton isSaving={isSaving} />
