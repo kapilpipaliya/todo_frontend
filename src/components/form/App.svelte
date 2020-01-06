@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 	import Form from './Form.svelte'
 	let form = [[1,2], 2]
 	let headers = ["Number1", "Number2"]

@@ -1,4 +1,4 @@
-<script>
+<script lang='ts'>
 	import clsx from "clsx";
 
 	export let name;

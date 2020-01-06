@@ -2,7 +2,7 @@
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick  } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.ts'
   export let key = 0
-  export let eventsFn = () => 0
+  export let eventsFn: (id: string | number, schema: string) => number[][]
   const f = new Form(S, key, eventsFn(key, 'translation'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   let jsoneditorformDom = null
   let editorform
@@ -19,7 +19,7 @@
   })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce() } else {$er = 'Reconnecting...'} }
-  const funcBindingOnce = () => {
+  function funcBindingOnce () {
     if (!$binded) {
       S.bind$(f.data_evt, (d) => {
         f.onFormDataGet(d)

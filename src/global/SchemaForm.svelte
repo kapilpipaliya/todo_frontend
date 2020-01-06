@@ -2,7 +2,7 @@
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.ts'
   export let key = 0
-  export let eventsFn = () => 0
+  export let eventsFn: (id: string | number, schema: string) => number[][]
   const f = new Form(S, key, eventsFn(key, 'schema'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   // should make seperate json component
   let jsoneditorformDom = null
@@ -17,7 +17,7 @@
             mode: 'code',
             modes: ["code", "tree"],
           };
-
+    
     await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
 
@@ -28,7 +28,7 @@
   })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce() } else {$er = 'Reconnecting...'} }
-  const funcBindingOnce = () => {
+  function funcBindingOnce() {
     if (!$binded) {
       S.bind$(f.data_evt, (d) => {
         f.onFormDataGet(d)

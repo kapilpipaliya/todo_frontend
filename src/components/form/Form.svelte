@@ -1,10 +1,9 @@
-
-
 <script lang='ts'>
 import { onMount } from '../../modules/functions.ts'
 import Checkboxes from './Checkboxes.svelte';
 import SubmitButton from '../_SubmitButton.svelte'
 import CancelButton from '../_CancelButton.svelte'
+import TableForm from './tableform/TableForm.svelte'
 export let key
 export let isSaving
 export let headers
@@ -68,11 +67,7 @@ onMount(()=> {
 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'email'}
@@ -82,14 +77,9 @@ onMount(()=> {
 					 type='email'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'file'}
@@ -99,14 +89,9 @@ onMount(()=> {
 					 type='file'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'hidden'}
@@ -115,14 +100,9 @@ onMount(()=> {
 					 type='hidden'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'number'}
@@ -132,14 +112,9 @@ onMount(()=> {
 					 type='number'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'password'}
@@ -149,14 +124,9 @@ onMount(()=> {
 					 type='password'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'range'}
@@ -166,14 +136,9 @@ onMount(()=> {
 					 type='range'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'search'}
@@ -183,17 +148,11 @@ onMount(()=> {
 					 type='search'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
-
 				{:else if types[i] === 'text'}
 				<span>{labels[i]}</span>
     			<input 
@@ -201,17 +160,11 @@ onMount(()=> {
 					 type='text'
 					 bind:value={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
-
 				{:else if types[i] === 'checkbox' && !Array.isArray(form[i])}
 				<span>{labels[i]}</span>
     			<input 
@@ -219,14 +172,9 @@ onMount(()=> {
 					 type='checkbox'
 					 bind:checked={form[i]}
 					 required={required[i]} 
-
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
 					 bind:this={doms[i]}
-					 
-					 
 					 {...props[i]}
 				/>
 				{:else if types[i] === 'checkbox'}
@@ -237,13 +185,7 @@ onMount(()=> {
 					 bind:value={form[i]}
 					 required={required[i]} 
 					 bind:this={doms[i]}
-					 
 					 disabled={form_disabled ? true : disabled[i]}
-					 
-					 
-					 
-					 
-					  
 					 props={props[i]}						 
 					/>
 				{:else if types[i] === 'radio'}
@@ -255,14 +197,9 @@ onMount(()=> {
 							 type='radio'
 							 bind:group={form[i]}
 							 required={required[i]} 
-
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
-							 
-							 
 							 bind:this={doms[i]}
-							 
-							 
 							 {...props[i]}
 						/>
 						{v}
@@ -289,6 +226,9 @@ onMount(()=> {
       bind:this={doms[i]}
       {...props[i]}
        />
+     {:else if types[i] = 'multi-select'}
+     	<span>{labels[i]}</span>
+     	<TableForm {...props[i]} />
     {/if}
     <!-- Description -->
     {#if description[i]}

@@ -2,6 +2,8 @@
   "include": [ "src/**/*" ],
   "compilerOptions": {
     "target": "ES2018",
+    // Dynamic imports are only supported when the '--module' flag is set to 'esnext', 'commonjs',  'amd', 'system', or 'umd'. 
+    "module": "ESNext",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
     "baseUrl": "./",
     "sourceMap": true,                     /* Generates corresponding '.map' file. */
     "types": ["svelte"],                           /* Type declaration files to be included in compilation. */

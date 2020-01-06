@@ -28,7 +28,7 @@ export const schemaEvents2 = (id=0, schema) => {
 }
 */
 // generate event from schema:
-export const schemaEvents = (id=0, schema) => {
+export const schemaEvents = (id: number | string = 0, schema: string) => {
   const h = e[`${schema}_header`]
   let e0 = 0
   if(h > 49 && h < 100){
