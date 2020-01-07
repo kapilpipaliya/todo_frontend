@@ -12,7 +12,7 @@ export let form_disabled = true
 export let save = ()=>0
 
 let labels = []
-let types = []
+let types: number[] = []
 let required = []
 
 let disabled = []
@@ -32,6 +32,32 @@ $: {
 	description = headers[4] ?? []
 	props = headers[5] ?? []
 }
+
+enum Type {
+	button = 1,
+	checkbox,
+	color,
+	date,
+	datetime_local,
+	email,
+	file,
+	hidden,
+	image,
+	month,
+	number,
+	password,
+	radio,
+	range,
+	reset,
+	search,
+	submit,
+	tel,
+	text,
+	time,
+	url,
+	week,
+	multi_select
+};
 
 $: {
 	if(mounted && once){
@@ -57,7 +83,7 @@ onMount(()=> {
 <form on:submit|preventDefault={save}>
 {#each form as f, i}
 
-				{#if types[i] === 'color'}
+				{#if types[i] === Type.color}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -70,7 +96,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'email'}
+				{:else if types[i] === Type.email}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -82,7 +108,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'file'}
+				{:else if types[i] === Type.file}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -94,7 +120,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'hidden'}
+				{:else if types[i] === Type.hidden}
     			<input 
 					 name={labels[i]}
 					 type='hidden'
@@ -105,7 +131,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'number'}
+				{:else if types[i] === Type.number}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -117,7 +143,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'password'}
+				{:else if types[i] === Type.password}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -129,7 +155,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'range'}
+				{:else if types[i] === Type.range}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -141,7 +167,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'search'}
+				{:else if types[i] === Type.search}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -153,7 +179,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'text'}
+				{:else if types[i] === Type.text}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -165,7 +191,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'checkbox' && !Array.isArray(form[i])}
+				{:else if types[i] === Type.checkbox && !Array.isArray(form[i])}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
@@ -177,7 +203,7 @@ onMount(()=> {
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === 'checkbox'}
+				{:else if types[i] === Type.checkbox}
 				<span>{labels[i]}</span>
 		    	<Checkboxes 
 							 
@@ -188,7 +214,7 @@ onMount(()=> {
 					 disabled={form_disabled ? true : disabled[i]}
 					 props={props[i]}						 
 					/>
-				{:else if types[i] === 'radio'}
+				{:else if types[i] === Type.radio}
 				<span>{labels[i]}</span>
 				{#each form[i] as v}
 					<label>
@@ -205,7 +231,7 @@ onMount(()=> {
 						{v}
 					</label>
 				{/each}
-   {:else if types[i] === 'textarea'}
+   {:else if types[i] === Type.textarea}
    	  <span>{labels[i]}</span>
       <textarea
 				bind:value={form[i]}
@@ -214,19 +240,19 @@ onMount(()=> {
         cols={20}
         {...props[i]}
        />
-    {:else if types[i] === 'select'}
+    {:else if types[i] === Type.select}
       <span>{labels[i]}</span>
       <select
 					bind:this={doms[i]}		
       {...props[i]}
        />
-    {:else if types[i] === 'radio'}
+    {:else if types[i] === Type.radio}
       <span>{labels[i]}</span>
       <radio
       bind:this={doms[i]}
       {...props[i]}
        />
-    {:else if types[i] === 'multi-select'}
+    {:else if types[i] === Type.multi_select}
     	<div>
      		<span>{labels[i]}</span>
      		<TableForm {...props[i]} />
