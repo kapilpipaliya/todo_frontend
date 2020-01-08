@@ -204,33 +204,30 @@ onMount(()=> {
 					 {...props[i]}
 				/>
 				{:else if types[i] === Type.checkbox}
-				<span>{labels[i]}</span>
-		    	<Checkboxes 
-							 
-					 name={labels[i]}
-					 bind:value={form[i]}
-					 required={required[i]} 
-					 bind:this={doms[i]}
-					 disabled={form_disabled ? true : disabled[i]}
-					 props={props[i]}						 
-					/>
+					<span>{labels[i]}</span>
+			    	<Checkboxes 
+						 name={labels[i]}
+						 bind:value={form[i]}
+						 required={required[i]}
+						 bind:this={doms[i]}
+						 disabled={form_disabled ? true : disabled[i]}
+						 props={props[i]}
+						/>
 				{:else if types[i] === Type.radio}
-				<span>{labels[i]}</span>
-				{#each form[i] as v}
-					<label>
-		    			<input 
+					<span>{labels[i]}</span>
+					{#each form[i] as v}
+		    			<input
 							 name={labels[i]}
 							 type='radio'
 							 bind:group={form[i]}
-							 required={required[i]} 
+							 required={required[i]}
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
 							 bind:this={doms[i]}
-							 {...props[i]}
+							 props={props[i]}
 						/>
-						{v}
-					</label>
-				{/each}
+						<label>{v}</label>
+					{/each}
    {:else if types[i] === Type.textarea}
    	  <span>{labels[i]}</span>
       <textarea
