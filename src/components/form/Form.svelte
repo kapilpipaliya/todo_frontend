@@ -88,7 +88,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='color'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 
 					 autocomplete={false}
@@ -101,7 +101,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='email'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -113,7 +113,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='file'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -124,7 +124,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='hidden'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -136,7 +136,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='number'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -148,7 +148,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='password'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -160,7 +160,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='range'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -172,7 +172,7 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='search'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -184,19 +184,19 @@ onMount(()=> {
     			<input 
 					 name={labels[i]}
 					 type='text'
-					 bind:value={form[i]}
+					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
-				{:else if types[i] === Type.checkbox && !Array.isArray(form[i])}
+				{:else if types[i] === Type.checkbox && !Array.isArray(f)}
 				<span>{labels[i]}</span>
     			<input 
 					 name={labels[i]}
 					 type='checkbox'
-					 bind:checked={form[i]}
+					 bind:checked={f}
 					 required={required[i]} 
 					 autocomplete={false}
 					 disabled={form_disabled ? true : disabled[i]}
@@ -207,7 +207,7 @@ onMount(()=> {
 					<span>{labels[i]}</span>
 			    	<Checkboxes 
 						 name={labels[i]}
-						 bind:value={form[i]}
+						 bind:value={f}
 						 required={required[i]}
 						 bind:this={doms[i]}
 						 disabled={form_disabled ? true : disabled[i]}
@@ -215,11 +215,11 @@ onMount(()=> {
 						/>
 				{:else if types[i] === Type.radio}
 					<span>{labels[i]}</span>
-					{#each form[i] as v}
+					{#each f as v}
 		    			<input
 							 name={labels[i]}
 							 type='radio'
-							 bind:group={form[i]}
+							 bind:group={f}
 							 required={required[i]}
 							 autocomplete={false}
 							 disabled={form_disabled ? true : disabled[i]}
@@ -231,7 +231,7 @@ onMount(()=> {
    {:else if types[i] === Type.textarea}
    	  <span>{labels[i]}</span>
       <textarea
-				bind:value={form[i]}
+				bind:value={f}
 				bind:this={doms[i]}
         rows={10}
         cols={20}
@@ -252,7 +252,7 @@ onMount(()=> {
     {:else if types[i] === Type.multi_select}
     	<div>
      		<span>{labels[i]}</span>
-     		<TableForm {...props[i]} />
+     		<TableForm  bind:values={f} {...props[i]} />
      	</div>
     {/if}
     <!-- Description -->
