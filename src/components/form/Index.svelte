@@ -21,5 +21,5 @@
 	bind:form={$form}
 	on:close
 />
-{$er}
+<div>{$er}</div>
 {JSON.stringify($form)}

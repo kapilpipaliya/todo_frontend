@@ -351,11 +351,11 @@ class FormBasic {
   onMutateGet([d]) {
     this.isSaving.set(false)
     let er
-    if (d.ok) {
+    if (d[0]) {
       er = ''
       this.dp('successSave', { key: this.key, d })
     } else {
-      er = d.error
+      er = d[1]
     }
     this.er.set(er)
   }
