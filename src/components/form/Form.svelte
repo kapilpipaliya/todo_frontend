@@ -239,10 +239,7 @@ onMount(()=> {
        />
     {:else if types[i] === Type.select}
       <span>{labels[i]}</span>
-      <select
-					bind:this={doms[i]}		
-      {...props[i]}
-       />
+      <TableForm bind:this={doms[i]} {...props[i]} multiSelect={false} />
     {:else if types[i] === Type.radio}
       <span>{labels[i]}</span>
       <radio
@@ -252,7 +249,7 @@ onMount(()=> {
     {:else if types[i] === Type.multi_select}
     	<div>
      		<span>{labels[i]}</span>
-     		<TableForm  bind:values={f} {...props[i]} />
+     		<TableForm  bind:values={f} {...props[i]} multiSelect={true}/>
      	</div>
     {/if}
     <!-- Description -->

@@ -37,6 +37,10 @@ export enum events {
   global_color_list,
   global_color_mutate,
 
+  global_role_header,
+  global_role_list,
+  global_role_mutate,
+
   global_permission_header,
   global_permission_list,
   global_permission_mutate,
