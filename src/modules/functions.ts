@@ -410,24 +410,24 @@ export class Form extends FormBasic {
 export class FormArray extends FormBasic {
   public headers: Writable<[]>
   public form: Writable<[]>
-  public schemaGetEvt: number[]
+  //public schemaGetEvt: number[]
   constructor(S, key, ev, dp, schema_key, type=form_type.array) {
     super(S, key, ev, dp, type);
     this.schema_key = schema_key
     this.form.set([])
     this.headers = writable([])
-    this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
+    //this.schemaGetEvt = [et.get, e.my, e.fields_schema_get, key ]
+    //this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
     this.onFormDataGet = this.onFormDataGet.bind(this)
-    this.schemaGetEvt = [et.get, e.my, e.fields_schema_get, key ]
   }
   bindAll(){
-    this.bindSchemaDataGet()
+    //this.bindSchemaDataGet()
     this.bindFormDataGet()
     this.bindMutate()
   }
-  bindSchemaDataGet(){
-    this.S.bind$(this.schemaGetEvt, this.onSchemaDataGet, 1)
-  }
+  //bindSchemaDataGet(){
+    //this.S.bind$(this.schemaGetEvt, this.onSchemaDataGet, 1)
+  //}
   bindFormDataGet(){
     if(this.data_evt) {
       this.S.bind$(this.data_evt, this.onFormDataGet, 1)
@@ -435,18 +435,22 @@ export class FormArray extends FormBasic {
   }
   onDestroy() {
     super.onDestroy()
-    this.S.unbind_(this.schemaGetEvt)
+    //this.S.unbind_(this.schemaGetEvt)
   }
   fetch() {
-    this.S.trigger([[this.schemaGetEvt, [this.schema_key]]])
-  }
-  onSchemaDataGet(d){
-    this.headers.set(d[0])
+    //this.S.trigger([[this.schemaGetEvt, [this.schema_key]]])
     super.fetch()
   }
-  onFormDataGet(d){
+  //onSchemaDataGet(d){
+    //this.headers.set(d[0])
+    //super.fetch()
+  //}
+  onFormDataGet([d]){
+    const schema = d[0]
+    this.headers.set(schema)
+    const form_values = d[1]
     this.isSaving.set(false)
-    const form = this.onFormDataGetStatic(d)
+    const form = this.onFormDataGetStatic(form_values)
     if (form[0]) {
      this.isUpdate = true
     }
@@ -467,7 +471,7 @@ export class FormArray extends FormBasic {
       return f    
     }
   }
-  onFormDataGetStatic([d]) {
+  onFormDataGetStatic(d) {
     if (d.r) {
       const r = d.r.result
       if(r.length){

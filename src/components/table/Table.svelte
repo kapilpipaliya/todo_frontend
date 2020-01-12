@@ -410,10 +410,10 @@
           ['DEL', filter]
         )
       })
-      if (d.ok) {
+      if (d[0]) {
         deleteRows_([key])
       } else {
-        alert(d.error)
+        alert(d[1])
       }
     }
   }
