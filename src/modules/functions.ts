@@ -306,14 +306,17 @@ class FormBasic {
     this.type = type
 
     this.events = e;
-    if(this.key) {
-      e[1][0] = et.subscribe
-    } else {
-      e[1][0] = et.get
+
+    if(e[1]){
+      if(this.key) {
+        e[1][0] = et.subscribe
+      } else {
+        e[1][0] = et.get
+      }
+      this.unsub_evt = [et.unsubscribe, ...e[1].slice(1)]
     }
     this.data_evt = e[1]
     this.mutate_evt = e[2]
-    this.unsub_evt = [et.unsubscribe, ...e[1].slice(1)]
     this.isUpdate = false
     
     this.mounted = writable(false)
@@ -337,10 +340,12 @@ class FormBasic {
       this.S.unbind_(this.events)
   }
   fetch() {
-    const filter = [`="${this.key}"`]
-    const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
-    const e1 = [this.data_evt, args]
-    this.S.trigger([e1])
+    if(this.data_evt) {
+      const filter = [`="${this.key}"`]
+      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
+      const e1 = [this.data_evt, args]
+      this.S.trigger([e1])
+    }
   }
   onSave() {
     const form = get(this.form) // not recommaned to use get
@@ -410,24 +415,28 @@ export class Form extends FormBasic {
 export class FormArray extends FormBasic {
   public headers: Writable<[]>
   public form: Writable<[]>
-  //public schemaGetEvt: number[]
+  public schemaGetEvt: number[]
   constructor(S, key, ev, dp, schema_key, type=form_type.array) {
     super(S, key, ev, dp, type);
     this.schema_key = schema_key
     this.form.set([])
     this.headers = writable([])
-    //this.schemaGetEvt = [et.get, e.my, e.fields_schema_get, key ]
-    //this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
+    if(!this.data_evt) {
+      this.schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
+      this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
+    }
     this.onFormDataGet = this.onFormDataGet.bind(this)
   }
   bindAll(){
-    //this.bindSchemaDataGet()
+    this.bindSchemaDataGet()
     this.bindFormDataGet()
     this.bindMutate()
   }
-  //bindSchemaDataGet(){
-    //this.S.bind$(this.schemaGetEvt, this.onSchemaDataGet, 1)
-  //}
+  bindSchemaDataGet(){
+    if(this.schemaGetEvt) {
+      this.S.bind$(this.schemaGetEvt, this.onSchemaDataGet, 1)
+    }
+  }
   bindFormDataGet(){
     if(this.data_evt) {
       this.S.bind$(this.data_evt, this.onFormDataGet, 1)
@@ -435,16 +444,25 @@ export class FormArray extends FormBasic {
   }
   onDestroy() {
     super.onDestroy()
-    //this.S.unbind_(this.schemaGetEvt)
+    if(this.schemaGetEvt) {
+      this.S.unbind_(this.schemaGetEvt)
+    }
   }
   fetch() {
-    //this.S.trigger([[this.schemaGetEvt, [this.schema_key]]])
+    if(this.schemaGetEvt) {
+      const filter = [`="${this.key}"`]
+      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
+      const e1 = [this.schemaGetEvt, args]
+      this.S.trigger([e1])
+    } else {
+      super.fetch()
+    }
+  }
+  onSchemaDataGet(d){
+    //this.headers.set(d[0])
+    this.onFormDataGet(d)
     super.fetch()
   }
-  //onSchemaDataGet(d){
-    //this.headers.set(d[0])
-    //super.fetch()
-  //}
   onFormDataGet([d]){
     const schema = d[0]
     this.headers.set(schema)

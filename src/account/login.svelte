@@ -6,7 +6,7 @@
   export const loginMutateEvents = (id=0) => {
     return [
       null,
-      [et.get, e.my, e.form_schema_get, id ],
+      null,
       [et.mutate, e.account, e.login, id],
     ]
   }

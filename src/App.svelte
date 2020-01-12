@@ -83,13 +83,12 @@
 
   	async function isLoggedIn() {
   		const auth = await isLoggedInFn(S)
-    	return auth.ok
+    	return auth[0]
   	}
 
   	async function isNotLoggedIn() {
   		const auth = await isLoggedInFn(S)
-  		console.log(!auth.ok)
-    	return !auth.ok
+    	return !auth[0]
   	}
 
 	function userIsAdmin() {

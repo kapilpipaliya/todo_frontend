@@ -7,7 +7,7 @@
   export const registerMutateEvents = (id=0) => {
     return [
       null,
-      [et.get, e.my, e.form_schema_get, id ],
+      null,
       [et.mutate, e.account, e.register_user, id],
     ]
   }
