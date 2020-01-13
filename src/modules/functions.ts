@@ -298,6 +298,7 @@ class FormBasic {
   public isSaving: Writable<boolean>
   public form_disabled: Writable<boolean>
   public schema_key: string
+  public options: Writable<{}>
 
   constructor(S, key, e, dp, type=form_type.object) {
     this.S = S
@@ -328,6 +329,7 @@ class FormBasic {
 
     this.onSave = this.onSave.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
+    this.options = writable({})
   }
   bindMutate(){
     this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
@@ -464,7 +466,9 @@ export class FormArray extends FormBasic {
     super.fetch()
   }
   onFormDataGet([d]){
-    const schema = d[0]
+    const schema = d[0][0]
+    const options = d[0][1] ?? {disabled: false}
+    this.options.set(options)
     this.headers.set(schema)
     const form_values = d[1]
     this.isSaving.set(false)
@@ -473,7 +477,7 @@ export class FormArray extends FormBasic {
      this.isUpdate = true
     }
     this.form.set(form)
-    this.form_disabled.set(false)
+    this.form_disabled.set(false || options.disabled)
   }
   //static functions:
   mergeFormValues(f) {

@@ -10,6 +10,7 @@ export let headers
 export let form
 export let form_disabled = true
 export let save = ()=>0
+export let options = {}
 
 let labels = []
 let types: number[] = []
@@ -79,6 +80,13 @@ $: {
 onMount(()=> {
    mounted = true
 })
+const isDisabled = (form_disabled_, i) =>{
+	if(form_disabled_ === true) {
+		return true
+	} else {
+		return disabled[i]
+	}
+}
 </script>
 <form on:submit|preventDefault={save}>
 {#each form as f, i}
@@ -92,7 +100,7 @@ onMount(()=> {
 					 required={required[i]} 
 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -104,7 +112,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -116,7 +124,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -127,7 +135,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -139,7 +147,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -151,7 +159,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -163,7 +171,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -175,7 +183,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -187,7 +195,7 @@ onMount(()=> {
 					 bind:value={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -199,7 +207,7 @@ onMount(()=> {
 					 bind:checked={f}
 					 required={required[i]} 
 					 autocomplete={false}
-					 disabled={form_disabled ? true : disabled[i]}
+					 disabled={isDisabled(form_disabled, i)}
 					 bind:this={doms[i]}
 					 {...props[i]}
 				/>
@@ -210,7 +218,7 @@ onMount(()=> {
 						 bind:value={f}
 						 required={required[i]}
 						 bind:this={doms[i]}
-						 disabled={form_disabled ? true : disabled[i]}
+						 disabled={isDisabled(form_disabled, i)}
 						 props={props[i]}
 						/>
 				{:else if types[i] === Type.radio}
@@ -222,7 +230,7 @@ onMount(()=> {
 							 bind:group={f}
 							 required={required[i]}
 							 autocomplete={false}
-							 disabled={form_disabled ? true : disabled[i]}
+							 disabled={isDisabled(form_disabled, i)}
 							 bind:this={doms[i]}
 							 props={props[i]}
 						/>
