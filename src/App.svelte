@@ -18,6 +18,7 @@
 	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
 	import {project_id, project_data} from './modules/global_stores/project.ts'
 	import {current_member} from './modules/global_stores/current_member.ts'
+	import {maintenance} from './modules/global_stores/maintenance.ts'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
@@ -157,6 +158,10 @@
 </script>
 
 <Css/>
+
+{#if $maintenance}
+	server is going down for sheduled maintenance
+{/if}
 
 <nav>
 	<div>

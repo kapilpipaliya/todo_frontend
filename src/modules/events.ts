@@ -5,6 +5,7 @@ export enum events {
   notification_event,
   cookie_event,
   redirection_event,
+  maintenance_event,
   translation_event,
   current_member_event,
 

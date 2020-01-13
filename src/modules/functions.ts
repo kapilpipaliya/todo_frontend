@@ -13,6 +13,8 @@ export * from '../../svelte/src/runtime/animate/index'
 import {event_type as et, events as e} from './events'
 export * from './events'
 export enum form_type { object = 1, array };
+
+export let unique_event = 0
 // import {account} from './global_stores/account.js'
 // import {cookie} from './global_stores/cookie.js'
 // import {member_settings} from './global_stores/member_settings.js'

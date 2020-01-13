@@ -649,7 +649,7 @@ function onShowRowNum(){
 $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
 </script>
 
-{er}
+
 {#if $css.table}
 <div>
 
@@ -671,6 +671,7 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
   {/if}
   <hr />
 
+  {er}
   <button class="" on:click={onResetFilter}>Reset Filters</button>
   <span>{items.length}{items.length <= 1 ? ' item' : ' items'}</span>
   Page Size:
