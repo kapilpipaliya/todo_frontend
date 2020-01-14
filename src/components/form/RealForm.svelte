@@ -14,7 +14,9 @@ import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
-import Array from './array/Array.svelte'
+import ArrayForm from './array/Array.svelte'
+import * as RA from 'ramda-adjunct'
+//import * as RD from 'ramda'
 
 export let form
 export let form_disabled = true
@@ -52,7 +54,8 @@ enum Type {
 	url,
 	week,
 	multi_select,
-	text_array
+	text_array,
+	multi_select_bool_properties
 };
 
 const isDisabled = (form_disabled_, i) =>{
@@ -61,6 +64,9 @@ const isDisabled = (form_disabled_, i) =>{
 	} else {
 		return disabled[i]
 	}
+}
+function isArray(val){
+	return RA.isArray(val)
 }
 </script>
 {#each form as f, i}
@@ -82,7 +88,7 @@ const isDisabled = (form_disabled_, i) =>{
 		<Search bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
 	{:else if types[i] === Type.text}
 		<Text bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.checkbox && !Array.isArray(f)}
+	{:else if types[i] === Type.checkbox && !isArray(f)}
 		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
 	{:else if types[i] === Type.checkbox}
 		<span>{labels[i]}</span>
@@ -103,12 +109,17 @@ const isDisabled = (form_disabled_, i) =>{
     {:else if types[i] === Type.multi_select}
     	<div>
      		<span>{labels[i]}</span>
-     		<TableForm  bind:values={f} multiSelect={true} {...props[i]} />
+     		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {:else if types[i] === Type.text_array}
     	<div>
      		<span>{labels[i]}</span>
-     		<Array  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+     		<ArrayForm  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+     	</div>
+    {:else if types[i] === Type.multi_select_bool_properties}
+    	<div>
+     		<span>{labels[i]}</span>
+     		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
     {/if}
     <!-- Description -->
