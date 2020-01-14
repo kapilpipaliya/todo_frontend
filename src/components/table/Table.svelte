@@ -2,9 +2,9 @@
   // import * as _ from "lamb";
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type } from '../../modules/functions.ts'
-  import {organization_id} from '../../modules/global_stores/organization.ts'
-  import {project_id} from '../../modules/global_stores/project.ts'
+  import Row from './Row.svelte'
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType } from '../../modules/functions.ts'
+
   import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -42,19 +42,7 @@
 
   let options = {}
 
-  // internal:
-  enum DisplayType {
-    BOOL=1,
-    INT,
-    TEXT,
-    DOUBLE,
-    UTCTIME,
-    ARRAY,
-    OBJECT,
-    BINARY,
-    URL
-  };
-
+  //internal:
   const hiddenColumns = [DisplayType.ARRAY, DisplayType.OBJECT, DisplayType.BINARY]
   let filterSettings = []
   let sortSettings = []
@@ -619,6 +607,22 @@
 <br>
 {JSON.stringify(selectedRowsKeys)}
   */
+
+function isGlobal(v) {
+  //return v?.[1] == 'global'
+  if(RA.isArray(v)) {
+    if(v.length >= 2) {
+      return v[1] === 'global'
+    }
+  }
+  return false
+}
+
+function onShowRowNum(){
+  showRowNum = !showRowNum
+}
+$: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
+
 function getValue(v) {
   if(RA.isArray(v)) {
     if(v.length > 0) {
@@ -631,22 +635,6 @@ function getValue(v) {
     return v
   }
 }
-function isGlobal(v) {
-  //return v?.[1] == 'global'
-  if(RA.isArray(v)) {
-    if(v.length >= 2) {
-      return v[1] === 'global'
-    }
-  }
-  return false
-}
-function makeUrl(props, id){
-  return new UrlPattern(props.pattern).stringify({id, org: $organization_id, project: $project_id})
-}
-function onShowRowNum(){
-  showRowNum = !showRowNum
-}
-$: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
 </script>
 
 
@@ -799,96 +787,30 @@ $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
     </thead>
     <tbody>
       {#each items as l, cindex (getValue(l[0]))}
-        <tr
-
-          
-          
-          
-          class="{selectedRowsKeys.includes(getValue(l[0])) ? $css.table.class.selected || 'selected' : ''}"
-          >
-          {#if showRowNum}
-            <td>{cindex + 1}</td>
-          {/if}
-          <td>
-              {#if !isGlobal(l[0])}
-              {#if false}
-                <span>ID: {getValue(l[0])}</span>
-              {/if}
-              <input
-                type="checkbox"
-                value={getValue(l[0])}
-                checked={selectedRowsKeys.includes(getValue(l[0]))}
-                on:click={onSelectRowClick} />
-              {/if}
-          </td>
-          <td>
-              {#if !isGlobal(l[0])}
-              {#if quickcomponent && !quickview.includes(getValue(l[0]))}
-                <button
-                  name='edit'
-                  key={getValue(l[0])}
-                  type="button"
-                  on:click={() => {
-                    quickview.push(getValue(l[0]))
-                    quickview = quickview
-                  }}>
-                  Edit
-                </button>
-              {/if}
-              {/if}
-          </td>
-          <td>
-              {#if !isGlobal(l[0])}
-              <button name='delete' key={getValue(l[0])} type="button" on:click={onDeleteRow(getValue(l[0]))}>D</button>
-              {/if}
-          </td>
-          {#each l as c, index}
-            {#if headerIsvisibleColumnsRow[index]}
-              <td>
-                {#if l[index] != null}
-                  {#if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
-                    {new Date(l[index]).toLocaleString()}
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
-                    <a href={makeUrl(headerColumnPropsRow[index], l[index])}>{headerColumnPropsRow[index].label}</a>
-                  {:else}{getValue(l[index])}{/if}
-                {/if}
-              </td>
-            {/if}
-          {/each}
-          <!-- <td> -->
-          {#if false}
-            <a href="javascript:;" on:click={() => onItemClick(l)}>
-              <span class="icon is-small">
-                <i class="fas fa-edit" />
-                edit
-              </span>
-            </a>
-
-            <a href="javascript:;" on:click={() => onDeleteClick(l)}>
-              <span class="icon is-small">
-                <i class="fas fa-trash" />
-                delete
-              </span>
-            </a>
-          {/if}
-          <!-- </td> -->
-        </tr>
-        {#if quickview.includes(getValue(l[0]))}
-          <tr>
-            <td colspan={l.length + 3}>
-              {#if quickcomponent}
-                <svelte:component
-                  this={quickcomponent}
-                  key={getValue(l[0])}
-                  {schema_key}
-                  {eventsFn}
-                  on:close={onCancel}
-                  on:successSave={successSave}
-                  on:deleteRow={deleteRow} />
-              {/if}
-            </td>
-          </tr>
-        {/if}
+        <Row 
+          selected={selectedRowsKeys.includes(getValue(l[0]))}
+          {showRowNum}
+          rowNum={cindex + 1}
+          isGlobal={isGlobal(l[0])}
+          rowValue={l}
+          {headerIsvisibleColumnsRow}
+          {headerVisibleColTypesRow}
+          {headerColumnPropsRow}
+          {selectedRowsKeys}
+          {onSelectRowClick}
+          {onItemClick}
+          {onDeleteClick}
+          {onDeleteRow}
+          bind:quickview={quickview}
+          showQuickView={quickview.includes(getValue(l[0]))}
+          {quickcomponent}
+          {schema_key}
+          {eventsFn}
+          {onCancel}
+          {successSave}
+          {deleteRow}
+          {getValue}
+        />
       {/each}
     </tbody>
   </table>

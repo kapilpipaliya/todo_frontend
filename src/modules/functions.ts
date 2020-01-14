@@ -89,6 +89,19 @@ export const productImageBase = async (S, id, version = 0) => {
   }
 }
 
+  // table:
+export enum DisplayType {
+    BOOL=1,
+    INT,
+    TEXT,
+    DOUBLE,
+    UTCTIME,
+    ARRAY,
+    OBJECT,
+    BINARY,
+    URL
+  };
+
 /*
 import cookie from 'cookie'
 export const setCookie  = res => {
