@@ -14,6 +14,7 @@ import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
+import Array from './array/Array.svelte'
 
 export let form
 export let form_disabled = true
@@ -50,7 +51,8 @@ enum Type {
 	time,
 	url,
 	week,
-	multi_select
+	multi_select,
+	text_array
 };
 
 const isDisabled = (form_disabled_, i) =>{
@@ -91,7 +93,7 @@ const isDisabled = (form_disabled_, i) =>{
    		<Textarea />
     {:else if types[i] === Type.select}
       <span>{labels[i]}</span>
-      <TableForm bind:this={doms[i]} {...props[i]} multiSelect={false} />
+      <TableForm bind:this={doms[i]} multiSelect={false} {...props[i]} />
     {:else if types[i] === Type.radio}
       <span>{labels[i]}</span>
       <radio
@@ -101,7 +103,12 @@ const isDisabled = (form_disabled_, i) =>{
     {:else if types[i] === Type.multi_select}
     	<div>
      		<span>{labels[i]}</span>
-     		<TableForm  bind:values={f} {...props[i]} multiSelect={true}/>
+     		<TableForm  bind:values={f} multiSelect={true} {...props[i]} />
+     	</div>
+    {:else if types[i] === Type.text_array}
+    	<div>
+     		<span>{labels[i]}</span>
+     		<Array  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {/if}
     <!-- Description -->

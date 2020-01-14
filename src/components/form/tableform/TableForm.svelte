@@ -14,6 +14,7 @@
 	$: newAvailableOps = data.filter(x=> !values.includes(x[keyIdx]))
 	function handleAdd() {
 		if(newAvailableOps.length) {
+			// note concat return new array:
 			values = values.concat([newAvailableOps[0][keyIdx]])	
 		}
 	} 
@@ -37,7 +38,6 @@
 	})
 	function onFetchGet([d]){
 		data = d.r.result
-		debugger
 		if(!multiSelect){
 			if(!values) {
 				if(data.length){
