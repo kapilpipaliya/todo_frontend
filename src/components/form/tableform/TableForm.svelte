@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, S, event_type as et, events as e } from '../../../modules/functions.ts'
+	import { onMount, S, event_type as et, events as e, Unique } from '../../../modules/functions.ts'
 	import {_cloneArray} from './clone.ts'
 	import Options from './Options.svelte'
 	export let display = "r[1]+' - '+r[2]"
@@ -31,7 +31,7 @@
 	}
 	onMount(() => {
 		let fetch_evt = event[0] ?? []
-		fetch_evt.push("0")
+		fetch_evt.push(Unique.id)
 		S.bind$(fetch_evt, onFetchGet, 1)
 		S.trigger([[fetch_evt, []]])
 	})

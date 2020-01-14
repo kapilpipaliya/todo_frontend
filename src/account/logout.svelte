@@ -1,5 +1,5 @@
 <script context="module">
-  import {S as S_, ws_todo, domainName, isLoggedIn, event_type as et, events as e, } from '../modules/functions.ts'
+  import {S as S_, ws_todo, domainName, isLoggedIn, event_type as et, events as e, Unique} from '../modules/functions.ts'
 </script>
 
 <script>
@@ -21,7 +21,7 @@
 
   let loging_out = true
 
-  const fns = [[et.mutate, e.account, e.logout, 0]],
+  const fns = [[et.mutate, e.account, e.logout, Unique.id]],
     [logout] = fns
 
   const bindOnce = () => {

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, S, domainName, event_type as et, events as e } from '../modules/functions.ts'
+  import { onMount, S, domainName, event_type as et, events as e, Unique } from '../modules/functions.ts'
   import GeneralForm from '../components/form/Index.svelte'
   import { navigateTo } from '../components/svelte-router-spa/src/index.ts'
   export let query = {}
@@ -8,7 +8,7 @@
     return [
       null,
       null,
-      [et.mutate, e.account, e.register_user, id],
+      [et.mutate, e.account, e.register_user, Unique.id],
     ]
   }
   onMount(()=> {

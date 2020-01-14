@@ -1,5 +1,5 @@
 <script context="module">
-  import { S as S_, ws_todo, domainName } from '../_modules/functions'
+  import { S as S_, ws_todo, domainName, Unique } from '../_modules/functions'
   export async function preload(page, session) {
     // let S; if (typeof S_ == "function") { S = new S_(ws_todo, this.req, this.res); } else { S = S_; }
     // let user = session.user; if(!!user){ this.redirect(302, '/confirmation') }
@@ -40,7 +40,7 @@
   let countries
   let formSave = false
   let email = null // to focus
-  const fns = [['account', 'register', 0]]
+  const fns = [['account', 'register', Unique.id]]
   //let S;
 
   $: isAuth = formSave

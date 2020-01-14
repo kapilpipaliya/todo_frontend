@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.ts";
-  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e } from '../../modules/functions.ts'
+  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, Unique } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
   	import Skeleton from '../../components/Skeleton.svelte'
@@ -12,7 +12,7 @@
 	let er = ''
 	let binded = false
 	let fetch_data = false
-	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_admin_menu' ]
+	let menu_evt = [et.get, e.my, e.form_schema_get, Unique.id ]
 	let menus  = []
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_evt]) })

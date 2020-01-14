@@ -6,6 +6,7 @@ import { navigateTo } from '../../components/svelte-router-spa/src/index.js'
 // when logout every pages should be redirect to login page.
 export const navigation = writable({})
 
+// must use id =0
 S.bind$( [et.get, e.account, e.redirection_event, 0],
 	function(data) {
 	  //goto(data[0])

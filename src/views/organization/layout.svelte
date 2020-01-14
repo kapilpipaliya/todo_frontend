@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.ts";
-  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_type } from '../../modules/functions.ts'
+  	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
   	import {organization_id, organization_data} from '../../modules/global_stores/organization.ts'
@@ -16,8 +16,8 @@
 	let er = ''
 	let binded = false
 	let fetch_data = false
-	let org_fetch_evt = [et.get, e.admin, e.organization_list, 'org_fetch' ]
-	let menu_evt = [et.get, e.my, e.form_schema_get, 'side_org_menu' ]
+	let org_fetch_evt = [et.get, e.admin, e.organization_list, Unique.id]
+	let menu_evt = [et.get, e.my, e.form_schema_get, Unique.id ]
 	let menus  = []
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_evt]); $organization_id = ""; $organization_data = {} })

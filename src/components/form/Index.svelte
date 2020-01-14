@@ -1,10 +1,10 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray, Unique } from '../../modules/functions.ts'
   import { Form, SubmitButton, CancelButton } from '../index.ts'
   export let eventsFn: (id: string | number, schema: string) => number[][]
   export let key = 0
   export let schema_key
-  const f = new FormArray(S, key, eventsFn(key, schema_key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled, options = f.options
+  const f = new FormArray(S, key, eventsFn(Unique.id, schema_key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled, options = f.options
   onMount(() => {$mounted = true })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }

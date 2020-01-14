@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, } from '../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, Unique } from '../modules/functions.ts'
   export let query = {}
 
   let mounted = false
@@ -14,9 +14,9 @@
   let result_title = ''
 
   const fns = [
-      [et.mutate, e.account, e.confirm_email, 0],
-      [et.subscribe, e.account, e.confirm_email_status, 0],
-      [et.unsubscribe, e.account, e.confirm_email_status, 0],
+      [et.mutate, e.account, e.confirm_email, Unique.id],
+      [et.subscribe, e.account, e.confirm_email_status, Unique.id],
+      [et.unsubscribe, e.account, e.confirm_email_status, Unique.id],
     ],
     [doconfirm, sub, unsub] = fns
 

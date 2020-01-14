@@ -251,12 +251,15 @@ export class ServerEventsDispatcher {
 
   dispatch(event, message) {
     const chain = this.callbacks[JSON.stringify(event)]
-    if (typeof chain == 'undefined') return // no callbacks for this event
-    const length = chain.length;
-    for (let i = 0; i < length; i++) {
-      chain[i][1](message)
-      if (chain[i][0] == 0) {
-        this.callbacks[JSON.stringify(event)] = []
+    if (typeof chain == 'undefined') {
+      console.log("no callbacks for this event: ", event)
+    } else {
+      const length = chain.length;
+      for (let i = 0; i < length; i++) {
+        chain[i][1](message)
+        if (chain[i][0] == 0) {
+          this.callbacks[JSON.stringify(event)] = []
+        }
       }
     }
   }

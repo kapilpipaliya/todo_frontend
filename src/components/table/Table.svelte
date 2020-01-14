@@ -3,7 +3,7 @@
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
 
   import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
@@ -85,7 +85,7 @@
   }
   function reset() {
     unRegister()
-    events = eventsFn(0, schema_key)
+    events = eventsFn(Unique.id, schema_key)
     headerTitlesRow = []
     items = []
     count = 0

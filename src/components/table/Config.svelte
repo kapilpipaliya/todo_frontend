@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip  } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip, Unique } from '../../modules/functions.ts'
 
   import SubmitButton from '../_SubmitButton.svelte'
   import CancelButton from '../_CancelButton.svelte'
@@ -111,7 +111,7 @@
   onMount(async () => {
     const [d] = await new Promise((resolve, reject) => {
       S.bind_(
-        [event_type.get, e.my, e.my_schema_get, `table_${schema_key}`],
+        [event_type.get, e.my, e.my_schema_get, Unique.id],
         d => {
           resolve(d)
         },
@@ -124,7 +124,7 @@
     isSaving = true
     const [d] = await new Promise((resolve, reject) => {
       S.bind_(
-        [event_type.mutate, e.my, e.my_schema_mutate, `table_${schema_key}`],
+        [event_type.mutate, e.my, e.my_schema_mutate, Unique.id],
         d => {
           resolve(d)
         },

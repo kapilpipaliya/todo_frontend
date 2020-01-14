@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn } from './modules/functions.ts'
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/functions.ts'
 	import * as R from 'ramda'
 	import Css from './components/Css.svelte'
 	import MenuF from './components/MenuF.svelte'
@@ -55,8 +55,8 @@
 	let mounted = false
 	let er = ''
 	let binded = false
-	const menu_form_evt = form_schema_evt(9999)
-	const menu_evt = [et.get, e.my, e.form_schema_get, 8888 ]
+	const menu_form_evt = form_schema_evt(Unique.id)
+	const menu_evt = [et.get, e.my, e.form_schema_get, Unique.id ]
 	let routes  = []
 	let menus  = []
 	onMount(() => {mounted = true})

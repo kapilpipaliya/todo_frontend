@@ -1,9 +1,9 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick } from '../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Form, beforeUpdate, tick, Unique } from '../modules/functions.ts'
   import { SubmitButton, CancelButton } from '../components/index.ts'
   export let key = 0
   export let eventsFn: (id: string | number, schema: string) => number[][]
-  const f = new Form(S, key, eventsFn(key, 'schema'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
+  const f = new Form(S, key, eventsFn(Unique.id, 'schema'), createEventDispatcher()), er = f.er, isSaving = f.isSaving, form = f.form, mounted = f.mounted, binded = f.binded
   // should make seperate json component
   let jsoneditorformDom = null
   let jsoneditorFieldsDom = null

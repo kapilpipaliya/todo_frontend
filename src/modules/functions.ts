@@ -102,6 +102,14 @@ export enum DisplayType {
     URL
   };
 
+class UniqueNumber {
+  private id_ = 0
+  get id(){
+    return ++this.id_
+  }
+}
+export const Unique = new UniqueNumber()
+
 /*
 import cookie from 'cookie'
 export const setCookie  = res => {
@@ -119,7 +127,7 @@ export const authCeck = async S => {
 
   const isAuth = await new Promise((resolve, reject) => {
     S.bind_(
-      ['user', 'is_logged_in', 0],
+      ['user', 'is_logged_in', Unique.id],
       ([d]) => {
         resolve(d)
       },
@@ -267,7 +275,7 @@ export const getTotalArray = p => {
 export const isLoggedIn = async S => {
   const auth = await new Promise((resolve, reject) => {
     S.bind_(
-      [et.get, e.account, e.is_logged_in, 0],
+      [et.get, e.account, e.is_logged_in, Unique.id],
       ([d]) => {
         resolve(d)
       },
