@@ -5,7 +5,8 @@
 	export let disabled;
 	export let value;
 	export let props;
-
+	export let dom = null
+	
 	$: props.options = props.options ?? [];
 </script>
 
@@ -13,6 +14,7 @@
 	<label>
 		<input 
 			 name={name}
+			 bind:this={dom}
 			 type="checkbox"
 			 value={v}
 			 bind:group={value}

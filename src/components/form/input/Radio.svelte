@@ -4,11 +4,15 @@
 	export let disabled;
 	export let value;
 	export let props = {};
+	export let dom = null
+
+	export let options = []
 </script>
 		<span>{name}</span>
-		{#each f as v}
+		{#each options as v}
 			<input
 				 {name}
+				 bind:this={dom}
 				 type='radio'
 				 bind:value={value}
 				 {required} 

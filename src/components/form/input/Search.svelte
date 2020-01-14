@@ -4,10 +4,12 @@
 	export let disabled;
 	export let value;
 	export let props = {};
+	export let dom = null
 </script>
 	<span>{name}</span>
 	<input 
 		 {name}
+		 bind:this={dom}
 		 type='search'
 		 bind:value={value}
 		 {required} 

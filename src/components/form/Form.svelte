@@ -44,7 +44,7 @@ $: {
 	      }
 	    }
 	    if(index > -1) {
-	      setTimeout(function(){ if(doms[index]) doms[index].focus() }, 200);
+	      setTimeout(function(){if(doms[index]) doms[index].focus() }, 200);
 		  once = false
 	    }
 	}
@@ -57,7 +57,7 @@ onMount(()=> {
 <form on:submit|preventDefault={save}>
   <RealForm
   	bind:form={form} {form_disabled}
-  	{labels} {types} {required} {disabled} {description} {props} {doms}
+  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
   />
   <footer>
     <SubmitButton isSaving={isSaving} />

@@ -4,10 +4,12 @@
 	export let disabled;
 	export let value;
 	export let props = {};
+	export let dom = null
 </script>
    	  <span>{name}</span>
       <textarea
 		bind:value={value}
+		bind:this={dom}
 		{required}
 		{disabled}
         rows={10}
