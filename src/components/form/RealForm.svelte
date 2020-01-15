@@ -30,33 +30,36 @@ export let props = []
 
 export let doms = {}
 
-enum Type {
-	button = 1,
-	checkbox,
-	color,
-	date,
-	datetime_local,
-	email,
-	file,
-	hidden,
-	image,
-	month,
-	number,
-	password,
-	radio,
-	range,
-	reset,
-	search,
-	submit,
-	tel,
-	text,
-	time,
-	url,
-	week,
-	multi_select,
-	text_array,
-	multi_select_bool_properties
-};
+  enum FormType {
+    button = 1,
+    checkbox,
+    color,
+    date,
+    datetime_local,
+    email,
+    file,
+    hidden,
+    image,
+    month,
+    number,
+    password,
+    radio,
+    range,
+    reset,
+    search,
+    submit,
+    tel,
+    text,
+    time,
+    url,
+    week,
+    textarea,
+    select,
+    multi_select,
+    text_array,
+    multi_select_bool_properties
+  };
+
 
 const isDisabled = (form_disabled_, i) =>{
 	if(form_disabled_ === true) {
@@ -70,53 +73,54 @@ function isArray(val){
 }
 </script>
 {#each form as f, i}
-	{#if types[i] === Type.color}
+	{#if types[i]}
+	{#if types[i] === FormType.color}
 		<Color bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.email}
+	{:else if types[i] === FormType.email}
 		<Email bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.file}
+	{:else if types[i] === FormType.file}
 		<File bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.hidden}
+	{:else if types[i] === FormType.hidden}
 		<Hidden bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.number}
+	{:else if types[i] === FormType.number}
 		<Number bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.password}
+	{:else if types[i] === FormType.password}
 		<Password bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.range}
+	{:else if types[i] === FormType.range}
 		<Range bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.search}
+	{:else if types[i] === FormType.search}
 		<Search bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.text}
+	{:else if types[i] === FormType.text}
 		<Text bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.checkbox && !isArray(f)}
+	{:else if types[i] === FormType.checkbox && !isArray(f)}
 		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === Type.checkbox}
+	{:else if types[i] === FormType.checkbox}
 		<span>{labels[i]}</span>
     	<Checkboxes  name={labels[i]} bind:value={f} required={required[i]} bind:this={doms[i]} disabled={isDisabled(form_disabled, i)} props={props[i]} />
-	{:else if types[i] === Type.radio}
+	{:else if types[i] === FormType.radio}
 		<Radio />
-   {:else if types[i] === Type.textarea}
+   {:else if types[i] === FormType.textarea}
    		<Textarea />
-    {:else if types[i] === Type.select}
+    {:else if types[i] === FormType.select}
       <span>{labels[i]}</span>
       <TableForm bind:this={doms[i]} multiSelect={false} {...props[i]} />
-    {:else if types[i] === Type.radio}
+    {:else if types[i] === FormType.radio}
       <span>{labels[i]}</span>
       <radio
       bind:this={doms[i]}
       {...props[i]}
        />
-    {:else if types[i] === Type.multi_select}
+    {:else if types[i] === FormType.multi_select}
     	<div>
      		<span>{labels[i]}</span>
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
-    {:else if types[i] === Type.text_array}
+    {:else if types[i] === FormType.text_array}
     	<div>
      		<span>{labels[i]}</span>
      		<ArrayForm  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
-    {:else if types[i] === Type.multi_select_bool_properties}
+    {:else if types[i] === FormType.multi_select_bool_properties}
     	<div>
      		<span>{labels[i]}</span>
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
@@ -125,5 +129,6 @@ function isArray(val){
     <!-- Description -->
     {#if description[i]}
       {description[i]}
+    {/if}
     {/if}
 {/each}

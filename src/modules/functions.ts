@@ -440,12 +440,12 @@ export class Form extends FormBasic {
 }
 export class FormArray extends FormBasic {
   public headers: Writable<[]>
-  public form: Writable<[]>
+  public form: Writable<any[]>
   public schemaGetEvt: number[]
-  constructor(S, key, ev, dp, schema_key, type=form_type.array) {
+  constructor(S, key, ev, dp, schema_key, form=[], type=form_type.array) {
     super(S, key, ev, dp, type);
     this.schema_key = schema_key
-    this.form.set([])
+    this.form.set(form)
     this.headers = writable([])
     if(!this.data_evt) {
       this.schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
@@ -500,7 +500,10 @@ export class FormArray extends FormBasic {
     if (form[0]) {
      this.isUpdate = true
     }
-    this.form.set(form)
+    const form_store = get(this.form)
+    if(!form_store.length){
+      this.form.set(form)
+    }
     this.form_disabled.set(false || options.disabled)
   }
   //static functions:

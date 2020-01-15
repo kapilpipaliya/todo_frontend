@@ -4,7 +4,16 @@
   export let eventsFn: (id: string | number, schema: string) => number[][]
   export let key = 0
   export let schema_key
-  const f = new FormArray(S, key, eventsFn(Unique.id, schema_key), createEventDispatcher(), schema_key), er = f.er, isSaving = f.isSaving, form = f.form, headers = f.headers, mounted = f.mounted, binded = f.binded, form_disabled = f.form_disabled, options = f.options
+  export let form = []
+  const f = new FormArray(S, key, eventsFn(Unique.id, schema_key), createEventDispatcher(), schema_key, form), 
+    er = f.er,
+    isSaving = f.isSaving, 
+    form_ = f.form, 
+    headers = f.headers, 
+    mounted = f.mounted, 
+    binded = f.binded, 
+    form_disabled = f.form_disabled, 
+    options = f.options
   onMount(() => {$mounted = true })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }
@@ -19,10 +28,10 @@
     form_disabled={$form_disabled}
     options={$options}
 	bind:headers={$headers}
-	bind:form={$form}
+	bind:form={$form_}
 	on:close
 />
 <div>{$er}</div>
-{JSON.stringify($form)}
+{JSON.stringify($form_)}
 options:
 {JSON.stringify($options)}

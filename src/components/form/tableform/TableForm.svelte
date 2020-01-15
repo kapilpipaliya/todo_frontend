@@ -62,9 +62,13 @@
 	}
 	onMount(() => {
 		let fetch_evt = event[0] ?? []
-		fetch_evt.push(Unique.id)
-		S.bind$(fetch_evt, onFetchGet, 1)
-		S.trigger([[fetch_evt, []]])
+		if(fetch_evt.length){
+			fetch_evt.push(Unique.id)
+			S.bind$(fetch_evt, onFetchGet, 1)
+			S.trigger([[fetch_evt, []]])
+		} else {
+			console.log('cant get fetch_evt')
+		}
 	})
 	function onFetchGet([d]){
 		data = d.r.result
