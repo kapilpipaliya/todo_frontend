@@ -16,10 +16,16 @@
 	let boolkeys = []
 	const onChange = () => {
 		const b = RD.find(x=>x[keyIdx]==value[0], options)
-		value[1]={}
-		console.log(b)
+		if(!value[1]) {
+			value[1]= value[1] ?? {}
+		}
 		if(b){
-			boolkeys = b[boolPropIndex]
+			if(Array.isArray(b) && b.length > boolPropIndex && Array.isArray(b[boolPropIndex])){
+				boolkeys = b[boolPropIndex]
+			} else {
+				value[1] = {}
+				boolkeys = []
+			}
 		}
 	}
 	onMount(()=>{
@@ -29,9 +35,11 @@
 
 
 <td>
-	<select bind:value={value[0]} required on:change={onChange} disabled={disabled || form_disabled} >
-		<Options {keyIdx} {options} {display} />
-	</select>
+	{#if options.length}
+		<select bind:value={value[0]} required on:change={onChange} disabled={disabled || form_disabled} >
+			<Options {keyIdx} {options} {display} />
+		</select>
+	{/if}
 </td>
 <td>
 	{#each boolkeys as r }

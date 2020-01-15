@@ -8,6 +8,7 @@
 	export let keyIdx = 0
 	export let values = []
 	export let event = []
+	export let disabled;
 	//export let args = [ [filter], [], []]
 	export let multiSelect = false
 	export let boolprop = false
@@ -42,7 +43,16 @@
 		values = values.filter((_, i) => i !== row);
 	}
 	const getOptions = (valuesIdx) => {
-		return _cloneArray(data, [], [], true).filter(x=>!values.includes(x[keyIdx]) || values[valuesIdx] == x[keyIdx])
+		if (boolprop){
+			const keys = values.map(x=>x[0])
+			return _cloneArray(data, [], [], true).filter(x=> {
+				// [['abc',{}],['def',{}]]
+				return !keys.includes(x[keyIdx]) || keys[valuesIdx] == x[keyIdx]
+			})
+		} else {
+			// ['abc','def']
+			return _cloneArray(data, [], [], true).filter(x=>!values.includes(x[keyIdx]) || values[valuesIdx] == x[keyIdx])
+		}
 	}
 	const onChange = (v) => (e) => {
 		// on selecting new value, remove it from all other select options
@@ -85,31 +95,32 @@
 				<tr>
 					<td><label></label></td>
 					{#if boolprop}
-						<BoolProperties 
-						disabled={i < values.length - 1}
-						bind:value={v}
-						options={getOptions(i)}
-						{keyIdx}
-						{display}
-						{boolPropIndex}
-						/>
+						{#if data.length}
+							<BoolProperties 
+								disabled={disabled || i < values.length - 1}
+								bind:value={v}
+								options={getOptions(i)}
+								{keyIdx}
+								{display}
+								{boolPropIndex}
+							/>
+						{/if}
 					{:else}
 						<td>
-							<select bind:value={v} required disabled={i < values.length - 1} on:change={onChange}>
+							<select bind:value={v} required disabled={disabled || i < values.length - 1} on:change={onChange}>
 									<Options {keyIdx} options={getOptions(i)} {display} />
 							</select>
 						</td>
 					{/if}
-					<td><button type="button" on:click={handleDelete(i)} >delete</button></td>
+					<td><button type="button" on:click={handleDelete(i)} {disabled}>delete</button></td>
 				</tr>
 			{/each}
 		</tbody>
 	</table>
 	{/if}
-	<button type="button" on:click={handleAdd} disabled={!newAvailableOps.length}>Add</button>
+	<button type="button" on:click={handleAdd} disabled={!newAvailableOps.length} {disabled}>Add</button>
 {:else}
 	<select bind:value={values}  required on:change={onChangeSingle} on:change >
 		<Options {keyIdx} options={data} {display} />
 	</select>
 {/if}
-{JSON.stringify($$props)}
