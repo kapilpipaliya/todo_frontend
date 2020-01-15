@@ -2,7 +2,7 @@
   import {S as S_, ws_todo, domainName, isLoggedIn, event_type as et, events as e, Unique} from '../modules/functions.ts'
 </script>
 
-<script>
+<script lang='ts'>
   // same as confirm page.
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected } from '../modules/functions.ts'
 

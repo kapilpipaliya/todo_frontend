@@ -11,7 +11,7 @@
 		 {name}
 		 bind:this={dom}
 		 type='checkbox'
-		 bind:value={value}
+		 bind:checked={value}
 		 {required} 
 		 autocomplete={false}
 		 {disabled}

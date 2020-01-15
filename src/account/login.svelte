@@ -3,12 +3,22 @@
   import GeneralForm from '../components/form/Index.svelte'
   export let query = {}
   export let server = ''
-  export const loginMutateEvents = (id=0) => {
-    return [
-      null,
-      null,
-      [et.mutate, e.account, e.login, Unique.id],
-    ]
+  export let currentRoute
+  let user = currentRoute.namedParams.user ?? ''
+  const loginMutateEvents = (id=0) => {
+    if(!user) {
+      return [
+        null,
+        null,
+        [et.mutate, e.account, e.login, Unique.id],
+      ]
+    } else {
+      return [
+        null,
+        null,
+        [et.mutate, e.account, e.login, Unique.id],
+      ]
+    }
   }
   onMount(()=> {
     // i found logic from: https://github.com/vemarav/subdomains/blob/master/plugin/index.js
@@ -21,7 +31,12 @@
   })
   // Todo: When login on subdomain, server field do not show.
 </script>
-{#if query.message}
-  <span class={query.type}>{query.message}</span>
+{#if currentRoute.queryParams.message}
+  <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
-<GeneralForm eventsFn={loginMutateEvents} key={null} schema_key={'login'} />
+
+{#if !user}
+  <GeneralForm eventsFn={loginMutateEvents} key={null} schema_key={'login'} />
+{:else}
+  <GeneralForm eventsFn={loginMutateEvents} key={null} schema_key={'login_member'} />
+{/if}

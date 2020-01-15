@@ -1,15 +1,24 @@
-<script>
+<script lang='ts'>
   import { onMount, S, domainName, event_type as et, events as e, Unique } from '../modules/functions.ts'
   import GeneralForm from '../components/form/Index.svelte'
   import { navigateTo } from '../components/svelte-router-spa/src/index.ts'
-  export let query = {}
+  export let currentRoute
+  let user = currentRoute.namedParams.user ?? ''
   //let form = { email: '', pass: '' }
   export const registerMutateEvents = (id=0) => {
-    return [
-      null,
-      null,
-      [et.mutate, e.account, e.register_user, Unique.id],
-    ]
+    if(!user) {
+      return [
+        null,
+        null,
+        [et.mutate, e.account, e.register_user, Unique.id],
+      ]
+    } else {
+      return [
+        null,
+        null,
+        [et.mutate, e.account, e.register_user, Unique.id],
+      ]
+    }
   }
   onMount(()=> {
     // 1. If subdomain open this page move to main page:
@@ -24,10 +33,10 @@
   })
 </script>
 
-{#if query.message}
-  <span class={query.type}>{query.message}</span>
+{#if currentRoute.queryParams.message}
+  <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
-
+{user}
 <GeneralForm eventsFn={registerMutateEvents} key={null} schema_key={'register'} />
 <p>
   By creating an account you agree to our
