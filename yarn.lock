@@ -1122,6 +1122,11 @@ rambda@^4.4.0:
   resolved "https://registry.yarnpkg.com/rambda/-/rambda-4.4.0.tgz#c300335e2c0a560f0d6334c200728cd753c5cce4"
   integrity sha512-NbQBX5LOfSIHnLQww+QPiHqllTTnKqPLs0pqwBcVctkPh+o0AHCJ985rwGVS9OgaT+GGKI1lOIX3aTQnqXjoPA==
 
+rambdax@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/rambdax/-/rambdax-3.5.0.tgz#ed7edccf5be9290036e335d15ace311904a75936"
+  integrity sha512-hoDmCSIZl9S+HdsTRp7kNI0lSeQ1A9FkBvkhyR0+kfmTnWFbkS6u+uC+aXF5n7LXeIJOqu6ku4S7slCbz63IgQ==
+
 ramda-adjunct@^2.23.0:
   version "2.23.0"
   resolved "https://registry.yarnpkg.com/ramda-adjunct/-/ramda-adjunct-2.23.0.tgz#56b99b626e035e72edf9403b66ab33952a76d067"

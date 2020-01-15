@@ -2,6 +2,7 @@ import { Writable, writable, get } from '../../svelte/src/runtime/store/index'; 
 import StorageDB from './indexdb/storage.js'
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
+import * as RX from 'rambdax'
 import { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
 export { ServerEventsDispatcher, ws_connected } from './ws_events_dispatcher'
 export { onMount, onDestroy, createEventDispatcher, beforeUpdate, tick, setContext } from '../../svelte/src/runtime/index'
@@ -553,4 +554,15 @@ export const form_schema_evt = (id) => [et.get, e.my, e.form_schema_get, id ]
 
 export enum level_of_member {
   predefined, super_admin, organization, project
+}
+export function stringifyRawPattern(pattern, row){
+let str = ''
+  pattern.forEach(x => {
+    if(RX.type(x) ==  'Number') {
+      str += row[x]
+    } else {
+      str += x
+    }
+  })  
+  return str
 }
