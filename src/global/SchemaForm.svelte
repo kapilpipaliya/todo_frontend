@@ -34,8 +34,8 @@
         f.onFormDataGet(d)
         if (d[0].r) {
           editorform.set($form.form ?? {})
-          editorFields.set($form.fields ?? [])
-          editorcolumns.set($form.columns ?? [])
+          editorFields.set($form.fields ?? {})
+          editorcolumns.set($form.columns ?? {})
         }
       }, 1)
       f.bindMutate()
@@ -72,7 +72,7 @@
   </div>
   <div style="display: flex;">
     <div>
-      <div>Fields Array:</div>
+      <div>Fields Object:</div>
       <div name='fields' bind:this={jsoneditorFieldsDom} style="width: 400px; height: 400px;" />
     </div>
     <div>

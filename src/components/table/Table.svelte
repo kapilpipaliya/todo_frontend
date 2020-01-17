@@ -5,7 +5,6 @@
   import Row from './Row.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
 
-  import UrlPattern from 'url-pattern'
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
   import { default_filter } from '../../modules/global_stores/default_filter.ts'

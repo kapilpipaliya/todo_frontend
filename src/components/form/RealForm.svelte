@@ -55,6 +55,7 @@ export let doms = {}
     week,
     textarea,
     select,
+    internal_true_edge,
     multi_select,
     text_array,
     multi_select_bool_properties
