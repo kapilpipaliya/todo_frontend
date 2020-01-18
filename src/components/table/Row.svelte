@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { DisplayType } from '../../modules/functions.ts'
   import { css } from '../../modules/global_stores/css.ts'
-  import {organization_id} from '../../modules/global_stores/organization.ts'
+  import {project_id} from '../../modules/global_stores/project.ts'
   import UrlPattern from 'url-pattern'
   
   export let selected: boolean
@@ -28,7 +28,7 @@
   export let getValue
 
   function makeUrl(props, id){
-    return new UrlPattern(props.pattern).stringify({id, org: $organization_id[0], project: $organization_id[1]})
+    return new UrlPattern(props.pattern).stringify({id, org: $project_id[0], project: $project_id[1]})
   }
 </script>
 

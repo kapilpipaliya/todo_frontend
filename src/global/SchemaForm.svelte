@@ -14,10 +14,9 @@
   $: $form._key = $form._key ?? '';
   onMount(async () => {
     const options = {
-            mode: 'code',
-            modes: ["code", "tree"],
-          };
-    
+      mode: 'code',
+      modes: ["code", "tree"],
+    };
     await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
 
@@ -26,7 +25,7 @@
     editorcolumns = new JSONEditor(jsoneditorcolumnsDom, options, $form.columns ?? {})
     $mounted = true
   })
-  onDestroy(() => {f.onDestroy() })
+  onDestroy(() => { f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce() } else {$er = 'Reconnecting...'} }
   function funcBindingOnce() {
     if (!$binded) {
