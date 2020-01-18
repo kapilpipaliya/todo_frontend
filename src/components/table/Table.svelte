@@ -3,6 +3,7 @@
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
+  import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
 
@@ -627,8 +628,9 @@ function getValue(v) {
     if(v.length > 0) {
       return v[0]
     } else {
-      console.log("Array Must has one element")
+      // console.log("Array Must has one element", schema_key, v)
       return v
+      // can pass null to display nothing.
     }
   } else {
     return v
@@ -694,95 +696,22 @@ function getValue(v) {
 
   <table>
     <thead>
-      <tr>
-        <th colspan={mergeRowsCount}>
-          <input
-            type="checkbox"
-            bind:checked={allSelected}
-            on:click={onSelectAllClick} />
-          Actions
-        </th>
-        {#each headerTitlesRow as h, index}
-          {#if headerIsvisibleColumnsRow[index]}
-            <th
-              on:click={e => handleSort(e, index)}
-              on:contextmenu|preventDefault={onHeaderContext}>
-              {h}
-              {#if sortSettings[index] === 0}
-                ▲
-              {:else if sortSettings[index] === 1}
-                ▼
-              {:else}
-                <!-- content here -->
-              {/if}
-            </th>
-          {/if}
-        {/each}
-        <!-- <th width="100px">Actions</th> -->
-      </tr>
-      <tr>
-        <th colspan={mergeRowsCount}/>
-        {#each headerTitlesRow as h, index}
-          {#if headerIsvisibleColumnsRow[index]}
-            {#if customFilter[index]}
-              <th>
-                <select
-                  bind:value={filterSettings[index]}
-                  on:change={onHandleFilter(index)}>
-                  {#each customFilter[index] as f}
-                    <option value={f[1]}>{f[0]}</option>
-                  {/each}
-                </select>
-              </th>
-            {:else if !hiddenColumns.includes(headerVisibleColTypesRow[index])}
-              {#if headerVisibleColTypesRow[index] === DisplayType.INT}
-                <th>
-                  <input
-                    type="search"
-                    bind:value={filterSettings[index]}
-                    on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext} />
-                </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.TEXT}
-                <th>
-                  <input
-                    type="search"
-                    bind:value={filterSettings[index]}
-                    on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext} />
-                </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.DOUBLE}
-                <th>
-                  <input
-                    type="search"
-                    bind:value={filterSettings[index]}
-                    on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext}
-                    step="any" />
-                </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.BOOL}
-                <th>
-                  <input
-                    type="checkbox"
-                    bind:checked={filterSettings[index]}
-                    on:change={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext}
-                    step="any" />
-                </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
-                <th>Date</th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
-                <th></th>
-              {:else}
-                <th>Unknown Type {headerVisibleColTypesRow[index]}</th>
-              {/if}
-            {:else}
-              <th />
-            {/if}
-          {/if}
-        {/each}
-        <!-- <th width="100px"></th> -->
-      </tr>
+      <Header
+          {mergeRowsCount}
+          {allSelected}
+          {onSelectAllClick}
+          {headerTitlesRow}
+          selected={false}
+          {headerIsvisibleColumnsRow}
+          {headerVisibleColTypesRow}
+          {sortSettings}
+          {customFilter}
+          {filterSettings}
+          {hiddenColumns}
+          {onHeaderContext}
+          {onHandleFilter}
+          {onTextInputContext}
+      />
     </thead>
     <tbody>
       {#each items as l, cindex (getValue(l[0]))}

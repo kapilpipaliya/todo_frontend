@@ -15,7 +15,7 @@
   onMount(async () => {
     const options = {
       mode: 'code',
-      modes: ["code", "tree"],
+      modes: ["code", "tree"]
     };
     await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
