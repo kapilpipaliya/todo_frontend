@@ -3,7 +3,6 @@ import {event_type as et, events as e} from './events'
 import * as R from 'ramda'
 // the component cant include this file because of cyclic depandancy
 import SchemaForm from '../global/SchemaForm.svelte'
-import TranslationForm from '../global/TranslationForm.svelte'
 import GeneralForm from '../components/form/Index.svelte'
 
 /* process events from database:
@@ -58,18 +57,7 @@ export const tableOptions = {
       schema_key: 'schema'
       // object form
     }
-  },
-  translation: {
-    title: 'translation_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: TranslationForm,
-      quickcomponent: TranslationForm,
-      schema_key: 'translation'
-      // object form
-    }
-  },
+  }
 }
 
 export const getTableOptions =  (query) => { 

@@ -129,7 +129,7 @@ function isArray(val){
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.jsoneditor}
-      <JsonEditor bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+      <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else}
       Unknown Component
     {/if}

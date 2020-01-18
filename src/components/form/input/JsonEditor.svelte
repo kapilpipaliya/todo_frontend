@@ -17,7 +17,7 @@
         }
       }
     }; 
-    const {default: JSONEditor} = await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
+    /*const {default: JSONEditor} = */ await import( "https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.js" );
     await tick();
     jsoneditor = new JSONEditor(jsonediDom, options, value)
   })
