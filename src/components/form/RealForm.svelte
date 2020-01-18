@@ -12,6 +12,7 @@ import Text from './input/Text.svelte'
 import Checkbox from './input/Checkbox.svelte'
 import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
+import JsonEditor from './input/JsonEditor.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
@@ -55,6 +56,7 @@ export let doms = {}
     week,
     textarea,
     select,
+    jsoneditor,
     internal_true_edge,
     multi_select,
     text_array,
@@ -126,6 +128,10 @@ function isArray(val){
      		<span>{labels[i]}</span>
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
+    {:else if types[i] === FormType.jsoneditor}
+      <JsonEditor bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+    {:else}
+      Unknown Component
     {/if}
     <!-- Description -->
     {#if description[i]}
