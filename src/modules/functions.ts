@@ -569,3 +569,6 @@ let str = ''
   })  
   return str
 }
+/*export function getCurrentProjectLevel(pro: [{"_id":"project/3296721","_key":"3296721","_rev":"_Z5MP9mS--_","id":"kapil","name":"Kapil"}]){
+    return pro[pro.length - 1]?._key ?? ""
+}*/

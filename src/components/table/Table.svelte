@@ -4,6 +4,7 @@
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
+  import { project_data } from '../../modules/global_stores/project.ts'
 
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -103,7 +104,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = { type: form_type.array }
+    fetchConfig = { type: form_type.array, level: $project_data[$project_data.length - 1]?._key ?? "" }
     // pagination:
     limit = Number(query.limit) ?? 0
     pages = [1, 2]
@@ -130,7 +131,6 @@
     console.log('reset complete')
   }
 
-  
   onMount(async () => {
     mounted = true
     $css.table.css.count = $css.table.css.count + 1
