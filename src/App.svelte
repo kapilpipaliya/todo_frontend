@@ -16,7 +16,6 @@
 	import {default_filter} from './modules/global_stores/default_filter.ts'
 	import {default_form} from './modules/global_stores/default_form.ts'
 	import {organization_id, organization_data} from './modules/global_stores/organization.ts'
-	import {project_id, project_data} from './modules/global_stores/project.ts'
 	import {current_member} from './modules/global_stores/current_member.ts'
 	import {maintenance} from './modules/global_stores/maintenance.ts'
 
@@ -143,14 +142,14 @@
 	// }
 	$: {
 		$default_filter = {
-		  project: [null, $organization_data._key ?? null],
-		  work_package: [null, $organization_data._key ?? null, $project_data._key ?? null],
+		  project: [null, $organization_data[0]?._key ?? null],
+		  work_package: [null, $organization_data[0]?._key ?? null, $organization_data[1]?._key ?? null],
 		}
 	}
 	$: {
 		$default_form = {
-		  project: [null, $organization_data._key ?? null],
-		  work_package: [null, $organization_data._key ?? null, $project_data._key ?? null]
+		  project: [null, $organization_data[0]?._key ?? null],
+		  work_package: [null, $organization_data[0]?._key ?? null, $organization_data[1]?._key ?? null]
 		}
 	}
 
@@ -192,4 +191,11 @@ default_filter:
 default_form:
 {JSON.stringify($default_form)}
 <br>
+current_member:
 {JSON.stringify($current_member)}
+<br>
+organization_id:
+{JSON.stringify($organization_id)}
+<br>
+organization_data:
+{JSON.stringify($organization_data)}

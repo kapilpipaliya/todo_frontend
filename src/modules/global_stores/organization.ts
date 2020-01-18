@@ -1,3 +1,3 @@
 import { writable } from '../functions'
-export const organization_id = writable("")
-export const organization_data = writable({})
+export const organization_id = writable([] as string[])
+export const organization_data = writable([] as Array<{}>)
