@@ -1,11 +1,10 @@
 
 import {event_type as et, events as e} from './events'
-import * as R from 'ramda'
 // the component cant include this file because of cyclic depandancy
-import SchemaForm from '../global/SchemaForm.svelte'
 import GeneralForm from '../components/form/Index.svelte'
 
 /* process events from database:
+//import * as R from 'ramda'
 //sample
 export const schemaEvents = (id=0) => {
   const ev = [
@@ -47,17 +46,6 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
 }
 
 export const tableOptions = {
-  schema: {
-    title: 'schema_title',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: SchemaForm,
-      quickcomponent: SchemaForm,
-      schema_key: 'schema'
-      // object form
-    }
-  }
 }
 
 export const getTableOptions =  (query) => { 
@@ -69,15 +57,15 @@ export const getTableOptions =  (query) => {
   } else {
     // user, session, note, confirm, org, 
     return {
-    title: 'genaric',
-    table: {
-      eventsFn: schemaEvents,
-      customFilter: {},
-      modelcomponent: GeneralForm,
-      quickcomponent: GeneralForm,
-      schema_key,
-      query
+      title: 'genaric',
+      table: {
+        eventsFn: schemaEvents,
+        customFilter: {},
+        modelcomponent: GeneralForm,
+        quickcomponent: GeneralForm,
+        schema_key,
+        query
+      }
     }
-  }
   }
 }
