@@ -16,6 +16,7 @@
   export let onHeaderContext
   export let onHandleFilter
   export let onTextInputContext
+  export let onHandleSort
 </script>
 
       <tr>
@@ -29,7 +30,7 @@
         {#each headerTitlesRow as h, index}
           {#if headerIsvisibleColumnsRow[index]}
             <th
-              on:click={e => handleSort(e, index)}
+              on:click={e => onHandleSort(e, index)}
               on:contextmenu|preventDefault={onHeaderContext}>
               {h}
               {#if sortSettings[index] === 0}

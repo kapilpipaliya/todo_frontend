@@ -454,7 +454,7 @@
   }
   // ============================================================================
   // ================================Sorting=====================================
-  const handleSort = (e, col) => {
+  const onHandleSort = (e, col) => {
     if (e.ctrlKey) {
     } else {
       const sortOrder = sortSettings[col]
@@ -711,6 +711,7 @@ function getValue(v) {
           {onHeaderContext}
           {onHandleFilter}
           {onTextInputContext}
+          {onHandleSort}
       />
     </thead>
     <tbody>

@@ -36,7 +36,7 @@
 {#if currentRoute.queryParams.message}
   <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
-{user}
+
 <GeneralForm eventsFn={registerMutateEvents} key={null} schema_key={'register'} />
 <p>
   By creating an account you agree to our

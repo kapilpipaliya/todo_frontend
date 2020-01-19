@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, Unique } from '../modules/functions.ts'
-  export let query = {}
+  export let currentRoute
 
   let mounted = false
   let binded = false
@@ -35,8 +35,8 @@
         bindOnce()
         S.trigger([[sub, {}]])
 
-        if (query.token) {
-          S.trigger([[doconfirm, query]])
+        if (currentRoute.queryParams.token) {
+          S.trigger([[doconfirm, currentRoute.queryParams]])
         }
       } else {
         er = 'Reconnecting...'
@@ -47,7 +47,7 @@
   onMount(async () => {
     mounted = true
 
-    if (query.token) {
+    if (currentRoute.queryParams.token) {
       header = 'Confirming'
       subtitle = 'Please wait ...'
     } else {
