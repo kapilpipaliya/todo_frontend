@@ -22,10 +22,9 @@
 	import { Router } from './components/svelte-router-spa/src/index.ts'
 	// Routes:
   	import Page from './Page.svelte'
+	import Form from './Form.svelte'
 	// account:
-	import Login from './account/login.svelte'
 	import Logout from './account/logout.svelte'
-	import Register from './account/register.svelte'
 	import Confirm from './account/confirm.svelte'
 
 	// admin:
@@ -45,6 +44,7 @@
 
 	// other
 	import SchemaGenerator from  './components/SchemaGenerate.svelte'
+
 
 	//import { NotificationDisplay } from '@beyonk/svelte-notifications'
 	//let n
@@ -97,11 +97,13 @@
 	}
 
 	const modifyComp = (key, obj)=> {
+		
 	    switch (obj[key]) {
 	    case "Page": obj[key] = Page; break;  
 	    case "PublicLayout": obj[key] = PublicLayout; break;
-	    case "Register": obj[key] = Register; break;
-	    case "Login": obj[key] = Login; break;
+	    
+	    case "Form": obj[key] = Form; break;
+	    
 	    case "Logout": obj[key] = Logout; break;
 	    case "Confirm": obj[key] = Confirm; break;
 	    case "AdminLayout": obj[key] = AdminLayout; break;
@@ -112,6 +114,12 @@
 	    case "ProjectLayout": obj[key] = ProjectLayout; break;
 	    case "ProjectIndex": obj[key] = ProjectIndex; break;
 	    case "SchemaGenerator": obj[key] = SchemaGenerator; break;
+	    default:
+	    if(key === 'layout' || key === 'component' || key == ''){
+			// No error
+		} else {
+	    	console.error("No Component Found For: ", obj, " | key: ", key)
+		}
 	  }
 	  return obj
 	}

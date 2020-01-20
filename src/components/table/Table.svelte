@@ -6,6 +6,7 @@
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
+  import {schemaEvents} from '../../modules/schema_events.ts'
 
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -14,7 +15,7 @@
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
 
-  export let eventsFn: (id:number, schema: string) => Array<[]>
+  export let eventsFn = schemaEvents
   let events
 
   let headerTitlesRow

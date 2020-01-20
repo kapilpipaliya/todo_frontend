@@ -11,7 +11,7 @@ export * from '../../svelte/src/runtime/easing/index'
 export * from '../../svelte/src/runtime/transition/index'
 export * from '../../svelte/src/runtime/transition/index'
 export * from '../../svelte/src/runtime/animate/index'
-import {event_type as et, events as e} from './events'
+import {event_type as et, events as e, Unique} from './events'
 export * from './events'
 
 import {project_id, project_data} from './global_stores/project'
@@ -105,14 +105,6 @@ export enum DisplayType {
     BINARY,
     URL
   };
-
-class UniqueNumber {
-  private id_ = 0
-  get id(){
-    return ++this.id_
-  }
-}
-export const Unique = new UniqueNumber()
 
 /*
 import cookie from 'cookie'
@@ -307,6 +299,14 @@ export function pPath() {
 export function getCookieValue(a) {
   var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)')
   return b ? b.pop() : ''
+}
+export function merge(array1, array2){
+  for(let i=0; i < array2.length; i++){
+    if(array1[i]) {
+      array2[i] = array1[i]
+    }
+  }
+  return array2
 }
 class FormBasic {
   public S: ServerEventsDispatcher
@@ -515,9 +515,9 @@ export class FormArray extends FormBasic {
      this.isUpdate = true
     }
     const form_store = get(this.form)
-    if(!form_store.length){
-      this.form.set(form)
-    }
+    const new_form = merge(form_store, form)
+    this.form.set(new_form)
+    
     this.form_disabled.set(false || options.disabled)
   }
   //static functions:

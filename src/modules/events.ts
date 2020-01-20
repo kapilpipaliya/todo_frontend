@@ -124,3 +124,12 @@ export enum events {
 
   e_project = 500
 }
+
+class UniqueNumber {
+  private id_ = 0
+  get id(){
+    return ++this.id_
+  }
+}
+
+export const Unique = new UniqueNumber()
