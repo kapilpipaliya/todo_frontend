@@ -1,9 +1,6 @@
 <script lang='ts'>
-  import qs from "qs";
-  import {Table} from './components/index.ts'
   import Title from './components/Title.svelte'
-  import * as R from 'ramda'
-
+  import {Table} from './components/index.ts'
   import GeneralForm from './components/form/Index.svelte'
 
   export let currentRoute
@@ -18,6 +15,12 @@
     }
   }
 
+  /*
+  export let accountFilter = {};
+  let customFilter = {
+  1 : accountFilter
+  };
+  */
   let options = {}
   $: {
     options = {
@@ -28,13 +31,6 @@
       query: currentRoute?.queryParams ?? {}
     }
   }
-  //console.log($$props) // very helpful.
-  /*
-  export let accountFilter = {};
-  let customFilter = {
-  1 : accountFilter
-  };
-  */
 </script>
 
 <Title {currentRoute}/>

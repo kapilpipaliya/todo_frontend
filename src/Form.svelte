@@ -1,9 +1,6 @@
 <script lang='ts'>
-  import {  event_type as et,events as e, Unique } from './modules/functions.ts'
-
-  import GeneralForm from './components/form/Index.svelte'
   import Title from './components/Title.svelte'
-  import * as R from 'ramda'
+  import GeneralForm from './components/form/Index.svelte'
 
   export let currentRoute
 
