@@ -66,7 +66,7 @@
           </td>
           <td>
               {#if !isGlobal}
-              <button name='delete' key={getValue(rowValue[0])} type="button" on:click={onDeleteRow(getValue(rowValue[0]))}>D</button>
+              <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]))()}>D</button>
               {/if}
           </td>
           {#each rowValue as c, index}
