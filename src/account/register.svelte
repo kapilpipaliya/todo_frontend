@@ -4,17 +4,15 @@
   import { navigateTo } from '../components/svelte-router-spa/src/index.ts'
   export let currentRoute
   let user = currentRoute.namedParams.user ?? ''
-  //let form = { email: '', pass: '' }
+  // when find how to pass namedParams to form, delete this component.
   export const registerMutateEvents = (id=0) => {
     if(!user) {
       return [
-        null,
         null,
         [et.mutate, e.account, e.register_user, Unique.id],
       ]
     } else {
       return [
-        null,
         null,
         [et.mutate, e.account, e.register_user, Unique.id],
       ]
@@ -37,7 +35,7 @@
   <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
 
-<GeneralForm eventsFn={registerMutateEvents} key={null} schema_key={'register'} />
+<GeneralForm eventsFn={registerMutateEvents} key={null} schema_key={'register'} form={[user,'','']}/>
 <p>
   By creating an account you agree to our
   <a href="page/privacy">Terms & Privacy</a>
