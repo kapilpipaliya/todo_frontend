@@ -50,7 +50,7 @@
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
-  let fetchConfig = { type: form_type.array }
+  let fetchConfig = { type: form_type.array } // also set level latter
   // pagination:
   let limit = Number(query.limit) ?? 0
   let pages = [1, 2]

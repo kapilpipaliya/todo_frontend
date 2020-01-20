@@ -10,39 +10,31 @@ export enum events {
   current_member_event,
 
   e_global = 50,
-  user_header,
+
   user_list,
   user_mutate,
 
-  schema_header,
   schema_list,
   schema_mutate,
 
-  translation_header,
   translation_list,
   translation_mutate,
 
-  session_header,
   session_list,
   session_mutate,
 
-  confirm_header,
   confirm_list,
   confirm_mutate,
 
-  note_header,
   note_list,
   note_mutate,
 
-  global_color_header,
   global_color_list,
   global_color_mutate,
 
-  global_role_header,
   global_role_list,
   global_role_mutate,
 
-  global_permission_header,
   global_permission_list,
   global_permission_mutate,
 
@@ -66,75 +58,57 @@ export enum events {
   admin = 200,
   dashboard,
 
-  organization_header,
   organization_list,
   organization_mutate,
 
-  project_header,
   project_list,
   project_mutate,
 
-  group_header,
   group_list,
   group_mutate,
 
-  role_header,
   role_list,
   role_mutate,
 
-  member_header,
   member_list,
   member_mutate,
 
-  permission_header,
   permission_list,
   permission_mutate,
 
-  color_header,
   color_list,
   color_mutate,
 
-  type_header,
   type_list,
   type_mutate,
 
-  priority_header,
   priority_list,
   priority_mutate,
 
-  status_header,
   status_list,
   status_mutate,
 
-  activity_header,
   activity_list,
   activity_mutate,
 
-  doc_category_header,
   doc_category_list,
   doc_category_mutate,
 
-  announcement_header,
   announcement_list,
   announcement_mutate,
 
-  news_header,
   news_list,
   news_mutate,
 
-  wiki_header,
   wiki_list,
   wiki_mutate,
 
-  work_package_header,
   work_package_list,
   work_package_mutate,
 
-  forum_header,
   forum_list,
   forum_mutate,
 
-  post_header,
   post_list,
   post_mutate,
 

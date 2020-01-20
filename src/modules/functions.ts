@@ -13,6 +13,9 @@ export * from '../../svelte/src/runtime/transition/index'
 export * from '../../svelte/src/runtime/animate/index'
 import {event_type as et, events as e} from './events'
 export * from './events'
+
+import {project_id, project_data} from './global_stores/project'
+
 export enum form_type { object = 1, array };
 
 export let unique_event = 0
@@ -372,7 +375,9 @@ class FormBasic {
   fetch() {
     if(this.data_evt) {
       const filter = [`="${this.key}"`]
-      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
+      const project_data_store = get(project_data)
+      // is schema_key passing neccessary?
+      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, level: project_data_store[project_data_store.length - 1]?._key ?? "" }]
       const e1 = [this.data_evt, args]
       this.S.trigger([e1])
     }
@@ -485,7 +490,8 @@ export class FormArray extends FormBasic {
   fetch() {
     if(this.schemaGetEvt) {
       const filter = [`="${this.key}"`]
-      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {}) }]
+      const project_data_store = get(project_data)
+      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {}), level: project_data_store[project_data_store.length - 1]?._key ?? ""  }]
       const e1 = [this.schemaGetEvt, args]
       this.S.trigger([e1])
     } else {
