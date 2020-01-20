@@ -1,8 +1,8 @@
 <script lang='ts'>
-  import Title from './components/Title.svelte'
-  import GeneralForm from './components/form/Index.svelte'
+  import Title from './Title.svelte'
+  import GeneralForm from './form/Index.svelte'
 
-  export let currentRoute
+  export let currentRoute = {}
 
   //export let default_pattern = [[0, "user"], [1, ''], [2, '']]
   let default_pattern = currentRoute?.params?.default_pattern ?? []
@@ -19,23 +19,8 @@
   })
 </script>
 
-<Title {currentRoute}/>
+<Title {currentRoute} />
 
 <div>
   <GeneralForm {...currentRoute.params} form={default_value} />
-</div>
-
-<p>
-  By creating an account you agree to our
-  <a href="page/privacy">Terms & Privacy</a>
-  .
-</p>
-
-<div class="signin">
-  <p>
-    Already have an account?
-    <a href="account/login">Sign in</a>
-    .
-  </p>
-  <p>An account is needed to purchase a product</p>
 </div>

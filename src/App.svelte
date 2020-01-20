@@ -24,8 +24,8 @@
 	import {current_member} from './modules/global_stores/current_member.ts'
 
 // Routes:
-  	import Page from './Page.svelte'
-	import Form from './Form.svelte'
+  	import Page from './components/Page.svelte'
+	import FormWrapper from './components/FormWrapper.svelte'
 	// account:
 	import Logout from './account/logout.svelte'
 	import Confirm from './account/confirm.svelte'
@@ -101,7 +101,7 @@
 	    case "Page": obj[key] = Page; break;  
 	    case "PublicLayout": obj[key] = PublicLayout; break;
 	    
-	    case "Form": obj[key] = Form; break;
+	    case "Form": obj[key] = FormWrapper; break;
 	    
 	    case "Logout": obj[key] = Logout; break;
 	    case "Confirm": obj[key] = Confirm; break;

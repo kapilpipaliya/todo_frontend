@@ -28,16 +28,16 @@
   <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
 
-<div>
-
+{#if title}
   <div>
-    <h1>{title}</h1>
-  </div>
+    <div>
+      <h1>{title}</h1>
+    </div>
 
-  {#if subtitle}
-  <div>
-    <h2>{subtitle}</h2>
+    {#if subtitle}
+    <div>
+      <h2>{subtitle}</h2>
+    </div>
+    {/if}
   </div>
-  {/if}
-
-</div>
+{/if}

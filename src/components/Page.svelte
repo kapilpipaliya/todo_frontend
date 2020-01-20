@@ -1,7 +1,7 @@
 <script lang='ts'>
-  import Title from './components/Title.svelte'
-  import {Table} from './components/index.ts'
-  import GeneralForm from './components/form/Index.svelte'
+  import Title from './Title.svelte'
+  import {Table} from './index.ts'
+  import GeneralForm from './form/Index.svelte'
 
   export let currentRoute
     
