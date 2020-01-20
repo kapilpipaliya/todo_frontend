@@ -332,16 +332,16 @@ class FormBasic {
 
     this.events = e;
 
-    if(e[1]){
+    if(e[0]){
       if(this.key) {
-        e[1][0] = et.subscribe
+        e[0][0] = et.subscribe
       } else {
-        e[1][0] = et.get
+        e[0][0] = et.get
       }
-      this.unsub_evt = [et.unsubscribe, ...e[1].slice(1)]
+      this.unsub_evt = [et.unsubscribe, ...e[0].slice(1)]
     }
-    this.data_evt = e[1]
-    this.mutate_evt = e[2]
+    this.data_evt = e[0]
+    this.mutate_evt = e[1]
     this.isUpdate = false
     
     this.mounted = writable(false)
@@ -352,6 +352,7 @@ class FormBasic {
     this.form_disabled = writable(true)
 
     this.onSave = this.onSave.bind(this)
+    this.onClose = this.onClose.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
     this.options = writable({})
   }
@@ -362,8 +363,11 @@ class FormBasic {
     this.er.set('')
   }
   onDestroy() {
-      if (this.key && this.unsub_evt) this.S.trigger([[this.unsub_evt, {}]])
+      //if (this.key && this.unsub_evt) this.S.trigger([[this.unsub_evt, {}]])
       this.S.unbind_(this.events)
+  }
+  onClose() {
+    if (this.key && this.unsub_evt) this.S.trigger([[this.unsub_evt, {}]])
   }
   fetch() {
     if(this.data_evt) {
@@ -377,7 +381,11 @@ class FormBasic {
     const form = get(this.form) // not recommaned to use get
     this.isSaving.set(true)
     const filter = this.isUpdate ? [`="${this.type == form_type.object ? form._key : form[0]}"`] : null
-    this.S.trigger([[this.mutate_evt, [form, filter]]])
+    const args = [form, filter]
+    if(this.isUpdate){
+      args.push(this.unsub_evt)
+    }
+    this.S.trigger([[this.mutate_evt, args]])
   }
   onMutateGet([d]) {
     this.isSaving.set(false)
@@ -477,7 +485,7 @@ export class FormArray extends FormBasic {
   fetch() {
     if(this.schemaGetEvt) {
       const filter = [`="${this.key}"`]
-      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key }]
+      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {}) }]
       const e1 = [this.schemaGetEvt, args]
       this.S.trigger([e1])
     } else {

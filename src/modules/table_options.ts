@@ -39,7 +39,6 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
     e0 = e.my
   }
   return [
-      [et.subscribe, e0, h, id],
       [et.subscribe, e0, e[`${schema}_list`], id],
       [et.mutate, e0, e[`${schema}_mutate`], id],
     ]

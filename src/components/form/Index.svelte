@@ -29,7 +29,7 @@
     options={$options}
 	bind:headers={$headers}
 	bind:form={$form_}
-	on:close
+	on:close={f.onClose} on:close
 />
 <div>{$er}</div>
 {JSON.stringify($form_)}

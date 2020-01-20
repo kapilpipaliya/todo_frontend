@@ -71,7 +71,6 @@
   let contextmenu = false
   let showRowNum = true
 
-  let header_evt
   let data_evt
   let unsub
   let mutate_evt
@@ -125,10 +124,9 @@
     config = false
     contextmenu = false
 
-    header_evt = events[0]
-    data_evt = events[1]
-    unsub = [event_type.unsubscribe, ...events[1].slice(1)]
-    mutate_evt = events[2]
+    data_evt = events[0]
+    unsub = [event_type.unsubscribe, ...events[0].slice(1)]
+    mutate_evt = events[1]
     console.log('reset complete')
   }
 
@@ -145,23 +143,23 @@
     if (!binded) {
       {
         S.bind$(data_evt, onDataGet, 1)
-        S.bind$(header_evt, onHeaderGet, 1)
-        if(header_evt){
-          const e1 = [header_evt, fetchConfig]
-          S.trigger([e1])
-        }
+        //S.bind$(header_evt, onHeaderGet, 1)
+        //if(header_evt) {
+          //const e1 = [header_evt, fetchConfig]
+          //S.trigger([e1])
+        //}
       }
       //binded = true
     }
   }
   const onWSConnect = () => {
-    if (headerFetched) {
+    //if (headerFetched) {
       refresh()
-    }
+    //}
   }
   // this function send subscription request everytime ws connection open
   $: {
-      (binded)
+    (binded)
     if (mounted) {
       if ($ws_connected) {
         bindOnce()
@@ -197,6 +195,7 @@
   }
   // =============================================================================
   // ================================On Headers and Data Receive =================
+  // delete this function
   const onHeaderGet = ([d]) => {
     fillHeadersArray(d)
     refresh()
@@ -232,7 +231,12 @@
     }
     return newa1
   }
-  function onDataGet([d]) {
+  function onDataGet(all) {
+    //console.warn(all)
+    const [[h, d]] = all
+    if(h.length) {
+      fillHeadersArray(h)
+    }
     if (d.r) {
       // reset quickview with empty array:
       // [...Array(20)].map(_=>0)
@@ -409,7 +413,7 @@
     const r = confirm('Are You Sure to delete selected rows?')
     if (r == true) {
       mutate_evt.pop()
-      mutate_evt.push(12345)
+      mutate_evt.push(Unique.id)
 
       const filter = [JSON.stringify(selectedRowsKeys)]
       const [d] = await new Promise((resolve, reject) => {
@@ -421,10 +425,10 @@
           ['DEL', filter]
         )
       })
-      if (d.ok) {
+      if (d[0]) {
         deleteRows_(selectedRowsKeys)
       } else {
-        alert(d.error)
+        alert(d[1])
       }
     }
   }
@@ -574,8 +578,8 @@
     const { list } = e.detail
     fetchConfig['columns'] = list
     config = false
-    const e1 = [header_evt, fetchConfig]
-    S.trigger([e1])
+    // const e1 = [header_evt, fetchConfig] // fix this(config)
+    // S.trigger([e1]) // fix this
     //resetFilter_(); onHeaderGet() will do this.
     sortSettings = []
     // refresh();
