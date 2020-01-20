@@ -1,26 +1,29 @@
 <script lang='ts'>
 	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/functions.ts'
 	import * as R from 'ramda'
+
+	import { Router } from './components/svelte-router-spa/src/index.ts'
+
 	import Css from './components/Css.svelte'
 	import MenuF from './components/MenuF.svelte'
 
-	// subscribe here with  LoginStatus too.
-	import {account} from './modules/global_stores/account.ts'
+// stores:
+	import {maintenance} from './modules/global_stores/maintenance.ts'
+	import {translation} from './modules/global_stores/translation.ts'
+	import {notification} from './modules/global_stores/notification.ts'
 	import {cookie} from './modules/global_stores/cookie.ts'
+	import {navigation} from './modules/global_stores/navigation.ts'
+
+	import {account} from './modules/global_stores/account.ts'
 	import {member_settings} from './modules/global_stores/member_settings.ts'
 	import {menu} from './modules/global_stores/menu.ts'
-	import {navigation} from './modules/global_stores/navigation.ts'
-	import {notification} from './modules/global_stores/notification.ts'
 	import {current_time} from './modules/global_stores/time_store.ts'
-	import {translation} from './modules/global_stores/translation.ts'
 	//import {default_filter} from './modules/global_stores/default_filter.ts'
 	//import {default_form} from './modules/global_stores/default_form.ts'
 	import {project_id, project_data} from './modules/global_stores/project.ts'
 	import {current_member} from './modules/global_stores/current_member.ts'
-	import {maintenance} from './modules/global_stores/maintenance.ts'
 
-	import { Router } from './components/svelte-router-spa/src/index.ts'
-	// Routes:
+// Routes:
   	import Page from './Page.svelte'
 	import Form from './Form.svelte'
 	// account:
@@ -43,13 +46,10 @@
 	import ProjectIndex from './views/project/index.svelte'
 
 	// other
-	import SchemaGenerator from  './components/SchemaGenerate.svelte'
-
 
 	//import { NotificationDisplay } from '@beyonk/svelte-notifications'
 	//let n
 	//<NotificationDisplay bind:this={n} />
-
 
 	let mounted = false
 	let er = ''
@@ -96,8 +96,7 @@
 	  return true
 	}
 
-	const modifyComp = (key, obj)=> {
-		
+	const modifyComp = (key, obj)=> {		
 	    switch (obj[key]) {
 	    case "Page": obj[key] = Page; break;  
 	    case "PublicLayout": obj[key] = PublicLayout; break;
@@ -113,7 +112,6 @@
 	    case "OrganizationIndex": obj[key] = OrganizationIndex; break;
 	    case "ProjectLayout": obj[key] = ProjectLayout; break;
 	    case "ProjectIndex": obj[key] = ProjectIndex; break;
-	    case "SchemaGenerator": obj[key] = SchemaGenerator; break;
 	    default:
 	    if(key === 'layout' || key === 'component' || key == ''){
 			// No error
@@ -195,13 +193,3 @@
 {#if routes.length}
 	<Router {routes} />
 {/if}
-
-<br>
-current_member:
-{JSON.stringify($current_member)}
-<br>
-project_id:
-{JSON.stringify($project_id)}
-<br>
-project_data:
-{JSON.stringify($project_data)}
