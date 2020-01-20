@@ -85,6 +85,9 @@
     events && S.unbind_(events)
   }
   function reset() {
+    if(!schema_key){
+      console.warn('schema key is invalid in table')
+    }
     unRegister()
     events = eventsFn(Unique.id, schema_key)
     headerTitlesRow = []
