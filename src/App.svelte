@@ -13,8 +13,8 @@
 	import {notification} from './modules/global_stores/notification.ts'
 	import {current_time} from './modules/global_stores/time_store.ts'
 	import {translation} from './modules/global_stores/translation.ts'
-	import {default_filter} from './modules/global_stores/default_filter.ts'
-	import {default_form} from './modules/global_stores/default_form.ts'
+	//import {default_filter} from './modules/global_stores/default_filter.ts'
+	//import {default_form} from './modules/global_stores/default_form.ts'
 	import {project_id, project_data} from './modules/global_stores/project.ts'
 	import {current_member} from './modules/global_stores/current_member.ts'
 	import {maintenance} from './modules/global_stores/maintenance.ts'
@@ -148,6 +148,8 @@
 	// const onClickHandle = e => {
 	//   goto(e.target.href, { replaceState: true })
 	// }
+
+	/* No static default_filter and default_form
 	$: {
 		$default_filter = {
 		  project: [null, $project_data[0]?._key ?? null],
@@ -159,7 +161,7 @@
 		  project: [null, $project_data[0]?._key ?? null],
 		  work_package: [null, $project_data[0]?._key ?? null, $project_data[1]?._key ?? null]
 		}
-	}
+	}*/
 
 	$: level = $current_member?.level;
 </script>
@@ -193,11 +195,7 @@
 {#if routes.length}
 	<Router {routes} />
 {/if}
-default_filter:
-{JSON.stringify($default_filter)}
-<br>
-default_form:
-{JSON.stringify($default_form)}
+
 <br>
 current_member:
 {JSON.stringify($current_member)}
