@@ -3,13 +3,13 @@ import {event_type as et, events as e, Unique} from './events'
 export const schemaEvents = (id: number | string = 0, schema: string) => {
   const h = e[`${schema}_list`]
   let e0 = 0
-  if(h > 49 && h < 100){
+  if(h > 20 && h < 40){
     e0 = e.e_global
-  } else if (h > 100 && h < 200) {
+  } else if (h > 40 && h < 60) {
     e0 = e.account
-  } else if (h > 200 && h < 300) {
+  } else if (h > 60 && h < 120) {
     e0 = e.admin
-  } else if (h > 300 && h < 400) {
+  } else if (h > 120 && h < 140) {
     e0 = e.my
   }
   if(h){

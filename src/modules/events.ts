@@ -9,7 +9,7 @@ export enum events {
   translation_event,
   current_member_event,
 
-  e_global = 50,
+  e_global = 20,
 
   user_list,
   user_mutate,
@@ -38,7 +38,7 @@ export enum events {
   global_permission_list,
   global_permission_mutate,
 
-  account = 100,
+  account = 40,
 
   register_user,
   register_member,
@@ -55,7 +55,7 @@ export enum events {
   subscribe_test,
   triggering_test,
 
-  admin = 200,
+  admin = 60,
   dashboard,
 
   organization_list,
@@ -112,7 +112,7 @@ export enum events {
   post_list,
   post_mutate,
 
-  my = 300,
+  my = 120,
   schema_get,
   my_schema_mutate,
   fields_schema_get,
@@ -120,9 +120,9 @@ export enum events {
   form_schema_get,
   form_schema_mutate,
 
-  e_organization = 400,
+  e_organization = 140,
 
-  e_project = 500
+  e_project = 160
 }
 
 class UniqueNumber {
