@@ -1,5 +1,41 @@
 # Svelte Router changelog
 
+## 5.3.3
+
+Fix route generation when localised and multiple paths with named params in name. -> { name: 'complex/route/:param/other/stuff/:param2' }
+
+A bit of refactoring
+
+## 5.3.2
+
+Add missing code to Navigate component onMount.
+
+## 5.3.1
+
+Fix bug where navigateTo did not return the right localised route.
+
+## 5.3.0
+
+currentRoute.path returns the full path including query params.
+
+## 5.2.1
+
+Navigate and navigateTo support route generation for a language.
+
+## 5.2.0
+
+- Internationalisation. Translate the route names to as many languages as you need.
+
+```javascript
+const adminRoutes = [
+  {
+    name: 'employees',
+    layout: EmployeesPage,
+    lang: { es: 'empleados', fr: 'employes', de: 'angestellte', it: 'impiegati' }
+  }
+]
+```
+
 ## 5.1.1
 
 - Fix an error when a route has a redirectTo that leads to a guarded route that also redirects.
@@ -7,20 +43,21 @@
 ```javascript
 const adminRoutes = [
   {
-    name: "/admin",
+    name: '/admin',
     layout: AdminLayout,
     nestedRoutes: [
-      { name: "index", redirectTo: "admin/dashboard" },
+      { name: 'index', redirectTo: 'admin/dashboard' },
       {
-        name: "dashboard",
+        name: 'dashboard',
         component: DashboardIndex,
         onlyIf: {
           guard: isLoggedIn,
-          redirect: "/login"
+          redirect: '/login'
         }
-      },
+      }
+    ]
   }
-}
+]
 ```
 
 ## 5.1.0

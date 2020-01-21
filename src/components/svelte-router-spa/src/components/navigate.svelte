@@ -1,8 +1,19 @@
 <script>
-  import { navigateTo, routeIsActive } from '../router.js'
+  import { onMount } from '../../../../modules/functions.ts'
+  import { localisedRoute, navigateTo, routeIsActive } from '../router.js'
   export let to = '/'
   export let title = ''
   export let styles = ''
+  export let lang = null
+
+  onMount(function() {
+    if (lang) {
+      const route = localisedRoute(to, lang)
+      if (route) {
+        to = route.path
+      }
+    }
+  })
 
   function navigate(event) {
     event.preventDefault()

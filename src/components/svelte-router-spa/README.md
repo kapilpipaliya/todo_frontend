@@ -18,6 +18,7 @@ It's designed for Single Page Applications (SPA). If you need Server Side Render
 - Layouts global, per page or nested.
 - Nested routes.
 - Named params.
+- Localisation.
 - Guards to protect urls. Public and private urls.
 - Track pageviews in Google Analytics (optional).
 - Use standard `<a href="/about-us">About</a>` elements to navigate between pages (or use [`<Navigate />`](#navigate) for bonus features).
@@ -43,6 +44,12 @@ yarn add svelte-router-spa
 ```
 
 ## Usage
+
+Ensure your local server is configured in SPA mode. In a default Svelte installation you need to edit your package.json and add _-s_ to `sirv public`.
+
+```javascript
+"start": "sirv public -s"
+```
 
 Instead of having your routes spread inside your code Svelte Router SPA lets you define them inside a file where you can easily identify all available routes.
 
@@ -75,7 +82,10 @@ const routes = [
       {
         name: 'employees',
         component: '',
-        nestedRoutes: [{ name: 'index', component: EmployeesIndex }, { name: 'show/:id', component: EmployeesShow }]
+        nestedRoutes: [
+          { name: 'index', component: EmployeesIndex },
+          { name: 'show/:id', component: EmployeesShow }
+        ]
       }
     ]
   }
@@ -144,13 +154,30 @@ The route page will take care of rendering the appropriate component inside the 
 
 ### Anatomy of a route
 
-Each route is an object with the following elements:
+Each route is an object that may have the following properties:
 
 ```javascript
-{ name: 'about-us', component: About, layout: PublicLayout, redirectTo: 'https://www.alvareznavarro.es' }
+
+function userIdAdmin() {
+  // return true or false
+}
+
+
+{
+  name: 'about-us',
+  component: About,
+  layout: PublicLayout,
+  redirectTo: 'company',
+  onlyIf: { guard: userIsAdmin, redirect: '/login' },
+  lang: { es: 'acerca-de' },
+  nestedRoutes: [
+    { name: 'our-values', component: CompanyValues, lang: { es: 'nuestros-valores' } }
+  ]
+}
+
 ```
 
-**name (required)**: The name that will be used in the url
+**name (required)**: The name that will be used in the url. This is the default name for the route if no localisation is defined or no language is set.
 
 **component (required if no layout is present)**: A component that will be rendered when this route is active. If the route has nestedRoutes the component should be a Layout.
 
@@ -164,18 +191,11 @@ _Either a component or a layout should be specified. Both can not be empty._
 
 **onlyIf**: An object to conditionally render a route. If guard returns true then route is rendered. If guard is false it redirects to _redirect_.
 
-```javascript
-
-function userIsAdmin() {
-  // do your checks here and returns true or false
-}
-
-{ name: 'admin', component: Admin, layout: PrivateLayout, onlyIf: { guard: userIsAdmin, redirect: '/login} }
-```
+**lang**: An object with route names localised. Check [Localisation](#localisation)
 
 Routes can contain as many nested routes as needed.
 
-It can also contain as many layouts as needed. Layouts can be nested into other layouts.
+They can also contain as many layouts as needed. Layouts can be nested into other layouts.
 
 In the following example both the home root ('/' and 'login' will use the same layout). Admin, employees and employeesShow will use the admin layout and employees will also use the employees layout, rendered inside the admin layout.
 
@@ -201,7 +221,10 @@ const routes = [
           {
             name: 'show/:id',
             component: EmployeesShowLayout,
-            nestedRoutes: [{ name: 'index', component: EmployeesShow }, { name: 'list', component: EmployeesShowList }]
+            nestedRoutes: [
+              { name: 'index', component: EmployeesShow },
+              { name: 'list', component: EmployeesShowList }
+            ]
           }
         ]
       }
@@ -245,9 +268,13 @@ The simplest approach (although not required) is to have an App.svelte file like
 
 The layout and/or the component that matches the active route will be rendered inside _Router_.
 
-The only option availabe now is _gaPageviews_ that will record route changes as pageviews in Google Analytics. It's disabled by default.
+Options is an object that supports two properties:
 
-## Route
+_gaPageviews_ that will record route changes as pageviews in Google Analytics. It's disabled by default.
+
+_lang_ a string that sets the language that the router will use to match the active route. Check [Localisation](#localisation)
+
+### Route
 
 `import { Route } from 'svelte-router-spa'`
 
@@ -283,9 +310,19 @@ Example:
 </div>
 ```
 
-## currentRoute
+### currentRoute
 
-This property is propagated from _Route_ to the components it renders. It contains information about the current route and the child routes.
+This object is propagated from _Route_ to the components it renders. It contains information about the current route and the child routes.
+
+These are the properties available in this object:
+
+- name
+- component
+- layout
+- queryParams
+- namedParams
+- childRoute
+- language
 
 **Example:**
 
@@ -298,7 +335,10 @@ const routes = [
       {
         name: 'about-us',
         component: 'AboutUsLayout',
-        nestedRoutes: [{ name: 'company', component: CompanyPage }, { name: 'people', component: PeoplePage }]
+        nestedRoutes: [
+          { name: 'company', component: CompanyPage },
+          { name: 'people', component: PeoplePage }
+        ]
       }
     ]
   }
@@ -336,13 +376,22 @@ This will render:
 <h1>Your name is: Jack</h1>
 ```
 
-## Navigate
+### Navigate
 
 `import { Navigate } from 'svelte-router-spa'`
 
+#### params
+
+- **to** (Required) String A valid route to navigate to.
+- **title** (Optional) String A title for the _a_ element.
+- **styles** (Optional) String Class styles to be applied to the _a class_ element.
+- **lang** (Optional) String A language to convert the route to.
+
 Navigate is a wrapper around the < a href="" > element to help you generate links quick and easily.
 
-It adds an _active_ class if the generated route is the active one.
+It adds an _active_ class to the styles if the generated route is the active one.
+
+Check **navigateTo** belown for more information about the language param.
 
 Example:
 
@@ -361,18 +410,30 @@ Example:
 
 `import { navigateTo } from 'svelte-router-spa'`
 
-navigateTo allows you to programatically navigate to a route from inside your app code.
+#### params
 
-navigateTo receives a path name as a param and will try to navigate to that route.
+- **route name** (Required) String A valid route to navigate to.
+- **language** (Optional) String A language to convert the route to.
 
-Example:
+navigateTo allows you to programatically navigate to a route from inside your app updating the browser url and history.
+
+navigateTo receives a route name as a param and an optional language and will try to navigate to that route.
+
+When a language is provided _navigateTo_ will try to convert the _route name_ to the localised version of the route.
 
 ```javascript
-if (loginSuccess) {
-  navigateTo('admin')
-} else {
-  navigateTo('login')
-}
+  // Example route
+  {
+    name: '/setup',
+    component: 'SetupComponent',
+    lang: { es: 'configuracion' }
+  }
+```
+
+```javascript
+navigateTo('setup') // Will redirect to /setup
+
+navigateTo('setup', 'es') // Will redirect to /configuracion
 ```
 
 ### routeIsActive
@@ -414,7 +475,33 @@ routeIsActive('other-company', true) // returns false
 
 If _includePath_ is true and the current route is `/admin/companies/show/my-company`
 
-## Not Found - 404
+### localisedRoute
+
+`import { localisedRoute } from 'svelte-router-spa'`
+
+#### params
+
+- **route name** (Required) String A valid route to navigate to.
+- **language** (Required) String A language to convert the route to.
+
+localisedRoute returns a string with the route localised to the specified language.
+
+```javascript
+  // Example route
+  {
+    name: '/setup',
+    component: 'SetupComponent',
+    lang: { es: 'configuracion', it: 'configurazione' }
+  }
+```
+
+```javascript
+localisedRoute('setup', 'es') // Will return the string "/configuracion"
+
+localisedRoute('setup', 'it') // Will return the string "/configurazione"
+```
+
+### Not Found - 404
 
 Svelte Router redirects to a 404.html page if a route is not found. You need to host and upload that page to your site. Most hosting providers support this configuration and will serve a 404.html page automatically for not found pages so chances are you already have one.
 
@@ -423,15 +510,151 @@ Svelte Router redirects to a 404.html page if a route is not found. You need to 
 If you want to track route changes as pageviews in Google Analytics just add
 
 ```javascript
-<Router {routes} options={{gaPageviews: true}} />
+<Router { routes } options={ {gaPageviews: true} } />
 ```
+
+## Localisation
+
+How localisation works depends on the _lang_ param being passed to the _Router_ component. If a language is specified the router will try to match a route in that language only. If no language is specified then the router will try to find a route in any language available.
+
+```javascript
+  const options = { lang: 'de' }
+
+  <Router {routes} {options} />
+```
+
+Let's see some examples using the following routes.
+
+```javascript
+const routes = [
+  {
+    name: '/',
+    component: PublicIndex
+  },
+  { name: 'login', component: Login, lang: { es: 'iniciar-sesion' } },
+  { name: 'signup', component: SignUp, lang: { es: 'registrarse' } },
+  {
+    name: 'admin',
+    component: AdminIndex,
+    lang: { es: 'administrador' },
+    nestedRoutes: [
+      {
+        name: 'employees',
+        component: EmployeesIndex,
+        lang: { es: 'empleados' },
+        nestedRoutes: [
+          {
+            name: 'show/:id',
+            component: ShowEmployeeLayout,
+            lang: { es: 'mostrar/:id' },
+            nestedRoutes: [
+              {
+                name: 'index',
+                component: ShowEmployee
+              },
+              {
+                name: 'calendar/:month',
+                component: CalendarEmployee,
+                lang: { es: 'calendario/:month', de: 'kalender/:month' }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
+```
+
+If we don't specify a language the following routes are valid:
+
+`/login`
+
+`/setup`
+
+`/admin/employees`
+
+`/admin/employees/show/123`
+
+`/admin/employees/show/123/calendar/june`
+
+`/iniciar-sesion`
+
+`/registrarse`
+
+`/administrador/empleados`
+
+`/administrador/empleados/mostrar/123`
+
+`/administrador/empleados/mostrar/123/calendario/junio`
+
+If we specify a language the router will try to find routes **only** in that language so if in our current example we set the _lang_ variable to _'es'_ these routes will be **invalid** and the router will return a 404 page:
+
+`/login`
+
+`/setup`
+
+`/admin/employees`
+
+`/admin/employees/show/123`
+
+`/admin/employees/show/123/calendar/june`
+
+However these other routes will be **valid**:
+
+`/iniciar-sesion`
+
+`/registrarse`
+
+`/administrador/empleados`
+
+`/administrador/empleados/mostrar/123`
+
+`/administrador/empleados/mostrar/123/calendario/junio`
+
+_currentRoute_ will return the language of the matched route.
+
+Another example: In the routes above there is only one german localised route for _calendar_ so this url will be valid:
+
+`/admin/employees/show/123/kalender/april`
+
+The router will match the default route for all paths that are not localised and will match the german one for the one that specfies a localisation.
+
+That route will set **'de'** as the language in _currentRoute_
+
+### Rendering a page in different languages
+
+If you use _Navigate_ and _navigateTo_ to generate links and navigate to different parts of your application an automatic language conversion will be done for you.
+
+Both _Navigate_ and _navigateTo_ support an aditional parameter with a language. If a language is provided they will try to convert the default route into the corresponding one for that language.
+
+Example:
+
+```javascript
+  // Example route
+  {
+    name: '/setup',
+    component: 'SetupComponent',
+    lang: { es: 'configuracion' }
+  }
+```
+
+```javascript
+navigateTo('setup') // Will redirect to /setup
+
+navigateTo('setup', 'es') // Will redirect to /configuracion
+```
+
+There is also available a function called _localisedRoute_ that will return a string with the translated route, in case you just want the translation and not navigating to the route.
+
+Inside your application you just need to define your routes using the default language (_route name_) and then when you specify a language, the route will be translated to the specified language automatically.
 
 ## Credits
 
-Svelte Router has been developed by [Jorge Alvarez](https://www.alvareznavarro.es).
+Svelte Router has been developed by [Jorge Alvarez](https://www.alvareznavarro.es) - Twitter: [@jorgealvarez](https://twitter.com/jorgealvarez)
+
+I would like to thank all the people that create issues and comment on [Github](https://github.com/jorgegorka/svelte-router/issues). Your feedback is the best way of improving.
 
 ### Contributors
 
 [Mark Kopenga](https://github.com/mjarkk)
-
-I would like to thank all the people that create issues and comment on Github. Your feedback is the best way of improving.
