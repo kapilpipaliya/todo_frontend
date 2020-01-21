@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { onMount, tick } from '../modules/functions.ts'
   import Title from './Title.svelte'
   import GeneralForm from './form/Index.svelte'
 
@@ -17,10 +18,27 @@
   default_pattern.forEach(x=>{
     addDefaultvalue(x)
   })
+
+
+  let show = true
+  class A {isFirst = true}
+  const a = new A
+  async function remount1(){
+    a.isFirst = false
+    show = false
+    await tick()
+    show = true
+  }
+  $: {
+    if(!a.isFirst){ remount1(currentRoute)} else {a.isFirst = false}
+  }
+
 </script>
 
 <Title {currentRoute} />
 
-<div>
-  <GeneralForm {...currentRoute.params} form={default_value} />
-</div>
+{#if show}
+  <div>
+    <GeneralForm {...currentRoute.params} form={default_value} />
+  </div>
+{/if}

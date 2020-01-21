@@ -91,7 +91,7 @@
     	return !auth[0]
   	}
 
-	function userIsAdmin() {
+	async function userIsAdmin() {
 	  //check if user is admin and returns true or false
 	  return true
 	}
