@@ -149,7 +149,7 @@ export function SpaRouter(routes, currentUrl, options = {}) {
           pathNames = removeExtraPaths(pathNames, localisedRouteWithoutNamedParams)
         }
 
-        redirectTo = await setRedirectPath(route, redirectTo)
+        //redirectTo = await setRedirectPath(route, redirectTo)
 
         const namedParams = getNamedParams(localisedPathName)
         if (namedParams && namedParams.length > 0) {
@@ -162,6 +162,7 @@ export function SpaRouter(routes, currentUrl, options = {}) {
 
         if (currentRoute.name !== routePath) {
           currentRoute = setCurrentRoute({ route, routePath, routeLanguage, urlParser, namedPath })
+          redirectTo = await setRedirectPath(route, redirectTo)
         }
 
         if (route.nestedRoutes && route.nestedRoutes.length > 0 && pathNames.length > 0) {
