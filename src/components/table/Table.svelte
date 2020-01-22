@@ -4,11 +4,13 @@
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
   import Header from './Header.svelte'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick,
+   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
+  import ContextMenu from './ContextMenu.svelte'
 
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -17,7 +19,6 @@
   import Modal from './Model.svelte'
   import Config from './Config.svelte'
 
-  export let eventsFn = schemaEvents
   let events
 
   let headerTitlesRow
@@ -80,7 +81,7 @@
 
 
   // customFilter, not work with filter..
-  $: query, eventsFn, requiredFilter, schema_key, reset()
+  $: query, requiredFilter, schema_key, reset()
 
   function unRegister() {
     unsub && S.trigger([[unsub, {}]])
@@ -91,7 +92,7 @@
       console.warn('schema key is invalid in table')
     }
     unRegister()
-    events = eventsFn(Unique.id, schema_key)
+    events = schemaEvents(Unique.id, schema_key)
     headerTitlesRow = []
     items = []
     count = 0
@@ -344,21 +345,6 @@
       editButtonFocus(key)
     }
   }
-  // Great function but now not used
-  /*const reFetchRow = async(key) => {
-      const e = [...events[1], key]
-      const d = await new Promise((resolve, reject) => { S.bind_(e, ([data]) => { resolve(data) }, [[`=${items[key][0]}`]]); });
-      if(d) {
-        for (let i = 0; i < d[0].length; i++) {
-          items[key][i] = d[0][i];
-        }
-        items[key] = items[key];
-      } else {
-        alert("error");
-      }
-      S.unbind(e);
-  }*/
-
   const onCancel = event => {
     const key = event.detail
     closeForm_(key)
@@ -610,42 +596,34 @@
     openModal()
   }
   // ============================================================================
-  /*
-{JSON.stringify(items)}
-<br>
-{JSON.stringify(quickview)}
-<br>
-{JSON.stringify(selectedRowsKeys)}
-  */
-
-function isGlobal(v) {
-  //return v?.[1] == 'global'
-  if(RA.isArray(v)) {
-    if(v.length >= 2) {
-      return v[1] === 'global'
+  function isGlobal(v) {
+    //return v?.[1] == 'global'
+    if(RA.isArray(v)) {
+      if(v.length >= 2) {
+        return v[1] === 'global'
+      }
     }
+    return false
   }
-  return false
-}
 
-function onShowRowNum(){
-  showRowNum = !showRowNum
-}
-$: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
+  function onShowRowNum() {
+    showRowNum = !showRowNum
+  }
+  $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
 
-function getValue(v) {
-  if(RA.isArray(v)) {
-    if(v.length > 0) {
-      return v[0]
+  function getValue(v) {
+    if(RA.isArray(v)) {
+      if(v.length > 0) {
+        return v[0]
+      } else {
+        // console.log("Array Must has one element", schema_key, v)
+        return v
+        // can pass null to display nothing.
+      }
     } else {
-      // console.log("Array Must has one element", schema_key, v)
       return v
-      // can pass null to display nothing.
     }
-  } else {
-    return v
   }
-}
 </script>
 
 
@@ -727,7 +705,6 @@ function getValue(v) {
           showQuickView={quickview.includes(getValue(l[0]))}
           {quickcomponent}
           {schema_key}
-          {eventsFn}
           {onCancel}
           {successSave}
           {deleteRow}
@@ -736,62 +713,14 @@ function getValue(v) {
       {/each}
     </tbody>
   </table>
-
-{#if contextmenu}
-  <div class="menu">
-    <div class="menu-item">Share On Facebook</div>
-    <div class="menu-item">Share On Twitter</div>
-    <hr />
-    <div class="menu-item">Search On Google</div>
-    <div class="menu-item">Search On Bing</div>
-    <hr />
-    <div class="menu-item">Bookmark</div>
-  </div>
-  <div class="menu-input">
-    <div class="menu-item" on:click={closeInputMenu}>Close</div>
-    <hr />
-    <div class="menu-item">What's This?</div>
-    <hr />
-    <div class="menu-item">Is NULL</div>
-    <div class="menu-item">Is not NULL</div>
-    <div class="menu-item">Is empty</div>
-    <div class="menu-item">Is not empty</div>
-    <hr />
-    <div class="menu-item">Equal to...</div>
-    <div class="menu-item">Not equal to...</div>
-    <div class="menu-item">Greater than...</div>
-    <div class="menu-item">Less than...</div>
-    <div class="menu-item">Greater or equal...</div>
-    <div class="menu-item">Less or equal...</div>
-    <div class="menu-item">In range...</div>
-  </div>
-  <div class="menu">
-    <div class="menu-item">Share On Facebook</div>
-    <div class="menu-item">Share On Twitter</div>
-    <hr />
-    <div class="menu-item">Search On Google</div>
-    <div class="menu-item">Search On Bing</div>
-    <hr />
-    <div class="menu-item">Bookmark</div>
-  </div>
-{/if}
 </div>
-
-{#if modalIsVisible}
-  <Modal on:close={closeModal}>
-    <header slot="header">
-      <button class="" aria-label="close" on:click={closeModal}>
-        X
-      </button>
-    </header>
-
-    <svelte:component
-      this={modelcomponent}
-      on:close={closeModal}
-      on:successSave={refresh}
-      {headerTitlesRow}
-      {items} />
-  </Modal>
-{/if}
-
+<ContextMenu
+  {contextmenu}
+  {modalIsVisible}
+  {closeModal}
+  {modelcomponent}
+  {refresh}
+  {headerTitlesRow}
+  {items}
+/>
 {/if}

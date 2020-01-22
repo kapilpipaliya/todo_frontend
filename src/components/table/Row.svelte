@@ -21,7 +21,6 @@
   export let showQuickView
   export let quickcomponent
   export let schema_key
-  export let eventsFn
   export let onCancel
   export let successSave
   export let deleteRow
