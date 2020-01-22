@@ -4,15 +4,15 @@
   		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
-  	import {project_id, project_data} from '../../modules/global_stores/project.ts'
+
   	import UrlPattern from 'url-pattern'
   	import Skeleton from '../../components/Skeleton.svelte'
 
     export let currentRoute;
     export let params
 
-    $project_id.push(currentRoute.namedParams.org)
-    $project_id = $project_id
+    const org_id = currentRoute.namedParams.org
+    setContext("org_id", org_id)
 
     let mounted = false
 	let er = ''
@@ -24,10 +24,6 @@
 	onMount(() => {mounted = true})
   	onDestroy(() => {
   		S.unbind_([menu_evt]); 
-  		$project_id.pop(); 
-  		$project_data.pop(); 
-  		$project_id = $project_id, 
-  		$project_data = $project_data
   		// be very careful: top level component unmount first.
   		// console.warn('organization unmount')
   	})
@@ -39,11 +35,12 @@
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(org_fetch_evt, (d) => {
-	      	if(d[0].r.result.length == 0) {
+	      	const result = d[0][1].r.result
+	      	if(result.length == 0) {
 	      		console.log('no organization found')
-	      	} else if(d[0].r.result[0]) {
-	      		$project_data.push(d[0].r.result[0])
-	      		$project_data = $project_data
+	      	} else if(result[0]) {
+	      		const org_data = result[0]
+	      		setContext("org_data", org_data)
 	      		fetch_data = true
 	      		return
 	      	}
@@ -53,7 +50,7 @@
 	      	if(d[0].length && d[0][0]){
 	      		if(d[0][0]){
 	      			m.menu = d[0][0].organization
-	      			menus = processMenu(R.clone(m.menu), $project_id[0])
+	      			menus = processMenu(R.clone(m.menu), org_id)
 	      			return
 	      		}
 	      	console.log("cant set menu")
@@ -61,7 +58,7 @@
 	      }, 1)
 	      binded = true
           const args = [
-		      [null, `="${$project_id[0]}"`],
+		      [null, `="${org_id}"`],
 		      [],
 		      [0, 0, 1],
 		      {type: form_type.object},
@@ -84,10 +81,10 @@
 
   	// when project_id change or project_data is change just refresh the component.
 
-  	$: {menus = processMenu(R.clone(m.menu), $project_id[0]) }
+  	$: {menus = processMenu(R.clone(m.menu), org_id) }
 </script>
 
-<h4>Selected Organization: {$project_id[0]}</h4>
+<h4>Selected Organization: {org_id}</h4>
 <div style="display: flex">
   <div>
 	<TreeSidebar menu={menus}/>
