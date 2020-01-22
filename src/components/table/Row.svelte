@@ -108,7 +108,6 @@
                   this={quickcomponent}
                   key={getValue(rowValue[0])}
                   {schema_key}
-                  {eventsFn}
                   on:close={onCancel}
                   on:successSave={successSave}
                   on:deleteRow={deleteRow} />

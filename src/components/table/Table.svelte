@@ -7,6 +7,7 @@
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
+  import Pagination from './Pagination.svelte'
 
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -662,7 +663,6 @@ function getValue(v) {
       this={quickcomponent}
       key={null}
       {schema_key}
-      {eventsFn}
       on:close={toogleAddForm}
       on:successSave={successSave} />
   {/if}
@@ -670,24 +670,15 @@ function getValue(v) {
 
   {er}
   <button class="" on:click={onResetFilter}>Reset Filters</button>
-  <span>{items.length}{items.length <= 1 ? ' item' : ' items'}</span>
-  Page Size:
-  <input
-    class="w60"
-    type="number"
-    bind:value={limit}
-    on:change={onLimitChange}
-    min="0" />
-  {#if false}
-    <button class="" on:click={refresh}>Refresh</button>
-  {/if}
-  Page:
-  <select bind:value={current_page} on:change={refresh}>
-    {#each pages as p}
-      <option value={p}>{p}</option>
-    {/each}
-  </select>
-  &nbsp;/&nbsp;{total_pages}
+  <Pagination
+    {items}
+    {limit}
+    {current_page}
+    {total_pages}
+    {onLimitChange}
+    {refresh}
+    {pages}
+  />
   {#if multipleSelected}
     <button type="button" on:click={onDeleteSelected}>Delete</button>
   {/if}
