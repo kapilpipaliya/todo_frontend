@@ -8,6 +8,7 @@
   import { project_data } from '../../modules/global_stores/project.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
   import Pagination from './Pagination.svelte'
+  import AddForm from './AddForm.svelte'
 
   const dp = createEventDispatcher()
   import { css } from '../../modules/global_stores/css.ts'
@@ -651,21 +652,14 @@ function getValue(v) {
 {#if $css.table}
 <div>
 
-  <button
-    name="table_add"
-    on:click={toogleAddForm}
-    bind:this={doms.addbutton}
-    class={addnewform ? 'pressed' : ''}>
-    {!addnewform ? 'Add New' : 'Close'}
-  </button>
-  {#if addnewform}
-    <svelte:component
-      this={quickcomponent}
-      key={null}
-      {schema_key}
-      on:close={toogleAddForm}
-      on:successSave={successSave} />
-  {/if}
+  <AddForm
+    {toogleAddForm}
+    {doms}
+    {addnewform}
+    {quickcomponent}
+    {schema_key}
+    {successSave}
+  />
   <hr />
 
   {er}
