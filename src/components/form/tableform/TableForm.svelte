@@ -70,7 +70,8 @@
 			console.log('cant get fetch_evt')
 		}
 	})
-	function onFetchGet([d]){
+	function onFetchGet(all){
+		const [[h, d]] = all
 		data = d.r.result
 		if(!multiSelect){
 			if(!values) {

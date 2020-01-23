@@ -1,4 +1,5 @@
 <script lang='ts'>
+import { getContext, get } from '../../modules/functions.ts'
 import Checkboxes from './input/Checkboxes.svelte';
 import Color from './input/Color.svelte'
 import Email from './input/Email.svelte'
@@ -17,9 +18,11 @@ import JsonEditor from './input/JsonEditor.svelte'
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
 import * as RA from 'ramda-adjunct'
+import * as RD from 'rambda'
 //import * as RD from 'ramda'
 
 export let form
+export let key
 export let form_disabled = true
 
 export let labels = []
@@ -59,6 +62,7 @@ export let doms = {}
     jsoneditor,
     internal_true_edge,
     multi_select,
+    multi_select_hidden, // not added input yet
     text_array,
     multi_select_bool_properties
   };
@@ -74,6 +78,65 @@ const isDisabled = (form_disabled_, i) =>{
 function isArray(val){
 	return RA.isArray(val)
 }
+
+$: {
+  if(!key) {
+    if(Array.isArray(form)) {
+      for(let i = 0; i < form.length ; i++){
+        if(Array.isArray(form[i]) && form[i].length > 0){
+          let e = form[i]
+          if(Array.isArray(e) && e.length > 0){
+            for(let j = 0; j < e.length ; j++){
+              let f = e[j]
+              console.log(f)
+              if(typeof f[0] == 'string'){
+                const func = f[0]
+                if(func == 'fnSetContext'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    form[i] = get(getContext(key))
+                    continue
+                  }
+                } else if(func == 'fnSetContextKey'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    let objKey
+                    if(f.length > 2){
+                      objKey = f[2]
+                    } else {
+                      objKey = "_key"
+                    }
+                    console.log(key)
+                    console.log(getContext(key))
+                    form[i] = get(getContext(key))[objKey]
+                    continue
+                  }
+                } else if(func == 'fnSetContextKeyInArray'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    let objKey
+                    if(f.length > 2){
+                      objKey = f[2]
+                    } else {
+                      objKey = "_key"
+                    }
+                    console.log(key)
+                    console.log(getContext(key))
+                    form[i] = [get(getContext(key))[objKey]]
+                    continue
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+
+
 </script>
 {#each form as f, i}
 	{#if types[i]}
@@ -129,7 +192,10 @@ function isArray(val){
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.jsoneditor}
+      <span>{labels[i]}</span>
       <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+    {:else if types[i] === FormType.multi_select_hidden}
+    
     {:else}
       Unknown Component
     {/if}

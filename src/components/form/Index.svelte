@@ -23,11 +23,11 @@
 </script>
 
 <Form
-	save={f.onSave}
-    {key}
-    isSaving={$isSaving}
-    form_disabled={$form_disabled}
-    options={$options}
+  {key}
+  save={f.onSave}
+  isSaving={$isSaving}
+  form_disabled={$form_disabled}
+  options={$options}
 	bind:headers={$headers}
 	bind:form={$form_}
 	on:close={f.onClose} on:close

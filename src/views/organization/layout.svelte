@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.ts";
-  	import { onMount, onDestroy, setContext, getContext,
+  	import { onMount, onDestroy, writable, setContext, getContext,
   		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/functions.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
@@ -12,7 +12,10 @@
     export let params
 
     const org_id = currentRoute.namedParams.org
-    setContext("org_id", org_id)
+    const org_id_ctx = writable(org_id;
+    const org_data_ctx = writable({});
+    setContext('org_id', org_id_ctx);
+    setContext("org_data", org_data_ctx)
 
     let mounted = false
 	let er = ''
@@ -40,7 +43,7 @@
 	      		console.log('no organization found')
 	      	} else if(result[0]) {
 	      		const org_data = result[0]
-	      		setContext("org_data", org_data)
+	      		org_data_ctx.set(org_data)
 	      		fetch_data = true
 	      		return
 	      	}

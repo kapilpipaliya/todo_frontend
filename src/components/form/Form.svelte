@@ -52,15 +52,18 @@ $: {
 onMount(()=> {
    mounted = true
 })
-</script>
 
-<form on:submit|preventDefault={save}>
-  <RealForm
-  	bind:form={form} {form_disabled}
-  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
-  />
-  <footer>
-    <SubmitButton isSaving={isSaving} />
-    <CancelButton isSaving={isSaving} {key} on:close />
-  </footer>
-</form>
+</script>
+{#if form.length}
+	<form on:submit|preventDefault={save}>
+	  <RealForm
+	  	{key}
+	  	bind:form={form} {form_disabled}
+	  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
+	  />
+	  <footer>
+	    <SubmitButton isSaving={isSaving} />
+	    <CancelButton isSaving={isSaving} {key} on:close />
+	  </footer>
+	</form>
+{/if}

@@ -519,7 +519,7 @@ export class FormArray extends FormBasic {
     const new_form = merge(form_store, form)
     this.form.set(new_form)
     
-    this.form_disabled.set(false || options.disabled)
+    this.form_disabled.set(options.disabled ?? false)
   }
   //static functions:
   mergeFormValues(f) {

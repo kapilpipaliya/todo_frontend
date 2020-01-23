@@ -1,13 +1,14 @@
 <script lang='ts'>
   import { onMount, onDestroy, tick } from 'svelte'
  	export let value = {}
+  export let disabled = false
   
   let jsonediDom = null
   let jsoneditor
 
   onMount(async () => {
     const options = {
-      mode: 'code',
+      mode: disabled ? 'view' : 'code',
       modes: ["code", "tree"],
 			onChange: function(){
         try {
