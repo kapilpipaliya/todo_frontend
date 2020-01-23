@@ -12,7 +12,7 @@
     export let params
 
     const org_id = currentRoute.namedParams.org
-    const org_id_ctx = writable(org_id;
+    const org_id_ctx = writable(org_id);
     const org_data_ctx = writable({});
     setContext('org_id', org_id_ctx);
     setContext("org_data", org_data_ctx)
