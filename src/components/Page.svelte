@@ -31,10 +31,12 @@
       query: currentRoute?.queryParams ?? {}
     }
   }
+
+  let pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
 </script>
 
 <Title {currentRoute}/>
 
 <div>
-  <Table {...options} />
+  <Table {...options} {pass} />
 </div>

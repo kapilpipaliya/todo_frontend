@@ -4,7 +4,7 @@
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
   import Header from './Header.svelte'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick,
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
    S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
@@ -34,6 +34,8 @@
   export let query = {limit: 0, page: 1} // To get arguments from ?limit=25&page=2
 
   export let schema_key = ''
+
+  export let pass = [] // [["context", "org_data", "_key", "org"]]
 
   $: {
     setContext('items', items)
@@ -79,6 +81,73 @@
   let unsub
   let mutate_evt
 
+  function setPass() {
+    if(Array.isArray(pass)) {
+      for(let i = 0; i < pass.length ; i++){
+        if(Array.isArray(pass[i]) && pass[i].length > 0){
+          let e = pass[i]
+          console.log(e)
+          if(Array.isArray(e) && e.length > 0){
+            const func = e[0]
+            console.log('11',func)
+            if(typeof func == 'string') {
+              if(func == 'context'){
+                if(e.length > 1){
+                  const key = e[1]
+                  const data = get(getContext(key))
+                  let addKey
+                  if(e.length > 2){
+                    addKey = e[2]
+                  } else {
+                    addKey = key
+                  }
+                  fetchConfig[addKey] = data
+                  continue
+                }
+              } else if(func == 'contextKey'){
+                console.log(123)
+                if(e.length > 1){
+                  const key = e[1]
+                  let objKey
+                  if(e.length > 2){
+                    objKey = e[2]
+                  } else {
+                    objKey = "_key"
+                  }
+                  let addKey
+                  if(e.length > 3){
+                    addKey = e[3]
+                  } else {
+                    addKey = key
+                  }
+                  const data = get(getContext(key))[objKey]
+                  console.log('data is: ', data)
+                  fetchConfig[addKey] = data
+                  console.log('fetchConfig', fetchConfig)
+                  continue
+                }
+              } else if(func == 'contextKeyInArray'){
+                if(e.length > 1){
+                  const key = e[1]
+                  let objKey
+                  if(e.length > 2){
+                    objKey = e[2]
+                  } else {
+                    objKey = "_key"
+                  }
+                  console.log(key)
+                  console.log(getContext(key))
+                  pass[i] = [get(getContext(key))[objKey]]
+                  continue
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  setPass()
 
   // customFilter, not work with filter..
   $: query, requiredFilter, schema_key, reset()
@@ -87,6 +156,7 @@
     unsub && S.trigger([[unsub, {}]])
     events && S.unbind_(events)
   }
+  // Note reset() function executed before fetch
   function reset() {
     if(!schema_key){
       console.warn('schema key is invalid in table')
@@ -111,7 +181,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = { type: form_type.array, level: $project_data[$project_data.length - 1]?._key ?? "" }
+    fetchConfig = {...fetchConfig, type: form_type.array, level: $project_data[$project_data.length - 1]?._key ?? "" } // Fix Lavel not working..
     // pagination:
     limit = Number(query.limit) ?? 0
     pages = [1, 2]
