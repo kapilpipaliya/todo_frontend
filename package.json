@@ -9,6 +9,7 @@
     "start": "sirv dist  --single"
   },
   "dependencies": {
+    "@msgpack/msgpack": "^1.11.0",
     "clsx": "^1.0.4",
     "qs": "^6.9.1",
     "rambda": "^4.4.0",

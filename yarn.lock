@@ -18,6 +18,11 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@msgpack/msgpack@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@msgpack/msgpack/-/msgpack-1.11.0.tgz#72658d3e8c0b3ef87cc0ba5a284fcdaddcea326b"
+  integrity sha512-gR/NgUeQGARNabGVAjS59lagyxsCgD0zd4F5oKf9uKt8XNLu4awFBNO/Nstr2q1Iu1UPC5EeJeLZSNdP30m7zQ==
+
 "@polka/url@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-0.5.0.tgz#b21510597fd601e5d7c95008b76bf0d254ebfd31"

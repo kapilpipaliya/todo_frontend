@@ -6,6 +6,8 @@ import { writable } from 'svelte/store'
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 export const ws_connected = writable(false)
+import * as M from "@msgpack/msgpack";
+
 /*
 usage:
 for $ prefix use always check if(mounted) first.
@@ -200,10 +202,7 @@ export class ServerEventsDispatcher {
       // code block
     }
   }*/
-
-  onmessage(evt) {
-    if (typeof evt.data === 'string') {
-      const data = JSON.parse(evt.data)
+  stringHandle(data){
       try {
         for (let i = 0; i < data.length; i++) {
           const e = data[i]
@@ -215,10 +214,20 @@ export class ServerEventsDispatcher {
         console.warn('error: ', error)
         console.warn(data)
       }
+  }
+
+  async onmessage(evt) {
+    if (typeof evt.data === 'string') {
+      const data = JSON.parse(evt.data)
+      this.stringHandle(data)
     }
     // if(evt.data instanceof ArrayBuffer ){
     else {
-      const buffer = evt.data
+      const blob = evt.data
+      console.log(11, blob)
+      const buffer = await blob.arrayBuffer();
+      const data = M['default']['decode'](buffer)
+      this.stringHandle(data)
       //console.log('Received arraybuffer')
       //this.dispatch(this.event, buffer) // uncomment
     }
