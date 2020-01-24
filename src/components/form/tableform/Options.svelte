@@ -2,9 +2,9 @@
 	import { onMount, stringifyRawPattern } from '../../../modules/functions.ts'
 	export let options = []
 	export let keyIdx = 0
-	export let display = [1, ' - ',2]
+	export let dp = [1, ' - ',2]
 	function render(r){
-		return stringifyRawPattern(display, r)
+		return stringifyRawPattern(dp, r)
 	}
 </script>
 

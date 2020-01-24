@@ -27,7 +27,7 @@
   export let getValue
 
   function makeUrl(props, id){
-    return new UrlPattern(props.pattern).stringify({id, org: $project_id[0], project: $project_id[1]})
+    return new UrlPattern(props.dp).stringify({id, org: $project_id[0], project: $project_id[1]})
   }
 </script>
 
@@ -75,7 +75,7 @@
                   {#if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
                     {new Date(c).toLocaleString()}
                   {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
-                    <a href={makeUrl(headerColumnPropsRow[index], c)}>{headerColumnPropsRow[index].label}</a>
+                    <a href={makeUrl(headerColumnPropsRow[index], c)}>{headerColumnPropsRow[index].l}</a>
                   {:else}{getValue(c)}{/if}
                 {/if}
               </td>

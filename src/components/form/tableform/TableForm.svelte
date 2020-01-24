@@ -1,13 +1,13 @@
 <script lang='ts'>
-	import { onMount, S, event_type as et, events as e, Unique } from '../../../modules/functions.ts'
+	import { onMount, S, Unique } from '../../../modules/functions.ts'
 	import * as RD from 'rambda'
 	import {_cloneArray} from './clone.ts'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'
-	export let display = "r[1]+' - '+r[2]"
+	export let dp = "r[1]+' - '+r[2]" // display pattern
 	export let keyIdx = 0
 	export let values = []
-	export let event = []
+	export let e = []
 	export let disabled;
 	//export let args = [ [filter], [], []]
 	export let multiSelect = false
@@ -61,7 +61,7 @@
 		// on selecting new value, remove it from all other select options
 	}
 	onMount(() => {
-		let fetch_evt = event[0] ?? []
+		let fetch_evt = e[0] ?? []
 		if(fetch_evt.length){
 			fetch_evt.push(Unique.id)
 			S.bind$(fetch_evt, onFetchGet, 1)
@@ -106,14 +106,14 @@
 								bind:value={v}
 								options={getOptions(i)}
 								{keyIdx}
-								{display}
+								{dp}
 								{boolPropIndex}
 							/>
 						{/if}
 					{:else}
 						<td>
 							<select bind:value={v} required disabled={disabled || i < values.length - 1} on:change={onChange}>
-									<Options {keyIdx} options={getOptions(i)} {display} />
+									<Options {keyIdx} options={getOptions(i)} {dp} />
 							</select>
 						</td>
 					{/if}
@@ -126,6 +126,6 @@
 	<button type="button" on:click={handleAdd} disabled={!newAvailableOps.length} {disabled}>Add</button>
 {:else}
 	<select bind:value={values}  required on:change={onChangeSingle} on:change >
-		<Options {keyIdx} options={data} {display} />
+		<Options {keyIdx} options={data} {dp} />
 	</select>
 {/if}

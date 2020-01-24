@@ -6,8 +6,8 @@
 	export let options = []
 	export let disabled = false
 	export let keyIdx
-	export let display
-	export let boolPropIndex
+	export let dp
+	export let bi // boolPropIndex
 	export let form_disabled = false
 	
 
@@ -20,8 +20,8 @@
 			value[1]= value[1] ?? {}
 		}
 		if(b){
-			if(Array.isArray(b) && b.length > boolPropIndex && Array.isArray(b[boolPropIndex])){
-				boolkeys = b[boolPropIndex]
+			if(Array.isArray(b) && b.length > bi && Array.isArray(b[bi])){
+				boolkeys = b[bi]
 			} else {
 				value[1] = {}
 				boolkeys = []
@@ -37,7 +37,7 @@
 <td>
 	{#if options.length}
 		<select bind:value={value[0]} required on:change={onChange} disabled={disabled || form_disabled} >
-			<Options {keyIdx} {options} {display} />
+			<Options {keyIdx} {options} {dp} />
 		</select>
 	{/if}
 </td>

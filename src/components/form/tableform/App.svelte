@@ -7,9 +7,9 @@
 	let data = [[1,2,3], [4,5,6], [7,8,9], [10,11,12]];
 	let values = [1,10]
 	
-	let display= "r[1]+' '+r[2]";
+	let dp= "r[1]+' '+r[2]";
 	let keyIdx= 0
 	
 </script>
 
-<TableForm bind:data={data} {display} {keyIdx} {values} />
+<TableForm bind:data={data} {dp} {keyIdx} {values} />
