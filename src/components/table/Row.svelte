@@ -24,6 +24,7 @@
   export let successSave
   export let deleteRow
   export let getValue
+  export let fetchConfig
 
   const org_id_ctx = getContext('org_id')
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
@@ -113,6 +114,7 @@
                   this={quickcomponent}
                   key={getValue(rowValue[0])}
                   {schema_key}
+                  {fetchConfig}
                   on:close={onCancel}
                   on:successSave={successSave}
                   on:deleteRow={deleteRow} />

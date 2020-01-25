@@ -1,12 +1,13 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray, Unique, setContext, getContext } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, FormArray, Unique, setContext, getContext, form_type } from '../../modules/functions.ts'
 
   import { Form, SubmitButton, CancelButton } from '../index.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
   export let key = 0
   export let schema_key
   export let form = []
-  const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form), 
+  export let fetchConfig = {type: form_type.array}
+  const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig), 
     er = f.er,
     isSaving = f.isSaving, 
     form_ = f.form, 

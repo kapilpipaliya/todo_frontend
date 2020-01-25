@@ -313,7 +313,7 @@ class FormBasic {
   public S: ServerEventsDispatcher
   public key: string
   public dp:  (type: string, detail?: any) => void
-  public type: form_type
+  public config: {type: form_type}
   public events: Array<[]>
   public data_evt: []
   public mutate_evt: []
@@ -328,11 +328,11 @@ class FormBasic {
   public schema_key: string
   public options: Writable<{}>
 
-  constructor(S, key, e, dp, type=form_type.object) {
+  constructor(S, key, e, dp, config={type: form_type.object}) {
     this.S = S
     this.key = key
     this.dp = dp
-    this.type = type
+    this.config = config
 
     this.events = e;
 
@@ -378,7 +378,7 @@ class FormBasic {
       const filter = [`="${this.key}"`]
       const project_data_store = get(project_data)
       // is schema_key passing neccessary?
-      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, level: project_data_store[project_data_store.length - 1]?._key ?? "" }]
+      const args = [filter, [], [], { ...this.config, form: true, schema: this.schema_key, level: project_data_store[project_data_store.length - 1]?._key ?? "" }]
       const e1 = [this.data_evt, args]
       this.S.trigger([e1])
     }
@@ -386,7 +386,7 @@ class FormBasic {
   onSave() {
     const form = get(this.form) // not recommaned to use get
     this.isSaving.set(true)
-    const filter = this.isUpdate ? [`="${this.type == form_type.object ? form._key : form[0]}"`] : null
+    const filter = this.isUpdate ? [`="${this.config.type == form_type.object ? form._key : form[0]}"`] : null
     const args = [form, filter]
     if(this.isUpdate){
       args.push(this.unsub_evt)
@@ -407,8 +407,8 @@ class FormBasic {
 }
 
 export class Form extends FormBasic {
-  constructor(S, key, e, dp, type=form_type.object) {
-    super(S, key, e, dp, type);
+  constructor(S, key, e, dp, config={type: form_type.object}) {
+    super(S, key, e, dp, config);
     this.form.set({})
     this.onFormDataGet = this.onFormDataGet.bind(this)
   }
@@ -456,8 +456,8 @@ export class FormArray extends FormBasic {
   public headers: Writable<[]>
   public form: Writable<any[]>
   public schemaGetEvt: number[]
-  constructor(S, key, ev, dp, schema_key, form=[], type=form_type.array) {
-    super(S, key, ev, dp, type);
+  constructor(S, key, ev, dp, schema_key, form=[], config={type: form_type.array}) {
+    super(S, key, ev, dp, config);
     this.schema_key = schema_key
     this.form.set(form)
     this.headers = writable([])
@@ -492,7 +492,9 @@ export class FormArray extends FormBasic {
     if(this.schemaGetEvt) {
       const filter = [`="${this.key}"`]
       const project_data_store = get(project_data)
-      const args = [filter, [], [], { type: this.type, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {}), level: project_data_store[project_data_store.length - 1]?._key ?? ""  }]
+      // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
+      const fetchConfig = { ...this.config, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {})}
+      const args = [filter, [], [], fetchConfig]
       const e1 = [this.schemaGetEvt, args]
       this.S.trigger([e1])
     } else {

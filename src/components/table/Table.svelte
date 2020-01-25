@@ -779,6 +779,7 @@
           {successSave}
           {deleteRow}
           {getValue}
+          {fetchConfig}
         />
       {/each}
     </tbody>
