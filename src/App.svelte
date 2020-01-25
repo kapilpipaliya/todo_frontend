@@ -47,10 +47,9 @@
 
 	// other
 
-	//import { NotificationDisplay } from '@beyonk/svelte-notifications'
-	//let n
-	//<NotificationDisplay bind:this={n} />
-
+	import { NotificationDisplay } from './components/index.ts'
+	let n
+	
 	let mounted = false
 	let er = ''
 	let binded = false
@@ -169,6 +168,8 @@
 {#if $maintenance}
 	server is going down for sheduled maintenance
 {/if}
+
+<NotificationDisplay bind:this={n} />
 
 <nav>
 	<div>

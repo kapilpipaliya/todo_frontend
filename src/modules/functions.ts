@@ -16,6 +16,7 @@ import {event_type as et, events as e, Unique} from './events'
 export * from './events'
 
 import {project_id, project_data} from './global_stores/project'
+import { notifier } from '../components/thirdparty/svelte-notifications/src/index.js'
 
 export enum form_type { object = 1, array };
 
@@ -397,6 +398,7 @@ class FormBasic {
     this.isSaving.set(false)
     let er
     if (d[0]) {
+      notifier.success('Saved Successfully', 2000)
       er = ''
       this.dp('successSave', { key: this.key, d })
     } else {
