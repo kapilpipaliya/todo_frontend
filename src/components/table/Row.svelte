@@ -1,7 +1,6 @@
 <script lang='ts'>
-  import { DisplayType } from '../../modules/functions.ts'
+  import { DisplayType, getContext, get } from '../../modules/functions.ts'
   import { css } from '../../modules/global_stores/css.ts'
-  import {project_id} from '../../modules/global_stores/project.ts'
   import UrlPattern from 'url-pattern'
   
   export let selected: boolean
@@ -26,8 +25,15 @@
   export let deleteRow
   export let getValue
 
+  const org_id_ctx = getContext('org_id')
+  const org_id = org_id_ctx ? get(org_id_ctx) : ''
+
+  const project_id_ctx = getContext('project_id')
+  const project_id = project_id_ctx ? get(project_id_ctx) : ''
+
+
   function makeUrl(props, id){
-    return new UrlPattern(props.dp).stringify({id, org: $project_id[0], project: $project_id[1]})
+    return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id})
   }
 </script>
 
