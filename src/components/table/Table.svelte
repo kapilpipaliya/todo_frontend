@@ -181,7 +181,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = {...fetchConfig, type: form_type.array, level: $project_data[$project_data.length - 1]?._key ?? "" } // Fix Lavel not working..
+    fetchConfig = {...fetchConfig, type: form_type.array } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
     // pagination:
     limit = Number(query.limit) ?? 0
     pages = [1, 2]

@@ -1,30 +1,33 @@
 <script lang='ts'>
-  import { onMount, tick } from '../modules/functions.ts'
+  import { tick } from '../modules/functions.ts'
   import Title from './Title.svelte'
   import GeneralForm from './form/Index.svelte'
 
   export let currentRoute = {}
 
   //export let default_pattern = [[0, "user"], [1, ''], [2, '']]
-  let default_pattern = currentRoute?.params?.default_pattern ?? []
+  $: default_pattern = currentRoute?.params?.default_pattern ?? []
   
   let default_value = []
 
-  function addDefaultvalue(x){
-    const index = x[0]
-    const key = x[1]
-    default_value[index] = currentRoute?.namedParams?.[key] ?? ''
+  function fillDefaultValue() {
+    default_value = []
+    function addDefaultvalue(x){
+      const index = x[0]
+      const key = x[1]
+      default_value[index] = currentRoute?.namedParams?.[key] ?? ''
+    }
+    default_pattern.forEach(x=>{
+      addDefaultvalue(x)
+    })
   }
-  default_pattern.forEach(x=>{
-    addDefaultvalue(x)
-  })
+  $: { fillDefaultValue(currentRoute) }
 
 
   let show = true
   class A {isFirst = true}
   const a = new A
   async function remount1(){
-    a.isFirst = false
     show = false
     await tick()
     show = true

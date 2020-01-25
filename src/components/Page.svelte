@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { tick } from '../modules/functions.ts'
   import Title from './Title.svelte'
   import {Table} from './index.ts'
   import GeneralForm from './form/Index.svelte'
@@ -32,11 +33,25 @@
     }
   }
 
-  let pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
+  $: pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
+
+  let show = true
+  class A {isFirst = true}
+  const a = new A
+  async function remount1(){
+    show = false
+    await tick()
+    show = true
+  }
+  $: {
+    if(!a.isFirst){ remount1(currentRoute)} else {a.isFirst = false}
+  }
 </script>
 
 <Title {currentRoute}/>
 
-<div>
-  <Table {...options} {pass} />
-</div>
+{#if show}
+  <div>
+    <Table {...options} {pass} />
+  </div>
+{/if}
