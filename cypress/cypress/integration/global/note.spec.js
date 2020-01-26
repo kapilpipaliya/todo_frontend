@@ -1,26 +1,23 @@
-describe('Org Page Test', () => {
+describe('Note Page Test', () => {
   beforeEach(() => {
   	cy.login()
-  	cy.visit('/admin/orgs')
-
+    cy.visit('/page/note')
   })
 
   it('List', () => {
-    cy.contains('h1', 'Organizations')
+    cy.contains('h1', 'Note')
   })
 
   it('Create', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
-    cy.inputType('Id', 'Kapil')
-    cy.inputType('Name', 'Pipaliya')
+    cy.inputType('Subject', 'test2')
     cy.submitButtonClick()
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
-    cy.inputType('Id', 'Kapil1')
-    cy.inputType('Name', 'Pipaliya')
+    cy.inputType('Subject', 'test2')
     cy.submitButtonClick()
    })
 
