@@ -70,6 +70,18 @@ export enum events {
   role_list,
   role_mutate,
 
+  org_group_list,
+  org_group_mutate,
+
+  org_role_list,
+  org_role_mutate,
+
+  project_group_list,
+  project_group_mutate,
+
+  project_role_list,
+  project_role_mutate,
+
   member_list,
   member_mutate,
 

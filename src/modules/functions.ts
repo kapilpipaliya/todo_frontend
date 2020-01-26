@@ -398,7 +398,7 @@ class FormBasic {
     this.isSaving.set(false)
     let er
     if (d[0]) {
-      notifier.success('Saved Successfully', 2000)
+      notifier.success('Saved Successfully') // 3000
       er = ''
       this.dp('successSave', { key: this.key, d })
     } else {
