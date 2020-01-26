@@ -1,0 +1,92 @@
+<script lang='ts'>
+	/** @format */
+	import { onMount, createEventDispatcher } from '../../../modules/functions.ts'
+	import flatpickr from 'flatpickr';
+
+	const hooks = new Set([
+		'onChange',
+		'onOpen',
+		'onClose',
+		'onMonthChange',
+		'onYearChange',
+		'onReady',
+		'onValueUpdate',
+		'onDayCreate'
+	]);
+
+	export let value = '';
+	export let element = null;
+	export let dateFormat = null;
+
+  let allProps = $$props;
+  
+  const options = allProps.options || {};
+  const props = Object.assign({}, $$props);
+  delete props.options;
+
+	let input, fp;
+
+	$: if (fp) fp.setDate(value, false, dateFormat);
+
+	onMount(() => {
+		const elem = element || input
+		fp = flatpickr(elem, Object.assign(
+			addHooks(options),
+			element ? { wrap: true } : {}
+    ));
+
+		return () => {
+			fp.destroy();
+		}
+	});
+
+	const dispatch = createEventDispatcher();
+
+	$: if (fp) for (const [key, val] of Object.entries(addHooks(options))) {
+		fp.set(key, val);
+	}
+
+	function addHooks(opts = {}) {
+		opts = Object.assign({}, opts);
+
+		for (const hook of hooks) {
+			const firer = (selectedDates, dateStr, instance) => {
+				dispatch(stripOn(hook), [selectedDates, dateStr, instance]);
+			};
+
+			if (hook in opts) {
+				// Hooks must be arrays
+				if (!Array.isArray(opts[hook]))
+					opts[hook] = [opts[hook]];
+
+				opts[hook].push(firer);
+			} else {
+				opts[hook] = [firer];
+			}
+		}
+
+		if (opts.onChange && !opts.onChange.includes(updateValue))
+			opts.onChange.push(updateValue);
+
+		return opts;
+	}
+
+	function updateValue(newValue) {
+		value = (Array.isArray(newValue) && newValue.length === 1)
+			? newValue[0].getTime()
+			: newValue.getTime();
+	}
+
+	function stripOn(hook) {
+		return hook.charAt(2).toLowerCase() + hook.substring(3);
+	}
+</script>
+
+
+<svelte:head>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</svelte:head>
+
+<slot>
+<input bind:this={input} {...props} />
+</slot>

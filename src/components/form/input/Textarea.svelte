@@ -12,7 +12,7 @@
 		bind:this={dom}
 		{required}
 		{disabled}
-        rows={10}
+        rows={5}
         cols={20}
         {...props}
        />

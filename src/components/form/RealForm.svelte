@@ -14,6 +14,7 @@ import Checkbox from './input/Checkbox.svelte'
 import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 import JsonEditor from './input/JsonEditor.svelte'
+import Flatpicker from './input/Flatpicker.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
@@ -64,7 +65,8 @@ export let doms = {}
     multi_select,
     multi_select_hidden, // not added input yet
     text_array,
-    multi_select_bool_properties
+    multi_select_bool_properties,
+    flatpicker
   };
 
 
@@ -166,7 +168,7 @@ $: {
 	{:else if types[i] === FormType.radio}
 		<Radio />
    {:else if types[i] === FormType.textarea}
-   		<Textarea />
+   		<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
     {:else if types[i] === FormType.select}
       <span>{labels[i]}</span>
       <TableForm bind:this={doms[i]} multiSelect={false} {...props[i]} />
@@ -194,6 +196,9 @@ $: {
     {:else if types[i] === FormType.jsoneditor}
       <span>{labels[i]}</span>
       <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+    {:else if types[i] === FormType.flatpicker}
+      <span>{labels[i]}</span>
+      <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.multi_select_hidden}
     
     {:else}
