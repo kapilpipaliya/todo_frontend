@@ -1,6 +1,6 @@
 <script lang='ts'>
   // same as confirm page.
-  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, domainName, isLoggedIn, event_type as et, events as e, ws_connected, Unique } from '../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, isLoggedIn, event_type as et, events as e, ws_connected, Unique } from '../modules/functions.ts'
 
   // export let categories = [];
   // export let footerData = {};

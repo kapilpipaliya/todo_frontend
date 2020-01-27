@@ -2,11 +2,12 @@
 Simplified WebSocket events dispatcher
 */
 //import IsomorphicWs from 'isomorphic-ws'
-import { writable } from 'svelte/store'
+import { writable } from '../../svelte/src/runtime/store/index'; // no
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
+import {ws_todo} from './const_strings'
 
 /*
 usage:
@@ -312,3 +313,13 @@ export const ServerEventsDispatcher = function(){
     }
   };
 */
+let ws_
+ws_ = new ServerEventsDispatcher(ws_todo, {}, {})
+ws_.bind(
+  ['take_image_meta'],
+  function(data) {
+    ws_.event = data[0] // save value on class.
+  },
+  1
+)
+export const S = ws_

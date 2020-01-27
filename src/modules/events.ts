@@ -145,3 +145,5 @@ class UniqueNumber {
 }
 
 export const Unique = new UniqueNumber()
+
+export const form_schema_evt = (id) => [event_type.get, events.my, events.form_schema_get, id ]
