@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, stringifyRawPattern } from '../../../modules/functions.ts'
+	import { onMount, stringifyRawPattern } from '../../../modules/index.ts'
 	export let options = []
 	export let keyIdx = 0
 	export let dp = [1, ' - ',2]

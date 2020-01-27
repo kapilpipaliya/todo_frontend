@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, form_type } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, form_type } from '../../modules/index.ts'
   import { FormArray } from '../../modules/form.ts'
   import { Form, SubmitButton, CancelButton } from '../index.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'

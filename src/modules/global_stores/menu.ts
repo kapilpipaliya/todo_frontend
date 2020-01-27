@@ -1,6 +1,6 @@
 
-import { Writable, writable,S } from '../functions'
-import {event_type as et, events as e } from '../events'
+import { writable, S } from '../index'
+import { event_type as et, events as e } from '../events'
 //write me
 export const menu = writable({})
 

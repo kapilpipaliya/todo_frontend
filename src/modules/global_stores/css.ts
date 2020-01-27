@@ -1,6 +1,6 @@
 
-import { Writable, writable,S } from '../functions'
-import {event_type as et, events as e} from '../events'
+import { writable, S } from '../index'
+import { event_type as et, events as e } from '../events'
 
 export const css_frameworks = writable(
 	{ bootstrap: '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">' },

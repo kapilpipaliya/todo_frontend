@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, tick } from 'svelte'
+  import { onMount, onDestroy, tick } from '../../../modules/index.ts'
  	export let value = {}
   export let disabled = false
   

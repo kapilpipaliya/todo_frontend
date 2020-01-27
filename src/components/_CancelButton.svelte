@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from '../modules/functions.ts'
+  import { createEventDispatcher } from '../modules/index.ts'
   const dp = createEventDispatcher()
 
   export let isSaving = false

@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index.ts";
   	import { onMount, onDestroy, writable, setContext, getContext,
-  		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/functions.ts'
+  		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/index.ts'
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/TreeSidebar.svelte'
 

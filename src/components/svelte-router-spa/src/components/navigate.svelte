@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from '../../../../modules/functions.ts'
+  import { onMount } from '../../../../modules/index.ts'
   import { localisedRoute, navigateTo, routeIsActive } from '../router.js'
   export let to = '/'
   export let title = ''

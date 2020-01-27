@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { tick } from '../modules/functions.ts'
+  import { tick } from '../modules/index.ts'
   import Title from './Title.svelte'
   import {Table} from './index.ts'
   import GeneralForm from './form/Index.svelte'

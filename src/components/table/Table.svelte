@@ -5,7 +5,7 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
-   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/functions.ts'
+   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/index.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
   import { translation } from '../../modules/global_stores/translation.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'

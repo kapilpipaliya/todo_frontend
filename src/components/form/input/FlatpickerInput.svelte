@@ -1,6 +1,6 @@
 <script lang='ts'>
 	/** @format */
-	import { onMount, createEventDispatcher } from '../../../modules/functions.ts'
+	import { onMount, createEventDispatcher } from '../../../modules/index.ts'
 	import flatpickr from 'flatpickr';
 
 	const hooks = new Set([

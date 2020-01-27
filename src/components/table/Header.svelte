@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { DisplayType } from '../../modules/functions.ts'
+  import { DisplayType } from '../../modules/index.ts'
   import { css } from '../../modules/global_stores/css.ts'
   
   export let mergeRowsCount

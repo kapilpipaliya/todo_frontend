@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, S, Unique } from '../../../modules/functions.ts'
+	import { onMount, S, Unique } from '../../../modules/index.ts'
 	import * as RD from 'rambda'
 	import {_cloneArray} from './clone.ts'
 	import Options from './Options.svelte'

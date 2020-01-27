@@ -1,4 +1,4 @@
-import { readable } from '../functions'
+import { readable } from '../index'
 export const current_time = readable(new Date(), function start(set) {
   const interval = setInterval(() => {
     set(new Date())

@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/functions.ts'
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index.ts'
 	import * as R from 'ramda'
 
 	import { Router } from './components/svelte-router-spa/src/index.ts'

@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { getContext, get } from '../../modules/functions.ts'
+import { getContext, get } from '../../modules/index.ts'
 import Checkboxes from './input/Checkboxes.svelte';
 import Color from './input/Color.svelte'
 import Email from './input/Email.svelte'

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip, Unique } from '../../modules/functions.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip, Unique } from '../../modules/index.ts'
 
   import SubmitButton from '../_SubmitButton.svelte'
   import CancelButton from '../_CancelButton.svelte'

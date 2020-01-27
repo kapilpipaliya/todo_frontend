@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 import * as RX from 'rambdax'
-import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, notifier, merge } from './functions'; // not recommanded
+import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, notifier, merge } from './index'; // not recommanded
 import {project_id, project_data} from './global_stores/project'
 import {translation} from './global_stores/translation'
 import {default_form} from './global_stores/default_form'

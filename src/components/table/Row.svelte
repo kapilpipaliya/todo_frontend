@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { DisplayType, getContext, get } from '../../modules/functions.ts'
+  import { DisplayType, getContext, get } from '../../modules/index.ts'
   import { css } from '../../modules/global_stores/css.ts'
   import UrlPattern from 'url-pattern'
   

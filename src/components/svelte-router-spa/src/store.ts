@@ -1,5 +1,5 @@
 
-import { writable } from '../../../modules/functions'
+import { writable } from '../../../modules/index'
 const router = writable({})
 
 function set(route) {
