@@ -15,8 +15,10 @@
 
 	let boolkeys = []
 	const onChange = () => {
+		// value = ["backlog", {…}]
+ 		// options = [ ["backlog", "BackLog", Array(7)] ]
 		const b = RD.find(x=>x[keyIdx]==value[0], options)
-		if(!value[1]) {
+		if(!value[1]) { // this will not happen, parent component take care of it
 			value[1]= value[1] ?? {}
 		}
 		if(b){

@@ -200,7 +200,7 @@ $: {
       <span>{labels[i]}</span>
       <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.multi_select_hidden}
-    
+      <div></div>
     {:else}
       Unknown Component
     {/if}

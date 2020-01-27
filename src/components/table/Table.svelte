@@ -5,8 +5,9 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
-   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/functions.ts'
+   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/functions.ts'
   import { project_data } from '../../modules/global_stores/project.ts'
+  import { translation } from '../../modules/global_stores/translation.ts'
   import {schemaEvents} from '../../modules/schema_events.ts'
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
@@ -16,7 +17,7 @@
   import { css } from '../../modules/global_stores/css.ts'
   import { default_filter } from '../../modules/global_stores/default_filter.ts'
   // import Card from "../components/Card.svelte";
-  import Modal from './Model.svelte'
+
   import Config from './Config.svelte'
 
   let events
@@ -465,6 +466,8 @@
         )
       })
       if (d[0]) {
+        const delete_msg = R.view(R.lensPath(['msg', 'delete']), $translation);
+        notifier.danger(delete_msg)
         deleteRows_([key])
       } else {
         alert(d[1])
@@ -793,5 +796,6 @@
   {refresh}
   {headerTitlesRow}
   {items}
+  {closeInputMenu}
 />
 {/if}

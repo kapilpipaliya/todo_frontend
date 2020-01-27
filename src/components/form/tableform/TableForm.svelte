@@ -12,7 +12,7 @@
 	//export let args = [ [filter], [], []]
 	export let multiSelect = false
 	export let boolprop = false
-	export let boolPropIndex = 1
+	export let bi = 1 // boolPropIndex
 	
 	let data = []
 
@@ -107,7 +107,7 @@
 								options={getOptions(i)}
 								{keyIdx}
 								{dp}
-								{boolPropIndex}
+								{bi}
 							/>
 						{/if}
 					{:else}

@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import Modal from './Model.svelte'
   export let contextmenu
   export let modalIsVisible
   export let closeModal
@@ -6,6 +7,7 @@
   export let refresh
   export let headerTitlesRow
   export let items
+  export let closeInputMenu
 
 </script>
 {#if contextmenu}

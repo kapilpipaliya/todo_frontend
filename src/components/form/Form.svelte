@@ -10,7 +10,7 @@ export let headers
 export let form
 export let form_disabled = true
 export let save = ()=>0
-export let options = {}
+// export let options = {}
 
 let labels = []
 let types: number[] = []
