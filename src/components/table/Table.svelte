@@ -5,17 +5,21 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
-   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/index.ts'
-  import { project_data } from '../../modules/global_stores/project.ts'
-  import { translation } from '../../modules/global_stores/translation.ts'
-  import {schemaEvents} from '../../modules/schema_events.ts'
+   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/index'
+   declare let $ws_connected
+  import { project_data } from '../../modules/global_stores/project'
+  import { translation } from '../../modules/global_stores/translation'
+  declare let $translation
+  import {schemaEvents} from '../../modules/schema_events'
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
   import ContextMenu from './ContextMenu.svelte'
 
   const dp = createEventDispatcher()
-  import { css } from '../../modules/global_stores/css.ts'
-  import { default_filter } from '../../modules/global_stores/default_filter.ts'
+  import { css } from '../../modules/global_stores/css'
+  declare let $css
+  import { default_filter } from '../../modules/global_stores/default_filter'
+  declare let $default_filter
   // import Card from "../components/Card.svelte";
 
   import Config from './Config.svelte'
@@ -151,7 +155,7 @@
   setPass()
 
   // customFilter, not work with filter..
-  $: query, requiredFilter, schema_key, reset()
+  $: (query); (requiredFilter); (schema_key); reset()
 
   function unRegister() {
     unsub && S.trigger([[unsub, {}]])
@@ -610,6 +614,8 @@
   }
   // ============================================================================
   // ================================multiple select=============================
+  let allSelected
+  let multipleSelected
   $: allSelected = selectedRowsKeys.length == items.length ? true : false
   $: multipleSelected = selectedRowsKeys.length ? true : false
 
@@ -682,6 +688,7 @@
   function onShowRowNum() {
     showRowNum = !showRowNum
   }
+  let mergeRowsCount
   $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
 
   function getValue(v) {
@@ -745,7 +752,7 @@
           {allSelected}
           {onSelectAllClick}
           {headerTitlesRow}
-          selected={false}
+          
           {headerIsvisibleColumnsRow}
           {headerVisibleColTypesRow}
           {sortSettings}

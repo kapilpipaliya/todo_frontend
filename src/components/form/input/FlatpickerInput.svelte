@@ -1,6 +1,6 @@
 <script lang='ts'>
 	/** @format */
-	import { onMount, createEventDispatcher } from '../../../modules/index.ts'
+	import { onMount, createEventDispatcher } from '../../../modules/index'
 	import flatpickr from 'flatpickr';
 
 	const hooks = new Set([
@@ -18,6 +18,7 @@
 	export let element = null;
 	export let dateFormat = null;
 
+  declare let $$props
   let allProps = $$props;
   
   const options = allProps.options || {};
@@ -46,7 +47,7 @@
 		fp.set(key, val);
 	}
 
-	function addHooks(opts = {}) {
+	function addHooks(opts:{onChange?: Array<(newValue: any) => void>} = {}) {
 		opts = Object.assign({}, opts);
 
 		for (const hook of hooks) {

@@ -1,5 +1,5 @@
 <script>
-  import { quintOut,crossfade, flip  } from '../../modules/index.ts'
+  import { quintOut,crossfade, flip  } from '../../modules/index'
 
   // FLIP ANIMATION
   const [send, receive] = crossfade({

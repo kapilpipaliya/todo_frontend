@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { onMount } from '../../modules/index.ts'
+import { onMount } from '../../modules/index'
 import RealForm from './RealForm.svelte'
 
 import SubmitButton from '../_SubmitButton.svelte'

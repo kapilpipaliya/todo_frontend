@@ -1,7 +1,7 @@
 <script lang='ts'>
   // same as confirm page.
-  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, isLoggedIn, event_type as et, events as e, ws_connected, Unique } from '../modules/index.ts'
-
+  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, isLoggedIn, event_type as et, events as e, ws_connected, Unique } from '../modules/index'
+  declare let $ws_connected
   // export let categories = [];
   // export let footerData = {};
   // export let headerData = {};

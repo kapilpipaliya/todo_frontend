@@ -14,7 +14,7 @@ export function merge(array1, array2){
   return array2
 }
 // [1, ' - ',2], [...]
-export function stringifyRawPattern(pattern: [], row: []){
+export function stringifyRawPattern(pattern: Array<number | string>, row: []){
 let str = ''
   pattern.forEach(x => {
     if(RX.type(x) ==  'Number') {

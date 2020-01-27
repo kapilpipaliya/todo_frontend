@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount } from '../../../modules/index.ts'
+	import { onMount } from '../../../modules/index'
 	export let values = []
 	export let disabled = false
 	values = values ?? []

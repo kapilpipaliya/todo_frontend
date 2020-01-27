@@ -1,7 +1,7 @@
 <script lang='ts'>
-  import { tick } from '../modules/index.ts'
+  import { tick } from '../modules/index'
   import Title from './Title.svelte'
-  import {Table} from './index.ts'
+  import {Table} from './index'
   import GeneralForm from './form/Index.svelte'
 
   export let currentRoute
@@ -33,6 +33,7 @@
     }
   }
 
+  let pass
   $: pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
 
   let show = true
@@ -44,7 +45,8 @@
     show = true
   }
   $: {
-    if(!a.isFirst){ remount1(currentRoute)} else {a.isFirst = false}
+    (currentRoute)
+    if(!a.isFirst){ remount1()} else {a.isFirst = false}
   }
 </script>
 

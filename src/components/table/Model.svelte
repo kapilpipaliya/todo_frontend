@@ -1,5 +1,5 @@
-<script>
-  import { createEventDispatcher } from '../../modules/index.ts'
+<script lang='ts'>
+  import { createEventDispatcher } from '../../modules/index'
   const dp = createEventDispatcher()
 </script>
 

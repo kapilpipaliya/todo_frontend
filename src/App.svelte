@@ -1,27 +1,29 @@
 <script lang='ts'>
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index.ts'
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index'
+	declare let $ws_connected
 	import * as R from 'ramda'
 
-	import { Router } from './components/svelte-router-spa/src/index.ts'
+	import { Router } from './components/svelte-router-spa/src/index'
 
 	import Css from './components/Css.svelte'
 	import MenuF from './components/MenuF.svelte'
 
 // stores:
-	import {maintenance} from './modules/global_stores/maintenance.ts'
-	import {translation} from './modules/global_stores/translation.ts'
-	import {notification} from './modules/global_stores/notification.ts'
-	import {cookie} from './modules/global_stores/cookie.ts'
-	import {navigation} from './modules/global_stores/navigation.ts'
+	import {maintenance} from './modules/global_stores/maintenance'
+	import {translation} from './modules/global_stores/translation'
+	import {notification} from './modules/global_stores/notification'
+	import {cookie} from './modules/global_stores/cookie'
+	import {navigation} from './modules/global_stores/navigation'
 
-	import {account} from './modules/global_stores/account.ts'
-	import {member_settings} from './modules/global_stores/member_settings.ts'
-	import {menu} from './modules/global_stores/menu.ts'
-	import {current_time} from './modules/global_stores/time_store.ts'
-	//import {default_filter} from './modules/global_stores/default_filter.ts'
-	//import {default_form} from './modules/global_stores/default_form.ts'
-	import {project_id, project_data} from './modules/global_stores/project.ts'
-	import {current_member} from './modules/global_stores/current_member.ts'
+	import {account} from './modules/global_stores/account'
+	import {member_settings} from './modules/global_stores/member_settings'
+	import {menu} from './modules/global_stores/menu'
+	import {current_time} from './modules/global_stores/time_store'
+	//import {default_filter} from './modules/global_stores/default_filter'
+	//import {default_form} from './modules/global_stores/default_form'
+	import {project_id, project_data} from './modules/global_stores/project'
+	import {current_member} from './modules/global_stores/current_member'
+	declare let $current_member
 
 // Routes:
   	import Page from './components/Page.svelte'
@@ -47,7 +49,7 @@
 
 	// other
 
-	import { NotificationDisplay } from './components/index.ts'
+	import { NotificationDisplay } from './components/index'
 	let n
 	
 	let mounted = false
@@ -160,6 +162,7 @@
 		}
 	}*/
 
+	let level
 	$: level = $current_member?.level;
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher } from '../modules/index.ts'
+  import { onMount, onDestroy, createEventDispatcher } from '../modules/index'
   // How TO - Scroll Back To Top Button
   // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
   let button

@@ -1,7 +1,7 @@
 // use function directly on ws_dispatcher..
 import { writable, S } from '../index'
 import { event_type as et, events as e } from '../events'
-import { navigateTo } from '../../components/svelte-router-spa/src/index.js'
+import { navigateTo } from '../../components/svelte-router-spa/src/index'
 
 // when logout every pages should be redirect to login page.
 export const navigation = writable({})

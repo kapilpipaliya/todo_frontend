@@ -1,11 +1,12 @@
 <script lang='ts'>
-  import { tick } from '../modules/index.ts'
+  import { tick } from '../modules/index'
   import Title from './Title.svelte'
   import GeneralForm from './form/Index.svelte'
 
-  export let currentRoute = {}
+  export let currentRoute: {params?: {default_pattern?: string}, namedParams?: {}} = {}
 
   //export let default_pattern = [[0, "user"], [1, ''], [2, '']]
+  let default_pattern
   $: default_pattern = currentRoute?.params?.default_pattern ?? []
   
   let default_value = []
@@ -21,7 +22,7 @@
       addDefaultvalue(x)
     })
   }
-  $: { fillDefaultValue(currentRoute) }
+  $: { (currentRoute); fillDefaultValue() }
 
 
   let show = true
@@ -33,7 +34,8 @@
     show = true
   }
   $: {
-    if(!a.isFirst){ remount1(currentRoute)} else {a.isFirst = false}
+    (currentRoute)
+    if(!a.isFirst){ remount1()} else {a.isFirst = false}
   }
 
 </script>

@@ -1,7 +1,7 @@
 <script lang='ts'>
-	import { onMount, S, Unique } from '../../../modules/index.ts'
+	import { onMount, S, Unique } from '../../../modules/index'
 	import * as RD from 'rambda'
-	import {_cloneArray} from './clone.ts'
+	import {_cloneArray} from './clone'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'
 	export let dp = "r[1]+' - '+r[2]" // display pattern

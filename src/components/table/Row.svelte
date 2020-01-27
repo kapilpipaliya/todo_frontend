@@ -1,6 +1,6 @@
 <script lang='ts'>
-  import { DisplayType, getContext, get } from '../../modules/index.ts'
-  import { css } from '../../modules/global_stores/css.ts'
+  import { DisplayType, getContext, get } from '../../modules/index'
+  import { css } from '../../modules/global_stores/css'
   import UrlPattern from 'url-pattern'
   
   export let selected: boolean

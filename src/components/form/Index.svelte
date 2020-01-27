@@ -1,8 +1,9 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, form_type } from '../../modules/index.ts'
-  import { FormArray } from '../../modules/form.ts'
-  import { Form, SubmitButton, CancelButton } from '../index.ts'
-  import {schemaEvents} from '../../modules/schema_events.ts'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, form_type } from '../../modules/index'
+  declare let $ws_connected
+  import { FormArray } from '../../modules/form'
+  import { Form, SubmitButton, CancelButton } from '../index'
+  import {schemaEvents} from '../../modules/schema_events'
   export let key = 0
   export let schema_key
   export let form = []
@@ -16,6 +17,15 @@
     binded = f.binded, 
     form_disabled = f.form_disabled, 
     options = f.options
+  declare let $er
+  declare let $isSaving
+  declare let $form
+  declare let $headers
+  declare let $mounted
+  declare let $binded
+  declare let $form_disabled
+  declare let $options
+
   onMount(() => {$mounted = true })
   onDestroy(() => {f.onDestroy() })
   $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }

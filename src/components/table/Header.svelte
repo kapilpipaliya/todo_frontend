@@ -1,12 +1,12 @@
 <script lang='ts'>
-  import { DisplayType } from '../../modules/index.ts'
-  import { css } from '../../modules/global_stores/css.ts'
+  import { DisplayType } from '../../modules/index'
+  import { css } from '../../modules/global_stores/css'
   
   export let mergeRowsCount
   export let allSelected
   export let onSelectAllClick
   export let headerTitlesRow
-  export let selected: boolean
+  //export let selected: boolean
   export let headerIsvisibleColumnsRow= []
   export let headerVisibleColTypesRow = []
   export let sortSettings = []
