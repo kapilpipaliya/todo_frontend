@@ -1,7 +1,7 @@
 <script lang='ts'>
-	/** @format */
 	import { onMount, createEventDispatcher } from '../../../modules/index'
 	import flatpickr from 'flatpickr';
+	export let disabled
 
 	const hooks = new Set([
 		'onChange',
@@ -14,9 +14,9 @@
 		'onDayCreate'
 	]);
 
-	export let value = '';
-	export let element = null;
-	export let dateFormat = null;
+  export let value = '';
+  export let element = null;
+  export let dateFormat = null;
 
   declare let $$props
   let allProps = $$props;
@@ -89,5 +89,5 @@
 </svelte:head>
 
 <slot>
-<input bind:this={input} {...props} />
+<input bind:this={input} {...props} {disabled} />
 </slot>

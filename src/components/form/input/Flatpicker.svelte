@@ -1,6 +1,7 @@
 <script lang='ts'>
 	import Flatpickr from './FlatpickerInput.svelte'
 	export let value = null
+	export let disabled
 
 	//import 'flatpickr/dist/flatpickr.css'
 	//import 'flatpickr/dist/themes/light.css'
@@ -27,5 +28,6 @@
 	<Flatpickr
 		options={flatpickrOptions }
 		bind:value={value}
+		{disabled}
 		/>
 </div>
