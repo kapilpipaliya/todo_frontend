@@ -7,7 +7,6 @@
   	import Skeleton from '../../components/Skeleton.svelte'
 
     export let currentRoute;
-    export let params
 
     let mounted = false
 	let er = ''
@@ -41,7 +40,7 @@
 	{/if}
   </div>
   {#if fetch_data}
-  	<Route {currentRoute} {params}/>
+  	<Route {currentRoute} />
   {:else}
   	<Skeleton/>
   {/if}

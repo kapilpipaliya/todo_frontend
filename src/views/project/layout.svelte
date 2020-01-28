@@ -10,7 +10,6 @@
   	 import Skeleton from '../../components/Skeleton.svelte'
 
     export let currentRoute;
-    export let params
 
     const project_id = currentRoute.namedParams.project
     const project_id_ctx = writable(project_id);
@@ -94,7 +93,7 @@
 	<TreeSidebar menu={menus}/>
   </div>
   {#if fetch_data}
-  	<Route {currentRoute} {params}/>
+  	<Route {currentRoute} />
   {:else}
   	<Skeleton/>
   {/if}
