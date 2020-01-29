@@ -2,7 +2,6 @@ import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 import * as RX from 'rambdax'
 import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, notifier, merge } from './index'; // not recommanded
-import {project_id, project_data} from './global_stores/project'
 import {translation} from './global_stores/translation'
 import {default_form} from './global_stores/default_form'
 
@@ -73,9 +72,8 @@ class FormBasic {
   fetch() {
     if(this.data_evt) {
       const filter = [`="${this.key}"`]
-      const project_data_store = get(project_data)
       // is schema_key passing neccessary?
-      const args = [filter, [], [], { ...this.config, form: true, schema: this.schema_key, level: project_data_store[project_data_store.length - 1]?._key ?? "" }]
+      const args = [filter, [], [], { ...this.config, form: true, schema: this.schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
       const e1 = [this.data_evt, args]
       this.S.trigger([e1])
     }
@@ -191,7 +189,7 @@ export class FormArray extends FormBasic {
   fetch() {
     if(this.schemaGetEvt) {
       const filter = [`="${this.key}"`]
-      const project_data_store = get(project_data)
+      //const project_data_store = get(project_data)
       // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
       const fetchConfig = { ...this.config, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {})}
       const args = [filter, [], [], fetchConfig]

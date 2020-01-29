@@ -7,7 +7,6 @@
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
    S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/index'
    declare let $ws_connected
-  import { project_data } from '../../modules/global_stores/project'
   import { translation } from '../../modules/global_stores/translation'
   declare let $translation
   import {schemaEvents} from '../../modules/schema_events'

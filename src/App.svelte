@@ -21,7 +21,6 @@
 	import {current_time} from './modules/global_stores/time_store'
 	//import {default_filter} from './modules/global_stores/default_filter'
 	//import {default_form} from './modules/global_stores/default_form'
-	import {project_id, project_data} from './modules/global_stores/project'
 	import {current_member} from './modules/global_stores/current_member'
 	declare let $current_member
 
