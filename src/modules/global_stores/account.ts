@@ -5,8 +5,8 @@ import { event_type as et, events as e } from '../events'
 // when logout every pages should be redirect to login page.
 export const account = writable({})
 
-
-	S.bind$(e.cookie_event, (d) => {
+/*
+S.bind$(e.cookie_event, (d: []) => {
     
-  }, 1)
-
+}, 1)
+*/

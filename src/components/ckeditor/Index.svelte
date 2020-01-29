@@ -1,5 +1,5 @@
 
-<script>
+<script lang='ts'>
   import { onMount } from 'svelte'
   import CKEditor from "./CKEditor.svelte"
   

@@ -3,7 +3,7 @@ import { writable, S } from '../index'
 import { event_type as et, events as e } from '../events'
 import { navigateTo } from '../../components/svelte-router-spa/src/index'
 
-export const navigation = writable({})
+export const navigation = writable("")
 
 // must use id =0
 S.bind$( [et.get, e.account, e.redirection_event, 0],

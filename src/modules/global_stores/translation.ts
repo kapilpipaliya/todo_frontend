@@ -8,7 +8,7 @@ export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) => {
     S.bind_(
       form_schema_evt(Unique.id),
-      ([d]) => {
+      ([d]: [[{}]]) => {
         resolve(d[0])
       },
       ['translation']

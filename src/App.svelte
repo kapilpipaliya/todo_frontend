@@ -11,7 +11,7 @@
 // stores:
 	import {maintenance} from './modules/global_stores/maintenance'
 	import {translation} from './modules/global_stores/translation'
-	import {notification} from './modules/global_stores/notification'
+	//import {notification} from './modules/global_stores/notification'
 	import {cookie} from './modules/global_stores/cookie'
 	import {navigation} from './modules/global_stores/navigation'
 
@@ -178,10 +178,6 @@
 <NotificationDisplay bind:this={n} />
 
 <nav>
-	<div>
-		<a href="/">Home</a>
-		<a href="/about">About</a>
-	</div>
 	Current User Level: {level}
 
 	{#if menus.navData}

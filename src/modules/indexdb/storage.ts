@@ -18,7 +18,7 @@ export default class Storage {
   public dbName: string
   public storeName: string
   public dbVersion: number
-  constructor(dbName, dbVersion) {
+  constructor(dbName:string, dbVersion:number) {
     this.dbName = dbName
     this.storeName = dbName
     this.dbVersion = dbVersion
@@ -54,7 +54,7 @@ export default class Storage {
     })
   }
   // new and update
-  [putData](key, value) {
+  [putData](key:string, value) {
     return new Promise((resolve, reject) => {
       const store = this[db]
         .transaction([this.storeName], 'readwrite')
@@ -73,7 +73,7 @@ export default class Storage {
   }
 
   // retrieve data
-  [getData](key) {
+  [getData](key:string) {
     return new Promise((resolve, reject) => {
       const store = this[db]
         .transaction([this.storeName])
@@ -88,7 +88,7 @@ export default class Storage {
     })
   }
   // delete data
-  [removeData](key) {
+  [removeData](key:string) {
     const store = this[db]
       .transaction([this.storeName], 'readwrite')
       .objectStore(this.storeName)
@@ -101,7 +101,7 @@ export default class Storage {
     }
   }
   // delete the database
-  [removeDB](dbName) {
+  [removeDB](dbName:string) {
     indexedDB.deleteDatabase(dbName)
   }
   /**
@@ -109,7 +109,7 @@ export default class Storage {
    * @param {value} any
    * @description insert data
    */
-  async setItem(key, value) {
+  async setItem(key:string, value) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -120,7 +120,7 @@ export default class Storage {
    * @param {key} string
    * @description Get data
    */
-  async getItem(key) {
+  async getItem(key:string) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -131,7 +131,7 @@ export default class Storage {
    * @param {key} string
    * @description delete data
    */
-  async removeItem(key) {
+  async removeItem(key:string) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -141,7 +141,7 @@ export default class Storage {
    * @param {dbName} string
    * @description delete database
    */
-  removeDB(dbName) {
+  removeDB(dbName:string) {
     this[removeDB](dbName)
   }
 

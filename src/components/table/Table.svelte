@@ -474,7 +474,7 @@
       })
       if (d[0]) {
         const delete_msg = R.view(R.lensPath(['msg', 'delete']), $translation);
-        notifier.danger(delete_msg)
+        notifier.danger(delete_msg, 3000)
         deleteRows_([key])
       } else {
         alert(d[1])

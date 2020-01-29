@@ -21,6 +21,10 @@ for $ prefix use always check if(mounted) first.
 // same library:
 //A WebSocket JavaScript library https://sarus.anephenix.com
 //https://github.com/anephenix/sarus
+
+type callBack = (d: any) => void;
+type event = Array<number | string>
+
 class WsBase {
   
 }
@@ -28,10 +32,10 @@ export class ServerEventsDispatcher {
   private path: string;
   private req: {}
   private res: {}
-  private callbacks: {}
+  private callbacks: Record<string, any> 
   private conn: WebSocket
 
-  constructor(path, req, res) {
+  constructor(path: string, req:{}, res:{}) {
     this.bind = this.bind.bind(this)
     this.bind$ = this.bind$.bind(this)
     this.bind_ = this.bind_.bind(this)
@@ -64,25 +68,24 @@ export class ServerEventsDispatcher {
     this.conn.addEventListener('open', this.onopen)
   }
   destroy() {
-    this.conn.onmessage = undefined
-    this.conn.onclose = undefined
+    this.conn.onmessage = null
+    this.conn.onclose = null
     this.conn.removeEventListener('open', this.onopen)
     this.conn.close()
   }
 
-  bind(event, callback, handleMultiple = 0) {
-    this.callbacks[JSON.stringify(event)] =
-      this.callbacks[JSON.stringify(event)] ?? []
+  bind(event: event, callback: callBack, handleMultiple = 0) {
+    this.callbacks[JSON.stringify(event)] = this.callbacks[JSON.stringify(event)] ?? []
     this.callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
     return this
   }
-  unbind_(event_names = []) {
-    R.map(event => {
-      this.unbind(JSON.stringify(event))
+  unbind_(event_names: Array<event> = []) {
+    R.map((event:event) => {
+      this.unbind(event)
     }, event_names)
     return this
   }
-  batchBind(events) {
+  batchBind(events: Array<[event, callBack, number]> = []) {
     const payload = []
     for (let i = 0; i < events.length; i++) {
       const e = events[i]
@@ -91,17 +94,17 @@ export class ServerEventsDispatcher {
     }
     return payload
   }
-  batchBind_T(events) {
+  batchBind_T(events: Array<[event, callBack, number]> = []) {
     const payload = this.batchBind(events)
     this.trigger(payload)
     return this
   }
-  bind$(event, callback, handleMultiple) {
+  bind$(event: event, callback: callBack, handleMultiple=0) {
     this.unbind(event)
     this.bind(event, callback, handleMultiple)
     return this
   }
-  bind_(event, callback, data, handleMultiple) {
+  bind_(event: event, callback: callBack, data, handleMultiple=0) {
     this.bind$(event, callback, handleMultiple)
     this.trigger([[event, data]])
     return this
@@ -111,7 +114,7 @@ export class ServerEventsDispatcher {
     this.triggerFile(event, data, beforeEvent, changeNotice)
     return this
   }*/
-  unbind(event) {
+  unbind(event: event) {
     this.callbacks[JSON.stringify(event)] = []
   }
   trigger(payload) {
@@ -203,10 +206,16 @@ export class ServerEventsDispatcher {
       // code block
     }
   }*/
-  stringHandle(data){
+  stringHandle(data: [   [[number, number, string], Array<{}>]  ]){
+    if(!Array.isArray(data)){
+      console.warn('return data must be an array.', data)
+    } else {
       try {
         for (let i = 0; i < data.length; i++) {
           const e = data[i]
+          if(!Array.isArray(e) || e.length < 2){
+            console.warn('event array should have >= 2 elements, got: ', e)
+          }
           const event = e[0]
           const message = e.splice(1)
           this.dispatch(event, message)
@@ -215,9 +224,10 @@ export class ServerEventsDispatcher {
         console.warn('error: ', error)
         console.warn(data)
       }
+    }
   }
 
-  async onmessage(evt) {
+  async onmessage(evt: MessageEvent) {
     if (typeof evt.data === 'string') {
       const data = JSON.parse(evt.data)
       this.stringHandle(data)
@@ -239,27 +249,27 @@ export class ServerEventsDispatcher {
     // }
   }
 
-  onclose(evt) {
+  onclose(evt: CloseEvent) {
     ws_connected.set(false)
-    this.dispatch(['close', '', 0], null)
+    this.dispatch(['close', '', 0], [])
     setTimeout(() => {
       this.setupConnection()
     }, 1000)
     // on reconnection all subscribtion needs to resubscribe.
   }
-  onopen(evt) {
+  onopen(evt: Event) {
     ws_connected.set(true)
     //console.log(this.conn.extensions);
     //console.log("Server Opened")
-    this.dispatch(['open', '', 0], null)
+    this.dispatch(['open', '', 0], [])
   }
-  onerror(error) {
-    console.log(`[error] ${error.message}`)
+  onerror(error: Event) {
+    console.log(`[error] ${error}`)
     //todo depend on error try to reconnect
-    this.dispatch(['error', '', 0], null)
+    this.dispatch(['error', '', 0], [])
   }
 
-  dispatch(event, message) {
+  dispatch(event: event, message: Array<{}>) {
     const chain = this.callbacks[JSON.stringify(event)]
     if (typeof chain == 'undefined') {
       console.log("no callbacks for this event: ", event)
@@ -313,13 +323,13 @@ export const ServerEventsDispatcher = function(){
     }
   };
 */
-let ws_
+let ws_: ServerEventsDispatcher
 ws_ = new ServerEventsDispatcher(ws_todo, {}, {})
-ws_.bind(
+/*ws_.bind(
   ['take_image_meta'],
   function(data) {
     ws_.event = data[0] // save value on class.
   },
   1
-)
+)*/
 export const S = ws_

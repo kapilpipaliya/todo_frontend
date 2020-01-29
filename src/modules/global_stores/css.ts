@@ -29,7 +29,7 @@ export const css = writable(
 
   S.bind$(
     [et.get, e.account, e.css_event, 0],
-    function(data) {
+    function(data: []) {
       // just properly set css store...
       console.log("i got data: ", data) 
     },

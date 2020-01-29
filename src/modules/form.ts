@@ -10,10 +10,10 @@ class FormBasic {
   public key: string
   public dp:  (type: string, detail?: any) => void
   public config: {type: form_type}
-  public events: Array<[]>
-  public data_evt: []
-  public mutate_evt: []
-  public unsub_evt: Array<[]>
+  public events: Array<Array<number | string>>
+  public data_evt: Array<number | string>
+  public mutate_evt: Array<number | string>
+  public unsub_evt: Array<number | string>
   public isUpdate: boolean
   public mounted: Writable<boolean>
   public binded: Writable<boolean>
@@ -24,7 +24,7 @@ class FormBasic {
   public schema_key: string
   public options: Writable<{}>
 
-  constructor(S, key, e, dp, config={type: form_type.object}) {
+  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
     this.S = S
     this.key = key
     this.dp = dp
@@ -39,6 +39,8 @@ class FormBasic {
         e[0][0] = et.get
       }
       this.unsub_evt = [et.unsubscribe, ...e[0].slice(1)]
+    } else {
+      this.unsub_evt = []
     }
     this.data_evt = e[0]
     this.mutate_evt = e[1]
@@ -55,6 +57,7 @@ class FormBasic {
     this.onClose = this.onClose.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
     this.options = writable({})
+    this.schema_key = ""
   }
   bindMutate(){
     this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
@@ -67,7 +70,7 @@ class FormBasic {
       this.S.unbind_(this.events)
   }
   onClose() {
-    if (this.key && this.unsub_evt) this.S.trigger([[this.unsub_evt, {}]])
+    if (this.key && this.unsub_evt.length) this.S.trigger([[this.unsub_evt, {}]])
   }
   fetch() {
     if(this.data_evt) {
@@ -88,7 +91,7 @@ class FormBasic {
     }
     this.S.trigger([[this.mutate_evt, args]])
   }
-  onMutateGet([d]) {
+  onMutateGet([d]: [[boolean, string]]) {
     this.isSaving.set(false)
     let er
     if (d[0]) {
@@ -105,9 +108,9 @@ class FormBasic {
 }
 
 export class Form extends FormBasic {
-  constructor(S, key, e, dp, config={type: form_type.object}) {
+  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
     super(S, key, e, dp, config);
-    this.form.set({})
+    this.form = writable({})
     this.onFormDataGet = this.onFormDataGet.bind(this)
   }
   bindAll(){
@@ -120,14 +123,14 @@ export class Form extends FormBasic {
   onFormDataGet(d){
     this.isSaving.set(false)
     const form = Form.onFormDataGetStatic(d)
-    if (form._key) {
+    if ((form as {_key: string})._key) {
      this.isUpdate = true
     }
     this.form.set(form)
     this.form_disabled.set(false)
   }
   //static functions:
-  static onFormDataGetStatic([d]) {
+  static onFormDataGetStatic([d]:[{ r: {result:[[]] }, m: {result: [[]]}, n: {result: [[]]}, d: {} }]) {
     if (d.r) {
       const r = d.r.result
       if(r.length){
@@ -147,22 +150,26 @@ export class Form extends FormBasic {
       //d.m.result
     } else if (d.d) {
       //
+      return {}
     }
+    return {}
   }
 }
 export class FormArray extends FormBasic {
   public headers: Writable<[]>
-  public form: Writable<any[]>
-  public schemaGetEvt: number[]
-  constructor(S, key, ev, dp, schema_key, form=[], config={type: form_type.array}) {
+  public form: Writable<Array<number | string>>
+  public schemaGetEvt: Array<number | string>
+  constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}) {
     super(S, key, ev, dp, config);
     this.schema_key = schema_key
-    this.form.set(form)
+    this.form = writable(form)
     this.headers = writable([])
     if(!this.data_evt) {
       this.schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
-      this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
+    } else {
+      this.schemaGetEvt = []
     }
+    this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
     this.onFormDataGet = this.onFormDataGet.bind(this)
   }
   bindAll(){
@@ -182,12 +189,12 @@ export class FormArray extends FormBasic {
   }
   onDestroy() {
     super.onDestroy()
-    if(this.schemaGetEvt) {
-      this.S.unbind_(this.schemaGetEvt)
+    if(this.schemaGetEvt.length) {
+      this.S.unbind(this.schemaGetEvt)
     }
   }
   fetch() {
-    if(this.schemaGetEvt) {
+    if(this.schemaGetEvt && this.schemaGetEvt.length) {
       const filter = [`="${this.key}"`]
       //const project_data_store = get(project_data)
       // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
@@ -235,7 +242,7 @@ export class FormArray extends FormBasic {
       return f    
     }
   }
-  onFormDataGetStatic(d) {
+  onFormDataGetStatic(d:{ r: {result:[[]] }, m: {result: [[]]}, n: {result: [[]]}, d: {} }) {
     if (d.r) {
       const r = d.r.result
       if(r.length){

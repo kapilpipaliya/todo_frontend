@@ -54,7 +54,7 @@
   }
 
   unsubscribe = notification.subscribe(value => {
-    if (!value.type) {
+    if (!value || !value.type) {
       return
     }
     createToast(value.message, value.type, value.timeout)

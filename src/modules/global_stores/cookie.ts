@@ -6,7 +6,7 @@ import { event_type as et, events as e } from '../events'
 export const cookie = writable({})
 
 
-function saveCookie(name, value, max_age) {
+function saveCookie(name:string, value:string, max_age:number) {
 	// read more: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
 	document.cookie = `${name}=${value}; path=/; max-age=${max_age}`
 }

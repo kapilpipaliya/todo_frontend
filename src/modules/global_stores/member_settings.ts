@@ -7,8 +7,8 @@ import { event_type as et, events as e } from '../events'
 export const member_settings = writable({})
 
 
-
-	S.bind$(e.cookie_event, (d) => {
+/*
+S.bind$(e.cookie_event, (d) => {
     
-  }, 1)
-
+}, 1)
+*/

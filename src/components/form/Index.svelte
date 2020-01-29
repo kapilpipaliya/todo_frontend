@@ -4,7 +4,7 @@
   import { FormArray } from '../../modules/form'
   import { Form, SubmitButton, CancelButton } from '../index'
   import {schemaEvents} from '../../modules/schema_events'
-  export let key = 0
+  export let key = "0"
   export let schema_key
   export let form = []
   export let fetchConfig = {type: form_type.array}
