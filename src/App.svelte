@@ -171,6 +171,10 @@
 	server is going down for sheduled maintenance
 {/if}
 
+{#if $navigation}
+	{navigation}
+{/if}
+
 <NotificationDisplay bind:this={n} />
 
 <nav>
