@@ -85,6 +85,7 @@
   let data_evt
   let unsub
   let mutate_evt
+  let authorized = true
 
   function setPass() {
     if(Array.isArray(pass)) {
@@ -314,8 +315,11 @@
     return newa1
   }
   function onDataGet(all) {
-    //console.warn(all)
-    const [[h, d]] = all
+    const [[h, d]] = all;
+    if (h === false){
+      authorized = false
+      er = d
+    }
     if(h.length) {
       fillHeadersArray(h)
     }
@@ -745,6 +749,7 @@
       on:configApply={onConfigApply} />
   {/if}
 
+{#if authorized}
   <table>
     <thead>
       <Header
@@ -794,6 +799,9 @@
       {/each}
     </tbody>
   </table>
+{:else}
+  <div>{er}</div>
+{/if}
 </div>
 <ContextMenu
   {contextmenu}
