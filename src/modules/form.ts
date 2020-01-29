@@ -94,7 +94,7 @@ class FormBasic {
     if (d[0]) {
       const translation_store = get(translation)
       const save_msg = R.view(R.lensPath(['msg', 'save']), translation_store);
-      notifier.success(save_msg) // 3000
+      notifier.success(save_msg, 3000)
       er = ''
       this.dp('successSave', { key: this.key, d })
     } else {
