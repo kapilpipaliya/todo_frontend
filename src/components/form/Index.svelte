@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, form_type } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type } from '../../modules/index'
   declare let $ws_connected
   import { FormArray } from '../../modules/form'
   import { Form, SubmitButton, CancelButton } from '../index'
@@ -7,7 +7,17 @@
   export let key = "0"
   export let schema_key
   export let form = []
-  export let fetchConfig = {type: form_type.array}
+  export let fetchConfig = {type: form_type.array, project: null}
+
+  let project = getContext('project')
+  let project_ctx = writable([])
+  if(project) {
+    $project_ctx = get(project)
+  }
+  declare let $project_ctx
+
+  fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
+
   const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig), 
     er = f.er,
     isSaving = f.isSaving, 

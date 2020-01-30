@@ -85,7 +85,9 @@ class FormBasic {
     const form = get(this.form) // not recommaned to use get
     this.isSaving.set(true)
     const filter = this.isUpdate ? [`="${this.config.type == form_type.object ? form._key : form[0]}"`] : null
-    const args = [form, filter]
+    // Now auto unsubscribing no need to pass  , ...(this.isUpdate ?  {unsub: this.data_evt} : {})
+    const saveConfig = { ...this.config} // , form: true, schema: this.schema_key
+    const args = [form, filter, saveConfig]
     if(this.isUpdate){
       args.push(this.unsub_evt)
     }
@@ -198,7 +200,8 @@ export class FormArray extends FormBasic {
       const filter = [`="${this.key}"`]
       //const project_data_store = get(project_data)
       // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
-      const fetchConfig = { ...this.config, form: true, schema: this.schema_key, ...(this.isUpdate ?  {unsub: this.data_evt} : {})}
+      // Now auto unsubscribing no need to pass  , ...(this.isUpdate ?  {unsub: this.data_evt} : {})
+      const fetchConfig = { ...this.config, form: true, schema: this.schema_key}
       const args = [filter, [], [], fetchConfig]
       const e1 = [this.schemaGetEvt, args]
       this.S.trigger([e1])

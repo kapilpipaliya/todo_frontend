@@ -476,7 +476,7 @@
           d => {
             resolve(d)
           },
-          ['DEL', filter]
+          ['DEL', filter, fetchConfig]
         )
       })
       if (d[0]) {
