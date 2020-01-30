@@ -123,7 +123,7 @@
 		</tbody>
 	</table>
 	{/if}
-	<button type="button" on:click={handleAdd} disabled={!newAvailableOps.length} {disabled}>Add</button>
+	<button type="button" on:click={handleAdd} disabled={disabled || !newAvailableOps.length} >Add</button>
 {:else}
 	<select bind:value={values}  required on:change={onChangeSingle} on:change >
 		<Options {keyIdx} options={data} {dp} />
