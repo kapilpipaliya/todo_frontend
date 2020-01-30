@@ -4,7 +4,7 @@
   import * as RA from 'ramda-adjunct'
   import Row from './Row.svelte'
   import Header from './Header.svelte'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get,
+  import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
    S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, notifier } from '../../modules/index'
    declare let $ws_connected
   import { translation } from '../../modules/global_stores/translation'
@@ -60,7 +60,7 @@
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
-  let fetchConfig = { type: form_type.array } // also set level latter
+  let fetchConfig = { type: form_type.array, project: null } // also set level latter
   // pagination:
   let limit = Number(query.limit) ?? 0
   let pages = [1, 2]
@@ -85,6 +85,13 @@
   let unsub
   let mutate_evt
   let authorized = true
+
+  let project = getContext('project')
+  let project_ctx = writable([])
+  if(project) {
+    $project_ctx = get(project)
+  }
+  declare let $project_ctx
 
   function setPass() {
     if(Array.isArray(pass)) {
@@ -186,7 +193,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = {...fetchConfig, type: form_type.array } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
+    fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
     // pagination:
     limit = Number(query.limit) ?? 0
     pages = [1, 2]
