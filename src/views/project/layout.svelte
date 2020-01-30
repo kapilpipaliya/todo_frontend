@@ -14,9 +14,14 @@
     const project_id = currentRoute.namedParams.project
     const project_id_ctx = writable(project_id);
     const project_data_ctx = writable({});
+    declare let $project_data_ctx
     setContext('project_id', project_id_ctx);
     setContext("project_data", project_data_ctx)
     const org_id = getContext('org_id')
+
+    const project_ctx = writable([]);
+    declare let $project_ctx
+    setContext("project", project_ctx)
 
     let mounted = false
 	let er = ''
@@ -29,6 +34,7 @@
   	onDestroy(() => {S.unbind_([menu_evt]); 
   		// be very careful: top level component unmount first.
   		// console.warn('project unmount')
+  		$project_ctx.pop()
   	})
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
   	class Menu {
@@ -43,7 +49,8 @@
 	      		console.log('no project found')
 	      	} else if(result[0]) {
 	      		const project_data = result[0]
-	      		project_data_ctx.set(project_data)
+	      		$project_data_ctx.push(project_data)
+	      		$project_data_ctx = $project_data_ctx
 	      		fetch_data = true
 	      		return
 	      	}

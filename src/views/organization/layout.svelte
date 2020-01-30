@@ -14,8 +14,13 @@
     const org_id = currentRoute.namedParams.org
     const org_id_ctx = writable(org_id);
     const org_data_ctx = writable({});
+    declare let $org_data_ctx
     setContext('org_id', org_id_ctx);
     setContext("org_data", org_data_ctx)
+    
+    const project_ctx = writable([]);
+    declare let $project_ctx
+    setContext("project", project_ctx)
 
     let mounted = false
 	let er = ''
@@ -29,6 +34,7 @@
   		S.unbind_([menu_evt]); 
   		// be very careful: top level component unmount first.
   		// console.warn('organization unmount')
+  		$project_ctx.pop()
   	})
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
   	class Menu {
@@ -43,7 +49,8 @@
 	      		console.log('no organization found')
 	      	} else if(result[0]) {
 	      		const org_data = result[0]
-	      		org_data_ctx.set(org_data)
+	      		$org_data_ctx = org_data
+	      		$project_ctx = [org_data]
 	      		fetch_data = true
 	      		return
 	      	}
