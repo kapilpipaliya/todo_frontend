@@ -60,7 +60,7 @@
                 </select>
               </th>
             {:else if !hiddenColumns.includes(headerVisibleColTypesRow[index])}
-              {#if headerVisibleColTypesRow[index] === DisplayType.INT}
+              {#if headerVisibleColTypesRow[index] === DisplayType.Number}
                 <th>
                   <input
                     type="search"
@@ -68,7 +68,7 @@
                     on:input={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.TEXT}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.Text}
                 <th>
                   <input
                     type="search"
@@ -76,7 +76,7 @@
                     on:input={onHandleFilter(index)}
                     on:contextmenu|preventDefault={onTextInputContext} />
                 </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.DOUBLE}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.Double}
                 <th>
                   <input
                     type="search"
@@ -85,7 +85,7 @@
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.BOOL}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
                 <th>
                   <input
                     type="checkbox"
@@ -94,9 +94,11 @@
                     on:contextmenu|preventDefault={onTextInputContext}
                     step="any" />
                 </th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.DateTime}
                 <th>Date</th>
-              {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
+              {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
+                <th></th>
+              {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
                 <th></th>
               {:else}
                 <th>Unknown Type {headerVisibleColTypesRow[index]}</th>

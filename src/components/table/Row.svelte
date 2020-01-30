@@ -2,6 +2,11 @@
   import { DisplayType, getContext, get } from '../../modules/index'
   import { css } from '../../modules/global_stores/css'
   import UrlPattern from 'url-pattern'
+
+  import Text from './display/Text.svelte'
+  import Bool from './display/Bool.svelte'
+  import Url from './display/Url.svelte'
+  import Color from './display/Color.svelte'
   
   export let selected: boolean
   export let showRowNum
@@ -79,11 +84,17 @@
             {#if headerIsvisibleColumnsRow[index]}
               <td>
                 {#if c != null}
-                  {#if headerVisibleColTypesRow[index] === DisplayType.UTCTIME}
+                  {#if headerVisibleColTypesRow[index] === DisplayType.DateTime}
                     {new Date(c).toLocaleString()}
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.URL}
-                    <a href={makeUrl(headerColumnPropsRow[index], c)}>{headerColumnPropsRow[index].l}</a>
-                  {:else}{getValue(c)}{/if}
+                  {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
+                    <Url href={makeUrl(headerColumnPropsRow[index], c)} value={headerColumnPropsRow[index].l}/>
+                  {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
+                    <Bool value={getValue(c)}/>
+                  {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
+                    <Color value={getValue(c)}/>
+                  {:else}
+                    <Text value={getValue(c)}/>
+                  {/if}
                 {/if}
               </td>
             {/if}

@@ -1,14 +1,18 @@
   // table:
 export enum DisplayType {
-    BOOL=1,
-    INT,
-    TEXT,
-    DOUBLE,
-    UTCTIME,
-    ARRAY,
-    OBJECT,
-    BINARY,
-    URL
+  UNINITIALIZED,
+  Checkbox = 1,
+  Number,
+  Text,
+  Double,
+  Date,
+  DateTime,
+
+  ARRAY,
+  OBJECT,
+  BINARY,
+  Url,
+  Color
   };
 export enum form_type { object = 1, array };
 
