@@ -6,5 +6,4 @@
 	//export let dom = null
 </script>
 
-<span {...props} >{value}</span>
-<a href={href}>{value}</a>
+<a href={href} {...props}>{value}</a>

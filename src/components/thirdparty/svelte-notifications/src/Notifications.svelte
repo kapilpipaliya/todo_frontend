@@ -1,6 +1,6 @@
 <script>
   import { notification } from './store'
-  import { onMount, onDestroy } from 'svelte'
+  import { onMount, onDestroy } from '../../../../../svelte/src/runtime/index'
 
   export let themes = {
     danger: '#bb2124',

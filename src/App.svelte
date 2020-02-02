@@ -161,8 +161,8 @@
 		}
 	}*/
 
-	let level
-	$: level = $current_member?.level;
+	let email
+	$: email = $current_member?.email;
 </script>
 
 <Css/>
@@ -178,7 +178,7 @@
 <NotificationDisplay bind:this={n} />
 
 <nav>
-	Current User Level: {level}
+	Current User: {email}
 
 	{#if menus.navData}
 		<MenuF menu={menus.navData.account}/>
