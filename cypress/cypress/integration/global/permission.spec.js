@@ -1,4 +1,4 @@
-describe('Note Page Test', () => {
+describe('Permission Page Test', () => {
   beforeEach(() => {
     cy.login()
     cy.visit('/page/global_permission')

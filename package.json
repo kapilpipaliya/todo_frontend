@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "@msgpack/msgpack": "^1.11.0",
-    "clsx": "^1.0.4",
+    "clsx": "^1.1.0",
     "flatpickr": "^4.6.3",
     "qs": "^6.9.1",
     "rambda": "^4.5.0",
     "rambdax": "^3.5.0",
-    "ramda": "^0.26.1",
+    "ramda": "^0.27.0",
     "ramda-adjunct": "^2.24.0",
     "svelte": "^3.18.1",
     "tippy.js": "^5.2.0",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^11.0.2",
-    "@rollup/plugin-node-resolve": "^7.1.0",
+    "@rollup/plugin-node-resolve": "^7.1.1",
     "rollup": "^1.31.0",
     "rollup-plugin-bundle-html": "^0.2.2",
     "rollup-plugin-css-porter": "^1.0.2",
@@ -34,7 +34,7 @@
     "rollup-plugin-terser": "^5.2.0",
     "rollup-plugin-typescript2": "^0.25.3",
     "sirv-cli": "^0.4.5",
-    "svelte-preprocess": "^3.3.1",
+    "svelte-preprocess": "^3.4.0",
     "typescript": "^3.7.5"
   }
 }

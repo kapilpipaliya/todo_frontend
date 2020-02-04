@@ -1,4 +1,4 @@
-describe('Org Page Test', () => {
+describe('Schema Page Test', () => {
   beforeEach(() => {
   	cy.login()
     cy.visit('/page/schema')

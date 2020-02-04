@@ -1,4 +1,4 @@
-describe('Note Page Test', () => {
+describe('Color Page Test', () => {
   beforeEach(() => {
   	cy.login()
     cy.visit('/page/color')
