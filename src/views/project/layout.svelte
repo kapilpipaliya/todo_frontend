@@ -18,10 +18,10 @@
     setContext('project_id', project_id_ctx);
     setContext("project_data", project_data_ctx)
     const org_id = getContext('org_id')
+    declare let $org_id
 
-    const project_ctx = writable([]);
+    const project_ctx = getContext('project')
     declare let $project_ctx
-    setContext("project", project_ctx)
 
     let mounted = false
 	let er = ''
@@ -49,8 +49,8 @@
 	      		console.log('no project found')
 	      	} else if(result[0]) {
 	      		const project_data = result[0]
-	      		$project_data_ctx.push(project_data)
-	      		$project_data_ctx = $project_data_ctx
+	      		$project_data_ctx = project_data
+	      		$project_ctx.push(project_data)
 	      		fetch_data = true
 	      		return
 	      	}
@@ -60,7 +60,7 @@
 	      	if(d[0].length && d[0][0]){
 	      		if(d[0][0]){
 	      			m.menu = d[0][0].project
-	      			menus = processMenu(R.clone(m.menu), org_id, project_id)
+	      			menus = processMenu(R.clone(m.menu), $org_id, project_id)
 	      			return
 	      		}
 	      		console.log("cant set menu")
@@ -68,10 +68,10 @@
 	      }, 1)
 	      binded = true
           const args = [
-		      [null, null, `="${project_id}"`], // project_id
+		      [null, `="${project_id}"`], // project_id
 		      [],
 		      [0, 0, 1],
-		      {type: form_type.object},
+		      {type: form_type.object, org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null },
 		    ]
           S.trigger([
           	[project_fetch_evt, args],
@@ -91,7 +91,7 @@
 
   	// when project_id change or project_data is change just refresh the component.
 
-  	$: {menus = processMenu(R.clone(m.menu), org_id, project_id) }
+  	$: {menus = processMenu(R.clone(m.menu), $org_id, project_id) }
 </script>
 
 <h4>Selected Project: {project_id}</h4>

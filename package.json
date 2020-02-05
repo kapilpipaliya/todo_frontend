@@ -16,7 +16,7 @@
     "rambda": "^4.5.0",
     "rambdax": "^3.5.0",
     "ramda": "^0.27.0",
-    "ramda-adjunct": "^2.24.0",
+    "ramda-adjunct": "^2.25.0",
     "svelte": "^3.18.1",
     "tippy.js": "^5.2.0",
     "url-params-parser": "^1.0.2",

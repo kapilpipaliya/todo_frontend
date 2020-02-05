@@ -56,6 +56,8 @@ export let doms = {}
     tel,
     text,
     time,
+    inserted_time,
+    updated_time,
     url,
     week,
     textarea,
@@ -66,7 +68,9 @@ export let doms = {}
     multi_select_hidden, // not added input yet
     text_array,
     multi_select_bool_properties,
-    flatpicker
+    flatpicker,
+    WYSIWYG,
+    serial
   };
 
 
