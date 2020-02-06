@@ -13,6 +13,7 @@
     "clsx": "^1.1.0",
     "codemirror": "^5.51.0",
     "flatpickr": "^4.6.3",
+    "htmlhint": "^0.11.0",
     "qs": "^6.9.1",
     "rambda": "^4.5.0",
     "rambdax": "^3.5.0",

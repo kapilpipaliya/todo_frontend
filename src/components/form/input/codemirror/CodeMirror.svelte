@@ -1,4 +1,5 @@
 <script lang='ts'>
+	// better to use this component: https://github.com/frantic0/svelte-codemirror/blob/master/src/CodeMirror.svelte
 	import { is_browser } from './env';
 
 	import _CodeMirror from './codemirror'
@@ -18,7 +19,7 @@
 	let w;
 	let h;
 	export let code = '';
-	let mode;
+	export let mode;
 
 	// We have to expose set and update methods, rather
 	// than making this state-driven through props,
@@ -114,6 +115,7 @@
 			CodeMirror = _CodeMirror;
 			createEditor(mode || 'svelte').then(() => {
 				if (editor) editor.setValue(code || '');
+				// editor.setOption("lint",true);
 			});
 		}
 
@@ -174,6 +176,10 @@
 
 	function sleep(ms) {
 		return new Promise(fulfil => setTimeout(fulfil, ms));
+	}
+	const modeChange = (md) => () => {
+		editor.setOption("mode",md);
+		// For html set htmlMode to true
 	}
 </script>
 
@@ -244,6 +250,12 @@
 		height: auto;
 	}
 </style>
+
+<button type="button" on:click={modeChange('text/html')} >Html</button>
+<button type="button" on:click={modeChange('text/css')} >CSS</button>
+<button type="button" on:click={modeChange('text/x-scss')} >SCSS</button>
+<button type="button" on:click={modeChange('text/x-less')} >LESS</button>
+<button type="button" on:click={modeChange('text/x-styl')} >Stylus</button>
 
 <div class='codemirror-container' class:flex bind:offsetWidth={w} bind:offsetHeight={h}>
 	<!-- svelte-ignore a11y-positive-tabindex -->
