@@ -44,6 +44,9 @@ export enum events {
   template_list,
   template_mutate,
 
+  css_list,
+  css_mutate,
+
   account = 60,
 
   register_user,

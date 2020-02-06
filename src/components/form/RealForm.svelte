@@ -15,6 +15,7 @@ import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 import JsonEditor from './input/JsonEditor.svelte'
 import Flatpicker from './input/Flatpicker.svelte'
+import CodeMirror from './input/codemirror/CodeMirror.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
@@ -70,7 +71,8 @@ export let doms = {}
     multi_select_bool_properties,
     flatpicker,
     WYSIWYG,
-    serial
+    serial,
+    codemirror
   };
 
 
@@ -175,13 +177,10 @@ $: {
    		<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
     {:else if types[i] === FormType.select}
       <span>{labels[i]}</span>
-      <TableForm bind:this={doms[i]} multiSelect={false} {...props[i]} />
+      <TableForm bind:values={f} bind:this={doms[i]} multiSelect={false} {...props[i]} />
     {:else if types[i] === FormType.radio}
       <span>{labels[i]}</span>
-      <radio
-      bind:this={doms[i]}
-      {...props[i]}
-       />
+      <radio bind:this={doms[i]}  {...props[i]} />
     {:else if types[i] === FormType.multi_select}
     	<div>
      		<span>{labels[i]}</span>
@@ -200,6 +199,9 @@ $: {
     {:else if types[i] === FormType.jsoneditor}
       <span>{labels[i]}</span>
       <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+    {:else if types[i] === FormType.codemirror}
+      <span>{labels[i]}</span>
+      <CodeMirror bind:value={f} code={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.flatpicker}
       <span>{labels[i]}</span>
       <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />

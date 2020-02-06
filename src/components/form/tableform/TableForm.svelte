@@ -14,7 +14,7 @@
 	export let boolprop = false
 	export let bi = 1 // boolPropIndex
 	
-	let data = []
+	export let data = []
 
 	//$: newAvailableOps = data.filter(x=> !values.includes(x[keyIdx]))
 	let newAvailableOps = []
@@ -69,6 +69,15 @@
 		} else {
 			console.log('cant get fetch_evt')
 		}
+
+		// set single select first value if empty:
+		if(!multiSelect){
+			if(data.length){
+				if(!values){
+					values = data[0]?.[0]  ?? ""
+				}
+			}
+		}
 	})
 	function onFetchGet(all){
 		const [[h, d]] = all
@@ -76,7 +85,7 @@
 		if(!multiSelect){
 			if(!values) {
 				if(data.length){
-					values = data[0]
+					values = data[0] // Is this correct?? it should be data[0][0]
 				}
 			}
 		} else {
