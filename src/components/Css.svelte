@@ -1,5 +1,5 @@
 <script>
-	import { css, css_frameworks, selected_frameworks } from '../modules/global_stores/css'
+	import { css, css_frameworks, selected_frameworks, css_count } from '../modules/global_stores/css'
 </script>
 
 
@@ -14,10 +14,10 @@
 
 
 {#each Object.entries($css) as [key, comp], index (key)}
-		{#if comp.css.count}
-			{#each comp.css.links as l, index (l)}
-				<link rel="stylesheet" href="{l}">
-			{/each}
+		{#if $css_count[key]}
+			
+				<link rel="stylesheet" href="{comp.link}">
+			
 		{/if}
 {/each}
 

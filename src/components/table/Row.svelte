@@ -43,7 +43,7 @@
   }
 </script>
 
-        <tr class="{selected ? $css.table.class.selected || 'selected' : ''}" >
+        <tr class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
           {#if showRowNum}
             <td>{rowNum}</td>
           {/if}

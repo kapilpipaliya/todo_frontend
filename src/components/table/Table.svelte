@@ -15,8 +15,9 @@
   import ContextMenu from './ContextMenu.svelte'
 
   const dp = createEventDispatcher()
-  import { css } from '../../modules/global_stores/css'
+  import { css, css_count } from '../../modules/global_stores/css'
   declare let $css
+  declare let $css_count
   import { default_filter } from '../../modules/global_stores/default_filter'
   declare let $default_filter
   // import Card from "../components/Card.svelte";
@@ -228,11 +229,11 @@
 
   onMount(async () => {
     mounted = true
-    $css.table.css.count = $css.table.css.count + 1
+    $css_count.table = $css_count.table + 1
   })
   onDestroy(() => {
       unRegister();
-      $css.table.css.count = $css.table.css.count - 1
+      $css_count.table = $css_count.table - 1
   })
 
   const bindOnce = () => {
