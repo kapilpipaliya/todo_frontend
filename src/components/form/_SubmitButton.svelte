@@ -2,7 +2,9 @@
   export let isSaving = false
   export let disabled = false
   export let title = ''
+  export let label = 'Save changes'
 
+  $: label = label || 'Save changes'
   let classn;
   $: {
     classn = 'success '
@@ -23,5 +25,5 @@
 </style>
 
 <button type="submit" class={classn} disabled={isSaving || disabled} {title}>
-  <slot>Save changes</slot>
+  <slot>{label}</slot>
 </button>

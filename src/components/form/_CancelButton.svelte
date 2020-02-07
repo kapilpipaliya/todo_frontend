@@ -3,6 +3,10 @@
   const dp = createEventDispatcher()
 
   export let isSaving = false
+  export let label = "Cancel"
+
+  $: label = label || 'Cancel'
+  
   $: buttonSaveClass = isSaving === true ? 'disabled loading' : 'success'
   export let key = 0
 </script>
@@ -18,5 +22,5 @@
   class={buttonSaveClass}
   disabled={isSaving}
   on:click={() => dp('close', key)}>
-  Cancel
+  {label}
 </button>

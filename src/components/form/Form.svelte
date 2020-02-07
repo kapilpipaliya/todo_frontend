@@ -10,6 +10,10 @@ export let headers
 export let form
 export let form_disabled = true
 export let save = ()=>0
+export let buttonlabels = {}
+
+let saveLabel = buttonlabels?.save ?? ""
+let cancelLabel = buttonlabels?.cancel ?? ""
 // export let options = {}
 
 let labels = []
@@ -62,8 +66,8 @@ onMount(()=> {
 	  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
 	  />
 	  <footer>
-	    <SubmitButton isSaving={isSaving} />
-	    <CancelButton isSaving={isSaving} {key} on:close />
+	    <SubmitButton isSaving={isSaving} label={saveLabel} />
+	    <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	  </footer>
 	</form>
 {/if}

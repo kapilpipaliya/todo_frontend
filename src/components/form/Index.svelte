@@ -8,6 +8,7 @@
   export let schema_key
   export let form = []
   export let fetchConfig = {type: form_type.array, project: null}
+  export let buttonlabels = {}
 
   let project = getContext('project')
   let project_ctx = writable([])
@@ -52,6 +53,7 @@
 	bind:headers={$headers}
 	bind:form={$form_}
 	on:close={f.onClose} on:close
+  {buttonlabels}
 />
 <div>{$er}</div>
 {JSON.stringify($form_)}

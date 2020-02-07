@@ -8,8 +8,8 @@
   export let addnew_type
   export let addnew_labels
 
-  let saveLabel = addnew_labels?.save ?? "Save Changes"
-  let cancelLabel = addnew_labels?.cancel ?? "Cancel"
+  // let saveLabel = addnew_labels?.save ?? "Save Changes"
+  // let cancelLabel = addnew_labels?.cancel ?? "Cancel"
 
 </script>
 {#if addnew_type == "button"}
@@ -26,7 +26,8 @@
       key={null}
       {schema_key}
       on:close={toogleAddForm}
-      on:successSave={successSave} />
+      on:successSave={successSave} 
+      buttonlabels={addnew_labels}/>
   {/if}
 {:else}
     <svelte:component
@@ -34,5 +35,6 @@
       key={null}
       {schema_key}
       on:close={toogleAddForm}
-      on:successSave={successSave} />
+      on:successSave={successSave} 
+      buttonlabels={addnew_labels}/>
 {/if}
