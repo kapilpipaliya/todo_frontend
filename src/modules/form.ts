@@ -59,7 +59,7 @@ class FormBasic {
     this.onReset = this.onReset.bind(this)
     this.onClose = this.onClose.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
-    this.options = writable({})
+    this.options = writable({notify: true})
     this.schema_key = ""
     this.initial_form = []
   }
@@ -106,7 +106,10 @@ class FormBasic {
     if (d[0]) {
       const translation_store = get(translation)
       const save_msg = R.view(R.lensPath(['msg', 'save']), translation_store);
-      notifier.success(save_msg, 3000)
+      const options = get(this.options)
+      if(options.notify){
+        notifier.success(save_msg, 3000)
+      }
       er = ''
       this.dp('successSave', { key: this.key, d })
       this.onReset()
@@ -228,6 +231,7 @@ export class FormArray extends FormBasic {
     const schema = d[0][0]
     const options = d[0][1] ?? {disabled: false}
     this.options.set(options)
+    console.log(options)
     this.headers.set(schema)
     const form_values = d[1]
     this.isSaving.set(false)

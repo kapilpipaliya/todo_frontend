@@ -10,7 +10,7 @@ export let headers
 export let form
 export let form_disabled = true
 export let save = ()=>0
-export let buttonlabels = {}
+export let buttonlabels = {save: "", cancel : ""}
 export let showCancel = true
 export let onReset
 
