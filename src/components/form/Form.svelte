@@ -2,8 +2,8 @@
 import { onMount } from '../../modules/index'
 import RealForm from './RealForm.svelte'
 
-import SubmitButton from '../_SubmitButton.svelte'
-import CancelButton from '../_CancelButton.svelte'
+import SubmitButton from './_SubmitButton.svelte'
+import CancelButton from './_CancelButton.svelte'
 export let key
 export let isSaving
 export let headers

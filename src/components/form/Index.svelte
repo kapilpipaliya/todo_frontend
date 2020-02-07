@@ -2,7 +2,7 @@
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type } from '../../modules/index'
   declare let $ws_connected
   import { FormArray } from '../../modules/form'
-  import { Form, SubmitButton, CancelButton } from '../index'
+  import Form from './Form.svelte'
   import {schemaEvents} from '../../modules/schema_events'
   export let key = "0"
   export let schema_key

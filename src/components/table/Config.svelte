@@ -1,8 +1,8 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip, Unique } from '../../modules/index'
 
-  import SubmitButton from '../_SubmitButton.svelte'
-  import CancelButton from '../_CancelButton.svelte'
+  import SubmitButton from '../form/_SubmitButton.svelte'
+  import CancelButton from '../form/_CancelButton.svelte'
   export let schema_key = ''
   const dp = createEventDispatcher()
 
