@@ -12,6 +12,7 @@ export let form_disabled = true
 export let save = ()=>0
 export let buttonlabels = {}
 export let showCancel = true
+export let onReset
 
 let saveLabel = buttonlabels?.save ?? ""
 let cancelLabel = buttonlabels?.cancel ?? ""
@@ -71,6 +72,7 @@ onMount(()=> {
 	    {#if showCancel}
 	    	<CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	    {/if}
+	    <button type='button' on:click={onReset}>reset</button>
 	  </footer>
 	</form>
 {/if}

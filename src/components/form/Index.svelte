@@ -56,6 +56,7 @@
 	on:close={f.onClose} on:close
   {buttonlabels}
   {showCancel}
+  onReset={f.onReset}
 />
 <div>{$er}</div>
 {JSON.stringify($form_)}

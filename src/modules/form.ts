@@ -1,5 +1,6 @@
 import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
+import * as RD from 'rambda'
 import * as RX from 'rambdax'
 import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, notifier, merge } from './index'; // not recommanded
 import {translation} from './global_stores/translation'
@@ -23,6 +24,7 @@ class FormBasic {
   public form_disabled: Writable<boolean>
   public schema_key: string
   public options: Writable<{}>
+  public initial_form: []
 
   constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
     this.S = S
@@ -54,10 +56,12 @@ class FormBasic {
     this.form_disabled = writable(true)
 
     this.onSave = this.onSave.bind(this)
+    this.onReset = this.onReset.bind(this)
     this.onClose = this.onClose.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
     this.options = writable({})
     this.schema_key = ""
+    this.initial_form = []
   }
   bindMutate(){
     this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
@@ -92,6 +96,9 @@ class FormBasic {
       args.push(this.unsub_evt)
     }
     this.S.trigger([[this.mutate_evt, args]])
+  }
+  onReset() {
+    this.form.set(RD.clone(this.initial_form))
   }
   onMutateGet([d]: [[boolean, string]]) {
     this.isSaving.set(false)
@@ -161,6 +168,7 @@ export class FormArray extends FormBasic {
   public headers: Writable<[]>
   public form: Writable<Array<number | string>>
   public schemaGetEvt: Array<number | string>
+  
   constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}) {
     super(S, key, ev, dp, config);
     this.schema_key = schema_key
@@ -173,6 +181,7 @@ export class FormArray extends FormBasic {
     }
     this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
     this.onFormDataGet = this.onFormDataGet.bind(this)
+    
   }
   bindAll(){
     this.bindSchemaDataGet()
@@ -228,6 +237,7 @@ export class FormArray extends FormBasic {
     const form_store = get(this.form)
     const new_form = merge(form_store, form)
     this.form.set(new_form)
+    this.initial_form = RD.clone(new_form)
     
     this.form_disabled.set(options.ds ?? false) // options.disabled
   }
