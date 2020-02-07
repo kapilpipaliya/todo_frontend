@@ -18,7 +18,7 @@
 
   fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
 
-  const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig), 
+  export const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig), 
     er = f.er,
     isSaving = f.isSaving, 
     form_ = f.form, 

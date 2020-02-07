@@ -81,6 +81,7 @@
   let config = false
   let contextmenu = false
   let showRowNum = true
+  let rowEditDoms = []
 
   let addnew_pos = "t"
   let addnew_type = "button"
@@ -476,7 +477,7 @@
     const { key } = e.detail
     deleteRows_([key])
   }
-  const onDeleteRow = key => async () => {
+  const onDeleteRow = (key, rowIdx) => async () => {
     const r = confirm('Are You Sure?')
     if (r == true) {
       mutate_evt.pop()
@@ -484,12 +485,20 @@
 
       const filter = [`="${key}"`]
       const [d] = await new Promise((resolve, reject) => {
+        // send unsubscribe event if edit is open
+        const args = ['DEL', filter, fetchConfig]
+        if(rowEditDoms[rowIdx]){
+          const unsu_event = rowEditDoms[rowIdx]?.f?.unsub_evt ?? null
+          if(unsu_event){
+            args.push(unsu_event)
+          }
+        }
         S.bind_(
           mutate_evt,
           d => {
             resolve(d)
           },
-          ['DEL', filter, fetchConfig]
+          args
         )
       })
       if (d[0]) {
@@ -802,7 +811,7 @@
         <Row 
           selected={selectedRowsKeys.includes(getValue(l[0]))}
           {showRowNum}
-          rowNum={cindex + 1}
+          rowIndex={cindex}
           isGlobal={isGlobal(l[0])}
           rowValue={l}
           {headerIsvisibleColumnsRow}
@@ -822,6 +831,7 @@
           {deleteRow}
           {getValue}
           {fetchConfig}
+          {rowEditDoms}
         />
       {/each}
     </tbody>

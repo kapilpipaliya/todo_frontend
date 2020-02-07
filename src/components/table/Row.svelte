@@ -10,7 +10,7 @@
   
   export let selected: boolean
   export let showRowNum
-  export let rowNum
+  export let rowIndex
   export let isGlobal
   export let rowValue
   export let headerIsvisibleColumnsRow= []
@@ -30,6 +30,7 @@
   export let deleteRow
   export let getValue
   export let fetchConfig
+  export let rowEditDoms
 
   const org_id_ctx = getContext('org_id')
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
@@ -45,7 +46,7 @@
 
         <tr class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
           {#if showRowNum}
-            <td>{rowNum}</td>
+            <td>{rowIndex + 1}</td>
           {/if}
           <td>
               {#if !isGlobal}
@@ -77,7 +78,7 @@
           </td>
           <td>
               {#if !isGlobal}
-              <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]))()}>D</button>
+              <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]), rowIndex)()}>D</button>
               {/if}
           </td>
           {#each rowValue as c, index}
@@ -123,6 +124,7 @@
               {#if quickcomponent}
                 <svelte:component
                   this={quickcomponent}
+                  bind:this={rowEditDoms[rowIndex]}
                   key={getValue(rowValue[0])}
                   {schema_key}
                   {fetchConfig}
