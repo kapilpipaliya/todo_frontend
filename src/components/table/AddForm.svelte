@@ -5,9 +5,14 @@
   export let quickcomponent
   export let schema_key
   export let successSave
+  export let addnew_type
+  export let addnew_labels
+
+  let saveLabel = addnew_labels?.save ?? "Save Changes"
+  let cancelLabel = addnew_labels?.cancel ?? "Cancel"
 
 </script>
-
+{#if addnew_type == "button"}
   <button
     name="table_add"
     on:click={toogleAddForm}
@@ -23,3 +28,11 @@
       on:close={toogleAddForm}
       on:successSave={successSave} />
   {/if}
+{:else}
+    <svelte:component
+      this={quickcomponent}
+      key={null}
+      {schema_key}
+      on:close={toogleAddForm}
+      on:successSave={successSave} />
+{/if}

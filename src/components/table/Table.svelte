@@ -81,6 +81,13 @@
   let contextmenu = false
   let showRowNum = true
 
+  let addnew_pos = "t"
+  let addnew_type = "button"
+  let addnew_labels = {}
+  let rowType = "table"
+
+  let showHeader = true;
+
   let data_evt
   let unsub
   let mutate_evt
@@ -306,6 +313,11 @@
 
 
     options = d[4]
+    addnew_pos = options?.add?.pos ?? "t"
+    addnew_type = options?.add?.type ?? "button"
+    addnew_labels = options?.add?.l ?? {}
+    showHeader = options?.table?.header ?? true
+    rowType = options?.table?.row ?? "table"
     resetFilter_() // Take care....
   }
   function dropNotExisting(a1: string[], b1:string[]) {
@@ -720,17 +732,22 @@
 {#if $css.table}
 <div>
 
-  <AddForm
-    {toogleAddForm}
-    {doms}
-    {addnewform}
-    {quickcomponent}
-    {schema_key}
-    {successSave}
-  />
+  {#if addnew_pos == "t"}
+    <AddForm
+      {toogleAddForm}
+      {doms}
+      {addnewform}
+      {quickcomponent}
+      {schema_key}
+      {successSave}
+      {addnew_type}
+      {addnew_labels}
+    />
+  {/if}
   <hr />
 
   {er}
+{#if showHeader}
   <button class="" on:click={onResetFilter}>Reset Filters</button>
   <Pagination
     {items}
@@ -754,28 +771,31 @@
       on:close={() => (config = !config)}
       on:configApply={onConfigApply} />
   {/if}
+{/if}
 
 {#if authorized}
   <table>
-    <thead>
-      <Header
-          {mergeRowsCount}
-          {allSelected}
-          {onSelectAllClick}
-          {headerTitlesRow}
-          
-          {headerIsvisibleColumnsRow}
-          {headerVisibleColTypesRow}
-          {sortSettings}
-          {customFilter}
-          {filterSettings}
-          {hiddenColumns}
-          {onHeaderContext}
-          {onHandleFilter}
-          {onTextInputContext}
-          {onHandleSort}
-      />
-    </thead>
+    {#if showHeader}
+      <thead>
+        <Header
+            {mergeRowsCount}
+            {allSelected}
+            {onSelectAllClick}
+            {headerTitlesRow}
+            
+            {headerIsvisibleColumnsRow}
+            {headerVisibleColTypesRow}
+            {sortSettings}
+            {customFilter}
+            {filterSettings}
+            {hiddenColumns}
+            {onHeaderContext}
+            {onHandleFilter}
+            {onTextInputContext}
+            {onHandleSort}
+        />
+      </thead>
+    {/if}
     <tbody>
       {#each items as l, cindex (getValue(l[0]))}
         <Row 
@@ -807,6 +827,19 @@
   </table>
 {:else}
   <div>{er}</div>
+{/if}
+
+{#if addnew_pos == "b"}
+  <AddForm
+    {toogleAddForm}
+    {doms}
+    {addnewform}
+    {quickcomponent}
+    {schema_key}
+    {successSave}
+    {addnew_type}
+    {addnew_labels}
+  />
 {/if}
 </div>
 <ContextMenu
