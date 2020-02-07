@@ -9,6 +9,7 @@
   export let form = []
   export let fetchConfig = {type: form_type.array, project: null}
   export let buttonlabels = {}
+  export let showCancel = true
 
   let project = getContext('project')
   let project_ctx = writable([])
@@ -54,6 +55,7 @@
 	bind:form={$form_}
 	on:close={f.onClose} on:close
   {buttonlabels}
+  {showCancel}
 />
 <div>{$er}</div>
 {JSON.stringify($form_)}

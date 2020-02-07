@@ -36,5 +36,6 @@
       {schema_key}
       on:close={toogleAddForm}
       on:successSave={successSave} 
-      buttonlabels={addnew_labels}/>
+      buttonlabels={addnew_labels}
+      showCancel={false}/>
 {/if}
