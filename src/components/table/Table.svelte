@@ -404,8 +404,14 @@
   // =============================================================================
   // ================================Add Edit Row ===============================
   const toogleAddForm = () => {
-    addnewform = !addnewform
-    doms.addbutton.focus()
+    if(addnew_type == "button"){
+      addnewform = !addnewform
+      if(doms.addbutton){
+        doms.addbutton.focus()
+      } else {
+        console.log('no dom for add button!')
+      }
+    }
   }
   const closeForm_ = key => {
     const idx = quickview.findIndex(x => x == key)
@@ -438,7 +444,6 @@
     const { key, d } = e.detail
     if (key === null) {
       toogleAddForm()
-      doms.addbutton.focus()
     } else {
       closeForm_(key)
       editButtonFocus(key)

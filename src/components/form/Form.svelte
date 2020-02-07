@@ -72,7 +72,7 @@ onMount(()=> {
 	    {#if showCancel}
 	    	<CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	    {/if}
-	    <button type='button' on:click={onReset}>reset</button>
+	    {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
 	  </footer>
 	</form>
 {/if}

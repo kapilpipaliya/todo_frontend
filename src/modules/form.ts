@@ -109,6 +109,7 @@ class FormBasic {
       notifier.success(save_msg, 3000)
       er = ''
       this.dp('successSave', { key: this.key, d })
+      this.onReset()
     } else {
       er = d[1]
     }
