@@ -16,6 +16,7 @@ import Textarea from './input/Textarea.svelte'
 import JsonEditor from './input/JsonEditor.svelte'
 import Flatpicker from './input/Flatpicker.svelte'
 import CodeMirror from './input/codemirror/CodeMirror.svelte'
+import DropZone from './input/DropZone.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
@@ -75,7 +76,8 @@ export let doms = {}
     codemirror,
     save_time,
     inserted,
-    updated
+    updated,
+    dropzone
   };
 
 
@@ -213,6 +215,8 @@ $: {
       <div></div>
     {:else if types[i] === FormType.save_time}
       <div></div>
+    {:else if types[i] === FormType.dropzone}
+      <DropZone/>
     {:else}
       Unknown Component
     {/if}
