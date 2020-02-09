@@ -81,7 +81,10 @@
 	})
 	function onFetchGet(all){
 		const [[h, d]] = all
-		data = d.r.result
+		data = d?.r?.result ?? false
+		if(data === false){
+			console.warn('returned data is not proper': all)
+		}
 		if(!multiSelect){
 			if(!values) {
 				if(data.length){

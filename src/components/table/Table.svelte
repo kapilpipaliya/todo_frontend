@@ -49,6 +49,7 @@
   // headers
   let headerVisibleColTypesRow = []
   let headerIsvisibleColumnsRow = []
+  let sortSettings = []
   let headerColumnPropsRow = []
 
 
@@ -57,7 +58,7 @@
   //internal:
   const hiddenColumns = [DisplayType.ARRAY, DisplayType.OBJECT, DisplayType.BINARY]
   let filterSettings = []
-  let sortSettings = []
+  
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
@@ -190,6 +191,7 @@
     // headers
     headerVisibleColTypesRow = []
     headerIsvisibleColumnsRow = []
+    sortSettings = []
     headerColumnPropsRow = []
 
 
@@ -198,7 +200,6 @@
     // internal:
     // hiddenColumns = [ARRAY, OBJECT, BINARY]
     filterSettings = []
-    sortSettings = []
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
@@ -304,7 +305,8 @@
     headerTitlesRow = d[0] ?? []
     headerVisibleColTypesRow = d[1] ?? []
     headerIsvisibleColumnsRow = d[2] ?? []
-    headerColumnPropsRow = d[3] ?? []
+    sortSettings = d[3] ?? []
+    headerColumnPropsRow = d[4] ?? []
     let i
     for (i = 0; i < headerIsvisibleColumnsRow.length; i++) {
       if (headerIsvisibleColumnsRow[i]) {
@@ -314,7 +316,7 @@
     }
 
 
-    options = d[4]
+    options = d[5]
     addnew_pos = options?.add?.pos ?? "t"
     addnew_type = options?.add?.type ?? "button"
     addnew_labels = options?.add?.l ?? {}
@@ -569,12 +571,12 @@
     } else {
       const sortOrder = sortSettings[col]
       sortSettings = []
-      if (sortOrder === undefined) {
+      if (sortOrder === null || sortOrder === undefined) {
         sortSettings[col] = 0
       } else if (sortOrder === 0) {
         sortSettings[col] = 1
       } else {
-        sortSettings[col] = undefined
+        sortSettings[col] = null
       }
     }
     refresh()

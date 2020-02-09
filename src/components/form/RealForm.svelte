@@ -72,7 +72,10 @@ export let doms = {}
     flatpicker,
     WYSIWYG,
     serial,
-    codemirror
+    codemirror,
+    save_time,
+    inserted,
+    updated
   };
 
 
@@ -134,6 +137,7 @@ $: {
                     continue
                   }
                 }
+
               }
             }
           }
@@ -206,6 +210,8 @@ $: {
       <span>{labels[i]}</span>
       <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.multi_select_hidden}
+      <div></div>
+    {:else if types[i] === FormType.save_time}
       <div></div>
     {:else}
       Unknown Component
