@@ -1,9 +1,6 @@
 <script>
 	import { css, css_frameworks, selected_frameworks, css_count } from '../modules/global_stores/css'
-</script>
-
-
-<svelte:head>
+/* No Framework load
 {#each Object.entries($css_frameworks) as [framework, link], index (framework)}
 	{#each $selected_frameworks as f, index (f)}
 		{#if framework == f}
@@ -11,6 +8,13 @@
 		{/if}
 	{/each}
 {/each}
+*/
+
+</script>
+
+
+<svelte:head>
+
 
 
 {#each Object.entries($css) as [key, comp], index (key)}
