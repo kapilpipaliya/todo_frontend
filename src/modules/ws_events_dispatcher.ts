@@ -34,6 +34,9 @@ export class ServerEventsDispatcher {
   private res: {}
   private callbacks: Record<string, any> 
   private conn: WebSocket
+  private isFirst: boolean
+  private firstCancelTimeout: number
+  private firstPayload: Array<[]>
 
   constructor(path: string, req:{}, res:{}) {
     this.bind = this.bind.bind(this)
@@ -51,12 +54,16 @@ export class ServerEventsDispatcher {
     this.dispatch = this.dispatch.bind(this)
     this.batchBind = this.batchBind.bind(this)
     this.batchBind_T = this.batchBind_T.bind(this)
+    this.delay_send = this.delay_send.bind(this)
 
     this.path = path
     this.req = req
     this.res = res
     this.setupConnection()
     this.callbacks = {}
+    this.isFirst = false
+    this.firstCancelTimeout = null
+    this.firstPayload = []
   }
   setupConnection() {
     this.conn = new WebSocket(this.path, [])
@@ -117,6 +124,10 @@ export class ServerEventsDispatcher {
   unbind(event: event) {
     this.callbacks[JSON.stringify(event)] = []
   }
+  delay_send(){
+    this.conn.send(JSON.stringify(this.firstPayload))
+    this.isFirst = false
+  }
   trigger(payload) {
     const f = this.trigger
     switch (this.conn.readyState) {
@@ -128,7 +139,15 @@ export class ServerEventsDispatcher {
         })
         return this
       case 1: // OPEN
-        this.conn.send(JSON.stringify(payload)) // <= send JSON data to socket server
+        if(this.isFirst){
+          for(let i = 0; i < payload.length; i++){
+            this.firstPayload.push(payload[i])
+          }
+          clearTimeout(this.firstCancelTimeout)
+          this.firstCancelTimeout = setTimeout(this.delay_send, 50);
+        } else {
+          this.conn.send(JSON.stringify(payload)) // <= send JSON data to socket server
+        }
         return this
       case 2: // CLOSING
       case 3: //CLOSED
@@ -259,6 +278,7 @@ export class ServerEventsDispatcher {
   }
   onopen(evt: Event) {
     ws_connected.set(true)
+    this.isFirst = true
     //console.log(this.conn.extensions);
     //console.log("Server Opened")
     this.dispatch(['open', '', 0], [])
