@@ -6,8 +6,8 @@
 </script>
 
 <Dropzone
-  dropzoneClass="dropzoneClass"
-  hooveringClass="hooveringClass"
+  dropzoneClass="dropzone"
+  hooveringClass="dropzone-hoovering"
   id="id"
   dropzoneEvents={{ addedfile, drop, init }}
   options={{ clickable: true, acceptedFiles: 'text/javascript', maxFilesize: 256, init }}>

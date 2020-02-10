@@ -7,7 +7,7 @@
   $: label = label || 'Save changes'
   let classn;
   $: {
-    classn = 'success '
+    classn = 'submit success '
     if(isSaving || disabled) classn += 'disabled '
     if(isSaving) classn += 'loading '
   }
@@ -15,14 +15,6 @@
 
 </script>
 
-<style>
-  .success {
-    color: green;
-  }
-  .loading {
-    color: grey;
-  }
-</style>
 
 <button type="submit" class={classn} disabled={isSaving || disabled} {title}>
   <slot>{label}</slot>

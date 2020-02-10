@@ -1,5 +1,7 @@
 <script lang='ts'>
   import { onMount, onDestroy, tick } from '../../../modules/index'
+  import { css_count } from '../../../modules/global_stores/css'
+  declare let $css_count
  	export let value = {}
   export let disabled = false
   
@@ -8,6 +10,8 @@
   declare let JSONEditor
 
   onMount(async () => {
+    $css_count.jsoneditor = ($css_count.jsoneditor || 0) + 1
+    
     const options = {
       mode: disabled ? 'view' : 'code',
       modes: ["code", "tree"],
@@ -23,12 +27,12 @@
     await tick();
     jsoneditor = new JSONEditor(jsonediDom, options, value)
   })
+  onDestroy(() => {
+    $css_count.jsoneditor = $css_count.jsoneditor - 1
+  })
 
 </script>
 
-<svelte:head>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/7.0.5/jsoneditor.min.css" rel="stylesheet" type="text/css">
-</svelte:head>
 
 <div>
 	<div name='form' bind:this={jsonediDom} style="width: 1200px; height: 400px;" />

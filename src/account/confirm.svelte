@@ -74,9 +74,7 @@
   }
 </script>
 
-<style>
 
-</style>
 
 {#if confirming}
   <div class="header">

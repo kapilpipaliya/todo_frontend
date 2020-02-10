@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { onMount } from '../../modules/index'
+import { onMount, onDestroy } from '../../modules/index'
 import RealForm from './RealForm.svelte'
 
 import SubmitButton from './_SubmitButton.svelte'
@@ -13,6 +13,9 @@ export let save = ()=>0
 export let buttonlabels = {save: "", cancel : ""}
 export let showCancel = true
 export let onReset
+
+import { css_count } from '../../modules/global_stores/css'
+declare let $css_count
 
 let saveLabel = buttonlabels?.save ?? ""
 let cancelLabel = buttonlabels?.cancel ?? ""
@@ -57,6 +60,10 @@ $: {
 }
 onMount(()=> {
    mounted = true
+   $css_count.submit_buttons = ($css_count.submit_buttons || 0) + 1
+})
+onDestroy(() => {
+  $css_count.submit_buttons = $css_count.submit_buttons - 1
 })
 
 </script>

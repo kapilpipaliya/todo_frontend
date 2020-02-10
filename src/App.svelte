@@ -50,6 +50,8 @@
 
 	import { NotificationDisplay } from './components/index'
 	let n
+
+	import ScrollTop from './components/ScrollTop.svelte'
 	
 	let mounted = false
 	let er = ''
@@ -176,6 +178,8 @@
 {/if}
 
 <NotificationDisplay bind:this={n} />
+
+<ScrollTop/>
 
 <nav>
 	Current User: {email}

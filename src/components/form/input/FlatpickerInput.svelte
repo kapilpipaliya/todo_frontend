@@ -1,6 +1,8 @@
 <script lang='ts'>
 	import { onMount, createEventDispatcher } from '../../../modules/index'
 	import flatpickr from 'flatpickr';
+	import { css_count } from '../../../modules/global_stores/css'
+	declare let $css_count
 	export let disabled
 
 	const hooks = new Set([
@@ -34,10 +36,12 @@
 		fp = flatpickr(elem, Object.assign(
 			addHooks(options),
 			element ? { wrap: true } : {}
+		$css_count.flatpickr = ($css_count.flatpickr || 0) + 1
     ));
 
 		return () => {
 			fp.destroy();
+			$css_count.flatpickr = $css_count.flatpickr - 1
 		}
 	});
 
@@ -85,7 +89,7 @@
 
 
 <svelte:head>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	
 </svelte:head>
 
 <slot>

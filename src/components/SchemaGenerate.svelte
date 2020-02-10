@@ -38,11 +38,7 @@
 	]
 
 </script>
-<style>
-	input{
-		width: 120px;
-	}
-</style>
+
 <div>
 	Columns:
 	<br>

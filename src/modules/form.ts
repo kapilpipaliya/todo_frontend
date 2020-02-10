@@ -2,7 +2,8 @@ import * as R from 'ramda'
 import * as RA from 'ramda-adjunct'
 import * as RD from 'rambda'
 import * as RX from 'rambdax'
-import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, notifier, merge } from './index'; // not recommanded
+import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, merge } from './index'; // not recommanded
+import { notifier } from '../components/thirdparty/svelte-notifications/src/index'
 import {translation} from './global_stores/translation'
 import {default_form} from './global_stores/default_form'
 
@@ -59,7 +60,7 @@ class FormBasic {
     this.onReset = this.onReset.bind(this)
     this.onClose = this.onClose.bind(this)
     this.onMutateGet = this.onMutateGet.bind(this)
-    this.options = writable({notify: true})
+    this.options = writable({disabled: false, notify: true})
     this.schema_key = ""
     this.initial_form = []
   }
@@ -229,9 +230,10 @@ export class FormArray extends FormBasic {
   }
   onFormDataGet([d]){
     const schema = d[0][0]
-    const options = d[0][1] ?? {disabled: false}
-    this.options.set(options)
-    console.log(options)
+    const options = d[0][1] ?? {}
+    const old_options = get(this.options)
+    const newOptions = {...old_options, ...options}
+    this.options.set(newOptions)
     this.headers.set(schema)
     const form_values = d[1]
     this.isSaving.set(false)

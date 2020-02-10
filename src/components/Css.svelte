@@ -26,3 +26,4 @@
 {/each}
 
 </svelte:head>
+{JSON.stringify($css_count)}

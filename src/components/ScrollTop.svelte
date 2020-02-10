@@ -1,5 +1,7 @@
-<script>
+<script lang='ts'>
   import { onMount, onDestroy, createEventDispatcher } from '../modules/index'
+  import { css_count } from '../modules/global_stores/css'
+  declare let $css_count
   // How TO - Scroll Back To Top Button
   // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
   let button
@@ -9,9 +11,11 @@
       window.onscroll = function() {
         scrollFunction()
       }
+      $css_count.scrolltop = ($css_count.scrolltop || 0) + 1
   })
   onDestroy(() => {
       window.onscroll = undefined
+      $css_count.scrolltop = $css_count.scrolltop - 1
   })
   function scrollFunction() {
     if (
@@ -31,26 +35,5 @@
   }
 </script>
 
-<style>
-  button {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 30px;
-    z-index: 99;
 
-    border: none;
-    outline: none;
-    background-color: red;
-    color: white;
-    cursor: pointer;
-    padding: 15px;
-    border-radius: 4px;
-  }
-
-  button:hover {
-    background-color: #555;
-  }
-</style>
-
-<button on:click={topFunction} bind:this={button} title="Go to top">Top</button>
+<button class={"scrolltop"} on:click={topFunction} bind:this={button} title="Go to top">Top</button>

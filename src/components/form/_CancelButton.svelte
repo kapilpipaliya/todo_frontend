@@ -7,15 +7,9 @@
 
   $: label = label || 'Cancel'
   
-  $: buttonSaveClass = isSaving === true ? 'disabled loading' : 'success'
+  $: buttonSaveClass = isSaving === true ? 'cancel disabled loading' : 'cancel'
   export let key = 0
 </script>
-
-<style>
-  button {
-    color: darkred;
-  }
-</style>
 
 <button
   type="button"
