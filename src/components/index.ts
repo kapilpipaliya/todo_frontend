@@ -5,6 +5,7 @@ import Table from './table/Table.svelte'
 import { Tabs, Tab, TabList, TabPanel } from './thirdparty/svelte-tabs/src/index'
 
 import Form from './form/Form.svelte'
+import Error from './Error.svelte'
 
 export {
   Table,
@@ -17,5 +18,6 @@ export {
   TabList,
   TabPanel,
 
-  Form
+  Form,
+  Error
 }

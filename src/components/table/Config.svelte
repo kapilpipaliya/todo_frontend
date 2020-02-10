@@ -3,6 +3,7 @@
 
   import SubmitButton from '../form/_SubmitButton.svelte'
   import CancelButton from '../form/_CancelButton.svelte'
+  import Error from '../Error.svelte'
   export let schema_key = ''
   const dp = createEventDispatcher()
 
@@ -169,7 +170,7 @@
       {/each}
     </ul>
   {/if}
-  <div>{er}</div>
+  <Error {er} />
   <footer>
     <SubmitButton {isSaving} title="Save current changes" />
     <button

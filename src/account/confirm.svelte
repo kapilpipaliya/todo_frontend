@@ -1,5 +1,6 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, Unique } from '../modules/index'
+  import Error from '../components/Error.svelte'
   export let currentRoute
 
   let mounted = false
@@ -84,7 +85,7 @@
 {:else}
   <div class="header">
     <h1>{result_title}</h1>
-    <p>{er}</p>
+    <Error {er} />
   </div>
 
   <div class="signin">
