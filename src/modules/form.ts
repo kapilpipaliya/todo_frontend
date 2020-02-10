@@ -59,14 +59,12 @@ class FormBasic {
     this.onSave = this.onSave.bind(this)
     this.onReset = this.onReset.bind(this)
     this.onClose = this.onClose.bind(this)
-    this.onMutateGet = this.onMutateGet.bind(this)
+    
     this.options = writable({disabled: false, notify: true})
     this.schema_key = ""
     this.initial_form = []
   }
-  bindMutate(){
-    this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
-  }
+
   clearError() {
     this.er.set('')
   }
@@ -78,11 +76,11 @@ class FormBasic {
     if (this.key && this.unsub_evt.length) this.S.trigger([[this.unsub_evt, {}]])
   }
   fetch() {
-    if(this.data_evt) {
+    if(this.mutate_evt) {
       const filter = [`="${this.key}"`]
       // is schema_key passing neccessary?
-      const args = [filter, [], [], { ...this.config, form: true, schema: this.schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
-      const e1 = [this.data_evt, args]
+      const args = ["s", filter, { ...this.config, schema: this.schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
+      const e1 = [this.mutate_evt, args]
       this.S.trigger([e1])
     }
   }
@@ -101,6 +99,35 @@ class FormBasic {
   onReset() {
     this.form.set(RD.clone(this.initial_form))
   }
+
+}
+
+export class Form extends FormBasic {
+  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
+    super(S, key, e, dp, config);
+    this.form = writable({})
+    this.onMutateGet = this.onMutateGet.bind(this)
+    this.onFormDataGet = this.onFormDataGet.bind(this)
+  }
+  bindMutate(){
+    this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
+  }
+  bindAll(){
+    this.bindFormDataGet()
+    this.bindMutate()
+  }
+  bindFormDataGet(){
+    this.S.bind$(this.data_evt, this.onFormDataGet, 1)
+  }
+  onFormDataGet(d){
+    this.isSaving.set(false)
+    const form = Form.onFormDataGetStatic(d)
+    if ((form as {_key: string})._key) {
+     this.isUpdate = true
+    }
+    this.form.set(form)
+    this.form_disabled.set(false)
+  }
   onMutateGet([d]: [[boolean, string]]) {
     this.isSaving.set(false)
     let er
@@ -118,30 +145,6 @@ class FormBasic {
       er = d[1]
     }
     this.er.set(er)
-  }
-}
-
-export class Form extends FormBasic {
-  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
-    super(S, key, e, dp, config);
-    this.form = writable({})
-    this.onFormDataGet = this.onFormDataGet.bind(this)
-  }
-  bindAll(){
-    this.bindFormDataGet()
-    this.bindMutate()
-  }
-  bindFormDataGet(){
-    this.S.bind$(this.data_evt, this.onFormDataGet, 1)
-  }
-  onFormDataGet(d){
-    this.isSaving.set(false)
-    const form = Form.onFormDataGetStatic(d)
-    if ((form as {_key: string})._key) {
-     this.isUpdate = true
-    }
-    this.form.set(form)
-    this.form_disabled.set(false)
   }
   //static functions:
   static onFormDataGetStatic([d]:[{ r: {result:[[]] }, m: {result: [[]]}, n: {result: [[]]}, d: {} }]) {
@@ -184,23 +187,19 @@ export class FormArray extends FormBasic {
     } else {
       this.schemaGetEvt = []
     }
+    this.onMutateGet = this.onMutateGet.bind(this)
     this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
-    this.onFormDataGet = this.onFormDataGet.bind(this)
-    
+  }
+  bindMutate(){
+    this.S.bind$(this.mutate_evt, this.onMutateGet, 1)
   }
   bindAll(){
     this.bindSchemaDataGet()
-    this.bindFormDataGet()
     this.bindMutate()
   }
   bindSchemaDataGet(){
     if(this.schemaGetEvt) {
       this.S.bind$(this.schemaGetEvt, this.onSchemaDataGet, 1)
-    }
-  }
-  bindFormDataGet(){
-    if(this.data_evt) {
-      this.S.bind$(this.data_evt, this.onFormDataGet, 1)
     }
   }
   onDestroy() {
@@ -215,8 +214,8 @@ export class FormArray extends FormBasic {
       //const project_data_store = get(project_data)
       // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
       // Now auto unsubscribing no need to pass  , ...(this.isUpdate ?  {unsub: this.data_evt} : {})
-      const fetchConfig = { ...this.config, form: true, schema: this.schema_key}
-      const args = [filter, [], [], fetchConfig]
+      const fetchConfig = { ...this.config, schema: this.schema_key}
+      const args = ["s", filter, fetchConfig] // Todo Fix on c++ side too.
       const e1 = [this.schemaGetEvt, args]
       this.S.trigger([e1])
     } else {
@@ -225,28 +224,48 @@ export class FormArray extends FormBasic {
   }
   onSchemaDataGet(d){
     //this.headers.set(d[0])
-    this.onFormDataGet(d)
-    super.fetch()
+    this.onMutateGet(d)
+    //super.fetch()
   }
-  onFormDataGet([d]){
-    const schema = d[0][0]
-    const options = d[0][1] ?? {}
-    const old_options = get(this.options)
-    const newOptions = {...old_options, ...options}
-    this.options.set(newOptions)
-    this.headers.set(schema)
-    const form_values = d[1]
-    this.isSaving.set(false)
-    const form = this.onFormDataGetStatic(form_values)
-    if (form[0]) {
-     this.isUpdate = true
+  onMutateGet([d]) {
+    if(Array.isArray(d[0])){
+      const schema = d[0][0]
+      const options = d[0][1] ?? {}
+      const old_options = get(this.options)
+      const newOptions = {...old_options, ...options}
+      this.options.set(newOptions)
+      this.headers.set(schema)
+      const form_values = d[1]
+      this.isSaving.set(false)
+      const form = this.onFormDataGetStatic(form_values)
+      if (form[0]) {
+       this.isUpdate = true
+      }
+      const form_store = get(this.form)
+      const new_form = merge(form_store, form)
+      this.form.set(new_form)
+      this.initial_form = RD.clone(new_form)
+      
+      this.form_disabled.set(options.ds ?? false) // options.disabled
+    } else {
+      this.isSaving.set(false)
+      let er
+      if (d[0]) {
+        const translation_store = get(translation)
+        const save_msg = R.view(R.lensPath(['msg', 'save']), translation_store);
+        const options = get(this.options)
+        if(options.notify){
+          notifier.success(save_msg, 3000)
+        }
+        er = ''
+        this.dp('successSave', { key: this.key, d })
+        this.onReset()
+      } else {
+        er = d[1]
+      }
+      this.er.set(er)
     }
-    const form_store = get(this.form)
-    const new_form = merge(form_store, form)
-    this.form.set(new_form)
-    this.initial_form = RD.clone(new_form)
-    
-    this.form_disabled.set(options.ds ?? false) // options.disabled
+
   }
   //static functions:
   mergeFormValues(f) {
