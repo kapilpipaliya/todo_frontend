@@ -17,8 +17,7 @@
   import Error from '../Error.svelte'
 
   const dp = createEventDispatcher()
-  import { css, css_count } from '../../modules/global_stores/css'
-  declare let $css
+  import { css_count } from '../../modules/global_stores/css'
   declare let $css_count
   import { default_filter } from '../../modules/global_stores/default_filter'
   declare let $default_filter
@@ -767,8 +766,8 @@
 </script>
 
 
-{#if $css.table}
-<div>
+
+<div class='table_wrap'>
 
   {#if addnew_pos == "t"}
     <AddForm
@@ -881,6 +880,7 @@
   />
 {/if}
 </div>
+
 <ContextMenu
   {closeHeaderMenu}
   {contextmenu}
@@ -895,4 +895,4 @@
   {headerMenuColumn}
   {inputHeaderMenuColumn}
 />
-{/if}
+
