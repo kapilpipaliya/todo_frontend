@@ -16,7 +16,9 @@
     type="number"
     bind:value={limit}
     on:change={onLimitChange}
-    min="0" />
+    min="0"
+    title='press Enter/Tab'
+    />
   {#if false}
     <button class="" on:click={refresh}>Refresh</button>
   {/if}

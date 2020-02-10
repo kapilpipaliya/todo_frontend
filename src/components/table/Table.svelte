@@ -14,6 +14,7 @@
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
   import ContextMenu from './ContextMenu.svelte'
+  import Error from '../Error.svelte'
 
   const dp = createEventDispatcher()
   import { css, css_count } from '../../modules/global_stores/css'
@@ -65,9 +66,9 @@
   let first_visibile_column = 0
   let fetchConfig = { type: form_type.array, project: null } // also set level latter
   // pagination:
-  let limit = Number(query.limit) ?? 0
+  let limit = Number(query.limit) || 0
   let pages = [1, 2]
-  let current_page = Number(query.page) ?? 1
+  let current_page = Number(query.page) || 1
 
   let total_pages = Math.max(current_page, 1)
 
@@ -206,9 +207,9 @@
     first_visibile_column = 0
     fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
     // pagination:
-    limit = Number(query.limit) ?? 0
+    limit = Number(query.limit) || 0
     pages = [1, 2]
-    current_page = Number(query.page) ?? 1
+    current_page = Number(query.page) || 1
 
     total_pages = Math.max(current_page, 1)
 
@@ -544,6 +545,7 @@
   // ============================================================================
   // ================================Pagination==================================
   const calc_pagination = () => {
+    //console.log(count, limit, total_pages, pages, current_page)
     if (limit <= 0) {
       limit = 0
       total_pages = 1
@@ -560,10 +562,12 @@
         current_page = 1
       }
     }
+    //console.log(count, limit, total_pages, pages, current_page)
   }
   const onLimitChange = () => {
     calc_pagination()
     refresh()
+    //note: after refresh calc_pagination() will be called again.
   }
   // ============================================================================
   // ================================Sorting=====================================
@@ -780,13 +784,13 @@
   {/if}
   <hr />
 
-  {er}
+<Error {er} />
 {#if showHeader}
   <button class="" on:click={onResetFilter}>Reset Filters</button>
   <Pagination
     {items}
-    {limit}
-    {current_page}
+    bind:limit={limit}
+    bind:current_page={current_page}
     {total_pages}
     {onLimitChange}
     {refresh}
@@ -861,7 +865,7 @@
     </tbody>
   </table>
 {:else}
-  <div>{er}</div>
+  <Error {er} />
 {/if}
 
 {#if addnew_pos == "b"}
