@@ -22,4 +22,6 @@ declare module "*.svelte" {
   const component: Component<{}>;
 
   export default component;
+  let showDebug
+  export {showDebug}
 }

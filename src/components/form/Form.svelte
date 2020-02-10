@@ -13,6 +13,7 @@ export let save = ()=>0
 export let buttonlabels = {save: "", cancel : ""}
 export let showCancel = true
 export let onReset
+import { Debug, showDebug } from '../debug'
 
 import { css_count } from '../../modules/global_stores/css'
 declare let $css_count
@@ -67,6 +68,7 @@ onDestroy(() => {
 })
 
 </script>
+<label>debug</label><input type=checkbox bind:checked={$showDebug} />
 {#if form.length}
 	<form on:submit|preventDefault={save}>
 	  <RealForm
