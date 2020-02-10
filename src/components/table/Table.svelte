@@ -81,7 +81,7 @@
   let modalIsVisible = false
   let item = []
   let config = false
-  let contextmenu = false
+  let contextmenu = true
   let showRowNum = true
   let rowEditDoms = []
 
@@ -222,7 +222,7 @@
     modalIsVisible = false
     item = []
     config = false
-    contextmenu = false
+    contextmenu = true
 
     data_evt = events[0]
     unsub = [event_type.unsubscribe, ...events[0].slice(1)]
@@ -567,17 +567,23 @@
   }
   // ============================================================================
   // ================================Sorting=====================================
-  const onHandleSort = (e, col) => {
+  const onHandleSort = (e, col, order) => {
     if (e.ctrlKey) {
     } else {
-      const sortOrder = sortSettings[col]
-      sortSettings = []
-      if (sortOrder === null || sortOrder === undefined) {
-        sortSettings[col] = 0
-      } else if (sortOrder === 0) {
-        sortSettings[col] = 1
-      } else {
-        sortSettings[col] = null
+      if(order !== undefined){
+        sortSettings = []
+        sortSettings[col] = order
+        closeHeaderMenu()
+      } else {      
+        const sortOrder = sortSettings[col]
+        sortSettings = []
+        if (sortOrder === null || sortOrder === undefined) {
+          sortSettings[col] = 0
+        } else if (sortOrder === 0) {
+          sortSettings[col] = 1
+        } else {
+          sortSettings[col] = null
+        }
       }
     }
     refresh()
@@ -607,10 +613,12 @@
   }
   // ============================================================================
   // ================================context-menu================================
-  let menuDisplayed = false
-  let inputMenuDisplayed = false
+  let headerMenuDisplayed = false
+  let inputheaderMenuDisplayed = false
+  let headerMenuColumn = 0
+  let inputHeaderMenuColumn = 0
 
-  const onHeaderContext = event => {
+  const onHeaderContext = (e, col) => {
     const left = event.clientX
     const top = event.clientY
 
@@ -620,15 +628,16 @@
       menuBox.style.top = top + 'px'
       menuBox.style.display = 'block'
 
-      menuDisplayed = true
+      headerMenuDisplayed = true
+      headerMenuColumn = col
     }
 
     // window.addEventListener("click", function() {
-    //     if(menuDisplayed == true){
+    //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
     //     }
   }
-  const onTextInputContext = event => {
+  const onTextInputContext = (e, col) => {
     const left = event.clientX
     const top = event.clientY
 
@@ -638,17 +647,24 @@
       menuBox.style.top = top + 'px'
       menuBox.style.display = 'block'
 
-      inputMenuDisplayed = true
+      inputheaderMenuDisplayed = true
+      inputHeaderMenuColumn = col
     }
 
     // window.addEventListener("click", function() {
-    //     if(menuDisplayed == true){
+    //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
     //     }
   }
+  const closeHeaderMenu = event => {
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu')
+    if (headerMenuDisplayed == true) {
+      menuBox.style.display = 'none'
+    }
+  }
   const closeInputMenu = event => {
     const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
-    if (inputMenuDisplayed == true) {
+    if (inputheaderMenuDisplayed == true) {
       menuBox.style.display = 'none'
     }
   }
@@ -862,6 +878,7 @@
 {/if}
 </div>
 <ContextMenu
+  {closeHeaderMenu}
   {contextmenu}
   {modalIsVisible}
   {closeModal}
@@ -870,5 +887,8 @@
   {headerTitlesRow}
   {items}
   {closeInputMenu}
+  {onHandleSort}
+  {headerMenuColumn}
+  {inputHeaderMenuColumn}
 />
 {/if}

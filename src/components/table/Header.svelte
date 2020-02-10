@@ -31,7 +31,7 @@
           {#if headerIsvisibleColumnsRow[index]}
             <th
               on:click={e => onHandleSort(e, index)}
-              on:contextmenu|preventDefault={onHeaderContext}>
+              on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
               {h}
               {#if sortSettings[index] === 0}
                 ▲
@@ -66,7 +66,7 @@
                     type="search"
                     bind:value={filterSettings[index]}
                     on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext} />
+                    on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.Text}
                 <th>
@@ -74,7 +74,7 @@
                     type="search"
                     bind:value={filterSettings[index]}
                     on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext} />
+                    on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.Double}
                 <th>
@@ -82,7 +82,7 @@
                     type="search"
                     bind:value={filterSettings[index]}
                     on:input={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext}
+                    on:contextmenu|preventDefault={e => onTextInputContext(e, index)}
                     step="any" />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
@@ -91,7 +91,7 @@
                     type="checkbox"
                     bind:checked={filterSettings[index]}
                     on:change={onHandleFilter(index)}
-                    on:contextmenu|preventDefault={onTextInputContext}
+                    on:contextmenu|preventDefault={e => onTextInputContext(e, index)}
                     step="any" />
                 </th>
               {:else if headerVisibleColTypesRow[index] === DisplayType.DateTime}

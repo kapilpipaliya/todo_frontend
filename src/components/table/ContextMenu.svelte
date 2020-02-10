@@ -1,5 +1,10 @@
 <script lang='ts'>
+  import { onMount, onDestroy } from '../../modules/index'
   import Modal from './Model.svelte'
+  import { css_count } from '../../modules/global_stores/css'
+  declare let $css_count
+
+  export let closeHeaderMenu
   export let contextmenu
   export let modalIsVisible
   export let closeModal
@@ -8,9 +13,17 @@
   export let headerTitlesRow
   export let items
   export let closeInputMenu
+  export let onHandleSort
+  export let headerMenuColumn
+  export let inputHeaderMenuColumn
 
-</script>
-{#if contextmenu}
+  onMount(() => {
+      $css_count.table_context_menu = ($css_count.table_context_menu || 0) + 1
+  })
+  onDestroy(() => {
+      $css_count.table_context_menu = $css_count.table_context_menu - 1
+  })
+/*
   <div class="menu">
     <div class="menu-item">Share On Facebook</div>
     <div class="menu-item">Share On Twitter</div>
@@ -20,11 +33,17 @@
     <hr />
     <div class="menu-item">Bookmark</div>
   </div>
+*/
+</script>
+{#if contextmenu}
+  <div class="menu">
+    <div class="menu-item" on:click={e => onHandleSort(e, headerMenuColumn, 0)}>Sort Ascending</div>
+    <div class="menu-item" on:click={e => onHandleSort(e, headerMenuColumn, 1)}>Sort Descending</div>
+    <div class="menu-item" on:click={e => onHandleSort(e, headerMenuColumn, null)}>No Sorting</div>
+    <hr />
+    <div class="menu-item" on:click={closeHeaderMenu}>Close</div>
+  </div>
   <div class="menu-input">
-    <div class="menu-item" on:click={closeInputMenu}>Close</div>
-    <hr />
-    <div class="menu-item">What's This?</div>
-    <hr />
     <div class="menu-item">Is NULL</div>
     <div class="menu-item">Is not NULL</div>
     <div class="menu-item">Is empty</div>
@@ -37,15 +56,8 @@
     <div class="menu-item">Greater or equal...</div>
     <div class="menu-item">Less or equal...</div>
     <div class="menu-item">In range...</div>
-  </div>
-  <div class="menu">
-    <div class="menu-item">Share On Facebook</div>
-    <div class="menu-item">Share On Twitter</div>
     <hr />
-    <div class="menu-item">Search On Google</div>
-    <div class="menu-item">Search On Bing</div>
-    <hr />
-    <div class="menu-item">Bookmark</div>
+    <div class="menu-item" on:click={closeInputMenu}>Close</div>
   </div>
 {/if}
 
