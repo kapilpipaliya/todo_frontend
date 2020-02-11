@@ -28,6 +28,7 @@ Cypress.Commands.add("login", (email='kapil@scesoftwares.com', password='1') => 
     cy.get("input[name='Email']").focus().type(email)
     cy.get("input[name='Pass']").focus().type(password)
     cy.get("button.success[type='submit']").click()
+    cy.wait(500) // must wait to get cookie from server
 })
 Cypress.Commands.add("addClick", () => { 
 	cy.get("button[name='table_add']").click()
