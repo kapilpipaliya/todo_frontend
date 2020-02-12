@@ -93,7 +93,6 @@
                   {schema_key}
                   key={getValue(rowValue[0])}
                   {fetchConfig}
-                  fetchSchema={false}
                   headerSchema={[
                     [
                       [

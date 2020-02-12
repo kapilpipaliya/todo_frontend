@@ -10,7 +10,6 @@
   export let fetchConfig = {type: form_type.array, project: null}
   export let buttonlabels = {}
   export let showCancel = true
-  export let fetchSchema = true
   export let headerSchema = []
 
   let project = getContext('project')
@@ -22,7 +21,7 @@
 
   fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
 
-  export const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig, fetchSchema, headerSchema), 
+  export const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig, headerSchema), 
     er = f.er,
     isSaving = f.isSaving, 
     form_ = f.form, 
