@@ -94,12 +94,13 @@
                   {schema_key}
                   key={getValue(rowValue[0])}
                   {fetchConfig}
+                  selector={["_key", editableColumnsRow[index].s]}
                   headerSchema={[
                     [
                       [
                         [
                           [],
-                          [FormType.hidden,FormType.number],
+                          [FormType.hidden, editableColumnsRow[index].t],
                           [],
                           [],
                           [],

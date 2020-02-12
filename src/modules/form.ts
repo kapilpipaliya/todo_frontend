@@ -26,8 +26,9 @@ class FormBasic {
   public schema_key: string
   public options: Writable<{}>
   public initial_form: []
+  public selector: Array<[]>
 
-  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
+  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}, selector=[]) {
     this.S = S
     this.key = key
     this.dp = dp
@@ -63,6 +64,7 @@ class FormBasic {
     this.options = writable({disabled: false, notify: true})
     this.schema_key = ""
     this.initial_form = []
+    this.selector = selector
   }
 
   clearError() {
@@ -90,6 +92,9 @@ class FormBasic {
     const filter = this.isUpdate ? [`="${this.config.type == form_type.object ? form._key : form[0]}"`] : null
     // Now auto unsubscribing no need to pass  , ...(this.isUpdate ?  {unsub: this.data_evt} : {})
     const saveConfig = { ...this.config} // , form: true, schema: this.schema_key
+    if(this.selector.length){
+      saveConfig['sel'] = this.selector
+    }
     const args = [form, filter, saveConfig]
     if(this.isUpdate){
       args.push(this.unsub_evt)
@@ -178,8 +183,9 @@ export class FormArray extends FormBasic {
   public schemaGetEvt: Array<number | string>
   public headerSchema: Array<[]>
   
-  constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}, headerSchema=[]) {
-    super(S, key, ev, dp, config);
+  
+  constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}, headerSchema=[], selector=[]) {
+    super(S, key, ev, dp, config, selector);
     this.schema_key = schema_key
     this.form = writable(form)
     this.headers = writable([])
@@ -244,8 +250,12 @@ export class FormArray extends FormBasic {
       const form_values = d[1]
       this.isSaving.set(false)
       const form = this.onFormDataGetStatic(form_values)
-      if (form[0]) {
-       this.isUpdate = true
+      if(form){
+        if (form[0]) {
+         this.isUpdate = true
+        }
+      } else {
+        console.log('form value is invalid: ', form_values)
       }
       const form_store = get(this.form)
       const new_form = merge(form_store, form)
@@ -284,8 +294,8 @@ export class FormArray extends FormBasic {
           }
         }
       }
-      return f    
     }
+    return f   
   }
   onFormDataGetStatic(d:{ r: {result:[[]] }, m: {result: [[]]}, n: {result: [[]]}, d: {} }) {
     if (d.r) {
