@@ -1,4 +1,5 @@
 <script lang='ts'>
+	import Label from '../_Label.svelte'
 	export let name;
 	export let required;
 	export let disabled;
@@ -7,7 +8,7 @@
 	export let dom = null
 </script>
 
-	<span>{name}</span>
+	<Label {name} />
 	<input 
 		 {name}
 		 bind:this={dom}

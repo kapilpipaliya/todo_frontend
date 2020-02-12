@@ -21,6 +21,7 @@ import DateRange from './input/DateRange.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
+import Label from './_Label.svelte'
 import * as RA from 'ramda-adjunct'
 import * as RD from 'rambda'
 //import * as RD from 'ramda'
@@ -177,41 +178,41 @@ $: {
 	{:else if types[i] === FormType.checkbox && !isArray(f)}
 		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
 	{:else if types[i] === FormType.checkbox}
-		<span>{labels[i]}</span>
+		<Label name={labels[i]} />
     	<Checkboxes  name={labels[i]} bind:value={f} required={required[i]} bind:this={doms[i]} disabled={isDisabled(form_disabled, i)} props={props[i]} />
 	{:else if types[i] === FormType.radio}
 		<Radio />
    {:else if types[i] === FormType.textarea}
    		<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
     {:else if types[i] === FormType.select}
-      <span>{labels[i]}</span>
+      <Label name={labels[i]} />
       <TableForm bind:values={f} bind:this={doms[i]} multiSelect={false} {...props[i]} />
     {:else if types[i] === FormType.radio}
-      <span>{labels[i]}</span>
+      <Label name={labels[i]} />
       <radio bind:this={doms[i]}  {...props[i]} />
     {:else if types[i] === FormType.multi_select}
     	<div>
-     		<span>{labels[i]}</span>
+     		<Label name={labels[i]} />
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.text_array}
     	<div>
-     		<span>{labels[i]}</span>
+     		<Label name={labels[i]} />
      		<ArrayForm  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.multi_select_bool_properties}
     	<div>
-     		<span>{labels[i]}</span>
+     		<Label name={labels[i]} />
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.jsoneditor}
-      <span>{labels[i]}</span>
+      <Label name={labels[i]} />
       <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.codemirror}
-      <span>{labels[i]}</span>
+      <Label name={labels[i]} />
       <CodeMirror bind:value={f} code={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.flatpicker}
-      <span>{labels[i]}</span>
+      <Label name={labels[i]} />
       <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.multi_select_hidden}
       <div></div>

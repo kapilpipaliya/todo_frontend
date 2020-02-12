@@ -1,4 +1,5 @@
 <script lang='ts'>
+	import Label from '../_Label.svelte'
 	export let name;
 	export let required;
 	export let disabled;
@@ -8,7 +9,7 @@
 
 	export let options = []
 </script>
-		<span>{name}</span>
+		<Label {name} />
 		{#each options as v}
 			<input
 				 {name}
