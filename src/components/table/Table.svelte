@@ -85,6 +85,7 @@
   let contextmenu = true
   let showRowNum = true
   let rowEditDoms = []
+  let rowDoms = []
 
   let addnew_pos = "t"
   let addnew_type = "button"
@@ -833,6 +834,9 @@
             {onHandleFilter}
             {onTextInputContext}
             {onHandleSort}
+            {showRowNum}
+            {rowDoms}
+            {items}
         />
       </thead>
     {/if}
@@ -862,6 +866,7 @@
           {getValue}
           {fetchConfig}
           {rowEditDoms}
+          {rowDoms}
         />
       {/each}
     </tbody>

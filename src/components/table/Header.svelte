@@ -17,9 +17,31 @@
   export let onHandleFilter
   export let onTextInputContext
   export let onHandleSort
+  export let showRowNum
+  export let rowDoms
+  export let items
+
+  let rowNumScroll
+  let scrolledRow
+  function removeScrollFocus(){
+    if(scrolledRow){
+      scrolledRow.classList.remove("onScrollFocus")
+    }
+  }
+  function onRowNumChange() {
+    removeScrollFocus()
+    scrolledRow = rowDoms[rowNumScroll-1]
+    if(scrolledRow){
+      const offsetTop = scrolledRow.offsetTop
+      window.scrollTo(0, offsetTop)
+      scrolledRow.classList.add("onScrollFocus")
+      setTimeout(removeScrollFocus, 1500);
+    }
+  }
 </script>
 
       <tr>
+
         <th colspan={mergeRowsCount}>
           <input
             type="checkbox"
@@ -46,7 +68,8 @@
         <!-- <th width="100px">Actions</th> -->
       </tr>
       <tr>
-        <th colspan={mergeRowsCount}/>
+        {#if showRowNum} <th><input type="number" class="w60" bind:value={rowNumScroll} min="1" max={items.length} on:change={onRowNumChange}/></th> {/if}
+        <th colspan={mergeRowsCount - (showRowNum ? 1 : 0)} />
         {#each headerTitlesRow as h, index}
           {#if headerIsvisibleColumnsRow[index]}
             {#if customFilter[index]}

@@ -31,6 +31,7 @@
   export let getValue
   export let fetchConfig
   export let rowEditDoms
+  export let rowDoms
 
   const org_id_ctx = getContext('org_id')
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
@@ -44,7 +45,7 @@
   }
 </script>
 
-        <tr class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
+        <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
           {#if showRowNum}
             <td>{rowIndex + 1}</td>
           {/if}
