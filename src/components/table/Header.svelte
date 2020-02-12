@@ -9,7 +9,7 @@
   //export let selected: boolean
   export let headerIsvisibleColumnsRow= []
   export let headerVisibleColTypesRow = []
-  export let sortSettings = []
+  export let sortSettingsRow = []
   export let customFilter = []
   export let filterSettings = []
   export let hiddenColumns = []
@@ -33,9 +33,9 @@
               on:click={e => onHandleSort(e, index)}
               on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
               {h}
-              {#if sortSettings[index] === 0}
+              {#if sortSettingsRow[index] === 0}
                 ▲
-              {:else if sortSettings[index] === 1}
+              {:else if sortSettingsRow[index] === 1}
                 ▼
               {:else}
                 <!-- content here -->

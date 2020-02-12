@@ -50,7 +50,8 @@
   // headers
   let headerVisibleColTypesRow = []
   let headerIsvisibleColumnsRow = []
-  let sortSettings = []
+  let sortSettingsRow = []
+  let editableColumnsRow = []
   let headerColumnPropsRow = []
 
 
@@ -192,7 +193,8 @@
     // headers
     headerVisibleColTypesRow = []
     headerIsvisibleColumnsRow = []
-    sortSettings = []
+    sortSettingsRow = []
+    editableColumnsRow = []
     headerColumnPropsRow = []
 
 
@@ -286,7 +288,7 @@
   export const refresh = () => {
     const args = [
       mergeFilter(filterSettings),
-      sortSettings,
+      sortSettingsRow,
       [limit, 0, current_page],
       fetchConfig,
     ]
@@ -306,8 +308,9 @@
     headerTitlesRow = d[0] ?? []
     headerVisibleColTypesRow = d[1] ?? []
     headerIsvisibleColumnsRow = d[2] ?? []
-    sortSettings = d[3] ?? []
-    headerColumnPropsRow = d[4] ?? []
+    sortSettingsRow = d[3] ?? []
+    editableColumnsRow = d[4] ?? []
+    headerColumnPropsRow = d[5] ?? []
     let i
     for (i = 0; i < headerIsvisibleColumnsRow.length; i++) {
       if (headerIsvisibleColumnsRow[i]) {
@@ -317,7 +320,7 @@
     }
 
 
-    options = d[5]
+    options = d[6]
     addnew_pos = options?.add?.pos ?? "t"
     addnew_type = options?.add?.type ?? "button"
     addnew_labels = options?.add?.l ?? {}
@@ -574,18 +577,18 @@
     if (e.ctrlKey) {
     } else {
       if(order !== undefined){
-        sortSettings = []
-        sortSettings[col] = order
+        sortSettingsRow = []
+        sortSettingsRow[col] = order
         closeHeaderMenu()
       } else {      
-        const sortOrder = sortSettings[col]
-        sortSettings = []
+        const sortOrder = sortSettingsRow[col]
+        sortSettingsRow = []
         if (sortOrder === null || sortOrder === undefined) {
-          sortSettings[col] = 0
+          sortSettingsRow[col] = 0
         } else if (sortOrder === 0) {
-          sortSettings[col] = 1
+          sortSettingsRow[col] = 1
         } else {
-          sortSettings[col] = null
+          sortSettingsRow[col] = null
         }
       }
     }
@@ -711,7 +714,7 @@
     // const e1 = [header_evt, fetchConfig] // fix this(config)
     // S.trigger([e1]) // fix this
     //resetFilter_(); onHeaderGet() will do this.
-    sortSettings = []
+    sortSettingsRow = []
     // refresh();
   }
   // ============================================================================
@@ -822,7 +825,7 @@
             
             {headerIsvisibleColumnsRow}
             {headerVisibleColTypesRow}
-            {sortSettings}
+            {sortSettingsRow}
             {customFilter}
             {filterSettings}
             {hiddenColumns}
