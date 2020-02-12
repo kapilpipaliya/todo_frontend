@@ -850,6 +850,7 @@
           rowValue={l}
           {headerIsvisibleColumnsRow}
           {headerVisibleColTypesRow}
+          {editableColumnsRow}
           {headerColumnPropsRow}
           {selectedRowsKeys}
           {onSelectRowClick}

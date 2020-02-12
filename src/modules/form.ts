@@ -26,8 +26,9 @@ class FormBasic {
   public schema_key: string
   public options: Writable<{}>
   public initial_form: []
+  public fetchSchema: boolean
 
-  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}) {
+  constructor(S: ServerEventsDispatcher, key:string, e: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, config={type: form_type.object}, fetchSchema=true) {
     this.S = S
     this.key = key
     this.dp = dp
@@ -63,6 +64,7 @@ class FormBasic {
     this.options = writable({disabled: false, notify: true})
     this.schema_key = ""
     this.initial_form = []
+    this.fetchSchema = fetchSchema
   }
 
   clearError() {
@@ -76,12 +78,14 @@ class FormBasic {
     if (this.key && this.unsub_evt.length) this.S.trigger([[this.unsub_evt, {}]])
   }
   fetch() {
-    if(this.mutate_evt) {
-      const filter = [`="${this.key}"`]
-      // is schema_key passing neccessary?
-      const args = ["s", filter, { ...this.config, schema: this.schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
-      const e1 = [this.mutate_evt, args]
-      this.S.trigger([e1])
+    if(this.fetchSchema){
+      if(this.mutate_evt) {
+        const filter = [`="${this.key}"`]
+        // is schema_key passing neccessary?
+        const args = ["s", filter, { ...this.config, schema: this.schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
+        const e1 = [this.mutate_evt, args]
+        this.S.trigger([e1])
+      }
     }
   }
   onSave() {
@@ -177,8 +181,8 @@ export class FormArray extends FormBasic {
   public form: Writable<Array<number | string>>
   public schemaGetEvt: Array<number | string>
   
-  constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}) {
-    super(S, key, ev, dp, config);
+  constructor(S: ServerEventsDispatcher, key:string, ev: Array<Array<number | string>>, dp:  (type: string, detail?: any) => void, schema_key:string, form=[], config={type: form_type.array}, fetchSchema=true, headerSchema=[]) {
+    super(S, key, ev, dp, config, fetchSchema);
     this.schema_key = schema_key
     this.form = writable(form)
     this.headers = writable([])
@@ -189,6 +193,9 @@ export class FormArray extends FormBasic {
     }
     this.onMutateGet = this.onMutateGet.bind(this)
     this.onSchemaDataGet = this.onSchemaDataGet.bind(this)
+    if(headerSchema.length) {
+      this.onMutateGet(headerSchema as [any])
+    }
   }
   bindMutate(){
     this.S.bind$(this.mutate_evt, this.onMutateGet, 1)

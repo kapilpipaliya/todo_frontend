@@ -7,6 +7,8 @@
   import Bool from './display/Bool.svelte'
   import Url from './display/Url.svelte'
   import Color from './display/Color.svelte'
+
+  import GeneralForm from '../form/Index.svelte'
   
   export let selected: boolean
   export let showRowNum
@@ -15,6 +17,7 @@
   export let rowValue
   export let headerIsvisibleColumnsRow= []
   export let headerVisibleColTypesRow = []
+  export let editableColumnsRow = []
   export let headerColumnPropsRow = []
   export let selectedRowsKeys = []
   export let onSelectRowClick
@@ -85,7 +88,31 @@
           {#each rowValue as c, index}
             {#if headerIsvisibleColumnsRow[index]}
               <td>
-                {#if c != null}
+                {#if editableColumnsRow[index]}
+                  <GeneralForm
+                  {schema_key}
+                  key={getValue(rowValue[0])}
+                  {fetchConfig}
+                  fetchSchema={false}
+                  headerSchema={[
+                    [
+                      [
+                        [
+                          [],
+                          [19,11],
+                          [],
+                          [],
+                          [],
+                          {}
+                        ],
+                        {}
+                      ],
+                      {r: {result:[[getValue(rowValue[0]), getValue(c)]]}  } 
+                    ]
+                  ]
+                  }
+                  />
+                {:else if c != null}
                   {#if headerVisibleColTypesRow[index] === DisplayType.DateTime}
                     {new Date(c).toLocaleString()}
                   {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
