@@ -22,6 +22,8 @@ import DateRange from './input/DateRange.svelte'
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
 import Label from './_Label.svelte'
+
+import {FormType} from '../../modules/enums'
 import * as RA from 'ramda-adjunct'
 import * as RD from 'rambda'
 //import * as RD from 'ramda'
@@ -39,49 +41,7 @@ export let props = []
 
 export let doms = {}
 
-  enum FormType {
-    button = 1,
-    checkbox,
-    color,
-    date,
-    datetime_local,
-    email,
-    file,
-    hidden,
-    image,
-    month,
-    number,
-    password,
-    radio,
-    range,
-    reset,
-    search,
-    submit,
-    tel,
-    text,
-    time,
-    inserted_time,
-    updated_time,
-    url,
-    week,
-    textarea,
-    select,
-    jsoneditor,
-    internal_true_edge,
-    multi_select,
-    multi_select_hidden, // not added input yet
-    text_array,
-    multi_select_bool_properties,
-    flatpicker,
-    WYSIWYG,
-    serial,
-    codemirror,
-    save_time,
-    inserted,
-    updated,
-    dropzone,
-    daterange
-  };
+
 
 
 const isDisabled = (form_disabled_, i) =>{

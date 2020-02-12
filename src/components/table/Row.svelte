@@ -9,6 +9,7 @@
   import Color from './display/Color.svelte'
 
   import GeneralForm from '../form/Index.svelte'
+  import {FormType} from '../../modules/enums'
   
   export let selected: boolean
   export let showRowNum
@@ -98,7 +99,7 @@
                       [
                         [
                           [],
-                          [19,11],
+                          [FormType.hidden,FormType.number],
                           [],
                           [],
                           [],
