@@ -93,7 +93,9 @@
     S.trigger([[mutate_evt, args]])
   }
   function onReset() {
-    form = RD.clone(initial_form)
+    if(!isUpdate) {
+      form = RD.clone(initial_form)
+    }
   }
 
   function bindMutate(){
@@ -225,6 +227,13 @@
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
   //console.log($$props)
+
+  $: {
+    if(headerSchema.length) {
+      onMutateGet(headerSchema as [any])
+    }
+  }
+  // $: {console.log(form)} // hell this prints two time.
 </script>
 
 <Form
@@ -232,7 +241,6 @@
   save={onSave}
   isSaving={isSaving}
   form_disabled={form_disabled}
-  options={options}
 	bind:headers={headers}
 	bind:form={form}
 	on:close={onClose} on:close

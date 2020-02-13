@@ -27,10 +27,12 @@
   }*/
   let y
   $: {
-    if(y > 20) {
-      button.style.display = 'block'
-    } else {
-      button.style.display = 'none'
+    if(button){
+      if(y > 20) {
+        button.style.display = 'block'
+      } else {
+        button.style.display = 'none'
+      }
     }
   }
 

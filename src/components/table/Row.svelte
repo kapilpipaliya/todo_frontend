@@ -95,6 +95,8 @@
                   key={getValue(rowValue[0])}
                   {fetchConfig}
                   selector={["_key", editableColumnsRow[index].s]}
+                  showCancel={false}
+                  buttonlabels={{save: "Save"}}
                   headerSchema={[
                     [
                       [
