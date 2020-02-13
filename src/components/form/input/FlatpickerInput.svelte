@@ -87,11 +87,6 @@
 	}
 </script>
 
-
-<svelte:head>
-	
-</svelte:head>
-
 <slot>
 <input bind:this={input} {...props} {disabled} />
 </slot>

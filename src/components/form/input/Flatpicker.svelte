@@ -20,10 +20,9 @@
 	//on:change={handleChange}
 </script>
 
-<div>
 	<Flatpickr
 		options={flatpickrOptions }
 		bind:value={value}
 		{disabled}
 		/>
-</div>
+
