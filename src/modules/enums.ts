@@ -57,5 +57,7 @@ export enum FormType {
     inserted,
     updated,
     dropzone,
-    daterange
+    daterange,
+    prosemirror,
+    cleditor
   };

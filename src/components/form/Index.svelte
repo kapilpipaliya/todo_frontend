@@ -47,9 +47,9 @@
     } else {
       events[0][0] = et.get
     }
-    let unsub_evt = [et.unsubscribe, ...events[0].slice(1)]
+    unsub_evt = [et.unsubscribe, ...events[0].slice(1)]
   } else {
-    let unsub_evt = []
+    unsub_evt = []
   }
   let data_evt = events[0]
   let mutate_evt = events[1]
@@ -67,16 +67,18 @@
   let headers = []
   let schemaGetEvt = []
   if(!data_evt) {
-    let schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
+    schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
   } else {
-    let schemaGetEvt = []
+    schemaGetEvt = []
   }
 
   function clearError() {
     er = ''
   }
   function onClose() {
-    if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
+    if (key && unsub_evt.length) {
+      S.trigger([[unsub_evt, {}]])
+    }
   }
 
   function onSave() {
