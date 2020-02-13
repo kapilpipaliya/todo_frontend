@@ -1,9 +1,22 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge } from '../../modules/index'
   declare let $ws_connected
+  const dp = createEventDispatcher();
   import { FormArray } from '../../modules/form'
   import Form from './Form.svelte'
   import {schemaEvents} from '../../modules/schema_events'
+
+
+  import * as R from 'ramda'
+  import * as RA from 'ramda-adjunct'
+  import * as RD from 'rambda'
+  import * as RX from 'rambdax'
+
+  import { notifier } from '../thirdparty/svelte-notifications/src/index'
+  import {translation} from '../../modules/global_stores/translation'
+  import {default_form} from '../../modules/global_stores/default_form'
+  declare let $default_form
+
   export let key = "0"
   export let schema_key
   export let form = []
@@ -14,53 +27,220 @@
   export let headerSchema = []
 
   let project = getContext('project')
+  declare let $project
   let project_ctx = writable([])
   if(project) {
-    $project_ctx = get(project)
+    $project_ctx = $project
   }
   declare let $project_ctx
 
   fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
 
-  export const f = new FormArray(S, key, schemaEvents(Unique.id, schema_key), createEventDispatcher(), schema_key, form, fetchConfig, headerSchema, selector), 
-    er = f.er,
-    isSaving = f.isSaving, 
-    form_ = f.form, 
-    headers = f.headers, 
-    mounted = f.mounted, 
-    binded = f.binded, 
-    form_disabled = f.form_disabled, 
-    options = f.options
-  declare let $er
-  declare let $isSaving
-  declare let $form
-  declare let $headers
-  declare let $mounted
-  declare let $binded
-  declare let $form_disabled
-  declare let $options
+  let config = {type: form_type.array}
 
-  onMount(() => {$mounted = true })
-  onDestroy(() => {f.onDestroy() })
-  $: if ($mounted) {if ($ws_connected) {$er = ''; funcBindingOnce(); } else {$er = 'Reconnecting...'} }
-  function funcBindingOnce () {if (!$binded) {f.bindAll(); $binded = true; f.fetch();}  }
+  let events = schemaEvents(Unique.id, schema_key);
+  let unsub_evt
+  if(events[0]){
+    if(key) {
+      events[0][0] = et.subscribe
+    } else {
+      events[0][0] = et.get
+    }
+    let unsub_evt = [et.unsubscribe, ...events[0].slice(1)]
+  } else {
+    let unsub_evt = []
+  }
+  let data_evt = events[0]
+  let mutate_evt = events[1]
+  let isUpdate = false
+  
+  let mounted = false
+  let binded = false
+  let er = ''
+  let isSaving = false
+  let form_disabled = true
+  
+  let options = {disabled: false, notify: true}
+  let initial_form = []
+
+  let headers = []
+  let schemaGetEvt = []
+  if(!data_evt) {
+    let schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
+  } else {
+    let schemaGetEvt = []
+  }
+
+  function clearError() {
+    er = ''
+  }
+  function onClose() {
+    if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
+  }
+
+  function onSave() {
+    isSaving =true
+    const filter = isUpdate ? [`="${config.type == form_type.object ? form._key : form[0]}"`] : null
+    // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
+    const saveConfig = { ...config} // , form: true, schema: schema_key
+    if(selector.length){
+      saveConfig['sel'] = selector
+    }
+    const args = [form, filter, saveConfig]
+    if(isUpdate){
+      args.push(unsub_evt)
+    }
+    S.trigger([[mutate_evt, args]])
+  }
+  function onReset() {
+    form = RD.clone(initial_form)
+  }
+
+  function bindMutate(){
+    S.bind$(mutate_evt, onMutateGet, 1)
+  }
+  function bindAll(){
+    bindSchemaDataGet()
+    bindMutate()
+  }
+  function bindSchemaDataGet(){
+    if(schemaGetEvt) {
+      S.bind$(schemaGetEvt, onSchemaDataGet, 1)
+    }
+  }
+  function onDestroy_() {
+    //if (key && unsub_evt) S.trigger([[unsub_evt, {}]])
+    S.unbind_(events)
+    if(schemaGetEvt.length) {
+      S.unbind(schemaGetEvt)
+    }
+  }
+  function fetch() {
+    if(headerSchema.length) {
+      onMutateGet(headerSchema as [any])
+      return
+    }
+    if(schemaGetEvt && schemaGetEvt.length) {
+      const filter = [`="${key}"`]
+      //const project_data_store = get(project_data)
+      // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
+      // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
+      const fetchConfig = { ...config, schema: schema_key}
+      const args = ["s", filter, fetchConfig] // Todo Fix on c++ side too.
+      const e1 = [schemaGetEvt, args]
+      S.trigger([e1])
+    } else {
+      if(mutate_evt) {
+        const filter = [`="${key}"`]
+        // is schema_key passing neccessary?
+        const args = ["s", filter, { ...config, schema: schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
+        const e1 = [mutate_evt, args]
+        S.trigger([e1])
+      }
+    }
+  }
+  function onSchemaDataGet(d){
+    //headers.set(d[0])
+    onMutateGet(d)
+    //super.fetch()
+  }
+  function onMutateGet([d]) {
+    if(Array.isArray(d[0])){
+      const schema = d[0][0]
+      const options_new = d[0][1] ?? {}
+      const newOptions = {...options, ...options_new}
+      options = newOptions
+      headers = schema
+      const form_values = d[1]
+      isSaving = false
+      const form_new = onFormDataGetStatic(form_values)
+      if(form_new){
+        if (form_new[0]) {
+         isUpdate = true
+        }
+      } else {
+        console.log('form value is invalid: ', form_values)
+      }
+      const new_form = merge(form, form_new)
+      form = new_form
+      initial_form = RD.clone(new_form)
+      
+      form_disabled = options.ds ?? false // options.disabled
+    } else {
+      isSaving = false
+      if (d[0]) {
+        const translation_store = get(translation)
+        const save_msg = R.view(R.lensPath(['msg', 'save']), translation_store);
+        
+        if(options.notify){
+          notifier.success(save_msg, 3000)
+        }
+        er = ''
+        dp('successSave', { key: key, d })
+        onReset()
+      } else {
+        er = d[1]
+      }
+    }
+
+  }
+  function mergeFormValues(f) {
+    if(!isUpdate){
+      const s = $default_form[schema_key]
+      if(s) {
+        for (let i = 0; i < f.length; i++) {
+          if (s[i]) {
+            f[i] = s[i]
+          }
+        }
+      }
+    }
+    return f   
+  }
+  function onFormDataGetStatic(d) {
+    if (d.r) {
+      const r = d.r.result
+      if(r.length){
+        return mergeFormValues(r[0])
+      } else {
+        return {}
+      }
+    } else if (d.n) {
+      //d.n.result
+    } else if (d.m) {
+      const r = d.m.result
+      if(r.length){
+        return r[0]
+      } else {
+        return {}
+      }
+      //d.m.result
+    } else if (d.d) {
+      //
+    }
+  }
+
+  onMount(() => {mounted = true })
+  onDestroy(() => { onDestroy_() })
+  $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
+  function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
   //console.log($$props)
 </script>
 
 <Form
   {key}
-  save={f.onSave}
-  isSaving={$isSaving}
-  form_disabled={$form_disabled}
-  options={$options}
-	bind:headers={$headers}
-	bind:form={$form_}
-	on:close={f.onClose} on:close
+  save={onSave}
+  isSaving={isSaving}
+  form_disabled={form_disabled}
+  options={options}
+	bind:headers={headers}
+	bind:form={form}
+	on:close={onClose} on:close
   {buttonlabels}
   {showCancel}
-  onReset={f.onReset}
+  onReset={onReset}
 />
-<div>{$er}</div>
-{JSON.stringify($form_)}
+<div>{er}</div>
+{JSON.stringify(form)}
 options:
-{JSON.stringify($options)}
+{JSON.stringify(options)}
