@@ -5,8 +5,10 @@
   import { FormArray } from '../../modules/form'
   import Form from './Form.svelte'
   import {schemaEvents} from '../../modules/schema_events'
+  import Html from '../Html.svelte'
   export let id = 'insert'
-
+  export let t = []
+  export let b = []
 
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
@@ -26,6 +28,7 @@
   export let showCancel = true
   export let selector = []
   export let headerSchema = []
+  export let showdbg = false
 
   let project = getContext('project')
   declare let $project
@@ -239,6 +242,7 @@
   // $: {console.log(form)} // hell this prints two time.
 </script>
 
+<Html html={t}/>
 <Form
   {id}
   {key}
@@ -251,8 +255,12 @@
   {buttonlabels}
   {showCancel}
   onReset={onReset}
+  {showdbg}
 />
 <div>{er}</div>
+{#if showdbg}
 {JSON.stringify(form)}
 options:
 {JSON.stringify(options)}
+{/if}
+<Html html={b}/>
