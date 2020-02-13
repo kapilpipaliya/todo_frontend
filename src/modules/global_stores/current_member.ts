@@ -1,5 +1,5 @@
 // use function directly on ws_dispatcher..
-import { writable, S, level_of_member } from '../index'
+import { writable, S } from '../index'
 import { event_type as et, events as e } from '../events'
 
 export const current_member = writable({})

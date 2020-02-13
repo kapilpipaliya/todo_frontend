@@ -83,7 +83,7 @@
 		const [[h, d]] = all
 		data = d?.r?.result ?? false
 		if(data === false){
-			console.warn('returned data is not proper': all)
+			console.warn('returned data is not proper', all)
 		}
 		if(!multiSelect){
 			if(!values) {

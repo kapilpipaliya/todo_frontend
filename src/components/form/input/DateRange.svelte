@@ -43,7 +43,6 @@
   {maxDate}
   weekGuides
   weekNumbers
-  {maxDate}
   todayBtn
   {locale}
   twoPages

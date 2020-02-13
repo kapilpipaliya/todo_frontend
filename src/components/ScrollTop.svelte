@@ -8,20 +8,26 @@
 
   onMount(() => {
       // When the user scrolls down 20px from the top of the document, show the button
-      window.onscroll = function() {
-        scrollFunction()
-      }
+      // window.onscroll = function() { scrollFunction() }
       $css_count.scrolltop = ($css_count.scrolltop || 0) + 1
   })
   onDestroy(() => {
-      window.onscroll = undefined
+      // window.onscroll = undefined
       $css_count.scrolltop = $css_count.scrolltop - 1
   })
-  function scrollFunction() {
+  /*function scrollFunction() {
     if (
       document.body.scrollTop > 20 ||
       document.documentElement.scrollTop > 20
     ) {
+      button.style.display = 'block'
+    } else {
+      button.style.display = 'none'
+    }
+  }*/
+  let y
+  $: {
+    if(y > 20) {
       button.style.display = 'block'
     } else {
       button.style.display = 'none'
@@ -33,7 +39,8 @@
     document.body.scrollTop = 0
     document.documentElement.scrollTop = 0
   }
+
 </script>
 
-
+<svelte:window bind:scrollY={y}/>
 <button class={"scrolltop"} on:click={topFunction} bind:this={button} title="Go to top">Top</button>
