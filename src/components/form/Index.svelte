@@ -5,6 +5,7 @@
   import { FormArray } from '../../modules/form'
   import Form from './Form.svelte'
   import {schemaEvents} from '../../modules/schema_events'
+  export let id = 'insert'
 
 
   import * as R from 'ramda'
@@ -237,6 +238,7 @@
 </script>
 
 <Form
+  {id}
   {key}
   save={onSave}
   isSaving={isSaving}

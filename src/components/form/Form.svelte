@@ -14,6 +14,7 @@ export let buttonlabels = {save: "", cancel : ""}
 export let showCancel = true
 export let onReset
 import { Debug, showDebug } from '../debug'
+export let id = 'insert'
 
 import { css_count } from '../../modules/global_stores/css'
 declare let $css_count
@@ -70,14 +71,14 @@ onDestroy(() => {
 </script>
 <label>debug</label><input type=checkbox bind:checked={$showDebug} />
 {#if form.length}
-	<form on:submit|preventDefault={save}>
+	<form class={id} on:submit|preventDefault={()=>{}}>
 	  <RealForm
 	  	{key}
 	  	bind:form={form} {form_disabled}
 	  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
 	  />
 	  <footer>
-	    <SubmitButton isSaving={isSaving} label={saveLabel} />
+	    <SubmitButton isSaving={isSaving} label={saveLabel} {save} />
 	    {#if showCancel}
 	    	<CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	    {/if}

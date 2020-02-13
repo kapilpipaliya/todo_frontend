@@ -45,8 +45,8 @@ Cypress.Commands.add("deleteClick", () => {
 Cypress.Commands.add("deleteKeyClick", (key) => { 
 	cy.get(`table tbody td button[name='delete'][key='${key}'][type='button']`).click()
 })
-Cypress.Commands.add("submitButtonClick", (key) => { 
-	cy.get("button.success[type='submit']").click()
+Cypress.Commands.add("submitButtonClick", (key='insert') => { 
+	cy.get(`form.${key} button.success[type='submit']`).click()
 })
 Cypress.Commands.add("inputType", (key, value) => {
 	cy.wait(300)

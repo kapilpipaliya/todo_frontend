@@ -3,6 +3,7 @@
   export let disabled = false
   export let title = ''
   export let label = 'Save changes'
+  export let save
 
   $: label = label || 'Save changes'
   let classn;
@@ -16,6 +17,6 @@
 </script>
 
 
-<button type="submit" class={classn} disabled={isSaving || disabled} {title}>
+<button type="submit" class={classn} disabled={isSaving || disabled} {title} on:click={save} >
   <slot>{label}</slot>
 </button>
