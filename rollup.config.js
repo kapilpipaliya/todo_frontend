@@ -1,14 +1,17 @@
 import svelte from "rollup-plugin-svelte"
 import commonjs from "@rollup/plugin-commonjs"
 import resolve from "@rollup/plugin-node-resolve"
-//import serve from "rollup-plugin-serve"
+//import serve from "rollup-plugin-serve" // use my own serve function
 import html from "rollup-plugin-bundle-html"
-import css from "rollup-plugin-css-porter"
+//import css from "rollup-plugin-css-porter" // now use postcss
+import postcss from "rollup-plugin-postcss"
 import typescript from "rollup-plugin-typescript2"
 import typescriptCompiler from "typescript"
 import { terser } from "rollup-plugin-terser"
 import livereload from "rollup-plugin-livereload"
 import sveltePreprocessor from "svelte-preprocess"
+
+const hash = Date.now()
 
 const extensions = [".ts", ".js"]
 
@@ -17,6 +20,7 @@ const plugins = [
     dev: process.env.NODE_ENV === "development",
     extensions: [".svelte"],
     preprocess: sveltePreprocessor(),
+    emitCss: true,
   }),
   html({
     template: "src/index.html",
@@ -24,9 +28,8 @@ const plugins = [
     filename: "index.html",
     absolute: true
   }),
-  css({
-    dest: 'dist/index.css',
-    raw: false
+  postcss({
+    extract: true
   }),
   resolve({
           browser: true,
@@ -53,13 +56,17 @@ if (process.env.NODE_ENV === "development") {
 module.exports = {
   input: "src/index.ts",
   output: {
-    file: "dist/index.js",
+    //file: "dist/index.js",
     sourcemap: true,
-    format: "iife"
+    format: "iife",
+    file: `dist/index.${hash}.js`,
+    //dir: 'public/build/',
+    //entryFileNames: "[name].[hash].js",
   },
   plugins
 }
 
+// copied from official template
 function serve() {
   let started = false;
 

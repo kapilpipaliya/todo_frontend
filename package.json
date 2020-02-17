@@ -32,6 +32,7 @@
     "rambdax": "^3.6.0",
     "ramda": "^0.27.0",
     "ramda-adjunct": "^2.25.0",
+    "rollup-plugin-postcss": "^2.0.6",
     "svelte": "^3.18.2",
     "tippy.js": "^5.2.1",
     "url-params-parser": "^1.0.2",
