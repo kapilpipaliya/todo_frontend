@@ -95,9 +95,8 @@
                   key={getValue(rowValue[0])}
                   {fetchConfig}
                   selector={["_key", editableColumnsRow[index].s]}
-                  showCancel={false}
                   id='inline'
-                  buttonlabels={{save: "Save"}}
+                  buttonlabels={{save: "Save", cancel: ""}}
                   headerSchema={[
                     [
                       [

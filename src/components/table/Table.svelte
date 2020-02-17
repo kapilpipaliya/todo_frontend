@@ -93,7 +93,7 @@
 
   let addnew_pos = "t"
   let addnew_type = "button"
-  let addnew_labels = {}
+  let addnew_labels = {save: "Save", cancel : "Cancel"}
   let rowType = "table"
 
   let showHeader = true;
@@ -328,7 +328,10 @@
     options = d[6]
     addnew_pos = options?.add?.pos ?? "t"
     addnew_type = options?.add?.type ?? "button"
-    addnew_labels = options?.add?.l ?? {}
+    const l = options?.add?.l
+    if(l){
+      addnew_labels = l
+    }
     showHeader = options?.table?.header ?? true
     rowType = options?.table?.row ?? "table"
     resetFilter_() // Take care....

@@ -24,8 +24,7 @@
   export let schema_key
   export let form = []
   export let fetchConfig = {type: form_type.array, project: null}
-  export let buttonlabels = {}
-  export let showCancel = true
+  export let buttonlabels = {save: "Save", cancel : "Cancel"}
   export let selector = []
   export let headerSchema = []
   export let showdbg = false
@@ -253,9 +252,9 @@
 	bind:form={form}
 	on:close={onClose} on:close
   {buttonlabels}
-  {showCancel}
   onReset={onReset}
   {showdbg}
+  {...options}
 />
 <div>{er}</div>
 {#if showdbg}

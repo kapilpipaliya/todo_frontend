@@ -11,18 +11,17 @@ export let form
 export let form_disabled = true
 export let save = ()=>0
 export let buttonlabels = {save: "", cancel : ""}
-export let showCancel = true
 export let onReset
 import { Debug, showDebug } from '../debug'
 export let id = 'insert'
 export let showdbg = false
+// export let options = {}
 
 import { css_count } from '../../modules/global_stores/css'
 declare let $css_count
 
-let saveLabel = buttonlabels?.save ?? ""
-let cancelLabel = buttonlabels?.cancel ?? ""
-// export let options = {}
+$: saveLabel = buttonlabels?.save ?? ""
+$: cancelLabel = buttonlabels?.cancel ?? ""
 
 let labels = []
 let types: number[] = []
@@ -83,7 +82,7 @@ onDestroy(() => {
 	  />
 
 	    <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
-	    {#if showCancel}
+	    {#if cancelLabel}
 	    	<CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	    {/if}
 	    {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
