@@ -19,7 +19,7 @@
 		values = values.filter((_, i) => i !== row);
 	}
 
-  const onReorder = (from, to) => (event) {
+  const onReorder = (from, to) => (event) => {
     event.stopPropagation()
 
     values = values.map((item, i, array) => (

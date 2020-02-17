@@ -66,6 +66,7 @@ onMount(()=> {
    $css_count.submit_buttons = ($css_count.submit_buttons || 0) + 1
 })
 onDestroy(() => {
+  mounted = false
   $css_count.submit_buttons = $css_count.submit_buttons - 1
 })
 
@@ -74,14 +75,14 @@ onDestroy(() => {
 <label>debug</label><input type=checkbox bind:checked={$showDebug} />
 {/if}
 {#if form.length}
-	<form class={id} on:submit|preventDefault={()=>{}}>
+	<form class={id} on:submit|preventDefault={save}>
 	  <RealForm
 	  	{key}
 	  	bind:form={form} {form_disabled}
 	  	{labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
 	  />
 
-	    <SubmitButton isSaving={isSaving} label={saveLabel} {save} />
+	    <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
 	    {#if showCancel}
 	    	<CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
 	    {/if}

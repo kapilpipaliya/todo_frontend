@@ -1,4 +1,8 @@
 <script lang='ts'>
+//TODO fix table row hightlight not working properly when some row is deleted.
+// Add Two modes on button press change classes
+// Instead of alter show model on delete
+
   // import * as _ from "lamb";
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
