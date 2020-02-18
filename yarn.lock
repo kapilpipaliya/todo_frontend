@@ -2922,6 +2922,11 @@ rgba-regex@^1.0.0:
   resolved "https://registry.yarnpkg.com/rgba-regex/-/rgba-regex-1.0.0.tgz#43374e2e2ca0968b0ef1523460b7d730ff22eeb3"
   integrity sha1-QzdOLiyglosO8VI0YLfXMP8i7rM=
 
+rollup-plugin-analyzer@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-analyzer/-/rollup-plugin-analyzer-3.2.2.tgz#1ea109d164ac8cdbfeaacf1cf271bb66ca643d94"
+  integrity sha512-rRNOaykvnniNmByeaYuhrnMSwAmYduvGy1q2rBchRjGL/bEtEVr2WogKMQ0po8QbnwcsYaiQacYFxsvGTnw6Iw==
+
 rollup-plugin-bundle-html@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/rollup-plugin-bundle-html/-/rollup-plugin-bundle-html-0.2.2.tgz#1a8dbfceabb097af98cd53c5d4f839c9017537d6"

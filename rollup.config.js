@@ -10,12 +10,13 @@ import typescriptCompiler from "typescript"
 import { terser } from "rollup-plugin-terser"
 import livereload from "rollup-plugin-livereload"
 import sveltePreprocessor from "svelte-preprocess"
-
+import analyze from 'rollup-plugin-analyzer'
 const hash = Date.now()
 
 const extensions = [".ts", ".js"]
 
 const plugins = [
+  //analyze(),
   svelte({
     dev: process.env.NODE_ENV === "development",
     extensions: [".svelte"],
