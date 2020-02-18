@@ -7,6 +7,7 @@
   import Bool from './display/Bool.svelte'
   import Url from './display/Url.svelte'
   import Color from './display/Color.svelte'
+  import Time from './display/Time.svelte'
 
   import GeneralForm from '../form/Index.svelte'
   import {FormType} from '../../modules/enums'
@@ -124,6 +125,8 @@
                     <Bool value={getValue(c)}/>
                   {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
                     <Color value={getValue(c)}/>
+                  {:else if headerVisibleColTypesRow[index] === DisplayType.Time}
+                    <Time value={getValue(c)}/>
                   {:else}
                     <Text value={getValue(c)}/>
                   {/if}
