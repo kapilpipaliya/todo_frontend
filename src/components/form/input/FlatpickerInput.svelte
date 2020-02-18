@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import { onMount, createEventDispatcher } from '../../../modules/index'
-	import flatpickr from 'flatpickr';
+	//import flatpickr from 'flatpickr';
 	import { css_count } from '../../../modules/global_stores/css'
 	declare let $css_count
 	export let disabled
@@ -31,7 +31,16 @@
 
 	$: if (fp) fp.setDate(value, false, dateFormat);
 
-	onMount(() => {
+	onMount(async() => {
+	    //let flatpickr
+	    try{
+	      /*const {default: flatpickr_} =*/ await import( "https://unpkg.com/flatpickr/dist/flatpickr.js" );
+	      //flatpickr = flatpickr_
+	    }
+	    catch(err) {
+	      console.log(err.message)
+	      return
+	    }
 		const elem = element || input
 		fp = flatpickr(elem, Object.assign(
 			addHooks(options),
