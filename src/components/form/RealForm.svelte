@@ -23,7 +23,6 @@ import DateRange from './input/DateRange.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
-import Label from './_Label.svelte'
 
 import {FormType} from '../../modules/enums'
 import * as RA from 'ramda-adjunct'
@@ -114,74 +113,77 @@ $: {
   }
 }
 
-
+function getComponent(t){
+    if(t === FormType.color) {
+      return Color
+    } else if (t === FormType.email) {
+      return Email
+    } else if (t === FormType.file) {
+      return File
+    } else if(t === FormType.hidden) {
+      return Hidden 
+    } else if(t === FormType.number) {
+      return Number 
+    } else if(t === FormType.password) {
+      return Password 
+    } else if(t === FormType.range) {
+      return Range 
+    } else if(t === FormType.search) {
+      return Search 
+    } else if(t === FormType.text) {
+      return Text 
+    } else if(t === FormType.checkbox) {
+      return Checkbox 
+    } else if(t === FormType.checkboxes) {
+      return Checkboxes  
+    } else if(t === FormType.radio) {
+      return Radio
+    } else if(t === FormType.textarea) {
+      return Textarea 
+    } else if(t === FormType.select) {
+      return TableForm  //multiSelect={false}
+    } else if(t === FormType.radio) {
+      //return radio 
+    } else if(t === FormType.multi_select) {
+      return TableForm //multiSelect={true}
+    } else if(t === FormType.text_array) {
+      return ArrayForm  
+    } else if(t === FormType.multi_select_bool_properties) {
+      return TableForm // multiSelect={true} // boolprop={true}
+    } else if(t === FormType.jsoneditor) {
+      return JsonEditor
+    } else if(t === FormType.codemirror) {
+      //return CodeMirror
+      return Textarea
+    } else if(t === FormType.flatpicker) {
+      return Flatpicker
+    } else if(t === FormType.multi_select_hidden || t === FormType.save_time) {
+      //return Empty
+    } else if(t === FormType.dropzone) {
+      return DropZone
+    } else if(t === FormType.daterange) {
+      return DateRange
+    } else if(t === FormType.prosemirror) {
+      //return Prosemirror
+    } else if(t === FormType.cleditor) {
+      //reutn CLEditor
+    } else {
+      return 'Unknown Component'
+    }
+}
 
 </script>
 {#each form as f, i}
   {#if types[i]}
-  	<Label name={labels[i]} />
-  	{#if types[i] === FormType.color}
-  		<Color bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.email}
-  		<Email bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.file}
-  		<File bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.hidden}
-  		<Hidden bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.number}
-  		<Number bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.password}
-  		<Password bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.range}
-  		<Range bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.search}
-  		<Search bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.text}
-  		<Text bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.checkbox && !isArray(f)}
-  		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-  	{:else if types[i] === FormType.checkbox}
-      <Checkboxes  name={labels[i]} bind:value={f} required={required[i]} bind:this={doms[i]} disabled={isDisabled(form_disabled, i)} props={props[i]} />
-  	{:else if types[i] === FormType.radio}
-  		<Radio />
-    {:else if types[i] === FormType.textarea}
-    	<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
-    {:else if types[i] === FormType.select}
-      <TableForm bind:values={f} bind:this={doms[i]} multiSelect={false} {...props[i]} />
-    {:else if types[i] === FormType.radio}
-      <radio bind:this={doms[i]}  {...props[i]} />
-    {:else if types[i] === FormType.multi_select}
-    	<div>
-     		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-     	</div>
-    {:else if types[i] === FormType.text_array}
-    	<div>
-     		<ArrayForm  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-     	</div>
-    {:else if types[i] === FormType.multi_select_bool_properties}
-    	<div>
-     		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
-     	</div>
-    {:else if types[i] === FormType.jsoneditor}
-      <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-    {:else if types[i] === FormType.codemirror}
-    <!--       <CodeMirror bind:value={f} code={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
-    <Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
-    {:else if types[i] === FormType.flatpicker}
-      <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-    {:else if types[i] === FormType.multi_select_hidden || types[i] === FormType.save_time}
-      <div></div>
-    {:else if types[i] === FormType.dropzone}
-      <DropZone bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-    {:else if types[i] === FormType.daterange}
-      <DateRange bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-    {:else if types[i] === FormType.prosemirror}
-      <!-- <Prosemirror bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
-    {:else if types[i] === FormType.cleditor}
-      <!-- <CLEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
-    {:else}
-      Unknown Component
-    {/if}
+    <svelte:component
+      this={getComponent(types[i])}
+      bind:value={f}
+      name={labels[i]}
+      required={required[i]}
+      disabled={isDisabled(form_disabled, i)}
+      bind:dom={doms[i]}
+      {...props[i]}
+    />
 
     {#if description[i]}
       {description[i]}
