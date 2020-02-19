@@ -5,7 +5,6 @@ import * as RX from 'rambdax'
 import { ServerEventsDispatcher, Writable, writable, get, form_type, event_type as et, events as e, Unique, merge } from './index'; // not recommanded
 import { notifier } from '../components/thirdparty/svelte-notifications/src/index'
 import {translation} from './global_stores/translation'
-import {default_form} from './global_stores/default_form'
 
 class FormBasic {
   public S: ServerEventsDispatcher
@@ -285,7 +284,7 @@ export class FormArray extends FormBasic {
   }
   //static functions:
   mergeFormValues(f) {
-    if(!this.isUpdate){
+    /*if(!this.isUpdate){
       const s = get(default_form)[this.schema_key]
       if(s) {
         for (let i = 0; i < f.length; i++) {
@@ -294,7 +293,7 @@ export class FormArray extends FormBasic {
           }
         }
       }
-    }
+    }*/
     return f   
   }
   onFormDataGetStatic(d:{ r: {result:[[]] }, m: {result: [[]]}, n: {result: [[]]}, d: {} }) {

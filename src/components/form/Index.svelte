@@ -17,8 +17,6 @@
 
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import {translation} from '../../modules/global_stores/translation'
-  import {default_form} from '../../modules/global_stores/default_form'
-  declare let $default_form
 
   export let key = "0"
   export let schema_key
@@ -192,7 +190,7 @@
 
   }
   function mergeFormValues(f) {
-    if(!isUpdate){
+    /*if(!isUpdate){
       const s = $default_form[schema_key]
       if(s) {
         for (let i = 0; i < f.length; i++) {
@@ -201,7 +199,7 @@
           }
         }
       }
-    }
+    }*/
     return f   
   }
   function onFormDataGetStatic(d) {

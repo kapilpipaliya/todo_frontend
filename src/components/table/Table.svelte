@@ -22,8 +22,6 @@
 
   const dp = createEventDispatcher()
   import { css_count } from '../../modules/global_stores/css'
-  import { default_filter } from '../../modules/global_stores/default_filter'
-  declare let $default_filter
   // import Card from "../components/Card.svelte";
 
   import Config from './Config.svelte'
@@ -279,15 +277,15 @@
   }
   // ================================Re Fetch Data ===============================
   function mergeFilter(f) {
-    const s = $default_filter[schema_key]
+    /*const s = $default_filter[schema_key]
     if(s) {
       for (let i = 0; i < f.length; i++) {
         if (s[i]) {
           f[i] = s[i]
         }
       }
-    }
-    return f      
+    }*/
+    return f
   }
   export const refresh = () => {
     const args = [

@@ -115,20 +115,6 @@
 	// const onClickHandle = e => {
 	//   goto(e.target.href, { replaceState: true })
 	// }
-
-	/* No static default_filter and default_form
-	$: {
-		$default_filter = {
-		  project: [null, $project_data[0]?._key ?? null],
-		  work_package: [null, $project_data[0]?._key ?? null, $project_data[1]?._key ?? null],
-		}
-	}
-	$: {
-		$default_form = {
-		  project: [null, $project_data[0]?._key ?? null],
-		  work_package: [null, $project_data[0]?._key ?? null, $project_data[1]?._key ?? null]
-		}
-	}*/
 </script>
 
 {#if routes.length}
