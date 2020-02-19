@@ -33,7 +33,9 @@
 </script>
 
 <nav>
-	Current User: {email}
+	{#if email}
+		Current User: {email}
+	{/if}
 
 	{#if menus.navData}
 		<MenuF menu={menus.navData.account}/>

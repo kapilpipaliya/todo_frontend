@@ -2,7 +2,6 @@
   import { onMount, onDestroy } from '../../modules/index'
   import Modal from './Model.svelte'
   import { css_count } from '../../modules/global_stores/css'
-  declare let $css_count
 
   export let closeHeaderMenu
   export let contextmenu
@@ -18,10 +17,10 @@
   export let inputHeaderMenuColumn
 
   onMount(() => {
-      $css_count.table_context_menu = ($css_count.table_context_menu || 0) + 1
+      css_count.increase('table_context_menu')
   })
   onDestroy(() => {
-      $css_count.table_context_menu = $css_count.table_context_menu - 1
+      css_count.decrease('table_context_menu')
   })
 /*
   <div class="menu">

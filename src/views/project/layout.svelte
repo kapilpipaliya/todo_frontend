@@ -89,11 +89,10 @@
 		return menu_
   	}
 
-  	// when project_id change or project_data is change just refresh the component.
-
-  	$: {menus = processMenu(R.clone(m.menu), $org_id, project_id) }
+  	// enable this when need:
+  	//$: {menus = processMenu(R.clone(m.menu), $org_id, project_id) }
 </script>
-
+PROJECT LAYOUT
 <h4>Selected Project: {project_id}</h4>
 <div style="display: flex">
   <div>

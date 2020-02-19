@@ -11,7 +11,6 @@
 	import PublicLayout from './views/public/layout.svelte'
 	import AdminLayout from './views/admin/layout.svelte'
 	import AdminIndex from './views/admin/index.svelte'
-	import EmployeesIndex from './views/admin/employees/index.svelte'
 
 	// organization:
 	import OrganizationLayout from './views/organization/layout.svelte'
@@ -25,7 +24,7 @@
 
 	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index'
 	declare let $ws_connected
-	import * as R from 'ramda'
+	import * as RD from 'rambda'
 
 	let mounted = false
 	let er = ''
@@ -39,7 +38,7 @@
 	    if (!binded) {
 	      S.bind$(schema_get_evt, (d) => {
 	      	if(d[0].length && d[0][0].routes){
-	      		routes = R.map((x)=> modifyObj(x), d[0][0].routes)
+	      		routes = RD.map((x)=> modifyObj(x), d[0][0].routes)
 	      	}
 	      }, 1)
 	      binded = true
@@ -66,18 +65,20 @@
 
 	const modifyComp = (key, obj)=> {		
 	    switch (obj[key]) {
-	    case "Page": obj[key] = Page; break;  
 	    case "PublicLayout": obj[key] = PublicLayout; break;
 	    
+	    case "Page": obj[key] = Page; break;  
 	    case "Form": obj[key] = FormWrapper; break;
 	    
 	    case "Logout": obj[key] = Logout; break;
 	    case "Confirm": obj[key] = Confirm; break;
+	    
 	    case "AdminLayout": obj[key] = AdminLayout; break;
 	    case "AdminIndex": obj[key] = AdminIndex; break;
-	    case "EmployeesIndex": obj[key] = EmployeesIndex; break;
+	    
 	    case "OrganizationLayout": obj[key] = OrganizationLayout; break;
 	    case "OrganizationIndex": obj[key] = OrganizationIndex; break;
+	    
 	    case "ProjectLayout": obj[key] = ProjectLayout; break;
 	    case "ProjectIndex": obj[key] = ProjectIndex; break;
 	    default:
@@ -104,7 +105,7 @@
 	  obj = modifyComp('layout', obj)
 	  obj = modifyGuard(obj)
 	  if(obj.nestedRoutes){
-	    obj.nestedRoutes = R.map((x)=> modifyObj(x), obj.nestedRoutes)
+	    obj.nestedRoutes = RD.map((x)=> modifyObj(x), obj.nestedRoutes)
 	  }
 	  return obj
 	}

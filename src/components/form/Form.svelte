@@ -18,7 +18,6 @@ export let showdbg = false
 // export let options = {}
 
 import { css_count } from '../../modules/global_stores/css'
-declare let $css_count
 
 $: saveLabel = buttonlabels?.save ?? ""
 $: cancelLabel = buttonlabels?.cancel ?? ""
@@ -62,11 +61,11 @@ $: {
 }
 onMount(()=> {
    mounted = true
-   $css_count.submit_buttons = ($css_count.submit_buttons || 0) + 1
+   css_count.increase('submit_buttons')
 })
 onDestroy(() => {
   mounted = false
-  $css_count.submit_buttons = $css_count.submit_buttons - 1
+  css_count.decrease('submit_buttons')
 })
 
 </script>

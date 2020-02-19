@@ -5,6 +5,7 @@
   export let currentRoute
 </script>
 
+PUBLIC LAYOUT
 <div class="app">
   <!-- <TopHeader /> -->
   <section class="section">
