@@ -2,6 +2,8 @@
   import { DisplayType, getContext, get } from '../../modules/index'
   import { css } from '../../modules/global_stores/css'
   import UrlPattern from 'url-pattern'
+  import { fade, fly } from 'svelte/transition'
+  import { flip } from 'svelte/animate'
 
   import Text from './display/Text.svelte'
   import Bool from './display/Bool.svelte'
@@ -48,9 +50,14 @@
   function makeUrl(props, id){
     return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id})
   }
+  //animate:flip
 </script>
 
-        <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
+        <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
+          in:fade={{ y: 200, duration: 200 }}
+          out:fade={{ y: 2000, duration: 150 }}
+
+        >
           {#if showRowNum}
             <td>{rowIndex + 1}</td>
           {/if}
