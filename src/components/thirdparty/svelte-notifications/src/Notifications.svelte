@@ -2,7 +2,6 @@
   import { notification } from './store'
   import { onMount, onDestroy } from '../../../../../svelte/src/runtime/index'
   import { css_count } from '../../../../modules/global_stores/css'
-  declare let $css_count
   export let themes = {
     danger: '#bb2124',
     success: '#22bb33',
@@ -59,14 +58,14 @@
       return
     }
     createToast(value.message, value.type, value.timeout)
-    notification.set()
+    notification.set({})
   })
   onMount(()=>{
-    $css_count.notifications = ($css_count.notifications || 0) + 1
+    css_count.increase('notifications')
   })
   onDestroy(() => {
     unsubscribe()
-    $css_count.notifications = $css_count.notifications - 1
+    css_count.decrease('notifications')
   })
   //onDestroy(unsubscribe)
 

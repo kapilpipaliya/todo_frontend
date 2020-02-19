@@ -8,20 +8,31 @@ export const css_frameworks = writable(
     )
 export const selected_frameworks = writable(['bootstrap'])
 
-export const css = writable(
-    { table:{
-      classes:{ selected: 'myselected'},
-      link: 'one'
-     }
-  } )
-export const css_count = writable({'table': 0})
+export const css = writable({})
+const css_count_ = writable({'table': 0})
+export const css_count = {
+  subscribe: css_count_.subscribe,
+  increase: name => {
+    css_count_.update(val => {
+      val[name] = (val[name] || 0) + 1
+      return val
+    })
+  },
+  decrease: name => {
+    css_count_.update(val => {
+      val[name] = val[name]  - 1
+      return val
+      }
+     )
+  }
+}
 
 // {"table":{"classes":{},"link":"/table.5efd916f.css"}}
-  S.bind$(
-    [et.get, e.account, e.css_event, 0],
-    function(data) { // : [{}]
-      // console.log("i got data: ", data)
-      css.set(data[0])
-    },
-    1
-  )
+S.bind$(
+  [et.get, e.account, e.css_event, 0],
+  function(data) { // : [{}]
+    // console.log("i got data: ", data)
+    css.set(data[0])
+  },
+  1
+)

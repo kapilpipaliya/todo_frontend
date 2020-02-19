@@ -22,7 +22,6 @@
 
   const dp = createEventDispatcher()
   import { css_count } from '../../modules/global_stores/css'
-  declare let $css_count
   import { default_filter } from '../../modules/global_stores/default_filter'
   declare let $default_filter
   // import Card from "../components/Card.svelte";
@@ -239,11 +238,11 @@
 
   onMount(async () => {
     mounted = true
-    $css_count.table = $css_count.table + 1
+    css_count.increase('table')
   })
   onDestroy(() => {
       unRegister();
-      $css_count.table = $css_count.table - 1
+      css_count.decrease('table')
   })
 
   const bindOnce = () => {

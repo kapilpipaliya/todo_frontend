@@ -1,7 +1,6 @@
 <script lang='ts'>
   import { onMount, onDestroy, createEventDispatcher } from '../../modules/index'
   import { css_count } from '../../modules/global_stores/css'
-  declare let $css_count
   // How TO - Scroll Back To Top Button
   // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
   let button
@@ -9,11 +8,11 @@
   onMount(() => {
       // When the user scrolls down 20px from the top of the document, show the button
       // window.onscroll = function() { scrollFunction() }
-      $css_count.scrolltop = ($css_count.scrolltop || 0) + 1
+      css_count.increase('scrolltop')
   })
   onDestroy(() => {
       // window.onscroll = undefined
-      $css_count.scrolltop = $css_count.scrolltop - 1
+    css_count.decrease('scrolltop')  
   })
   /*function scrollFunction() {
     if (

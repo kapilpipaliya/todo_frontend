@@ -1,7 +1,6 @@
 <script lang='ts'>
   import { onMount, onDestroy, tick } from '../../../modules/index'
   import { css_count } from '../../../modules/global_stores/css'
-  declare let $css_count
  	export let value = {}
   export let disabled = false
   
@@ -10,7 +9,7 @@
   declare let JSONEditor
 
   onMount(async () => {
-    $css_count.jsoneditor = ($css_count.jsoneditor || 0) + 1
+    css_count.increase('jsoneditor')
     
     const options = {
       mode: disabled ? 'view' : 'code',
@@ -28,7 +27,7 @@
     jsoneditor = new JSONEditor(jsonediDom, options, value)
   })
   onDestroy(() => {
-    $css_count.jsoneditor = $css_count.jsoneditor - 1
+    css_count.decrease('jsoneditor')
   })
 
 </script>
