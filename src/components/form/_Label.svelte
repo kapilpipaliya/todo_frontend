@@ -1,4 +1,6 @@
 <script>
 export let name = ""
 </script>
-<span>{name}</span>
+{#if name}
+	<span>{name}</span>
+{/if}

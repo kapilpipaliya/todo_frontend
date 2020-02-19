@@ -2,7 +2,7 @@
 import { NotificationDisplay, notifier } from './thirdparty/svelte-notifications/src/index'
 import Time from './Time.svelte'
 import Table from './table/Table.svelte'
-import { Tabs, Tab, TabList, TabPanel } from './thirdparty/svelte-tabs/src/index'
+// import { Tabs, Tab, TabList, TabPanel } from './thirdparty/svelte-tabs/src/index'
 
 import Form from './form/Form.svelte'
 import Error from './Error.svelte'
@@ -13,10 +13,10 @@ export {
   NotificationDisplay,
   notifier,
   Time,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanel,
+  // Tabs,
+  // Tab,
+  // TabList,
+  // TabPanel,
 
   Form,
   Error

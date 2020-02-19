@@ -15,11 +15,11 @@ import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 import JsonEditor from './input/JsonEditor.svelte'
 import Flatpicker from './input/Flatpicker.svelte'
-import CodeMirror from './input/codemirror/CodeMirror.svelte'
+//import CodeMirror from './input/codemirror/CodeMirror.svelte'
 import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
-import CLEditor from './input/CLEditor.svelte'
+// import CLEditor from './input/CLEditor.svelte'
 
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
@@ -118,67 +118,58 @@ $: {
 
 </script>
 {#each form as f, i}
-	{#if types[i]}
-	{#if types[i] === FormType.color}
-		<Color bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.email}
-		<Email bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.file}
-		<File bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.hidden}
-		<Hidden bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.number}
-		<Number bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.password}
-		<Password bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.range}
-		<Range bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.search}
-		<Search bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.text}
-		<Text bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.checkbox && !isArray(f)}
-		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
-	{:else if types[i] === FormType.checkbox}
-		<Label name={labels[i]} />
-    	<Checkboxes  name={labels[i]} bind:value={f} required={required[i]} bind:this={doms[i]} disabled={isDisabled(form_disabled, i)} props={props[i]} />
-	{:else if types[i] === FormType.radio}
-		<Radio />
-   {:else if types[i] === FormType.textarea}
-   		<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
+  {#if types[i]}
+  	<Label name={labels[i]} />
+  	{#if types[i] === FormType.color}
+  		<Color bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.email}
+  		<Email bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.file}
+  		<File bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.hidden}
+  		<Hidden bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.number}
+  		<Number bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.password}
+  		<Password bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.range}
+  		<Range bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.search}
+  		<Search bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.text}
+  		<Text bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.checkbox && !isArray(f)}
+  		<Checkbox bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]} />
+  	{:else if types[i] === FormType.checkbox}
+      <Checkboxes  name={labels[i]} bind:value={f} required={required[i]} bind:this={doms[i]} disabled={isDisabled(form_disabled, i)} props={props[i]} />
+  	{:else if types[i] === FormType.radio}
+  		<Radio />
+    {:else if types[i] === FormType.textarea}
+    	<Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
     {:else if types[i] === FormType.select}
-      <Label name={labels[i]} />
       <TableForm bind:values={f} bind:this={doms[i]} multiSelect={false} {...props[i]} />
     {:else if types[i] === FormType.radio}
-      <Label name={labels[i]} />
       <radio bind:this={doms[i]}  {...props[i]} />
     {:else if types[i] === FormType.multi_select}
     	<div>
-     		<Label name={labels[i]} />
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.text_array}
     	<div>
-     		<Label name={labels[i]} />
      		<ArrayForm  bind:values={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.multi_select_bool_properties}
     	<div>
-     		<Label name={labels[i]} />
      		<TableForm  bind:values={f} multiSelect={true} disabled={isDisabled(form_disabled, i)} boolprop={true} {...props[i]} />
      	</div>
     {:else if types[i] === FormType.jsoneditor}
-      <Label name={labels[i]} />
       <JsonEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
     {:else if types[i] === FormType.codemirror}
-      <Label name={labels[i]} />
-      <CodeMirror bind:value={f} code={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+    <!--       <CodeMirror bind:value={f} code={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
+    <Textarea bind:value={f} name={labels[i]} required={required[i]} disabled={isDisabled(form_disabled, i)} bind:dom={doms[i]} {...props[i]}/>
     {:else if types[i] === FormType.flatpicker}
-      <Label name={labels[i]} />
       <Flatpicker bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
-    {:else if types[i] === FormType.multi_select_hidden}
-      <div></div>
-    {:else if types[i] === FormType.save_time}
+    {:else if types[i] === FormType.multi_select_hidden || types[i] === FormType.save_time}
       <div></div>
     {:else if types[i] === FormType.dropzone}
       <DropZone bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
@@ -187,13 +178,13 @@ $: {
     {:else if types[i] === FormType.prosemirror}
       <!-- <Prosemirror bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
     {:else if types[i] === FormType.cleditor}
-      <CLEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} />
+      <!-- <CLEditor bind:value={f} disabled={isDisabled(form_disabled, i)} {...props[i]} /> -->
     {:else}
       Unknown Component
     {/if}
-    <!-- Description -->
+
     {#if description[i]}
       {description[i]}
     {/if}
-    {/if}
+  {/if}
 {/each}
