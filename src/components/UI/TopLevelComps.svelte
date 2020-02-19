@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import {maintenance} from '../../modules/global_stores/maintenance'
 	import {navigation} from '../../modules/global_stores/navigation'
-	import {current_time} from '../../modules/global_stores/time_store'
+	//import {current_time} from '../../modules/global_stores/time_store'
 
 	import Css from './Css.svelte'
 	
@@ -24,4 +24,3 @@
 <NotificationDisplay bind:this={n} />
 
 <ScrollTop/>
-{$current_time}

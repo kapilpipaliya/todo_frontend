@@ -41,12 +41,13 @@
   		public menu = []
   	}
   	const m = new Menu;
+
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(org_fetch_evt, (d) => {
 	      	const result = d[0][1].r.result
 	      	if(result.length == 0) {
-	      		console.log('no organization found')
+	      		console.warn('no organization found')
 	      	} else if(result[0]) {
 	      		const org_data = result[0]
 	      		$org_data_ctx = org_data
@@ -54,7 +55,7 @@
 	      		fetch_data = true
 	      		return
 	      	}
-	      	console.log("cant set organization data")
+	      	console.warn("cant set organization data")
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
@@ -63,23 +64,32 @@
 	      			menus = processMenu(R.clone(m.menu), org_id)
 	      			return
 	      		}
-	      	console.log("cant set menu")
+	      	console.warn("cant set menu")
 	      	}
 	      }, 1)
 	      binded = true
-          const args = [
-		      [null, `="${org_id}"`],
-		      [],
-		      [0, 0, 1],
-		      {type: form_type.object},
-		    ]
-          S.trigger([
-          	[org_fetch_evt, args],
-	    	[menu_evt, ['side_menu']],
-	    	]) 
+	      if(org_id){      	
+	          const args = [
+			      [null, `="${org_id}"`],
+			      [],
+			      [0, 0, 1],
+			      {type: form_type.object},
+			    ]
+	          S.trigger([
+	          	[org_fetch_evt, args],
+		    	[menu_evt, ['side_menu']],
+		    	])
+	      } else {
+	      	er = "Please Select Organization"
+	      	console.warn('Organization key is invalid')
+	      }
 	    }
   	}
   	function processMenu(menu_, org) {
+  		if(!org){
+  			console.warn('org key must not be empty when processing menu')
+  			return []
+  		}
 		for(let x of menu_) {
 			x.path = new UrlPattern(x.path).stringify({org})
 			if(x.children){
@@ -94,7 +104,7 @@
   	$: {menus = processMenu(R.clone(m.menu), org_id) }
 </script>
 
-<h4>Selected Organization: {org_id}</h4>
+<div style="display: flex"><h4>Selected Organization:&nbsp</h4><h3>{org_id}</h3></div>
 <div style="display: flex">
   <div>
 	<TreeSidebar menu={menus}/>

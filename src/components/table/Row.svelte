@@ -48,7 +48,11 @@
 
 
   function makeUrl(props, id){
-    return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id})
+    if(id) {
+      return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id})
+    } else {
+      return ''
+    }
   }
   //animate:flip
 </script>
