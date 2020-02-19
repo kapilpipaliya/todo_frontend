@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { tick } from '../modules/index'
-  import Title from './Title.svelte'
+  import Title from './UI/Title.svelte'
   import {Table} from './index'
   import GeneralForm from './form/Index.svelte'
 

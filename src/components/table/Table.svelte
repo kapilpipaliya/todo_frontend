@@ -18,7 +18,7 @@
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
   import ContextMenu from './ContextMenu.svelte'
-  import Error from '../Error.svelte'
+  import Error from '../UI/Error.svelte'
 
   const dp = createEventDispatcher()
   import { css_count } from '../../modules/global_stores/css'

@@ -19,6 +19,7 @@ export enum form_type { object = 1, array };
 export enum FormType {
     button = 1,
     checkbox,
+    checkboxes,
     color,
     date,
     datetime_local,

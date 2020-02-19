@@ -1,6 +1,6 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher } from '../modules/index'
-  import { css_count } from '../modules/global_stores/css'
+  import { onMount, onDestroy, createEventDispatcher } from '../../modules/index'
+  import { css_count } from '../../modules/global_stores/css'
   declare let $css_count
   // How TO - Scroll Back To Top Button
   // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp

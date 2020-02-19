@@ -1,28 +1,28 @@
 <script lang='ts'>
-  import { Route } from "../../components/svelte-router-spa/src/index";
-  	import { onMount, onDestroy, writable, setContext, getContext,
-  		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/index'
-  	declare let $ws_connected
-  	import * as R from 'ramda'
-  	import TreeSidebar from '../../components/TreeSidebar.svelte'
+    import { Route } from "../../components/svelte-router-spa/src/index";
+	import { onMount, onDestroy, writable, setContext, getContext,
+		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/index'
+	declare let $ws_connected
+	import * as R from 'ramda'
+	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
 
-  	import UrlPattern from 'url-pattern'
-  	import Skeleton from '../../components/Skeleton.svelte'
+	import UrlPattern from 'url-pattern'
+	import Skeleton from '../../components/UI/Skeleton.svelte'
 
-    export let currentRoute;
+	export let currentRoute;
 
-    const org_id = currentRoute.namedParams.org
-    const org_id_ctx = writable(org_id);
-    const org_data_ctx = writable({});
-    declare let $org_data_ctx
-    setContext('org_id', org_id_ctx);
-    setContext("org_data", org_data_ctx)
-    
-    const project_ctx = writable([]);
-    declare let $project_ctx
-    setContext("project", project_ctx)
+	const org_id = currentRoute.namedParams.org
+	const org_id_ctx = writable(org_id);
+	const org_data_ctx = writable({});
+	declare let $org_data_ctx
+	setContext('org_id', org_id_ctx);
+	setContext("org_data", org_data_ctx)
 
-    let mounted = false
+	const project_ctx = writable([]);
+	declare let $project_ctx
+	setContext("project", project_ctx)
+
+	let mounted = false
 	let er = ''
 	let binded = false
 	let fetch_data = false

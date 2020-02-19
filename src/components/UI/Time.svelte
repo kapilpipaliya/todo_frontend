@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { current_time } from '../modules/global_stores/time_store'
+  import { current_time } from '../../modules/global_stores/time_store'
 
   const formatter = new Intl.DateTimeFormat('en', {
     hour12: true,

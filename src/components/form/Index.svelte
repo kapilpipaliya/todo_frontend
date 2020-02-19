@@ -5,7 +5,7 @@
   import { FormArray } from '../../modules/form'
   import Form from './Form.svelte'
   import {schemaEvents} from '../../modules/schema_events'
-  import Html from '../Html.svelte'
+  import Html from '../UI/Html.svelte'
   export let id = 'insert'
   export let t = []
   export let b = []

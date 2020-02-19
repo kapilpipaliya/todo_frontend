@@ -1,14 +1,5 @@
 <script lang='ts'>
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index'
-	declare let $ws_connected
-	import * as R from 'ramda'
-
-	import { Router } from './components/svelte-router-spa/src/index'
-
-	import Css from './components/Css.svelte'
-	import MenuF from './components/MenuF.svelte'
-
-// stores:
+	// stores:
 	import {maintenance} from './modules/global_stores/maintenance'
 	import {translation} from './modules/global_stores/translation'
 	//import {notification} from './modules/global_stores/notification'
@@ -24,7 +15,13 @@
 	import {current_member} from './modules/global_stores/current_member'
 	declare let $current_member
 
-// Routes:
+	import Css from './components/UI/Css.svelte'
+	import MenuF from './components/UI/MenuF.svelte'
+	import ScrollTop from './components/UI/ScrollTop.svelte'
+	import { NotificationDisplay } from './components/index'
+
+
+	// Routes:
   	import Page from './components/Page.svelte'
 	import FormWrapper from './components/FormWrapper.svelte'
 	// account:
@@ -46,13 +43,14 @@
 	import ProjectLayout from './views/project/layout.svelte'
 	import ProjectIndex from './views/project/index.svelte'
 
-	// other
+	import { Router } from './components/svelte-router-spa/src/index'
 
-	import { NotificationDisplay } from './components/index'
+	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index'
+	declare let $ws_connected
+	import * as R from 'ramda'
+
 	let n
 
-	import ScrollTop from './components/ScrollTop.svelte'
-	
 	let mounted = false
 	let er = ''
 	let binded = false

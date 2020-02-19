@@ -3,7 +3,7 @@
 
   import SubmitButton from '../form/_SubmitButton.svelte'
   import CancelButton from '../form/_CancelButton.svelte'
-  import Error from '../Error.svelte'
+  import Error from '../UI/Error.svelte'
   export let schema_key = ''
   const dp = createEventDispatcher()
 

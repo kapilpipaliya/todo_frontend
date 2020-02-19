@@ -1,5 +1,5 @@
 <script>
-	import { css, css_frameworks, selected_frameworks, css_count } from '../modules/global_stores/css'
+	import { css, css_frameworks, selected_frameworks, css_count } from '../../modules/global_stores/css'
 /* No Framework load
 {#each Object.entries($css_frameworks) as [framework, link], index (framework)}
 	{#each $selected_frameworks as f, index (f)}

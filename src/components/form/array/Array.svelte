@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import { onMount } from '../../../modules/index'
-	import { Debug } from '../../debug'
+	import { Debug } from '../../UI/debug'
 	export let values = []
 	export let disabled = false
 	export let ar = false

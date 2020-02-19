@@ -12,7 +12,7 @@ export let form_disabled = true
 export let save = ()=>0
 export let buttonlabels = {save: "", cancel : ""}
 export let onReset
-import { Debug, showDebug } from '../debug'
+import { Debug, showDebug } from '../UI/debug'
 export let id = 'insert'
 export let showdbg = false
 // export let options = {}

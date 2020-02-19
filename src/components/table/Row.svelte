@@ -53,126 +53,126 @@
   //animate:flip
 </script>
 
-        <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
-          in:fade={{ y: 200, duration: 200 }}
-          out:fade={{ y: 2000, duration: 150 }}
+<tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
+  in:fade={{ y: 200, duration: 200 }}
+  out:fade={{ y: 2000, duration: 150 }}
 
-        >
-          {#if showRowNum}
-            <td>{rowIndex + 1}</td>
-          {/if}
-          <td>
-              {#if !isGlobal}
-                {#if false}
-                  <span>ID: {getValue(rowValue[0])}</span>
-                {/if}
-                <input
-                  type="checkbox"
-                  value={getValue(rowValue[0])}
-                  checked={selectedRowsKeys.includes(getValue(rowValue[0]))}
-                  on:click={onSelectRowClick} />
-              {/if}
-          </td>
-          <td>
-              {#if !isGlobal}
-              {#if quickcomponent && !quickview.includes(getValue(rowValue[0]))}
-                <button
-                  name='edit'
-                  key={getValue(rowValue[0])}
-                  type="button"
-                  on:click={() => {
-                    quickview.push(getValue(rowValue[0]))
-                    quickview = quickview
-                  }}>
-                  Edit
-                </button>
-              {/if}
-              {/if}
-          </td>
-          <td>
-              {#if !isGlobal}
-              <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]), rowIndex)()}>D</button>
-              {/if}
-          </td>
-          {#each rowValue as c, index}
-            {#if headerIsvisibleColumnsRow[index]}
-              <td>
-                {#if editableColumnsRow[index]}
-                  <GeneralForm
-                  {schema_key}
-                  key={getValue(rowValue[0])}
-                  {fetchConfig}
-                  selector={["_key", editableColumnsRow[index].s]}
-                  id='inline'
-                  buttonlabels={{save: "Save", cancel: ""}}
-                  headerSchema={[
-                    [
-                      [
-                        [
-                          [],
-                          [FormType.hidden, editableColumnsRow[index].t],
-                          [],
-                          [],
-                          [],
-                          {}
-                        ],
-                        {}
-                      ],
-                      {r: {result:[[getValue(rowValue[0]), getValue(c)]]}  } 
-                    ]
-                  ]
-                  }
-                  />
-                {:else if c != null}
-                  {#if headerVisibleColTypesRow[index] === DisplayType.DateTime}
-                    {new Date(c).toLocaleString()}
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
-                    <Url href={makeUrl(headerColumnPropsRow[index], c)} value={headerColumnPropsRow[index].l}/>
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
-                    <Bool value={getValue(c)}/>
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
-                    <Color value={getValue(c)}/>
-                  {:else if headerVisibleColTypesRow[index] === DisplayType.Time}
-                    <Time value={getValue(c)}/>
-                  {:else}
-                    <Text value={getValue(c)}/>
-                  {/if}
-                {/if}
-              </td>
-            {/if}
-          {/each}
-          <!-- <td> -->
-          {#if false}
-            <a href="javascript:;" on:click={() => onItemClick(rowValue)}>
-              <span class="icon is-small">
-                <i class="fas fa-edit" />
-                edit
-              </span>
-            </a>
-
-            <a href="javascript:;" on:click={() => onDeleteClick(rowValue)}>
-              <span class="icon is-small">
-                <i class="fas fa-trash" />
-                delete
-              </span>
-            </a>
-          {/if}
-          <!-- </td> -->
-        </tr>
-        {#if showQuickView}
-          <tr>
-            <td colspan={rowValue.length + 3}>
-              {#if quickcomponent}
-                <svelte:component
-                  this={quickcomponent}
-                  bind:this={rowEditDoms[rowIndex]}
-                  key={getValue(rowValue[0])}
-                  {schema_key}
-                  {fetchConfig}
-                  on:close={onCancel}
-                  on:successSave={successSave}
-                  on:deleteRow={deleteRow} />
-              {/if}
-            </td>
-          </tr>
+>
+  {#if showRowNum}
+    <td>{rowIndex + 1}</td>
+  {/if}
+  <td>
+      {#if !isGlobal}
+        {#if false}
+          <span>ID: {getValue(rowValue[0])}</span>
         {/if}
+        <input
+          type="checkbox"
+          value={getValue(rowValue[0])}
+          checked={selectedRowsKeys.includes(getValue(rowValue[0]))}
+          on:click={onSelectRowClick} />
+      {/if}
+  </td>
+  <td>
+      {#if !isGlobal}
+      {#if quickcomponent && !quickview.includes(getValue(rowValue[0]))}
+        <button
+          name='edit'
+          key={getValue(rowValue[0])}
+          type="button"
+          on:click={() => {
+            quickview.push(getValue(rowValue[0]))
+            quickview = quickview
+          }}>
+          Edit
+        </button>
+      {/if}
+      {/if}
+  </td>
+  <td>
+      {#if !isGlobal}
+      <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]), rowIndex)()}>D</button>
+      {/if}
+  </td>
+  {#each rowValue as c, index}
+    {#if headerIsvisibleColumnsRow[index]}
+      <td>
+        {#if editableColumnsRow[index]}
+          <GeneralForm
+          {schema_key}
+          key={getValue(rowValue[0])}
+          {fetchConfig}
+          selector={["_key", editableColumnsRow[index].s]}
+          id='inline'
+          buttonlabels={{save: "Save", cancel: ""}}
+          headerSchema={[
+            [
+              [
+                [
+                  [],
+                  [FormType.hidden, editableColumnsRow[index].t],
+                  [],
+                  [],
+                  [],
+                  {}
+                ],
+                {}
+              ],
+              {r: {result:[[getValue(rowValue[0]), getValue(c)]]}  } 
+            ]
+          ]
+          }
+          />
+        {:else if c != null}
+          {#if headerVisibleColTypesRow[index] === DisplayType.DateTime}
+            {new Date(c).toLocaleString()}
+          {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
+            <Url href={makeUrl(headerColumnPropsRow[index], c)} value={headerColumnPropsRow[index].l}/>
+          {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
+            <Bool value={getValue(c)}/>
+          {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
+            <Color value={getValue(c)}/>
+          {:else if headerVisibleColTypesRow[index] === DisplayType.Time}
+            <Time value={getValue(c)}/>
+          {:else}
+            <Text value={getValue(c)}/>
+          {/if}
+        {/if}
+      </td>
+    {/if}
+  {/each}
+  <!-- <td> -->
+  {#if false}
+    <a href="javascript:;" on:click={() => onItemClick(rowValue)}>
+      <span class="icon is-small">
+        <i class="fas fa-edit" />
+        edit
+      </span>
+    </a>
+
+    <a href="javascript:;" on:click={() => onDeleteClick(rowValue)}>
+      <span class="icon is-small">
+        <i class="fas fa-trash" />
+        delete
+      </span>
+    </a>
+  {/if}
+  <!-- </td> -->
+</tr>
+{#if showQuickView}
+  <tr>
+    <td colspan={rowValue.length + 3}>
+      {#if quickcomponent}
+        <svelte:component
+          this={quickcomponent}
+          bind:this={rowEditDoms[rowIndex]}
+          key={getValue(rowValue[0])}
+          {schema_key}
+          {fetchConfig}
+          on:close={onCancel}
+          on:successSave={successSave}
+          on:deleteRow={deleteRow} />
+      {/if}
+    </td>
+  </tr>
+{/if}

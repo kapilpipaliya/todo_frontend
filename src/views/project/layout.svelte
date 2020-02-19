@@ -4,10 +4,10 @@
   		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/index'
   	declare let $ws_connected
   	import * as R from 'ramda'
-  	import TreeSidebar from '../../components/TreeSidebar.svelte'
+  	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
 
   	import UrlPattern from 'url-pattern'
-  	 import Skeleton from '../../components/Skeleton.svelte'
+  	 import Skeleton from '../../components/UI/Skeleton.svelte'
 
     export let currentRoute;
 
