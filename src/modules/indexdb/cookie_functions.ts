@@ -1,4 +1,4 @@
-import StorageDB from './indexdb/storage'
+import StorageDB from './storage'
 /*
 import cookie from 'cookie'
 export const setCookie  = res => {
