@@ -156,3 +156,34 @@ class UniqueNumber {
 export const Unique = new UniqueNumber()
 
 export const form_schema_evt = (id) => [event_type.get, events.my, events.form_schema_get, id ]
+
+// generate event from schema:
+export const schemaEvents = (id: number | string = 0, schema: string) => {
+  const h = events[`${schema}_list`]
+  let e0 = 0
+  if(h > 20 && h < 60){
+    e0 = events.e_global
+  } else if (h > 60 && h < 80) {
+    e0 = events.account
+  } else if (h > 80 && h < 140) {
+    e0 = events.admin
+  } else if (h > 140 && h < 160) {
+    e0 = events.my
+  }
+  if(h){
+    return [
+        [event_type.subscribe, e0, events[`${schema}_list`], id],
+        [event_type.mutate, e0, events[`${schema}_mutate`], id],
+      ]
+  } else if(schema == 'register'){
+    return [
+        null,
+        [event_type.mutate, events.account, events.register_user, Unique.id],
+      ]
+  } else if(schema == 'login'){
+    return [
+      null,
+      [event_type.mutate, events.account, events.login, Unique.id],
+    ]
+  }
+}

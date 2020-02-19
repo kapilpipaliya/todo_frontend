@@ -9,12 +9,11 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
-   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique } from '../../modules/index'
+   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, schemaEvents } from '../../modules/index'
    declare let $ws_connected
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
   declare let $translation
-  import {schemaEvents} from '../../modules/schema_events'
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
   import ContextMenu from './ContextMenu.svelte'

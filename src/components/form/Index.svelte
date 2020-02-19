@@ -1,10 +1,8 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
   declare let $ws_connected
   const dp = createEventDispatcher();
-  import { FormArray } from '../../modules/form'
   import Form from './Form.svelte'
-  import {schemaEvents} from '../../modules/schema_events'
   import Html from '../UI/Html.svelte'
   export let id = 'insert'
   export let t = []
