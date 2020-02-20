@@ -1,5 +1,6 @@
 <script lang='ts'>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
+  import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
   import Form from './Form.svelte'
@@ -14,7 +15,7 @@
   import * as RX from 'rambdax'
 
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
-  import {translation} from '../../modules/global_stores/translation'
+  import { translation } from '../../modules/global_stores/translation'
 
   export let key = "0"
   export let schema_key
@@ -34,8 +35,6 @@
   declare let $project_ctx
 
   fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
-
-  let config = {type: form_type.array}
 
   let events = schemaEvents(Unique.id, schema_key);
   let unsub_evt
@@ -61,7 +60,6 @@
   
   let options = {disabled: false, notify: true}
   let initial_form = []
-
   let headers = []
   let schemaGetEvt = []
   if(!data_evt) {
@@ -79,26 +77,6 @@
     }
   }
 
-  function onSave() {
-    isSaving =true
-    const filter = isUpdate ? [`="${config.type == form_type.object ? form._key : form[0]}"`] : null
-    // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
-    const saveConfig = { ...config} // , form: true, schema: schema_key
-    if(selector.length){
-      saveConfig['sel'] = selector
-    }
-    const args = [form, filter, saveConfig]
-    if(isUpdate){
-      args.push(unsub_evt)
-    }
-    S.trigger([[mutate_evt, args]])
-  }
-  function onReset() {
-    if(!isUpdate) {
-      form = RD.clone(initial_form)
-    }
-  }
-
   function bindMutate(){
     S.bind$(mutate_evt, onMutateGet, 1)
   }
@@ -111,13 +89,6 @@
       S.bind$(schemaGetEvt, onSchemaDataGet, 1)
     }
   }
-  function onDestroy_() {
-    //if (key && unsub_evt) S.trigger([[unsub_evt, {}]])
-    S.unbind_(events)
-    if(schemaGetEvt.length) {
-      S.unbind(schemaGetEvt)
-    }
-  }
   function fetch() {
     if(headerSchema.length) {
       onMutateGet(headerSchema as [any])
@@ -128,18 +99,43 @@
       //const project_data_store = get(project_data)
       // , level: project_data_store[project_data_store.length - 1]?._key ?? ""   fix lavel 
       // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
-      const fetchConfig = { ...config, schema: schema_key}
-      const args = ["s", filter, fetchConfig] // Todo Fix on c++ side too.
+      const args = ["s", filter, { ...fetchConfig, schema: schema_key}] // Todo Fix on c++ side too.
       const e1 = [schemaGetEvt, args]
       S.trigger([e1])
     } else {
       if(mutate_evt) {
         const filter = [`="${key}"`]
         // is schema_key passing neccessary?
-        const args = ["s", filter, { ...config, schema: schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
+        const args = ["s", filter, { ...fetchConfig, schema: schema_key }] // level: project_data_store[project_data_store.length - 1]?._key ?? "" 
         const e1 = [mutate_evt, args]
         S.trigger([e1])
       }
+    }
+  }
+  function onSave() {
+    isSaving = true
+    const filter = isUpdate ? [`="${fetchConfig.type == form_type.object ? form._key : form[0]}"`] : null
+    // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
+    const saveConfig = { ...fetchConfig} // , form: true, schema: schema_key
+    if(selector.length) {
+      saveConfig['sel'] = selector
+    }
+    const args = [form, filter, saveConfig]
+    if(isUpdate) {
+      args.push(unsub_evt)
+    }
+    S.trigger([[mutate_evt, args]])
+  }
+  function onReset() {
+    if(!isUpdate) {
+      form = RD.clone(initial_form)
+    }
+  }
+  function onDestroy_() {
+    //if (key && unsub_evt) S.trigger([[unsub_evt, {}]])
+    S.unbind_(events)
+    if(schemaGetEvt.length) {
+      S.unbind(schemaGetEvt)
     }
   }
   function onSchemaDataGet(d){
@@ -148,6 +144,7 @@
     //super.fetch()
   }
   function onMutateGet([d]) {
+    isSaving = false
     if(Array.isArray(d[0])){
       const schema = d[0][0]
       const options_new = d[0][1] ?? {}
@@ -155,7 +152,6 @@
       options = newOptions
       headers = schema
       const form_values = d[1]
-      isSaving = false
       const form_new = onFormDataGetStatic(form_values)
       if(form_new){
         if (form_new[0]) {
@@ -170,10 +166,8 @@
       
       form_disabled = options.ds ?? false // options.disabled
     } else {
-      isSaving = false
       if (d[0]) {
-        const translation_store = get(translation)
-        const save_msg = R.view(R.lensPath(['msg', 'save']), translation_store);
+        const save_msg = R.view(R.lensPath(['msg', 'save']), $translation);
         
         if(options.notify){
           notifier.success(save_msg, 3000)
@@ -252,7 +246,7 @@
   {showdbg}
   {...options}
 />
-<div>{er}</div>
+<Error {er} />
 {#if showdbg}
 {JSON.stringify(form)}
 options:
