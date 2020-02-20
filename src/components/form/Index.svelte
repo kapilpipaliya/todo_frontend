@@ -1,10 +1,14 @@
 <script lang='ts'>
   import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
-  import Error from '../UI/Error.svelte'
+  // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
-  import Form from './Form.svelte'
   import Html from '../UI/Html.svelte'
+  import { css_count } from '../../modules/global_stores/css'
+  import { Debug, showDebug } from '../UI/debug'
+  import RealForm from './RealForm.svelte'
+  import SubmitButton from './_SubmitButton.svelte'
+  import CancelButton from './_CancelButton.svelte'
   export let id = 'insert'
   export let t = []
   export let b = []
@@ -25,6 +29,7 @@
   export let selector = []
   export let headerSchema = []
   export let showdbg = false
+  let doms = {}
 
   let project = getContext('project')
   declare let $project
@@ -217,8 +222,8 @@
     }
   }
 
-  onMount(() => {mounted = true })
-  onDestroy(() => { onDestroy_() })
+  onMount(() => {mounted = true; css_count.increase('submit_buttons') })
+  onDestroy(() => { onDestroy_(); css_count.decrease('submit_buttons') })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
   //console.log($$props)
@@ -229,27 +234,72 @@
     }
   }
   // $: {console.log(form)} // hell this prints two time.
+  let labels = []
+  let types: number[] = []
+  let required = []
+  let disabled = []
+  let description = []
+  let props = []
+  $: {
+    labels = headers[0] ?? []
+    types = headers[1] ?? []
+    required = headers[2] ?? []
+    disabled = headers[3] ?? []
+    description = headers[4] ?? []
+    props = headers[5] ?? []
+  }
+  let once = true
+  $: {
+    if(mounted && once){
+      let index = -1
+      let i = -1
+        for (i = 0; i < disabled.length; i++) {
+          if (!disabled[i]) {
+            index = i
+            break
+          }
+        }
+        if(index > -1) {
+          setTimeout(function(){if(doms[index]) doms[index].focus() }, 200);
+          once = false
+        }
+    }
+  }
+
+  $: saveLabel = buttonlabels?.save ?? ""
+  $: cancelLabel = buttonlabels?.cancel ?? ""
+
 </script>
 
 <Html html={t}/>
-<Form
-  {id}
-  {key}
-  save={onSave}
-  isSaving={isSaving}
-  form_disabled={form_disabled}
-	bind:headers={headers}
-	bind:form={form}
-	on:close={onClose} on:close
-  {buttonlabels}
-  onReset={onReset}
-  {showdbg}
-  {...options}
-/>
-<Error {er} />
+
+{#if showdbg}
+  <label>debug</label><input type=checkbox bind:checked={$showDebug} />
+{/if}
+
+{#if form.length}
+  <form class={id} on:submit|preventDefault={onSave}>
+    <RealForm
+      {key}
+      bind:form={form} {form_disabled}
+      {labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
+    />
+
+    <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
+    {#if cancelLabel}
+      <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
+    {/if}
+    {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
+
+  </form>
+{/if}
+
+<!-- <Error {er} /> -->
+{er}
 {#if showdbg}
 {JSON.stringify(form)}
 options:
 {JSON.stringify(options)}
 {/if}
+
 <Html html={b}/>
