@@ -22,17 +22,6 @@
   onDestroy(() => {
       css_count.decrease('table_context_menu')
   })
-/*
-  <div class="menu">
-    <div class="menu-item">Share On Facebook</div>
-    <div class="menu-item">Share On Twitter</div>
-    <hr />
-    <div class="menu-item">Search On Google</div>
-    <div class="menu-item">Search On Bing</div>
-    <hr />
-    <div class="menu-item">Bookmark</div>
-  </div>
-*/
 </script>
 {#if contextmenu}
   <div class="menu">
@@ -59,7 +48,6 @@
     <div class="menu-item" on:click={closeInputMenu}>Close</div>
   </div>
 {/if}
-
 
 {#if modalIsVisible}
   <Modal on:close={closeModal}>

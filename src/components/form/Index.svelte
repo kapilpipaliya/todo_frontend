@@ -3,23 +3,23 @@
   // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
-  import Html from '../UI/Html.svelte'
   import { css_count } from '../../modules/global_stores/css'
   import { Debug, showDebug } from '../UI/debug'
+  import { notifier } from '../thirdparty/svelte-notifications/src/index'
+  import { translation } from '../../modules/global_stores/translation'
+  
+  import Html from '../UI/Html.svelte'
   import RealForm from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'
   import CancelButton from './_CancelButton.svelte'
-  export let id = 'insert'
-  export let t = []
-  export let b = []
-
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
   import * as RD from 'rambda'
   import * as RX from 'rambdax'
 
-  import { notifier } from '../thirdparty/svelte-notifications/src/index'
-  import { translation } from '../../modules/global_stores/translation'
+  export let id = 'insert'
+  export let t = []
+  export let b = []
 
   export let key = "0"
   export let schema_key
@@ -29,6 +29,7 @@
   export let selector = []
   export let headerSchema = []
   export let showdbg = false
+
   let doms = {}
 
   let project = getContext('project')
@@ -72,7 +73,6 @@
   } else {
     schemaGetEvt = []
   }
-
   function clearError() {
     er = ''
   }
@@ -81,7 +81,6 @@
       S.trigger([[unsub_evt, {}]])
     }
   }
-
   function bindMutate(){
     S.bind$(mutate_evt, onMutateGet, 1)
   }
@@ -184,7 +183,6 @@
         er = d[1]
       }
     }
-
   }
   function mergeFormValues(f) {
     /*if(!isUpdate){
@@ -221,13 +219,11 @@
       //
     }
   }
-
   onMount(() => {mounted = true; css_count.increase('submit_buttons') })
   onDestroy(() => { onDestroy_(); css_count.decrease('submit_buttons') })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
   //console.log($$props)
-
   $: {
     if(headerSchema.length) {
       onMutateGet(headerSchema as [any])
@@ -265,10 +261,8 @@
         }
     }
   }
-
   $: saveLabel = buttonlabels?.save ?? ""
   $: cancelLabel = buttonlabels?.cancel ?? ""
-
 </script>
 
 <Html html={t}/>

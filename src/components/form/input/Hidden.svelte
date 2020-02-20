@@ -6,13 +6,13 @@
 	export let props = {};
 	export let dom = null
 </script>
-	<input 
-		 {name}
-		 bind:this={dom}
-		 type='hidden'
-		 bind:value={value}
-		 {required} 
-		 autocomplete={false}
-		 {disabled}
-		 {...props}
-	/>
+<input 
+	{name}
+	bind:this={dom}
+	type='hidden'
+	bind:value={value}
+	{required} 
+	autocomplete={false}
+	{disabled}
+	{...props}
+/>

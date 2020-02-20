@@ -12,10 +12,7 @@
     if(isSaving || disabled) classn += 'disabled '
     if(isSaving) classn += 'loading '
   }
-
-
 </script>
-
 
 <button type="submit" class={classn} disabled={isSaving || disabled} {title} on:click={save} >
   <slot>{label}</slot>

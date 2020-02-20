@@ -1,5 +1,7 @@
 <script lang='ts'>
 import { getContext, get } from '../../modules/index'
+import { FormType } from '../../modules/enums'
+
 import Checkboxes from './input/Checkboxes.svelte';
 import Color from './input/Color.svelte'
 import Email from './input/Email.svelte'
@@ -20,40 +22,26 @@ import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
 // import CLEditor from './input/CLEditor.svelte'
-
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
-
-import {FormType} from '../../modules/enums'
-import * as RA from 'ramda-adjunct'
-import * as RD from 'rambda'
-//import * as RD from 'ramda'
 
 export let form
 export let key
 export let form_disabled = true
-
 export let labels = []
 export let types: number[] = []
 export let required = []
 export let disabled = []
 export let description = []
 export let props = []
-
 export let doms = {}
 
-
-
-
-const isDisabled = (form_disabled_, i) =>{
+const isDisabled = (form_disabled_, i) => {
 	if(form_disabled_ === true) {
 		return true
 	} else {
 		return disabled[i]
 	}
-}
-function isArray(val){
-	return RA.isArray(val)
 }
 
 $: {
@@ -171,8 +159,8 @@ function getComponent(t){
       return 'Unknown Component'
     }
 }
-
 </script>
+
 {#each form as f, i}
   {#if types[i]}
     <svelte:component

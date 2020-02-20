@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { tick } from '../modules/index'
   import Title from './UI/Title.svelte'
-  import {Table} from './index'
+  import Table from './table/Table.svelte'
   import GeneralForm from './form/Index.svelte'
 
   export let currentRoute

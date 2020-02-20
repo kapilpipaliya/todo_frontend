@@ -9,17 +9,17 @@
 
 	export let options = []
 </script>
-		<Label {name} />
-		{#each options as v}
-			<input
-				 {name}
-				 bind:this={dom}
-				 type='radio'
-				 bind:value={value}
-				 {required} 
-				 autocomplete={false}
-				 {disabled}
-				 {...props}
-			/>
-			<label>{v}</label>
-		{/each}
+<Label {name} />
+{#each options as v}
+	<input
+		{name}
+		bind:this={dom}
+		type='radio'
+		bind:value={value}
+		{required} 
+		autocomplete={false}
+		{disabled}
+		{...props}
+	/>
+	<label>{v}</label>
+{/each}

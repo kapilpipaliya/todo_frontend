@@ -1,5 +1,4 @@
 <script lang='ts'>
-
 	export let name;
 	export let required;
 	export let disabled;

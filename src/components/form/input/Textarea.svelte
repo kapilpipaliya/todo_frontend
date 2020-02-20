@@ -7,13 +7,13 @@
 	export let props = {};
 	export let dom = null
 </script>
-   	  <Label {name} />
-      <textarea
-		bind:value={value}
-		bind:this={dom}
-		{required}
-		{disabled}
-        rows={5}
-        cols={20}
-        {...props}
-       />
+<Label {name} />
+<textarea
+	bind:value={value}
+	bind:this={dom}
+	{required}
+	{disabled}
+	rows={5}
+	cols={20}
+	{...props}
+/>

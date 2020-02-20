@@ -7,7 +7,7 @@
 	import Navigate from './Navigate.svelte'
 	
 	import ScrollTop from './ScrollTop.svelte'
-	import { NotificationDisplay } from '../index'
+	import { NotificationDisplay } from '../thirdparty/svelte-notifications/src/index'
 
 	let n
 </script>

@@ -7,35 +7,38 @@
   export let successSave
   export let addnew_type
   export let addnew_labels
-
-  // let saveLabel = addnew_labels?.save ?? "Save Changes"
-  // let cancelLabel = addnew_labels?.cancel ?? "Cancel"
-
+  let showButton = false
+  let showComponent = false
+  $: {
+    showButton = false
+    showComponent = false
+    if(addnew_type == "button"){
+      showButton = true
+      if(addnewform){
+       showComponent = true 
+      }
+    } else {
+      showComponent = true
+    }
+  }
 </script>
-{#if addnew_type == "button"}
+{#if showButton}
   <button
     name="table_add"
-    on:click={toogleAddForm}
+    class={addnewform ? 'pressed' : ''}
     bind:this={doms.addbutton}
-    class={addnewform ? 'pressed' : ''}>
+    on:click={toogleAddForm}
+    >
     {!addnewform ? 'Add New' : 'Close'}
   </button>
-  {#if addnewform}
-    <svelte:component
-      this={quickcomponent}
-      key={null}
-      {schema_key}
-      on:close={toogleAddForm}
-      on:successSave={successSave} 
-      buttonlabels={addnew_labels}/>
-  {/if}
-{:else}
-    <svelte:component
-      this={quickcomponent}
-      key={null}
-      {schema_key}
-      on:close={toogleAddForm}
-      on:successSave={successSave} 
-      buttonlabels={addnew_labels}
-      />
+{/if}
+{#if showComponent}
+  <svelte:component
+    this={quickcomponent}
+    key={null}
+    {schema_key}
+    buttonlabels={addnew_labels}
+    on:close={toogleAddForm}
+    on:successSave={successSave} 
+    />
 {/if}

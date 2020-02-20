@@ -7,14 +7,14 @@
 	export let props = {};
 	export let dom = null
 </script>
-	<Label {name} />
-	<input 
-		 {name}
-		 bind:this={dom}
-		 type='email'
-		 bind:value={value}
-		 {required} 
-		 autocomplete={false}
-		 {disabled}
-		 {...props}
-	/>
+<Label {name} />
+<input 
+	{name}
+	bind:this={dom}
+	type='email'
+	bind:value={value}
+	{required} 
+	autocomplete={false}
+	{disabled}
+	{...props}
+/>

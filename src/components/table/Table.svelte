@@ -817,94 +817,96 @@
   {/if}
 {/if}
 
-{#if authorized}
-  <table>
-    {#if showHeader}
-      <thead>
-        <Header
-            {mergeRowsCount}
-            {allSelected}
-            {onSelectAllClick}
-            {headerTitlesRow}
-            
+{#if headerTitlesRow.length}
+  {#if authorized}
+    <table>
+      {#if showHeader}
+        <thead>
+          <Header
+              {mergeRowsCount}
+              {allSelected}
+              {onSelectAllClick}
+              {headerTitlesRow}
+              
+              {headerIsvisibleColumnsRow}
+              {headerVisibleColTypesRow}
+              {sortSettingsRow}
+              {customFilter}
+              {filterSettings}
+              {hiddenColumns}
+              {onHeaderContext}
+              {onHandleFilter}
+              {onTextInputContext}
+              {onHandleSort}
+              {showRowNum}
+              {rowDoms}
+              {items}
+          />
+        </thead>
+      {/if}
+      <tbody>
+        {#each items as l, cindex (getValue(l[0]))}
+          <Row 
+            selected={selectedRowsKeys.includes(getValue(l[0]))}
+            {showRowNum}
+            rowIndex={cindex}
+            isGlobal={isGlobal(l[0])}
+            rowValue={l}
             {headerIsvisibleColumnsRow}
             {headerVisibleColTypesRow}
-            {sortSettingsRow}
-            {customFilter}
-            {filterSettings}
-            {hiddenColumns}
-            {onHeaderContext}
-            {onHandleFilter}
-            {onTextInputContext}
-            {onHandleSort}
-            {showRowNum}
+            {editableColumnsRow}
+            {headerColumnPropsRow}
+            {selectedRowsKeys}
+            {onSelectRowClick}
+            {onItemClick}
+            {onDeleteClick}
+            {onDeleteRow}
+            bind:quickview={quickview}
+            showQuickView={quickview.includes(getValue(l[0]))}
+            {quickcomponent}
+            {schema_key}
+            {onCancel}
+            {successSave}
+            {deleteRow}
+            {getValue}
+            {fetchConfig}
+            {rowEditDoms}
             {rowDoms}
-            {items}
-        />
-      </thead>
-    {/if}
-    <tbody>
-      {#each items as l, cindex (getValue(l[0]))}
-        <Row 
-          selected={selectedRowsKeys.includes(getValue(l[0]))}
-          {showRowNum}
-          rowIndex={cindex}
-          isGlobal={isGlobal(l[0])}
-          rowValue={l}
-          {headerIsvisibleColumnsRow}
-          {headerVisibleColTypesRow}
-          {editableColumnsRow}
-          {headerColumnPropsRow}
-          {selectedRowsKeys}
-          {onSelectRowClick}
-          {onItemClick}
-          {onDeleteClick}
-          {onDeleteRow}
-          bind:quickview={quickview}
-          showQuickView={quickview.includes(getValue(l[0]))}
-          {quickcomponent}
-          {schema_key}
-          {onCancel}
-          {successSave}
-          {deleteRow}
-          {getValue}
-          {fetchConfig}
-          {rowEditDoms}
-          {rowDoms}
-        />
-      {/each}
-    </tbody>
-  </table>
-{:else}
-  <Error {er} />
-{/if}
+          />
+        {/each}
+      </tbody>
+    </table>
+  {:else}
+    <Error {er} />
+  {/if}
 
-{#if addnew_pos == "b"}
-  <AddForm
-    {toogleAddForm}
-    {doms}
-    {addnewform}
-    {quickcomponent}
-    {schema_key}
-    {successSave}
-    {addnew_type}
-    {addnew_labels}
+  {#if addnew_pos == "b"}
+    <AddForm
+      {toogleAddForm}
+      {doms}
+      {addnewform}
+      {quickcomponent}
+      {schema_key}
+      {successSave}
+      {addnew_type}
+      {addnew_labels}
+    />
+  {/if}
+
+  <ContextMenu
+    {closeHeaderMenu}
+    {contextmenu}
+    {modalIsVisible}
+    {closeModal}
+    {modelcomponent}
+    {refresh}
+    {headerTitlesRow}
+    {items}
+    {closeInputMenu}
+    {onHandleSort}
+    {headerMenuColumn}
+    {inputHeaderMenuColumn}
   />
 {/if}
+
 </div>
-
-<ContextMenu
-  {closeHeaderMenu}
-  {contextmenu}
-  {modalIsVisible}
-  {closeModal}
-  {modelcomponent}
-  {refresh}
-  {headerTitlesRow}
-  {items}
-  {closeInputMenu}
-  {onHandleSort}
-  {headerMenuColumn}
-  {inputHeaderMenuColumn}
-/>
-
