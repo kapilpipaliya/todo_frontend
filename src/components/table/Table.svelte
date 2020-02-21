@@ -9,7 +9,7 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
-   S, ws_connected, event_type, events as e, fade, fly, form_type, DisplayType, Unique, schemaEvents } from '../../modules/index'
+   S, ws_connected, event_type, events as e, fade, fly, ValueType, DisplayType, Unique, schemaEvents } from '../../modules/index'
    declare let $ws_connected
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
@@ -64,7 +64,7 @@
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
-  let fetchConfig = { type: form_type.array, project: null } // also set level latter
+  let fetchConfig = { type: ValueType.Array, project: null } // also set level latter
   // pagination:
   let limit = Number(query.limit) || 0
   let pages = [1, 2]
@@ -207,7 +207,7 @@
     quickview = []
     selectedRowsKeys = []
     first_visibile_column = 0
-    fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
+    fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
     // pagination:
     limit = Number(query.limit) || 0
     pages = [1, 2]

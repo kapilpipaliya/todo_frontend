@@ -1,3 +1,24 @@
+export enum ValueType {
+  None,    // not yet initialized
+  Illegal, // illegal value
+  Null,    // JSON null
+  Bool,
+  Array,
+  Object,
+  Double,
+  UTCDate,
+  External,
+  MinKey,
+  MaxKey,
+  Int,
+  UInt,
+  SmallInt,
+  String,
+  Binary,
+  BCD,
+  Custom,
+  Tagged
+};
   // table:
 export enum DisplayType {
   UNINITIALIZED,
@@ -14,7 +35,6 @@ export enum DisplayType {
   Url,
   Color
   };
-export enum form_type { object = 1, array };
 
 export enum FormType {
     button = 1,

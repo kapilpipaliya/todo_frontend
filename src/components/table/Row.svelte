@@ -54,12 +54,13 @@
       return ''
     }
   }
+  //out:fade={{ y: 2000, duration: 150 }}
   //animate:flip
 </script>
 
 <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
   in:fade={{ y: 200, duration: 200 }}
-  out:fade={{ y: 2000, duration: 150 }}
+  
 
 >
   {#if showRowNum}

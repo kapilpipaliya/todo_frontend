@@ -1,7 +1,7 @@
 <script lang='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index";
   	import { onMount, onDestroy, writable, setContext, getContext, get,
-  		S, ws_connected, event_type as et,events as e, form_type, Unique } from '../../modules/index'
+  		S, ws_connected, event_type as et,events as e, ValueType, Unique } from '../../modules/index'
   	declare let $ws_connected
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
@@ -71,7 +71,7 @@
 		      [null, `="${project_id}"`], // project_id
 		      [],
 		      [0, 0, 1],
-		      {type: form_type.object, org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null },
+		      {type: ValueType.Object, org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null },
 		    ]
           S.trigger([
           	[project_fetch_evt, args],

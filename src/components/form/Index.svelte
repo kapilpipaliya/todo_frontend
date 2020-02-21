@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, form_type, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, ValueType, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
   // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
@@ -24,7 +24,7 @@
   export let key = "0"
   export let schema_key
   export let form = []
-  export let fetchConfig = {type: form_type.array, project: null}
+  export let fetchConfig = {type: ValueType.Array, project: null}
   export let buttonlabels = {save: "Save", cancel : "Cancel"}
   export let selector = []
   export let headerSchema = []
@@ -40,7 +40,7 @@
   }
   declare let $project_ctx
 
-  fetchConfig = {...fetchConfig, type: form_type.array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
+  fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
 
   let events = schemaEvents(Unique.id, schema_key);
   let unsub_evt
@@ -118,7 +118,7 @@
   }
   function onSave() {
     isSaving = true
-    const filter = isUpdate ? [`="${fetchConfig.type == form_type.object ? form._key : form[0]}"`] : null
+    const filter = isUpdate ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null
     // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
     const saveConfig = { ...fetchConfig} // , form: true, schema: schema_key
     if(selector.length) {
