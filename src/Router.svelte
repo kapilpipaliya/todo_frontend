@@ -7,7 +7,7 @@
 	import Confirm from './account/confirm.svelte'
 
 	// admin:
-	import PublicIndex from './views/public/index.svelte'
+	import Home from './views/public/home.svelte'
 	import PublicLayout from './views/public/layout.svelte'
 	import AdminLayout from './views/admin/layout.svelte'
 	import AdminIndex from './views/admin/index.svelte'
@@ -66,6 +66,7 @@
 	const modifyComp = (key, obj)=> {		
 	    switch (obj[key]) {
 	    case "PublicLayout": obj[key] = PublicLayout; break;
+	    case "Home": obj[key] = Home; break;
 	    
 	    case "Page": obj[key] = Page; break;  
 	    case "Form": obj[key] = FormWrapper; break;
