@@ -1,5 +1,4 @@
 <script lang='ts'>
-import { getContext, get } from '../../modules/index'
 import { FormType } from '../../modules/enums'
 
 import Checkboxes from './input/Checkboxes.svelte';
@@ -25,156 +24,95 @@ import DateRange from './input/DateRange.svelte'
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
 
-export let form
-export let key
-export let form_disabled = true
-export let labels = []
-export let types: number[] = []
-export let required = []
-export let disabled = []
-export let description = []
-export let props = []
+export let value
+export let type = FormType.text
+export let label = ''
+export let required = false
+export let disabled = false
+export let description = ''
+export let props = {}
 export let doms = {}
 
-const isDisabled = (form_disabled_, i) => {
-	if(form_disabled_ === true) {
-		return true
-	} else {
-		return disabled[i]
-	}
+
+const extraProps = {}
+if(type === FormType.multi_select) {
+      extraProps.multiSelect= true
+} else if(type === FormType.multi_select_bool_properties) {
+      extraProps.multiSelect = true
+      extraProps.boolprop = true
 }
 
-$: {
-  if(!key) {
-    if(Array.isArray(form)) {
-      for(let i = 0; i < form.length ; i++){
-        if(Array.isArray(form[i]) && form[i].length > 0){
-          let e = form[i]
-          if(Array.isArray(e) && e.length > 0){
-            for(let j = 0; j < e.length ; j++){
-              let f = e[j]
-              console.log(f)
-              if(typeof f[0] == 'string'){
-                const func = f[0]
-                if(func == 'fnSetContext'){
-                  if(f.length > 1){
-                    const key = f[1]
-                    form[i] = get(getContext(key))
-                    continue
-                  }
-                } else if(func == 'fnSetContextKey'){
-                  if(f.length > 1){
-                    const key = f[1]
-                    let objKey
-                    if(f.length > 2){
-                      objKey = f[2]
-                    } else {
-                      objKey = "_key"
-                    }
-                    console.log(key)
-                    console.log(getContext(key))
-                    form[i] = get(getContext(key))[objKey]
-                    continue
-                  }
-                } else if(func == 'fnSetContextKeyInArray'){
-                  if(f.length > 1){
-                    const key = f[1]
-                    let objKey
-                    if(f.length > 2){
-                      objKey = f[2]
-                    } else {
-                      objKey = "_key"
-                    }
-                    console.log(key)
-                    console.log(getContext(key))
-                    form[i] = [get(getContext(key))[objKey]]
-                    continue
-                  }
-                }
-
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-function getComponent(t){
-    if(t === FormType.color) {
+console.log(extraProps)
+function getComponent(){
+    if(type === FormType.color) {
       return Color
-    } else if (t === FormType.email) {
+    } else if (type === FormType.email) {
       return Email
-    } else if (t === FormType.file) {
+    } else if (type === FormType.file) {
       return File
-    } else if(t === FormType.hidden) {
+    } else if(type === FormType.hidden) {
       return Hidden 
-    } else if(t === FormType.number) {
+    } else if(type === FormType.number) {
       return Number 
-    } else if(t === FormType.password) {
+    } else if(type === FormType.password) {
       return Password 
-    } else if(t === FormType.range) {
+    } else if(type === FormType.range) {
       return Range 
-    } else if(t === FormType.search) {
+    } else if(type === FormType.search) {
       return Search 
-    } else if(t === FormType.text) {
+    } else if(type === FormType.text) {
       return Text 
-    } else if(t === FormType.checkbox) {
+    } else if(type === FormType.checkbox) {
       return Checkbox 
-    } else if(t === FormType.checkboxes) {
+    } else if(type === FormType.checkboxes) {
       return Checkboxes  
-    } else if(t === FormType.radio) {
+    } else if(type === FormType.radio) {
       return Radio
-    } else if(t === FormType.textarea) {
+    } else if(type === FormType.textarea) {
       return Textarea 
-    } else if(t === FormType.select) {
+    } else if(type === FormType.select) {
       return TableForm  //multiSelect={false}
-    } else if(t === FormType.radio) {
+    } else if(type === FormType.radio) {
       //return radio 
-    } else if(t === FormType.multi_select) {
-      return TableForm //multiSelect={true}
-    } else if(t === FormType.text_array) {
+    } else if(type === FormType.multi_select) {
+      return TableForm
+    } else if(type === FormType.text_array) {
       return ArrayForm  
-    } else if(t === FormType.multi_select_bool_properties) {
-      return TableForm // multiSelect={true} // boolprop={true}
-    } else if(t === FormType.jsoneditor) {
+    } else if(type === FormType.multi_select_bool_properties) {
+      return TableForm
+    } else if(type === FormType.jsoneditor) {
       return JsonEditor
-    } else if(t === FormType.codemirror) {
+    } else if(type === FormType.codemirror) {
       //return CodeMirror
       return Textarea
-    } else if(t === FormType.flatpicker) {
+    } else if(type === FormType.flatpicker) {
       return Flatpicker
-    } else if(t === FormType.multi_select_hidden || t === FormType.save_time) {
+    } else if(type === FormType.multi_select_hidden || type === FormType.save_time) {
       //return Empty
-    } else if(t === FormType.dropzone) {
+    } else if(type === FormType.dropzone) {
       return DropZone
-    } else if(t === FormType.daterange) {
+    } else if(type === FormType.daterange) {
       return DateRange
-    } else if(t === FormType.prosemirror) {
+    } else if(type === FormType.prosemirror) {
       //return Prosemirror
-    } else if(t === FormType.cleditor) {
+    } else if(type === FormType.cleditor) {
       //reutn CLEditor
     } else {
       return 'Unknown Component'
     }
 }
+let comp = getComponent()
 </script>
-
-{#each form as f, i}
-  {#if types[i]}
-    <svelte:component
-      this={getComponent(types[i])}
-      bind:value={f}
-      name={labels[i]}
-      required={required[i]}
-      disabled={isDisabled(form_disabled, i)}
-      bind:dom={doms[i]}
-      {...props[i]}
-    />
-
-    {#if description[i]}
-      {description[i]}
-    {/if}
+  <svelte:component
+    this={comp}
+    bind:value={value}
+    name={label}
+    {required}
+    {disabled}
+    bind:dom={doms}
+    {...props}
+    {...extraProps}
+  />
+  {#if description}
+    {description}
   {/if}
-{/each}

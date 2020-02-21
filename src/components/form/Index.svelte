@@ -9,7 +9,7 @@
   import { translation } from '../../modules/global_stores/translation'
   
   import Html from '../UI/Html.svelte'
-  import RealForm from './RealForm.svelte'
+  import GeneralInput from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'
   import CancelButton from './_CancelButton.svelte'
   import * as R from 'ramda'
@@ -263,6 +263,70 @@
   }
   $: saveLabel = buttonlabels?.save ?? ""
   $: cancelLabel = buttonlabels?.cancel ?? ""
+
+$: {
+  if(!key) {
+    if(Array.isArray(form)) {
+      for(let i = 0; i < form.length ; i++){
+        if(Array.isArray(form[i]) && form[i].length > 0){
+          let e = form[i]
+          if(Array.isArray(e) && e.length > 0){
+            for(let j = 0; j < e.length ; j++){
+              let f = e[j]
+              console.log(f)
+              if(typeof f[0] == 'string'){
+                const func = f[0]
+                if(func == 'fnSetContext'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    form[i] = get(getContext(key))
+                    continue
+                  }
+                } else if(func == 'fnSetContextKey'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    let objKey
+                    if(f.length > 2){
+                      objKey = f[2]
+                    } else {
+                      objKey = "_key"
+                    }
+                    console.log(key)
+                    console.log(getContext(key))
+                    form[i] = get(getContext(key))[objKey]
+                    continue
+                  }
+                } else if(func == 'fnSetContextKeyInArray'){
+                  if(f.length > 1){
+                    const key = f[1]
+                    let objKey
+                    if(f.length > 2){
+                      objKey = f[2]
+                    } else {
+                      objKey = "_key"
+                    }
+                    console.log(key)
+                    console.log(getContext(key))
+                    form[i] = [get(getContext(key))[objKey]]
+                    continue
+                  }
+                }
+
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+const isDisabled = (form_disabled_, i) => {
+  if(form_disabled_ === true) {
+    return true
+  } else {
+    return disabled[i]
+  }
+}
 </script>
 
 <Html html={t}/>
@@ -273,11 +337,26 @@
 
 {#if form.length}
   <form class={id} on:submit|preventDefault={onSave}>
-    <RealForm
-      {key}
-      bind:form={form} {form_disabled}
-      {labels} {types} {required} {disabled} {description} {props} bind:doms={doms}
-    />
+
+
+
+    {#each form as f, i}
+      {#if types[i]}
+        <GeneralInput
+          bind:value={f}
+          type ={types[i]}
+          label={labels[i]}
+          required={required[i]}
+          disabled={isDisabled(form_disabled, i)}
+          description={description[i]}
+          bind:dom={doms[i]}
+          props={props[i]}
+
+        />
+
+      {/if}
+    {/each}
+
 
     <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
     {#if cancelLabel}
