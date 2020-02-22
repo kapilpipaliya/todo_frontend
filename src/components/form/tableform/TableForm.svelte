@@ -6,7 +6,7 @@
 	import BoolProperties from './BoolProperties.svelte'
 	export let dp = "r[1]+' - '+r[2]" // display pattern
 	export let keyIdx = 0
-	export let values = []
+	export let value = []
 	export let e = []
 	export let disabled;
 	//export let args = [ [filter], [], []]
@@ -16,42 +16,42 @@
 	
 	export let data = []
 
-	//$: newAvailableOps = data.filter(x=> !values.includes(x[keyIdx]))
+	//$: newAvailableOps = data.filter(x=> !value.includes(x[keyIdx]))
 	let newAvailableOps = []
 	$: {
 		if (boolprop){
-			const keys = values.map(x=>x[0])
+			const keys = value.map(x=>x[0])
 			newAvailableOps = data.filter(x=> !keys.includes(x[keyIdx]))
 		} else {
-			newAvailableOps = data.filter(x=> !values.includes(x[keyIdx]))//return false if includes
+			newAvailableOps = data.filter(x=> !value.includes(x[keyIdx]))//return false if includes
 		}
 	}
 	function handleAdd() {
 		if (boolprop){
 			if(newAvailableOps.length) {
-				values.push([newAvailableOps[0][keyIdx], {}])
-				values=values
+				value.push([newAvailableOps[0][keyIdx], {}])
+				value=value
 			}
 		} else {
 			if(newAvailableOps.length) {
 				// note concat return new array:
-				values = values.concat([newAvailableOps[0][keyIdx]])	
+				value = value.concat([newAvailableOps[0][keyIdx]])	
 			}
 		}
 	} 
 	const handleDelete = (row) => () => {
-		values = values.filter((_, i) => i !== row);
+		value = value.filter((_, i) => i !== row);
 	}
-	const getOptions = (valuesIdx) => {
+	const getOptions = (valueIdx) => {
 		if (boolprop){
-			const keys = values.map(x=>x[0])
+			const keys = value.map(x=>x[0])
 			return _cloneArray(data, [], [], true).filter(x=> {
 				// [['abc',{}],['def',{}]]
-				return !keys.includes(x[keyIdx]) || keys[valuesIdx] == x[keyIdx]
+				return !keys.includes(x[keyIdx]) || keys[valueIdx] == x[keyIdx]
 			})
 		} else {
 			// ['abc','def']
-			return _cloneArray(data, [], [], true).filter(x=>!values.includes(x[keyIdx]) || values[valuesIdx] == x[keyIdx])
+			return _cloneArray(data, [], [], true).filter(x=>!value.includes(x[keyIdx]) || value[valueIdx] == x[keyIdx])
 		}
 	}
 	const onChange = (v) => (e) => {
@@ -73,8 +73,8 @@
 		// set single select first value if empty:
 		if(!multiSelect){
 			if(data.length){
-				if(!values){
-					values = data[0]?.[0]  ?? ""
+				if(!value){
+					value = data[0]?.[0]  ?? ""
 				}
 			}
 		}
@@ -86,35 +86,35 @@
 			console.warn('returned data is not proper', all)
 		}
 		if(!multiSelect){
-			if(!values) {
+			if(!value) {
 				if(data.length){
-					values = data[0] // Is this correct?? it should be data[0][0]
+					value = data[0] // Is this correct?? it should be data[0][0]
 				}
 			}
 		} else {
-		  	values = values
+		  	value = value
 		}
 	}
 // <br>
 // data:
 // <br>
 // {JSON.stringify(data)}<br>
-// values:
+// value:
 // <br>
-// {JSON.stringify(values)}
+// {JSON.stringify(value)}
 </script>
 
 {#if multiSelect}
-	{#if values.length}
+	{#if value.length}
 	<table>
 		<tbody>
-			{#each values as v, i (v)}
+			{#each value as v, i (v)}
 				<tr>
 					<td><label></label></td>
 					{#if boolprop}
 						{#if data.length}
 							<BoolProperties 
-								disabled={disabled || i < values.length - 1}
+								disabled={disabled || i < value.length - 1}
 								bind:value={v}
 								options={getOptions(i)}
 								{keyIdx}
@@ -124,7 +124,7 @@
 						{/if}
 					{:else}
 						<td>
-							<select bind:value={v} required disabled={disabled || i < values.length - 1} on:change={onChange}>
+							<select bind:value={v} required disabled={disabled || i < value.length - 1} on:change={onChange}>
 									<Options {keyIdx} options={getOptions(i)} {dp} />
 							</select>
 						</td>
@@ -137,7 +137,7 @@
 	{/if}
 	<button type="button" on:click={handleAdd} disabled={disabled || !newAvailableOps.length} >Add</button>
 {:else}
-	<select bind:value={values}  required on:change={onChangeSingle} on:change >
+	<select bind:value={value}  required on:change={onChangeSingle} on:change >
 		<Options {keyIdx} options={data} {dp} />
 	</select>
 {/if}
