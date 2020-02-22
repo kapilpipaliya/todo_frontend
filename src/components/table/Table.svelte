@@ -18,6 +18,7 @@
   import AddForm from './AddForm.svelte'
   import ContextMenu from './ContextMenu.svelte'
   import Error from '../UI/Error.svelte'
+  import Skeleton from '../UI/Skeleton.svelte'
 
   const dp = createEventDispatcher()
   import { css_count } from '../../modules/global_stores/css'
@@ -907,6 +908,8 @@
     {headerMenuColumn}
     {inputHeaderMenuColumn}
   />
+{:else}
+  <Skeleton/>
 {/if}
 
 </div>
