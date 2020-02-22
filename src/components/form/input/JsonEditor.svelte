@@ -8,8 +8,8 @@
   let jsoneditor
   declare let JSONEditor
 
+  css_count.increase('jsoneditor')
   onMount(async () => {
-    css_count.increase('jsoneditor')
     
     const options = {
       mode: disabled ? 'view' : 'code',

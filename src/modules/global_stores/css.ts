@@ -9,7 +9,7 @@ export const css_frameworks = writable(
 export const selected_frameworks = writable(['bootstrap'])
 
 export const css = writable({})
-const css_count_ = writable({'table': 0})
+const css_count_ = writable({table: 0, normalize: 0, body: 1})
 export const css_count = {
   subscribe: css_count_.subscribe,
   increase: name => {
@@ -19,11 +19,13 @@ export const css_count = {
     })
   },
   decrease: name => {
-    css_count_.update(val => {
-      val[name] = val[name]  - 1
-      return val
-      }
-     )
+    setTimeout(_=>{
+      css_count_.update(val => {
+        val[name] = val[name]  - 1
+        return val
+        }
+       )
+    }, 2000)
   }
 }
 

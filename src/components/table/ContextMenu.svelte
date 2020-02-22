@@ -16,9 +16,7 @@
   export let headerMenuColumn
   export let inputHeaderMenuColumn
 
-  onMount(() => {
-      css_count.increase('table_context_menu')
-  })
+  css_count.increase('table_context_menu')
   onDestroy(() => {
       css_count.decrease('table_context_menu')
   })

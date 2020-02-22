@@ -35,14 +35,15 @@ export let doms = {}
 
 
 const extraProps = {}
-if(type === FormType.multi_select) {
-      extraProps.multiSelect= true
+if(type === FormType.select) {
+  extraProps.multiSelect = false
+} else if(type === FormType.multi_select) {
+  extraProps.multiSelect= true
 } else if(type === FormType.multi_select_bool_properties) {
-      extraProps.multiSelect = true
-      extraProps.boolprop = true
+  extraProps.multiSelect = true
+  extraProps.boolprop = true
 }
 
-console.log(extraProps)
 function getComponent(){
     if(type === FormType.color) {
       return Color
@@ -71,7 +72,7 @@ function getComponent(){
     } else if(type === FormType.textarea) {
       return Textarea 
     } else if(type === FormType.select) {
-      return TableForm  //multiSelect={false}
+      return TableForm
     } else if(type === FormType.radio) {
       //return radio 
     } else if(type === FormType.multi_select) {
@@ -98,7 +99,8 @@ function getComponent(){
     } else if(type === FormType.cleditor) {
       //reutn CLEditor
     } else {
-      return 'Unknown Component'
+      console.warn('Unknown Component type: ', type)
+      return Hidden 
     }
 }
 let comp = getComponent()

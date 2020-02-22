@@ -47,6 +47,10 @@ export enum events {
   css_list,
   css_mutate,
 
+  recompile_frontend,
+  recompile_css,
+  restart_server,
+
   account = 60,
 
   register_user,
@@ -61,8 +65,9 @@ export enum events {
   update_member,
   modify_profile,
   is_logged_in,
-  subscribe_test,
-  triggering_test,
+  change_password,
+  force_password_change,
+  lost_password,
 
   admin = 80,
   dashboard,

@@ -1,34 +1,34 @@
 <script lang='ts'>
 	import { onMount } from '../../../modules/index'
 	import { Debug } from '../../UI/debug'
-	export let values = []
+	export let value = []
 	export let disabled = false
 	export let ar = false
-	values = values ?? []
+	value = value ?? []
 	let doms = []
 	function handleAdd() {
-		values.push("")	
-		values = values
-		setTimeout(function(){if(doms[values.length-1]) doms[values.length-1].focus() }, 50);
+		value.push("")	
+		value = value
+		setTimeout(function(){if(doms[value.length-1]) doms[value.length-1].focus() }, 50);
 	    
 	    //const itemSchema = (isFixedItems(schema) && allowAdditionalItems(schema)) ? schema.allowAdditionalItems : schema.items
 	    //formData = [...formData, getDefaultFormState(itemSchema, undefined, definitions)]
 	} 
 	const handleDelete = (row) => (e) => {
 		e.stopPropagation()
-		values = values.filter((_, i) => i !== row);
+		value = value.filter((_, i) => i !== row);
 	}
 
-  const onReorder = (from, to) => (event) => {
-    event.stopPropagation()
+	const onReorder = (from, to) => (event) => {
+		event.stopPropagation()
 
-    values = values.map((item, i, array) => (
-      (i === from)
-        ? array[to]
-        : (i === to)
-          ? array[from]
-          : item
-    ))
+		value = value.map((item, i, array) => (
+		  (i === from)
+		    ? array[to]
+		    : (i === to)
+		      ? array[from]
+		      : item
+		))
   }
 </script>
 
@@ -36,7 +36,7 @@
 
 <table>
 	<tbody>
-		{#each values as v, i (i)}
+		{#each value as v, i (i)}
 			<tr>
 				{#if false}<td><label></label></td>{/if}
 				<td>
@@ -44,7 +44,7 @@
 				</td>
 				{#if ar}
 					<td><button type="button" on:click={onReorder(i, i - 1)} disabled={disabled || (i == 0)} >˄</button></td>
-					<td><button type="button" on:click={onReorder(i, i + 1)} disabled={disabled || (i == (values.length-1))} >˅</button></td>
+					<td><button type="button" on:click={onReorder(i, i + 1)} disabled={disabled || (i == (value.length-1))} >˅</button></td>
 				{/if}
 				<td><button type="button" on:click={handleDelete(i)} {disabled} >x</button></td>
 			</tr>

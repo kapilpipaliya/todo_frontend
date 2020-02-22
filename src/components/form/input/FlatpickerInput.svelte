@@ -30,6 +30,7 @@
 
 	$: if (fp) fp.setDate(value, false, dateFormat);
 
+	css_count.increase('flatpickr')
 	onMount(async() => {
 	    //let flatpickr
 	    try{
@@ -37,14 +38,14 @@
 	      //flatpickr = flatpickr_
 	    }
 	    catch(err) {
-	      console.log(err.message)
+	      console.warn(err.message)
 	      return
 	    }
 		const elem = element || input
 		fp = flatpickr(elem, Object.assign(
 			addHooks(options),
 			element ? { wrap: true } : {}
-		css_count.increase('flatpickr')
+		
     ));
 
 		return () => {

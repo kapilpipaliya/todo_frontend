@@ -46,7 +46,7 @@
 	      S.bind$(project_fetch_evt, (d) => {
 	      	const result = d[0][1].r.result
 	      	if(result.length == 0) {
-	      		console.log('no project found')
+	      		console.warn('no project found')
 	      	} else if(result[0]) {
 	      		const project_data = result[0]
 	      		$project_data_ctx = project_data
@@ -54,7 +54,7 @@
 	      		fetch_data = true
 	      		return
 	      	}
-	      	console.log("cant set project data")
+	      	console.warn("cant set project data")
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
 	      	if(d[0].length && d[0][0]){
@@ -63,7 +63,7 @@
 	      			menus = processMenu(R.clone(m.menu), $org_id, project_id)
 	      			return
 	      		}
-	      		console.log("cant set menu")
+	      		console.warn("cant set menu")
 	      	}
 	      }, 1)
 	      binded = true

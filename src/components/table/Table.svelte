@@ -112,10 +112,10 @@
       for(let i = 0; i < pass.length ; i++){
         if(Array.isArray(pass[i]) && pass[i].length > 0){
           let e = pass[i]
-          console.log(e)
+
           if(Array.isArray(e) && e.length > 0){
             const func = e[0]
-            console.log('11',func)
+
             if(typeof func == 'string') {
               if(func == 'context'){
                 if(e.length > 1){
@@ -131,7 +131,7 @@
                   continue
                 }
               } else if(func == 'contextKey'){
-                console.log(123)
+
                 if(e.length > 1){
                   const key = e[1]
                   let objKey
@@ -147,9 +147,9 @@
                     addKey = key
                   }
                   const data = get(getContext(key))[objKey]
-                  console.log('data is: ', data)
+
                   fetchConfig[addKey] = data
-                  console.log('fetchConfig', fetchConfig)
+
                   continue
                 }
               } else if(func == 'contextKeyInArray'){
@@ -161,8 +161,8 @@
                   } else {
                     objKey = "_key"
                   }
-                  console.log(key)
-                  console.log(getContext(key))
+
+
                   pass[i] = [get(getContext(key))[objKey]]
                   continue
                 }
@@ -234,9 +234,9 @@
     console.log('reset complete')
   }
 
-  onMount(async () => {
+  css_count.increase('table')
+  onMount(() => {
     mounted = true
-    css_count.increase('table')
   })
   onDestroy(() => {
       unRegister();
@@ -420,7 +420,7 @@
       if(doms.addbutton){
         doms.addbutton.focus()
       } else {
-        console.log('no dom for add button!')
+        console.warn('no dom for add button!')
       }
     }
   }

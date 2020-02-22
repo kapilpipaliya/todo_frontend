@@ -9,7 +9,7 @@
 	const flatpickrOptions = {
 		enableTime: true,
 		onChange: (selectedDates, dateStr, instance) => {
-			console.log('Options onChange handler', selectedDates, dateStr, instance)
+			//console.log('Options onChange handler', selectedDates, dateStr, instance)
 		}
 	}
 

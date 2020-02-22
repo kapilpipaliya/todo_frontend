@@ -60,9 +60,8 @@
     createToast(value.message, value.type, value.timeout)
     notification.set({})
   })
-  onMount(()=>{
-    css_count.increase('notifications')
-  })
+  
+  css_count.increase('notifications')
   onDestroy(() => {
     unsubscribe()
     css_count.decrease('notifications')

@@ -5,10 +5,11 @@
   // https://www.w3schools.com/howto/howto_js_scroll_to_top.asp
   let button
 
+  css_count.increase('scrolltop')
   onMount(() => {
       // When the user scrolls down 20px from the top of the document, show the button
       // window.onscroll = function() { scrollFunction() }
-      css_count.increase('scrolltop')
+      
   })
   onDestroy(() => {
       // window.onscroll = undefined

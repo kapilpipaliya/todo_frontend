@@ -10,7 +10,7 @@
  let props = {
     content: '<div class="tooltip">Styled tooltip text</div>',
     onShow: function(instance) {
-      console.log(instance);
+      //console.log(instance);
     },
   };
  const plugins = [];

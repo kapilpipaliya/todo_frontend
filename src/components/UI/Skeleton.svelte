@@ -9,9 +9,7 @@
   export let baseColor = "rgb(238, 238, 238)"
   export let highlightColor = "rgb(245, 245, 245)"
   export let animationLength = "1.2s"
-  onMount(() => {
-      css_count.increase('skeleton')
-  })
+  css_count.increase('skeleton')
   onDestroy(() => {
       css_count.decrease('skeleton')
   })

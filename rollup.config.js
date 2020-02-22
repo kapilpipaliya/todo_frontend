@@ -11,12 +11,20 @@ import { terser } from "rollup-plugin-terser"
 import livereload from "rollup-plugin-livereload"
 import sveltePreprocessor from "svelte-preprocess"
 import analyze from 'rollup-plugin-analyzer'
+import replace from '@rollup/plugin-replace';
+import { compress } from 'brotli'
+import gzipPlugin from 'rollup-plugin-gzip'
 const hash = Date.now()
 
 const extensions = [".ts", ".js"]
 
+const mode = process.env.NODE_ENV;
+
 const plugins = [
   //analyze(),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify(mode)
+  }),
   svelte({
     dev: process.env.NODE_ENV === "development",
     extensions: [".svelte"],
@@ -39,6 +47,10 @@ const plugins = [
   }),
   commonjs({ include: "node_modules/**" }),
   typescript({ typescript: typescriptCompiler }),
+  gzipPlugin({
+      customCompression: content => compress(Buffer.from(content)),
+      fileName: '.br',
+  }),
 ];
 
 if (process.env.NODE_ENV === "development") {

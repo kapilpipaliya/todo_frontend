@@ -67,7 +67,7 @@
 			S.bind$(fetch_evt, onFetchGet, 1)
 			S.trigger([[fetch_evt, []]])
 		} else {
-			console.log('cant get fetch_evt')
+			console.warn('cant get fetch_evt')
 		}
 
 		// set single select first value if empty:
@@ -81,9 +81,11 @@
 	})
 	function onFetchGet(all){
 		const [[h, d]] = all
-		data = d?.r?.result ?? false
-		if(data === false){
+		const getData = d?.r?.result ?? false
+		if(getData === false){
 			console.warn('returned data is not proper', all)
+		} else {
+			data = getData
 		}
 		if(!multiSelect){
 			if(!value) {

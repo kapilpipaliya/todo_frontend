@@ -254,7 +254,6 @@ export class ServerEventsDispatcher {
     // if(evt.data instanceof ArrayBuffer ){
     else {
       const blob = evt.data
-      console.log(11, blob)
       const buffer = await blob.arrayBuffer();
       const data = M['default']['decode'](buffer)
       this.stringHandle(data)
@@ -284,7 +283,7 @@ export class ServerEventsDispatcher {
     this.dispatch(['open', '', 0], [])
   }
   onerror(error: Event) {
-    console.log(`[error] ${error}`)
+    console.warn(`[error] ${error}`)
     //todo depend on error try to reconnect
     this.dispatch(['error', '', 0], [])
   }
@@ -292,7 +291,7 @@ export class ServerEventsDispatcher {
   dispatch(event: event, message: Array<{}>) {
     const chain = this.callbacks[JSON.stringify(event)]
     if (typeof chain == 'undefined') {
-      console.log("no callbacks for this event: ", event)
+      console.warn("no callbacks for this event: ", event)
     } else {
       const length = chain.length;
       for (let i = 0; i < length; i++) {

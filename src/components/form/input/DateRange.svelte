@@ -35,7 +35,7 @@
   function onApply({ detail }) {
     startDate = detail.startDate
     endDate = detail.endDate
-    console.log('onApply: ', detail)
+    //console.log('onApply: ', detail)
   }
 </script>
 

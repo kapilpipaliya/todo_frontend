@@ -162,7 +162,7 @@
          isUpdate = true
         }
       } else {
-        console.log('form value is invalid: ', form_values)
+        console.warn('form value is invalid: ', form_values)
       }
       const new_form = merge(form, form_new)
       form = new_form
@@ -219,11 +219,12 @@
       //
     }
   }
-  onMount(() => {mounted = true; css_count.increase('submit_buttons') })
+  css_count.increase('submit_buttons')
+  onMount(() => {mounted = true;  })
   onDestroy(() => { onDestroy_(); css_count.decrease('submit_buttons') })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
-  //console.log($$props)
+
   $: {
     if(headerSchema.length) {
       onMutateGet(headerSchema as [any])
@@ -273,7 +274,7 @@ $: {
           if(Array.isArray(e) && e.length > 0){
             for(let j = 0; j < e.length ; j++){
               let f = e[j]
-              console.log(f)
+
               if(typeof f[0] == 'string'){
                 const func = f[0]
                 if(func == 'fnSetContext'){
@@ -291,8 +292,8 @@ $: {
                     } else {
                       objKey = "_key"
                     }
-                    console.log(key)
-                    console.log(getContext(key))
+
+
                     form[i] = get(getContext(key))[objKey]
                     continue
                   }
@@ -305,8 +306,8 @@ $: {
                     } else {
                       objKey = "_key"
                     }
-                    console.log(key)
-                    console.log(getContext(key))
+
+
                     form[i] = [get(getContext(key))[objKey]]
                     continue
                   }
