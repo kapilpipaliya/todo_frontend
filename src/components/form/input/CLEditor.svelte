@@ -10,7 +10,6 @@ export let value;
 export let props = {};
 export let dom = null
 
-let cleditorDom
 let cleditorInstance
 // Initialize editor
 onMount(async()=>{
@@ -73,4 +72,4 @@ onMount(async()=>{
 </script>
 
 <Label {name} />
-<Editor bind:this={cleditorDom} on:change={onChange} height='300px' html={value} removeFormatTags={['h1', 'h2', 'blackquote']}/>
+<Editor bind:this={dom} on:change={onChange} height='300px' html={value} removeFormatTags={['h1', 'h2', 'blackquote']}/>

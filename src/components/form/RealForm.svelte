@@ -16,11 +16,11 @@ import Radio from './input/Radio.svelte'
 import Textarea from './input/Textarea.svelte'
 import JsonEditor from './input/JsonEditor.svelte'
 import Flatpicker from './input/Flatpicker.svelte'
-//import CodeMirror from './input/codemirror/CodeMirror.svelte'
+import CodeMirror from './input/codemirror/CodeMirror.svelte'
 import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
-// import CLEditor from './input/CLEditor.svelte'
+import CLEditor from './input/CLEditor.svelte'
 import TableForm from './tableform/TableForm.svelte'
 import ArrayForm from './array/Array.svelte'
 
@@ -84,7 +84,7 @@ function getComponent(){
     } else if(type === FormType.jsoneditor) {
       return JsonEditor
     } else if(type === FormType.codemirror) {
-      //return CodeMirror
+      return CodeMirror
       return Textarea
     } else if(type === FormType.flatpicker) {
       return Flatpicker
@@ -97,7 +97,7 @@ function getComponent(){
     } else if(type === FormType.prosemirror) {
       //return Prosemirror
     } else if(type === FormType.cleditor) {
-      //reutn CLEditor
+      return CLEditor
     } else {
       console.warn('Unknown Component type: ', type)
       return Hidden 
