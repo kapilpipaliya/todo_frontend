@@ -243,7 +243,7 @@
       css_count.decrease('table')
   })
 
-  const bindOnce = () => {
+  const runOnce = () => {
     if (!binded) {
       {
         S.bind$(data_evt, onDataGet, 1)
@@ -266,7 +266,7 @@
     (binded)
     if (mounted) {
       if ($ws_connected) {
-        bindOnce()
+        runOnce()
         binded = true
         er = ''
         onWSConnect()

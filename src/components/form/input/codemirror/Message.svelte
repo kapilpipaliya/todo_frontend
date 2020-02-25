@@ -24,6 +24,9 @@
 
 		return str + (loc.length ? ` (${loc.join(':')})` : ``);
 	};
+
+	//usage
+	/*<M kind='a' details={{message: "hello world"}} filename='asdf' truncate={true}/>*/
 </script>
 
 <style>

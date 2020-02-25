@@ -192,3 +192,8 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
     ]
   }
 }
+export const g = (e1,e2) => [event_type.get, e1, e2, Unique.id]
+export const s = (e1,e2) => [event_type.subscribe, e1, e2, Unique.id]
+export const i = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]
+export const u = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]
+export const d = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]

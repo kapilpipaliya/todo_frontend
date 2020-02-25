@@ -1,5 +1,6 @@
 
 <script lang='ts'>
+  // https://github.com/techlab23/ckeditor5-svelte/blob/master/sample/src/App.svelte
   import { onMount } from 'svelte'
   import CKEditor from "./CKEditor.svelte"
   

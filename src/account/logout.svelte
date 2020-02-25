@@ -21,7 +21,7 @@
   const fns = [[et.mutate, e.account, e.logout, Unique.id]],
     [logout] = fns
 
-  const bindOnce = () => {
+  const runOnce = () => {
     if (!binded) {
       S.bind$(logout, onLogout, 1)
       binded = true
@@ -33,7 +33,7 @@
     if (mounted) {
       if ($ws_connected) {
         er = ''
-        bindOnce()
+        runOnce()
         // S.trigger([[ sub, {} ]]);
 
         S.trigger([[logout, query]])

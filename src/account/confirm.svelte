@@ -21,7 +21,7 @@
     ],
     [doconfirm, sub, unsub] = fns
 
-  const bindOnce = () => {
+  const runOnce = () => {
     if (!binded) {
       S.bind$(sub, onSubGet, 1)
       binded = true
@@ -33,7 +33,7 @@
     if (mounted) {
       if ($ws_connected) {
         er = ''
-        bindOnce()
+        runOnce()
         S.trigger([[sub, {}]])
 
         if (currentRoute.queryParams.token) {

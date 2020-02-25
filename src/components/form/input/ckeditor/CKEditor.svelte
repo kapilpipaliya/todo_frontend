@@ -1,4 +1,5 @@
 <script>
+  // https://github.com/techlab23/ckeditor5-svelte/blob/master/src/Ckeditor.svelte
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import debounce from 'just-debounce-it'
   

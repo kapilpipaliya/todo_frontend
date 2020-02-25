@@ -12,12 +12,10 @@ function clearCookie(d) {
 }
 
 // must use id =0
-S.bind$([et.get, e.account, e.cookie_event, 0],
-  function(data) {
-  	Object.keys(data[0].cookie).forEach(key=>{
+S.bind$([et.get, e.account, e.cookie_event, 0], saveCookies, 1 )
+function saveCookies(data){
+	Object.keys(data[0].cookie).forEach(key=>{
 	   saveCookie(key, data[0].cookie[key], data[0].max_age)
 	});
-  },
-  1
-)
+}
 export default null
