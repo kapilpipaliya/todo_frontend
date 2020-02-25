@@ -3,7 +3,7 @@
 	S, ws_connected, event_type as et,events as e, ValueType, Unique } from '../../modules/index'
 
 const onRestart = () => {
-    S.bind_(
+    S.bindT(
       [et.get, e.e_global, e.restart_server, Unique.id],
       ([d]) => {
         // console.warn(d)
@@ -12,7 +12,7 @@ const onRestart = () => {
     )
   }
 const onRecompileFrontend = () => {
-    S.bind_(
+    S.bindT(
       [et.get, e.e_global, e.recompile_frontend, Unique.id],
       ([d]) => {
         // console.warn(d)
@@ -21,7 +21,7 @@ const onRecompileFrontend = () => {
     )
   }
 const onRecompileCSS = () => {
-    S.bind_(
+    S.bindT(
       [et.get, e.e_global, e.recompile_css, Unique.id],
       ([d]) => {
         // console.warn(d)

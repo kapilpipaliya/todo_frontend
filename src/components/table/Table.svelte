@@ -509,7 +509,7 @@
             args.push(unsu_event)
           }
         }
-        S.bind_(
+        S.bindT(
           mutate_evt,
           d => {
             resolve(d)
@@ -534,7 +534,7 @@
 
       const filter = [JSON.stringify(selectedRowsKeys)]
       const [d] = await new Promise((resolve, reject) => {
-        S.bind_(
+        S.bindT(
           mutate_evt,
           d => {
             resolve(d)

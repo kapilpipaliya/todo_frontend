@@ -111,7 +111,7 @@
   let isSaving = false
   onMount(async () => {
     const [d] = await new Promise((resolve, reject) => {
-      S.bind_(
+      S.bindT(
         [event_type.get, e.my, e.my_schema_get, Unique.id],
         d => {
           resolve(d)
@@ -124,7 +124,7 @@
   async function onSave() {
     isSaving = true
     const [d] = await new Promise((resolve, reject) => {
-      S.bind_(
+      S.bindT(
         [event_type.mutate, e.my, e.my_schema_mutate, Unique.id],
         d => {
           resolve(d)

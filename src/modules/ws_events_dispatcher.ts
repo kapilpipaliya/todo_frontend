@@ -41,7 +41,7 @@ export class ServerEventsDispatcher {
   constructor(path: string, req:{}, res:{}) {
     this.bind = this.bind.bind(this)
     this.bind$ = this.bind$.bind(this)
-    this.bind_ = this.bind_.bind(this)
+    this.bindT = this.bindT.bind(this)
     //this.bind_F = this.bind_F.bind(this)
     this.unbind = this.unbind.bind(this)
     this.unbind_ = this.unbind_.bind(this)
@@ -111,7 +111,7 @@ export class ServerEventsDispatcher {
     this.bind(event, callback, handleMultiple)
     return this
   }
-  bind_(event: event, callback: callBack, data, handleMultiple=0) {
+  bindT(event: event, callback: callBack, data, handleMultiple=0) {
     this.bind$(event, callback, handleMultiple)
     this.trigger([[event, data]])
     return this

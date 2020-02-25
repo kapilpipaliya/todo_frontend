@@ -208,7 +208,7 @@
     const e = form.p_attachments_attachement_id[i];
     if(!e[1]) continue;
     
-    S.bind_(["product", "attachment_data", sfx(rowIdx + i + e[0])], (data) => {
+    S.bindT(["product", "attachment_data", sfx(rowIdx + i + e[0])], (data) => {
       // thumbnails[i] = new Blob([data])
     if(data instanceof Blob){
       const url = URL.createObjectURL(data)
@@ -549,7 +549,7 @@
 
   const diamondChange = (d) => async() => {
     if(d[4] > 0) {
-      const prices = await new Promise((resolve, reject) => { S.bind_(["product", "diamond_price_data", 111], ([data]) => { resolve(data) }, d); });
+      const prices = await new Promise((resolve, reject) => { S.bindT(["product", "diamond_price_data", 111], ([data]) => { resolve(data) }, d); });
       
       prices.forEach(ele => {
         const v = d[6].find(v => v[0] == ele[0])
@@ -566,7 +566,7 @@
   }
   const csChange = (d) => async() => {
     if(d[5] > 0) {
-      const prices = await new Promise((resolve, reject) => { S.bind_(["product", "cs_price_data", 111], ([data]) => { resolve(data) }, d); });
+      const prices = await new Promise((resolve, reject) => { S.bindT(["product", "cs_price_data", 111], ([data]) => { resolve(data) }, d); });
       
       prices.forEach(ele => {
         // const v = d[5].find(v => v[0] == ele[0])

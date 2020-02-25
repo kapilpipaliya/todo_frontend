@@ -6,7 +6,7 @@ export const translation = writable({})
 
 export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) => {
-    S.bind_(
+    S.bindT(
       form_schema_evt(Unique.id),
       ([d]: [[{}]]) => {
         resolve(d[0])
