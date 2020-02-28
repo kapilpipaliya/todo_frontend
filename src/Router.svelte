@@ -37,8 +37,8 @@
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(schema_get_evt, (d) => {
-	      	if(d[0].length && d[0][0].routes){
-	      		routes = RD.map((x)=> modifyObj(x), d[0][0].routes)
+	      	if(d[0].routes){
+	      		routes = RD.map((x)=> modifyObj(x), d[0].routes)
 	      	}
 	      }, 1)
 	      binded = true

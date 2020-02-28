@@ -346,7 +346,7 @@
     return newa1
   }
   function onDataGet(all) {
-    const [[h, d]] = all;
+    const [h, d] = all;
     if (h === false){
       authorized = false
       er = d
@@ -500,7 +500,7 @@
       mutate_evt.push(key)
 
       const filter = [`="${key}"`]
-      const [d] = await new Promise((resolve, reject) => {
+      const d = await new Promise((resolve, reject) => {
         // send unsubscribe event if edit is open
         const args = ['DEL', filter, fetchConfig]
         if(rowEditDoms[rowIdx]){
@@ -533,7 +533,7 @@
       mutate_evt.push(Unique.id)
 
       const filter = [JSON.stringify(selectedRowsKeys)]
-      const [d] = await new Promise((resolve, reject) => {
+      const d = await new Promise((resolve, reject) => {
         S.bindT(
           mutate_evt,
           d => {

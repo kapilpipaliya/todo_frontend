@@ -225,7 +225,7 @@ export class ServerEventsDispatcher {
     } else {
       const length = chain.length;
       for (let i = 0; i < length; i++) {
-        chain[i][1](message)
+        chain[i][1](...message)
         if (chain[i][0] == 0) {
           this.#callbacks[JSON.stringify(event)] = []
         }

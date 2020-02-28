@@ -44,7 +44,7 @@
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(project_fetch_evt, (d) => {
-	      	const result = d[0][1].r.result
+	      	const result = d[1].r.result
 	      	if(result.length == 0) {
 	      		console.warn('no project found')
 	      	} else if(result[0]) {
@@ -57,9 +57,9 @@
 	      	console.warn("cant set project data")
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
-	      	if(d[0].length && d[0][0]){
-	      		if(d[0][0]){
-	      			m.menu = d[0][0].project
+	      	if(d[0]){
+	      		if(d[0]){
+	      			m.menu = d[0].project
 	      			menus = processMenu(R.clone(m.menu), $org_id, project_id)
 	      			return
 	      		}

@@ -110,7 +110,7 @@
   let er = ''
   let isSaving = false
   onMount(async () => {
-    const [d] = await new Promise((resolve, reject) => {
+    const d = await new Promise((resolve, reject) => {
       S.bindT(
         [event_type.get, e.my, e.my_schema_get, Unique.id],
         d => {
@@ -123,7 +123,7 @@
   })
   async function onSave() {
     isSaving = true
-    const [d] = await new Promise((resolve, reject) => {
+    const d = await new Promise((resolve, reject) => {
       S.bindT(
         [event_type.insert, e.my, e.my_schema_mutate, Unique.id],
         d => {

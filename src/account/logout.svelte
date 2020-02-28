@@ -54,7 +54,7 @@
   })
 
   // some functions:============
-  function onLogout([d]) {
+  function onLogout(d) {
     if (d.ok) {
       loging_out = false
       header = 'Logged out successfully!'

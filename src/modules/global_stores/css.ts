@@ -30,4 +30,4 @@ export const css_count = {
 }
 
 // {"table":{"classes":{},"link":"/table.5efd916f.css"}}
-S.bind$([et.get, e.account, e.css_event, 0], function(data) {css.set(data[0]) }, 1 )
+S.bind$([et.get, e.account, e.css_event, 0], function(data) {css.set(data) }, 1 )

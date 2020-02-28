@@ -147,7 +147,7 @@
     onMutateGet(d)
     //super.fetch()
   }
-  function onMutateGet([d]) {
+  function onMutateGet(d) {
     isSaving = false
     if(Array.isArray(d[0])){
       const schema = d[0][0]

@@ -5,11 +5,11 @@
 	// must use id =0
 	S.bind$( [et.get, e.account, e.redirection_event, 0],
 		function(data) {
-		  if(data[0][1]) {
-		  	navigation.set(data[0][2])
-		  	setTimeout(function(){navigateTo(data[0][0]) }, data[0][1]);
+		  if(data[1]) {
+		  	navigation.set(data[2])
+		  	setTimeout(function(){navigateTo(data[0]) }, data[1]);
 		  } else {
-		  	navigateTo(data[0][0])
+		  	navigateTo(data[0])
 		  }
 		},
 		1

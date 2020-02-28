@@ -80,7 +80,7 @@
 		}
 	})
 	function onFetchGet(all){
-		const [[h, d]] = all
+		const [h, d] = all
 		const getData = d?.r?.result ?? false
 		if(getData === false){
 			console.warn('returned data is not proper', all)

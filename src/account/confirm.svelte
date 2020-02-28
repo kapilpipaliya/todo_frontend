@@ -63,7 +63,7 @@
   })
 
   // some functions:============
-  function onSubGet([d]) {
+  function onSubGet(d) {
     if (d.ok) {
       confirming = false
       result_title = 'Success'

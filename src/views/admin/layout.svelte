@@ -20,8 +20,8 @@
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(menu_evt, (d) => {
-	      	if(d[0].length && d[0][0]){
-	      		menus = d[0][0]
+	      	if(d[0]){
+	      		menus = d[0]
 	      		fetch_data = true // not important on menu
 	      	}
 	      }, 1)

@@ -17,8 +17,8 @@
   function funcBindingOnce() {
     if (!binded) {
       S.bind$(template_evt, (d) => {
-        if(d[0].length && d[0][1]){
-          const result = d[0][1].r.result
+        if(d[1]){
+          const result = d[1].r.result
           if(Array.isArray(result)){
             for (let i = 0; i < result.length; i++) {
               htmlResult.push(result[i][2])

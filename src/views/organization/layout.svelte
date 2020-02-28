@@ -45,7 +45,7 @@
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(org_fetch_evt, (d) => {
-	      	const result = d[0][1].r.result
+	      	const result = d[1].r.result
 	      	if(result.length == 0) {
 	      		console.warn('no organization found')
 	      	} else if(result[0]) {
@@ -58,9 +58,9 @@
 	      	console.warn("cant set organization data")
 	      }, 1)
 	      S.bind$(menu_evt, (d) => {
-	      	if(d[0].length && d[0][0]){
-	      		if(d[0][0]){
-	      			m.menu = d[0][0].organization
+	      	if(d[0]){
+	      		if(d[0]){
+	      			m.menu = d[0].organization
 	      			menus = processMenu(R.clone(m.menu), org_id)
 	      			return
 	      		}
