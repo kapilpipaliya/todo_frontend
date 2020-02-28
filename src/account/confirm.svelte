@@ -15,7 +15,7 @@
   let result_title = ''
 
   const fns = [
-      [et.mutate, e.account, e.confirm_email, Unique.id],
+      [et.insert, e.account, e.confirm_email, Unique.id],
       [et.subscribe, e.account, e.confirm_email_status, Unique.id],
       [et.unsubscribe, e.account, e.confirm_email_status, Unique.id],
     ],

@@ -200,7 +200,7 @@
   batch1.push([ all("cs_color", rowIdx), ([d]) => { cs_colors = d; size_()}, [[]]  ])
   batch1.push([ all("cs_type", rowIdx), ([d]) => { cs_types = d; size_()}, [[]]  ])
   batch1.push([ all("size", rowIdx), ([d]) => { sizes = d; size_()}, [[], [0]]  ])
-  S.batchBind_T(batch1)
+  S.batchBindT(batch1)
   
   /*
   // request thumnails with websocket:

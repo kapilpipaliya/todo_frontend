@@ -45,60 +45,36 @@ if(type === FormType.select) {
 }
 
 function getComponent(){
-    if(type === FormType.color) {
-      return Color
-    } else if (type === FormType.email) {
-      return Email
-    } else if (type === FormType.file) {
-      return File
-    } else if(type === FormType.hidden) {
-      return Hidden 
-    } else if(type === FormType.number) {
-      return Number 
-    } else if(type === FormType.password) {
-      return Password 
-    } else if(type === FormType.range) {
-      return Range 
-    } else if(type === FormType.search) {
-      return Search 
-    } else if(type === FormType.text) {
-      return Text 
-    } else if(type === FormType.checkbox) {
-      return Checkbox 
-    } else if(type === FormType.checkboxes) {
-      return Checkboxes  
-    } else if(type === FormType.radio) {
-      return Radio
-    } else if(type === FormType.textarea) {
-      return Textarea 
-    } else if(type === FormType.select) {
-      return TableForm
-    } else if(type === FormType.radio) {
-      //return radio 
-    } else if(type === FormType.multi_select) {
-      return TableForm
-    } else if(type === FormType.text_array) {
-      return ArrayForm  
-    } else if(type === FormType.multi_select_bool_properties) {
-      return TableForm
-    } else if(type === FormType.jsoneditor) {
-      return JsonEditor
-    } else if(type === FormType.codemirror) {
-      return CodeMirror
-      return Textarea
-    } else if(type === FormType.flatpicker) {
-      return Flatpicker
-    } else if(type === FormType.multi_select_hidden || type === FormType.save_time) {
+  switch (type) {
+    case FormType.color: return Color
+    case FormType.email: return Email
+    case FormType.file: return File
+    case FormType.hidden: return Hidden
+    case FormType.number: return Number
+    case FormType.password: return Password
+    case FormType.range: return Range
+    case FormType.search: return Search
+    case FormType.text: return Text
+    case FormType.checkbox: return Checkbox
+    case FormType.checkboxes: return Checkboxes
+    case FormType.radio: return Radio
+    case FormType.textarea: return Textarea
+    case FormType.select: return TableForm
+    case FormType.radio: //return radio
+    case FormType.multi_select: return TableForm
+    case FormType.text_array: return ArrayForm
+    case FormType.multi_select_bool_properties: return TableForm
+    case FormType.jsoneditor: return JsonEditor
+    case FormType.codemirror: return CodeMirror
+    case FormType.flatpicker: return Flatpicker
+    case FormType.multi_select_hidden:
+    case FormType.save_time:
       //return Empty
-    } else if(type === FormType.dropzone) {
-      return DropZone
-    } else if(type === FormType.daterange) {
-      return DateRange
-    } else if(type === FormType.prosemirror) {
-      //return Prosemirror
-    } else if(type === FormType.cleditor) {
-      return CLEditor
-    } else {
+    case FormType.dropzone: return DropZone
+    case FormType.daterange: return DateRange
+    case FormType.prosemirror: //return Prosemirror
+    case FormType.cleditor: return CLEditor
+    default:
       console.warn('Unknown Component type: ', type)
       return Hidden 
     }

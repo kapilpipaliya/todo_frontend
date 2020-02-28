@@ -18,7 +18,7 @@
 
   let loging_out = true
 
-  const fns = [[et.mutate, e.account, e.logout, Unique.id]],
+  const fns = [[et.insert, e.account, e.logout, Unique.id]],
     [logout] = fns
 
   const runOnce = () => {

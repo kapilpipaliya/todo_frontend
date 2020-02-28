@@ -4,11 +4,11 @@
 
   export let isSaving = false
   export let label = "Cancel"
+  export let key = 0
 
   $: label = label || 'Cancel'
   
   $: buttonSaveClass = isSaving === true ? 'cancel disabled loading' : 'cancel'
-  export let key = 0
 </script>
 
 <button

@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { onMount, onDestroy } from '../../modules/index'
-  import Modal from './Model.svelte'
+  import Modal from '../UI/Model.svelte'
   import { css_count } from '../../modules/global_stores/css'
 
   export let closeHeaderMenu

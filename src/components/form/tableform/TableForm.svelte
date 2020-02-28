@@ -97,13 +97,6 @@
 		  	value = value
 		}
 	}
-// <br>
-// data:
-// <br>
-// {JSON.stringify(data)}<br>
-// value:
-// <br>
-// {JSON.stringify(value)}
 </script>
 
 {#if multiSelect}

@@ -125,7 +125,7 @@
     isSaving = true
     const [d] = await new Promise((resolve, reject) => {
       S.bindT(
-        [event_type.mutate, e.my, e.my_schema_mutate, Unique.id],
+        [event_type.insert, e.my, e.my_schema_mutate, Unique.id],
         d => {
           resolve(d)
         },

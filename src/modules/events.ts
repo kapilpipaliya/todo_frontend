@@ -1,4 +1,4 @@
-export enum event_type { get = 1, mutate, subscribe, unsubscribe };
+export enum event_type { get = 1, subscribe, unsubscribe, insert, update, delete_ };
 
 export enum events {
   css_event = 1,
@@ -144,11 +144,7 @@ export enum events {
   fields_schema_get,
   fields_schema_mutate,
   form_schema_get,
-  form_schema_mutate,
-
-  e_organization = 160,
-
-  e_project = 180
+  form_schema_mutate
 }
 
 class UniqueNumber {
@@ -178,22 +174,22 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
   if(h){
     return [
         [event_type.subscribe, e0, events[`${schema}_list`], id],
-        [event_type.mutate, e0, events[`${schema}_mutate`], id],
+        [event_type.insert, e0, events[`${schema}_mutate`], id],
       ]
   } else if(schema == 'register'){
     return [
         null,
-        [event_type.mutate, events.account, events.register_user, Unique.id],
+        [event_type.insert, events.account, events.register_user, Unique.id],
       ]
   } else if(schema == 'login'){
     return [
       null,
-      [event_type.mutate, events.account, events.login, Unique.id],
+      [event_type.insert, events.account, events.login, Unique.id],
     ]
   }
 }
 export const g = (e1,e2) => [event_type.get, e1, e2, Unique.id]
 export const s = (e1,e2) => [event_type.subscribe, e1, e2, Unique.id]
-export const i = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]
-export const u = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]
-export const d = (e1,e2) => [event_type.mutate, e1, e2, Unique.id]
+export const i = (e1,e2) => [event_type.insert, e1, e2, Unique.id]
+export const u = (e1,e2) => [event_type.update, e1, e2, Unique.id]
+export const d = (e1,e2) => [event_type.delete_, e1, e2, Unique.id]

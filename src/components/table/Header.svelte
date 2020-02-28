@@ -82,30 +82,13 @@
           </select>
         </th>
       {:else if !hiddenColumns.includes(headerVisibleColTypesRow[index])}
-        {#if headerVisibleColTypesRow[index] === DisplayType.Number}
+        {#if headerVisibleColTypesRow[index] === DisplayType.Number || headerVisibleColTypesRow[index] === DisplayType.Text || headerVisibleColTypesRow[index] === DisplayType.Double}
           <th>
             <input
               type="search"
               bind:value={filterSettings[index]}
               on:input={onHandleFilter(index)}
               on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-          </th>
-        {:else if headerVisibleColTypesRow[index] === DisplayType.Text}
-          <th>
-            <input
-              type="search"
-              bind:value={filterSettings[index]}
-              on:input={onHandleFilter(index)}
-              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-          </th>
-        {:else if headerVisibleColTypesRow[index] === DisplayType.Double}
-          <th>
-            <input
-              type="search"
-              bind:value={filterSettings[index]}
-              on:input={onHandleFilter(index)}
-              on:contextmenu|preventDefault={e => onTextInputContext(e, index)}
-              step="any" />
           </th>
         {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
           <th>
@@ -113,8 +96,7 @@
               type="checkbox"
               bind:checked={filterSettings[index]}
               on:change={onHandleFilter(index)}
-              on:contextmenu|preventDefault={e => onTextInputContext(e, index)}
-              step="any" />
+              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
           </th>
         {:else if headerVisibleColTypesRow[index] === DisplayType.DateTime}
           <th>Date</th>
