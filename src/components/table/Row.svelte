@@ -110,7 +110,7 @@
           selector={["_key", editableColumnsRow[index].s]}
           id='inline'
           buttonlabels={{save: "Save", cancel: ""}}
-          headerSchema={[
+          headerSchema={
             [
               [
                 [
@@ -125,7 +125,6 @@
               ],
               {r: {result:[[getValue(rowValue[0]), getValue(c)]]}  } 
             ]
-          ]
           }
           />
         {:else if c != null}

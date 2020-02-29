@@ -50,6 +50,10 @@ export enum events {
   recompile_frontend,
   recompile_css,
   restart_server,
+  test_mail,
+  read_log,
+  super_pass_check,
+  css_sync_files_to_db,
 
   account = 60,
 
@@ -145,6 +149,7 @@ export enum events {
   fields_schema_mutate,
   form_schema_get,
   form_schema_mutate
+
 }
 
 class UniqueNumber {
