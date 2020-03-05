@@ -22,39 +22,25 @@
 
 	import { Router } from './components/svelte-router-spa/src/index'
 
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from './modules/index'
-	declare let $ws_connected
+	import { onDestroy, S, event_type as et,events as e, form_schema_evt, isLoggedIn, Unique } from './modules/index'
+
 	import * as RD from 'rambda'
 
-	let mounted = false
-	let er = ''
-	let binded = false
-	const schema_get_evt = form_schema_evt(Unique.id)
 	let routes  = []
-	onMount(() => {mounted = true})
-  	onDestroy(() => {S.unbind_([schema_get_evt]) })
-  	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	function funcBindingOnce() {
-	    if (!binded) {
-	      S.bind$(schema_get_evt, (d) => {
-	      	if(d[0].routes){
-	      		routes = RD.map((x)=> modifyObj(x), d[0].routes)
-	      	}
-	      }, 1)
-	      binded = true
-          S.trigger([
-	    	[schema_get_evt, ['routes']],
-	    	]) 
-	    }
-  	}
 
-  	async function isLoggedIn() {
-  		const auth = await isLoggedInFn(S)
+	const schema_get_evt = form_schema_evt(Unique.id)
+	S.bind$(schema_get_evt, (d) => {if(d[0].routes){routes = RD.map((x)=> modifyObj(x), d[0].routes) } }, 1)
+	S.trigger([[schema_get_evt, ['routes']], ])
+  	onDestroy(() => {S.unbind_([schema_get_evt]) })
+
+	// guards:
+  	async function isLoggedInFn() {
+  		const auth = await isLoggedIn(S)
     	return auth[0]
   	}
 
   	async function isNotLoggedIn() {
-  		const auth = await isLoggedInFn(S)
+  		const auth = await isLoggedIn(S)
     	return !auth[0]
   	}
 
@@ -96,7 +82,7 @@
 	    switch (obj.onlyIf.guard) {
 	      case "userIsAdmin": obj.onlyIf.guard = userIsAdmin; break;    
 	      case "isNotLoggedIn": obj.onlyIf.guard = isNotLoggedIn; break;    
-	      case "isLoggedIn": obj.onlyIf.guard = isLoggedIn; break;    
+	      case "isLoggedIn": obj.onlyIf.guard = isLoggedInFn; break;    
 	    }
 	  }
 	  return obj

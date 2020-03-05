@@ -4,29 +4,14 @@
 
 	import MenuF from './components/UI/MenuF.svelte'
 
-	import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, Unique } from './modules/index'
-	declare let $ws_connected
+	import { onDestroy, S, event_type as et,events as e, Unique } from './modules/index'
 
-	let mounted = false
-	let er = ''
-	let binded = false
+	let menus  = []
 
 	const menu_evt = [et.get, e.my, e.form_schema_get, Unique.id ]
-	let menus  = []
-	onMount(() => {mounted = true})
+	S.bind$(menu_evt, (d) => {if(d[0]){menus = d[0] } }, 1)
+	S.trigger([ [menu_evt, ['menu']] ])
   	onDestroy(() => {S.unbind_([menu_evt]) })
-  	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	function funcBindingOnce() {
-	    if (!binded) {
-	      S.bind$(menu_evt, (d) => {
-	      	if(d[0]){
-	      		menus = d[0]
-	      	}
-	      }, 1)
-	      binded = true
-          S.trigger([ [menu_evt, ['menu']] ]) 
-	    }
-  	}
 
 	let email
 	$: email = $current_member?.email;
