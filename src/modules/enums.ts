@@ -28,10 +28,6 @@ export enum DisplayType {
   Double,
   Date,
   DateTime,
-
-  ARRAY,
-  OBJECT,
-  BINARY,
   Url,
   Color
   };
@@ -77,6 +73,5 @@ export enum FormType {
   updated,
   dropzone,
   daterange,
-  prosemirror,
   cleditor
   };

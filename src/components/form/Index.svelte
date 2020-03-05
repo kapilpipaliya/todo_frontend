@@ -141,7 +141,9 @@
   }*/
   function onDataGet(d) {
     console.warn('onDataGet', d)
-    if(Array.isArray(d[0])){
+    if(!d[0]) {
+      er = d[1]
+    } else if(Array.isArray(d[0])){
       const schema = d[0][0]
       const options_new = d[0][1] ?? {}
       const newOptions = {...options, ...options_new}

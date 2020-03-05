@@ -212,7 +212,8 @@ export class ServerEventsDispatcher {
     //console.log("Server Opened")
     this.dispatch(['open', '', 0], [])
   }
-  private onerror(error: Event) {
+  private onerror(error) {
+    console.warn(error.message)
     console.warn(`[error] ${error}`)
     //todo depend on error try to reconnect
     this.dispatch(['error', '', 0], [])

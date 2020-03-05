@@ -54,6 +54,7 @@ export enum events {
   read_log,
   super_pass_check,
   css_sync_files_to_db,
+  subscribe_online_users,
 
   account = 60,
 
