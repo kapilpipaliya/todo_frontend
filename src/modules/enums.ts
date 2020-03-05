@@ -74,5 +74,6 @@ export enum FormType {
   dropzone,
   daterange,
   cleditor,
-  emoji
+  emoji,
+  mindmap
   };
