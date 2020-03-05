@@ -28,7 +28,7 @@
   export let buttonlabels = {save: "Save", cancel : "Cancel"}
   export let selector = []
   export let headerSchema = []
-  export let showdbg = false
+  export let showdbg = true
 
   let doms = {}
 

@@ -19,6 +19,7 @@ import Flatpicker from './input/Flatpicker.svelte'
 import CodeMirror from './input/codemirror/CodeMirror.svelte'
 import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
+import Emoji from './input/Emoji.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
 import CLEditor from './input/CLEditor.svelte'
 import TableForm from './tableform/TableForm.svelte'
@@ -74,6 +75,7 @@ function getComponent(){
     case FormType.daterange: return DateRange
     case FormType.prosemirror: //return Prosemirror
     case FormType.cleditor: return CLEditor
+    case FormType.emoji: return Emoji
     default:
       console.warn('Unknown Component type: ', type)
       return Hidden 

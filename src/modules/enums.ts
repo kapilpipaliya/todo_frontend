@@ -73,5 +73,6 @@ export enum FormType {
   updated,
   dropzone,
   daterange,
-  cleditor
+  cleditor,
+  emoji
   };
