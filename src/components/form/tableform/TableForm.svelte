@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount, S, Unique } from '../../../modules/index'
+	import { onMount, S } from '../../../modules/index'
 	import * as RD from 'rambda'
 	import {_cloneArray} from './clone'
 	import Options from './Options.svelte'
@@ -63,7 +63,7 @@
 	onMount(() => {
 		let fetch_evt = e[0] ?? []
 		if(fetch_evt.length){
-			fetch_evt.push(Unique.id)
+			fetch_evt.push(S.uid)
 			S.bind$(fetch_evt, onFetchGet, 1)
 			S.trigger([[fetch_evt, []]])
 		} else {

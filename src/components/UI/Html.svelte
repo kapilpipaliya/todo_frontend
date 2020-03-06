@@ -1,12 +1,12 @@
 <script lang='ts'>
-  import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from '../../modules/index'
+  import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn } from '../../modules/index'
   declare let $ws_connected
   export let html = []
   let mounted = false
   let er = ''
   let binded = false
   let htmlResult = []
-  const template_evt = [et.get, e.e_global, e.template_list, Unique.id ]
+  const template_evt = [et.get, e.e_global, e.template_list, S.uid ]
   onMount(() => {mounted = true})
   onDestroy(() => {S.unbind_([template_evt]) })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }

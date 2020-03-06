@@ -8,7 +8,7 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
-   S, ws_connected, event_type, events as e, fade, fly, ValueType, DisplayType, Unique, schemaEvents } from '../../modules/index'
+   S, ws_connected, event_type, events as e, fade, fly, ValueType, DisplayType, schemaEvents } from '../../modules/index'
    declare let $ws_connected
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
@@ -129,7 +129,7 @@
   function reset() {
     if(!schema_key){console.warn('schema key is invalid in table') }
     unRegister()
-    events = schemaEvents(Unique.id, schema_key)
+    events = schemaEvents(S.uid, schema_key)
     headerTitlesRow = []
     items = []
     count = 0
@@ -428,7 +428,7 @@
     const r = confirm('Are You Sure to delete selected rows?')
     if (r == true) {
       mutate_evt.pop()
-      mutate_evt.push(Unique.id)
+      mutate_evt.push(S.uid)
       const filter = [JSON.stringify(selectedRowsKeys)]
       const d = await new Promise((resolve, reject) => {
         S.bindT(mutate_evt, d => {resolve(d) }, ['DEL', filter] )

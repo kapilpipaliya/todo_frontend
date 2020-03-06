@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import {  event_type as et,events as e, Unique } from '../../modules/index'
+  import {  event_type as et,events as e } from '../../modules/index'
   import {translation} from '../../modules/global_stores/translation'
   declare let $translation
   import * as R from 'ramda'

@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, Unique, setContext, getContext, get, writable, ValueType, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, setContext, getContext, get, writable, ValueType, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
   // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
@@ -35,7 +35,7 @@
   }
   declare let $project_ctx
   fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
-  let events = schemaEvents(Unique.id, schema_key);
+  let events = schemaEvents(S.uid, schema_key);
   let unsub_evt
   if(events[0]){
     if(key) {

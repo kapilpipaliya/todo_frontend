@@ -1,3 +1,4 @@
+import {S} from './ws_events_dispatcher'
 export enum event_type { get = 1, subscribe, unsubscribe, insert, update, delete_ };
 export enum events {
   css_event = 1,
@@ -151,13 +152,6 @@ export enum events {
   form_schema_mutate
 
 }
-class UniqueNumber {
-  private id_ = 0
-  get id(){
-    return ++this.id_
-  }
-}
-export const Unique = new UniqueNumber()
 export const form_schema_evt = (id) => [event_type.get, events.my, events.form_schema_get, id ]
 // generate event from schema:
 export const schemaEvents = (id: number | string = 0, schema: string) => {
@@ -180,17 +174,17 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
   } else if(schema == 'register'){
     return [
         null,
-        [event_type.insert, events.account, events.register_user, Unique.id],
+        [event_type.insert, events.account, events.register_user, S.uid],
       ]
   } else if(schema == 'login'){
     return [
       null,
-      [event_type.insert, events.account, events.login, Unique.id],
+      [event_type.insert, events.account, events.login, S.uid],
     ]
   }
 }
-export const g = (e1,e2) => [event_type.get, e1, e2, Unique.id]
-export const s = (e1,e2) => [event_type.subscribe, e1, e2, Unique.id]
-export const i = (e1,e2) => [event_type.insert, e1, e2, Unique.id]
-export const u = (e1,e2) => [event_type.update, e1, e2, Unique.id]
-export const d = (e1,e2) => [event_type.delete_, e1, e2, Unique.id]
+export const g = (e1,e2) => [event_type.get, e1, e2, S.uid]
+export const s = (e1,e2) => [event_type.subscribe, e1, e2, S.uid]
+export const i = (e1,e2) => [event_type.insert, e1, e2, S.uid]
+export const u = (e1,e2) => [event_type.update, e1, e2, S.uid]
+export const d = (e1,e2) => [event_type.delete_, e1, e2, S.uid]
