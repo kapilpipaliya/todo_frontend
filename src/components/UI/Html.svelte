@@ -1,15 +1,11 @@
 <script lang='ts'>
   import { onMount, onDestroy, S, ws_connected, event_type as et,events as e, form_schema_evt, isLoggedIn as isLoggedInFn, Unique } from '../../modules/index'
   declare let $ws_connected
-
   export let html = []
-
   let mounted = false
   let er = ''
   let binded = false
-
   let htmlResult = []
-
   const template_evt = [et.get, e.e_global, e.template_list, Unique.id ]
   onMount(() => {mounted = true})
   onDestroy(() => {S.unbind_([template_evt]) })
@@ -28,22 +24,12 @@
         }
       }, 1)
       binded = true
-      if(html.length){
-        S.trigger([
-          [template_evt, [[null, join(html)],[],[],{h: false}]]
-        ]) 
-      }
+      if(html.length){S.trigger([[template_evt, [[null, join(html)],[],[],{h: false}]] ]) } 
     }
   }
   function join(array){
-    if(!array.length){
-      return ''
-    }
-    if(array.length == 1){
-      return `["${array[0]}"]`
-    }
-
-
+    if(!array.length){return ''}
+    if(array.length == 1){return `["${array[0]}"]` }
     let r = `"${array[0]}"`
     for(let i = 1; i < html.length; i++){
       const t = html[i]
@@ -54,7 +40,6 @@
     return `[${r}]`;
   }
 </script>
-
 {#each htmlResult as h}
 {@html h}
 {/each}

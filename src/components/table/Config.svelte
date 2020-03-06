@@ -1,12 +1,10 @@
 <script>
   import { onMount, onDestroy, createEventDispatcher, S, event_type, events as e, quintOut,crossfade, flip, Unique } from '../../modules/index'
-
   import SubmitButton from '../form/_SubmitButton.svelte'
   import CancelButton from '../form/_CancelButton.svelte'
   import Error from '../UI/Error.svelte'
   export let schema_key = ''
   const dp = createEventDispatcher()
-
   // FLIP ANIMATION
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
@@ -29,7 +27,6 @@
     node.dataset && node.dataset.index
       ? node.dataset
       : getDraggedParent(node.parentNode)
-
   const start = ev => {
     // console.log("start", ev);
     // dataset: DOMStringMap
@@ -98,7 +95,6 @@
     list = newList
     dp('sort', newList)
   }
-
   // UTILS
   const getKey = item => (key_ ? item[key_] : item)
   // PROPS
@@ -106,7 +102,6 @@
   let sortMode = 'insert'
   let key_ = 'form_label'
   let disabledDndIdx = [0]
-
   let er = ''
   let isSaving = false
   onMount(async () => {
@@ -145,7 +140,6 @@
   }
   // {JSON.stringify(list)}
 </script>
-
 <form on:submit|preventDefault={onSave}>
   {#if list && list.length}
     <ul>

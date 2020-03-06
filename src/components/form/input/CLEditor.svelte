@@ -1,7 +1,6 @@
 <script lang='ts'>
 import { onMount, createEventDispatcher, tick } from '../../../modules/index'
 import Editor from "../../thirdparty/cl-editor/src/Editor.svelte";
-
 import Label from '../_Label.svelte'
 export let name;
 export let required;
@@ -9,7 +8,6 @@ export let disabled;
 export let value;
 export let props = {};
 export let dom = null
-
 let cleditorInstance
 // Initialize editor
 onMount(async()=>{
@@ -64,11 +62,7 @@ onMount(async()=>{
 	// that demands that focus is shifted from editor to, for example, modal window.
 
 })
-	function onChange(event){
-		value = event.detail
-		//value = cleditorInstance.getHtml()
-	}
-
+	function onChange(event){value = event.detail }
 </script>
 
 <Label {name} />

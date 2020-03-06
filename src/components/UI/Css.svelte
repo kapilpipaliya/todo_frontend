@@ -9,20 +9,9 @@
 	{/each}
 {/each}
 */
-
 </script>
-
-
 <svelte:head>
-
-
-
 {#each Object.entries($css) as [key, comp], index (key)}
-		{#if $css_count[key]}
-			
-				<link rel="stylesheet" href="{comp.link}">
-			
-		{/if}
+		{#if $css_count[key]} <link rel="stylesheet" href="{comp.link}" > {/if}
 {/each}
-
 </svelte:head>

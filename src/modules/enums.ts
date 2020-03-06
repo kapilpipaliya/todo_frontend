@@ -31,7 +31,6 @@ export enum DisplayType {
   Url,
   Color
   };
-
 export enum FormType {
   button = 1,
   checkbox,
@@ -75,5 +74,6 @@ export enum FormType {
   daterange,
   cleditor,
   emoji,
-  mindmap
+  mindmap,
+  mapcountries
   };

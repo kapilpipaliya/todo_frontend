@@ -3,4 +3,4 @@
 	export let props = {};
 </script>
 
-<span {...props} ><input type='checkbox' checked={!!value} disabled={true} /></span>
+<span {...props} ><input type='checkbox' checked={!!value} disabled={true} ></span>

@@ -1,7 +1,4 @@
 <script>
-
-
-
   //export let menu_name
   //let menu_data = []
 

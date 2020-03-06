@@ -2,7 +2,6 @@
   // https://github.com/dylanblokhuis/svelte-loading-skeleton
   import { onMount, onDestroy } from '../../modules/index'
   import { css_count } from '../../modules/global_stores/css'
-
   export let width = "100%"
   export let height = "50px"
   export let borderRadius = "4px"
@@ -10,12 +9,8 @@
   export let highlightColor = "rgb(245, 245, 245)"
   export let animationLength = "1.2s"
   css_count.increase('skeleton')
-  onDestroy(() => {
-      css_count.decrease('skeleton')
-  })
+  onDestroy(() => {css_count.decrease('skeleton') })
 </script>
-
-
 <div 
   class="skeleton" 
   style="height: {height}; width: {width}; border-radius: {borderRadius}; --baseColor: {baseColor}; --highlightColor: {highlightColor}; --animationLength: {animationLength}" 

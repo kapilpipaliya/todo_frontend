@@ -5,12 +5,9 @@
   	declare let $ws_connected
   	import * as R from 'ramda'
   	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
-
   	import UrlPattern from 'url-pattern'
-  	 import Skeleton from '../../components/UI/Skeleton.svelte'
-
+  	import Skeleton from '../../components/UI/Skeleton.svelte'
     export let currentRoute;
-
     const project_id = currentRoute.namedParams.project
     const project_id_ctx = writable(project_id);
     const project_data_ctx = writable({});
@@ -19,10 +16,8 @@
     setContext("project_data", project_data_ctx)
     const org_id = getContext('org_id')
     declare let $org_id
-
     const project_ctx = getContext('project')
     declare let $project_ctx
-
     let mounted = false
 	let er = ''
 	let binded = false
@@ -37,9 +32,7 @@
   		$project_ctx.pop()
   	})
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	class Menu {
-  		public menu = []
-  	}
+  	class Menu {public menu = [] }
   	const m = new Menu;
   	function funcBindingOnce() {
 	    if (!binded) {
@@ -88,7 +81,6 @@
 		}
 		return menu_
   	}
-
   	// enable this when need:
   	//$: {menus = processMenu(R.clone(m.menu), $org_id, project_id) }
 </script>
@@ -103,5 +95,4 @@ PROJECT LAYOUT
   {:else}
   	<Skeleton/>
   {/if}
-
 </div>

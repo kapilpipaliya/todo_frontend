@@ -12,8 +12,6 @@ export function getCookieValue(a) {
   var b = document.cookie.match('(^|[^;]+)\\s*' + a + '\\s*=\\s*([^;]+)')
   return b ? b.pop() : ''
 }
-
-
 export const getSettingCache = async key => {
   const db = new StorageDB('setting', 1)
   const setting = await db.getItem(key)

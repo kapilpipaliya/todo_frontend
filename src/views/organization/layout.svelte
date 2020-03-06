@@ -5,23 +5,18 @@
 	declare let $ws_connected
 	import * as R from 'ramda'
 	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
-
 	import UrlPattern from 'url-pattern'
 	import Skeleton from '../../components/UI/Skeleton.svelte'
-
 	export let currentRoute;
-
 	const org_id = currentRoute.namedParams.org
 	const org_id_ctx = writable(org_id);
 	const org_data_ctx = writable({});
 	declare let $org_data_ctx
 	setContext('org_id', org_id_ctx);
 	setContext("org_data", org_data_ctx)
-
 	const project_ctx = writable([]);
 	declare let $project_ctx
 	setContext("project", project_ctx)
-
 	let mounted = false
 	let er = ''
 	let binded = false
@@ -37,11 +32,8 @@
   		$project_ctx.pop()
   	})
   	$: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }
-  	class Menu {
-  		public menu = []
-  	}
+  	class Menu {public menu = [] }
   	const m = new Menu;
-
   	function funcBindingOnce() {
 	    if (!binded) {
 	      S.bind$(org_fetch_evt, (d) => {
@@ -112,5 +104,4 @@ ORGANIZATION LAYOUT
   {:else}
   	<Skeleton/>
   {/if}
-
 </div>

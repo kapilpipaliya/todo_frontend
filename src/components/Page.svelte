@@ -3,9 +3,7 @@
   import Title from './UI/Title.svelte'
   import Table from './table/Table.svelte'
   import GeneralForm from './form/Index.svelte'
-
   export let currentRoute
-    
   let schema_key = ''
   $: {
   	// get schema_key From Route params or namedParams
@@ -15,13 +13,10 @@
       schema_key = currentRoute?.namedParams?.schema_key ?? ''
     }
   }
-
-  /*
-  export let accountFilter = {};
+  /*  export let accountFilter = {};
   let customFilter = {
   1 : accountFilter
-  };
-  */
+  };*/
   let options = {}
   $: {
     options = {
@@ -32,10 +27,8 @@
       query: currentRoute?.queryParams ?? {}
     }
   }
-
   let pass
   $: pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
-
   let show = true
   class A {isFirst = true}
   const a = new A
@@ -49,9 +42,7 @@
     if(!a.isFirst){ remount1()} else {a.isFirst = false}
   }
 </script>
-
 <Title {currentRoute}/>
-
 {#if show}
   <div>
     <Table {...options} {pass} />

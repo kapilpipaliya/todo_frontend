@@ -11,7 +11,6 @@ export function merge(array1: [], array2: []){
 // const a = ['1', '2']
 // const b = ['1', '3']
 // console.log(merge(a, b)) // ['1', '3']
-
 // [1, ' - ',2], [...]
 export function stringifyRawPattern(pattern: Array<number | string>, row: []){
 let str = ''

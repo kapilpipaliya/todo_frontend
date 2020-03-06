@@ -1,5 +1,4 @@
 export enum event_type { get = 1, subscribe, unsubscribe, insert, update, delete_ };
-
 export enum events {
   css_event = 1,
   notification_event,
@@ -152,18 +151,14 @@ export enum events {
   form_schema_mutate
 
 }
-
 class UniqueNumber {
   private id_ = 0
   get id(){
     return ++this.id_
   }
 }
-
 export const Unique = new UniqueNumber()
-
 export const form_schema_evt = (id) => [event_type.get, events.my, events.form_schema_get, id ]
-
 // generate event from schema:
 export const schemaEvents = (id: number | string = 0, schema: string) => {
   const h = events[`${schema}_list`]

@@ -1,7 +1,6 @@
 <script lang='ts'>
   import { DisplayType } from '../../modules/index'
   import { css } from '../../modules/global_stores/css'
-  
   export let mergeRowsCount
   export let allSelected
   export let onSelectAllClick
@@ -20,7 +19,6 @@
   export let showRowNum
   export let rowDoms
   export let items
-
   let rowNumScroll
   let scrolledRow
   function removeScrollFocus(){
@@ -39,7 +37,6 @@
     }
   }
 </script>
-
 <tr>
   <th colspan={mergeRowsCount}>
     <input
@@ -72,23 +69,18 @@
   {#each headerTitlesRow as h, index}
     {#if headerIsvisibleColumnsRow[index]}
       {#if customFilter[index]}
-        <th>
-          <select
-            bind:value={filterSettings[index]}
-            on:change={onHandleFilter(index)}>
-            {#each customFilter[index] as f}
-              <option value={f[1]}>{f[0]}</option>
-            {/each}
-          </select>
-        </th>
+        <th> <select bind:value={filterSettings[index]} on:change={onHandleFilter(index)}>
+            {#each customFilter[index] as f} <option value={f[1]}>{f[0]}</option> {/each}
+          </select> </th>
       {:else if !hiddenColumns.includes(headerVisibleColTypesRow[index])}
         {#if headerVisibleColTypesRow[index] === DisplayType.Number || headerVisibleColTypesRow[index] === DisplayType.Text || headerVisibleColTypesRow[index] === DisplayType.Double}
           <th>
             <input
               type="search"
+              placeholder=" &#128269;"
               bind:value={filterSettings[index]}
               on:input={onHandleFilter(index)}
-              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} >
           </th>
         {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
           <th>
@@ -96,7 +88,7 @@
               type="checkbox"
               bind:checked={filterSettings[index]}
               on:change={onHandleFilter(index)}
-              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+              on:contextmenu|preventDefault={e => onTextInputContext(e, index)} >
           </th>
         {:else if headerVisibleColTypesRow[index] === DisplayType.DateTime}
           <th>Date</th>

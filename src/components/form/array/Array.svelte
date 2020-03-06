@@ -18,7 +18,6 @@
 		e.stopPropagation()
 		value = value.filter((_, i) => i !== row);
 	}
-
 	const onReorder = (from, to) => (event) => {
 		event.stopPropagation()
 
@@ -31,9 +30,7 @@
 		))
   }
 </script>
-
 <Debug title=Array data={{$$props}} />
-
 <table>
 	<tbody>
 		{#each value as v, i (i)}

@@ -1,6 +1,5 @@
 <script lang='ts'>
 import { FormType } from '../../modules/enums'
-
 import Checkboxes from './input/Checkboxes.svelte';
 import Color from './input/Color.svelte'
 import Email from './input/Email.svelte'
@@ -21,11 +20,10 @@ import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
 import Emoji from './input/Emoji.svelte'
 import MindMap from './input/MindMap.svelte'
+import MapCountries from './input/MapCountries.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
 import CLEditor from './input/CLEditor.svelte'
 import TableForm from './tableform/TableForm.svelte'
-import ArrayForm from './array/Array.svelte'
-
 export let value
 export let type = FormType.text
 export let label = ''
@@ -34,8 +32,6 @@ export let disabled = false
 export let description = ''
 export let props = {}
 export let doms = {}
-
-
 const extraProps = {}
 if(type === FormType.select) {
   extraProps.multiSelect = false
@@ -45,7 +41,6 @@ if(type === FormType.select) {
   extraProps.multiSelect = true
   extraProps.boolprop = true
 }
-
 function getComponent(){
   switch (type) {
     case FormType.color: return Color
@@ -78,6 +73,7 @@ function getComponent(){
     case FormType.cleditor: return CLEditor
     case FormType.emoji: return Emoji
     case FormType.mindmap: return MindMap
+    case FormType.mapcountries: return MapCountries
     default:
       console.warn('Unknown Component type: ', type)
       return Hidden 

@@ -1,6 +1,5 @@
 <script>
   import { quintOut,crossfade, flip  } from '../../modules/index'
-
   // FLIP ANIMATION
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
@@ -55,7 +54,6 @@
   export let list
   export let key
 </script>
-
 {#if list && list.length}
   <ul>
     {#each list as item, index (getKey(item))}

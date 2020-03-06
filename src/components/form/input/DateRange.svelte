@@ -14,9 +14,7 @@
   } from 'date-fns'
   import * as locales from 'date-fns/locale'
   import SDateRangePicker from  "../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte"
-
   const random = false
-
   const localesArray = Object.keys(locales).map(i => locales[i])
   const locale = random
     ? localesArray[Math.floor(Math.random() * localesArray.length)]
@@ -38,7 +36,6 @@
     //console.log('onApply: ', detail)
   }
 </script>
-
 <SDateRangePicker
   {maxDate}
   weekGuides

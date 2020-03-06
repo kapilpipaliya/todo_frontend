@@ -1,33 +1,26 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, Unique } from '../modules/index'
-  import Error from '../components/UI/Error.svelte'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e, Unique } from '../../modules/index'
+  import Error from '../../components/UI/Error.svelte'
   export let currentRoute
-
   let mounted = false
   let binded = false
-
   let er = ''
-
   let header = ''
   let subtitle = ''
-
   let confirming = true
   let result_title = ''
-
   const fns = [
       [et.insert, e.account, e.confirm_email, Unique.id],
       [et.subscribe, e.account, e.confirm_email_status, Unique.id],
       [et.unsubscribe, e.account, e.confirm_email_status, Unique.id],
     ],
     [doconfirm, sub, unsub] = fns
-
   const runOnce = () => {
     if (!binded) {
       S.bind$(sub, onSubGet, 1)
       binded = true
     }
   }
-
   // this function send subscription request everytime ws connection open
   $: {
     if (mounted) {
@@ -44,7 +37,6 @@
       }
     }
   }
-
   onMount(async () => {
     mounted = true
 
@@ -56,12 +48,10 @@
       subtitle = 'Please check your inbox to verify email.'
     }
   })
-
   onDestroy(() => {
       S.trigger([[unsub, {}]])
       S.unbind_(fns)
   })
-
   // some functions:============
   function onSubGet(d) {
     if (d.ok) {
@@ -74,9 +64,6 @@
     }
   }
 </script>
-
-
-
 {#if confirming}
   <div class="header">
     <h1>{header}</h1>

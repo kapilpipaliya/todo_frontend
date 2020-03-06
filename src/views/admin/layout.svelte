@@ -5,9 +5,7 @@
 	import * as R from 'ramda'
 	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
 	import Skeleton from '../../components/UI/Skeleton.svelte'
-
 	export let currentRoute;
-
   	let mounted = false
 	let er = ''
 	let binded = false
@@ -44,6 +42,4 @@ ADMIN LAYOUT
   {:else}
   	<Skeleton/>
   {/if}
-
-
 </div>

@@ -2,7 +2,6 @@
 //TODO fix table row hightlight not working properly when some row is deleted.
 // Add Two modes on button press change classes
 // Instead of alter show model on delete
-
   // import * as _ from "lamb";
   import * as R from 'ramda'
   import * as RA from 'ramda-adjunct'
@@ -19,49 +18,32 @@
   import ContextMenu from './ContextMenu.svelte'
   import Error from '../UI/Error.svelte'
   import Skeleton from '../UI/Skeleton.svelte'
-
   const dp = createEventDispatcher()
   import { css_count } from '../../modules/global_stores/css'
   // import Card from "../components/Card.svelte";
-
   import Config from './Config.svelte'
-
   let events
-
   let headerTitlesRow
   let items
   let count
-
   export let customFilter = {}
   export let requiredFilter = {} // always add this filter when fetch
-
   export let modelcomponent = false
   export let quickcomponent = false
-
   export let query = {limit: 0, page: 1} // To get arguments from ?limit=25&page=2
-
   export let schema_key = ''
-
   export let pass = [] // [["context", "org_data", "_key", "org"]]
-
-  $: {
-    setContext('items', items)
-  }
-
+  $: {setContext('items', items) }
   // headers
   let headerVisibleColTypesRow = []
   let headerIsvisibleColumnsRow = []
   let sortSettingsRow = []
   let editableColumnsRow = []
   let headerColumnPropsRow = []
-
-
   let options = {}
-
   //internal:
   const hiddenColumns = [DisplayType.ARRAY, DisplayType.OBJECT, DisplayType.BINARY]
   let filterSettings = []
-  
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
@@ -70,13 +52,10 @@
   let limit = Number(query.limit) || 0
   let pages = [1, 2]
   let current_page = Number(query.page) || 1
-
   let total_pages = Math.max(current_page, 1)
-
   let mounted = false
   let binded = false
   let er = ''
-
   let doms = {addbutton: null}
   let addnewform = false
   let headerFetched = false
@@ -87,82 +66,48 @@
   let showRowNum = true
   let rowEditDoms = []
   let rowDoms = []
-
   let addnew_pos = "t"
   let addnew_type = "button"
   let addnew_labels = {save: "Save", cancel : "Cancel"}
   let rowType = "table"
-
   let showHeader = true;
-
   let data_evt
   let unsub
   let mutate_evt
   let authorized = true
-
   let project = getContext('project')
   let project_ctx = writable([])
-  if(project) {
-    $project_ctx = get(project)
-  }
+  if(project) {$project_ctx = get(project) }
   declare let $project_ctx
-
   function setPass() {
     if(Array.isArray(pass)) {
       for(let i = 0; i < pass.length ; i++){
         if(Array.isArray(pass[i]) && pass[i].length > 0){
           let e = pass[i]
-
           if(Array.isArray(e) && e.length > 0){
             const func = e[0]
-
             if(typeof func == 'string') {
               if(func == 'context'){
                 if(e.length > 1){
                   const key = e[1]
                   const data = get(getContext(key))
-                  let addKey
-                  if(e.length > 2){
-                    addKey = e[2]
-                  } else {
-                    addKey = key
-                  }
+                  let addKey = e.length > 2 ? e[2] : key
                   fetchConfig[addKey] = data
                   continue
                 }
               } else if(func == 'contextKey'){
-
                 if(e.length > 1){
                   const key = e[1]
-                  let objKey
-                  if(e.length > 2){
-                    objKey = e[2]
-                  } else {
-                    objKey = "_key"
-                  }
-                  let addKey
-                  if(e.length > 3){
-                    addKey = e[3]
-                  } else {
-                    addKey = key
-                  }
+                  let objKey = e.length > 2 ? e[2] : "_key"
+                  let addKey = e.length > 3 ? e[3] : key
                   const data = get(getContext(key))[objKey]
-
                   fetchConfig[addKey] = data
-
                   continue
                 }
               } else if(func == 'contextKeyInArray'){
                 if(e.length > 1){
                   const key = e[1]
-                  let objKey
-                  if(e.length > 2){
-                    objKey = e[2]
-                  } else {
-                    objKey = "_key"
-                  }
-
-
+                  let objKey = e.length > 2 ? e[2] : "_key"
                   pass[i] = [get(getContext(key))[objKey]]
                   continue
                 }
@@ -174,19 +119,15 @@
     }
   }
   setPass()
-
   // customFilter, not work with filter..
   $: (query); (requiredFilter); (schema_key); reset()
-
   function unRegister() {
     unsub && S.trigger([[unsub, {}]])
     events && S.unbind_(events)
   }
   // Note reset() function executed before fetch
   function reset() {
-    if(!schema_key){
-      console.warn('schema key is invalid in table')
-    }
+    if(!schema_key){console.warn('schema key is invalid in table') }
     unRegister()
     events = schemaEvents(Unique.id, schema_key)
     headerTitlesRow = []
@@ -198,10 +139,7 @@
     sortSettingsRow = []
     editableColumnsRow = []
     headerColumnPropsRow = []
-
-
     options = {}
-
     // internal:
     // hiddenColumns = [ARRAY, OBJECT, BINARY]
     filterSettings = []
@@ -213,13 +151,10 @@
     limit = Number(query.limit) || 0
     pages = [1, 2]
     current_page = Number(query.page) || 1
-
     total_pages = Math.max(current_page, 1)
-
     mounted = true
     binded = false
     er = ''
-
     // doms = {}
     addnewform = false
     headerFetched = false
@@ -227,22 +162,17 @@
     item = []
     config = false
     contextmenu = true
-
     data_evt = events[0]
     unsub = [event_type.unsubscribe, ...events[0].slice(1)]
     mutate_evt = events[1]
     console.log('reset complete')
   }
-
   css_count.increase('table')
-  onMount(() => {
-    mounted = true
-  })
+  onMount(() => {mounted = true })
   onDestroy(() => {
       unRegister();
       css_count.decrease('table')
   })
-
   const runOnce = () => {
     if (!binded) {
       {
@@ -320,15 +250,11 @@
         break
       }
     }
-
-
     options = d[6]
     addnew_pos = options?.add?.pos ?? "t"
     addnew_type = options?.add?.type ?? "button"
     const l = options?.add?.l
-    if(l){
-      addnew_labels = l
-    }
+    if(l){addnew_labels = l }
     showHeader = options?.table?.header ?? true
     rowType = options?.table?.row ?? "table"
     resetFilter_() // Take care....
@@ -339,9 +265,7 @@
     for(let x of a1){
       const idx = b1.indexOf(x)
       // if(idx == -1){a1.splice(idx, 1) } } // cant modify array in loop
-      if(idx != -1) {
-        newa1.push(x)
-      }
+      if(idx != -1) {newa1.push(x) }
     }
     return newa1
   }
@@ -351,9 +275,7 @@
       authorized = false
       er = d
     }
-    if(h.length) {
-      fillHeadersArray(h)
-    }
+    if(h.length) {fillHeadersArray(h) }
     if (d.r) {
       // reset quickview with empty array:
       // [...Array(20)].map(_=>0)
@@ -373,18 +295,14 @@
       // replace rows in table.
       // show on form that its updated...
       d.m.result.forEach(mod => {
-        const findIndex = items.findIndex(i => {
-          return i[0] == mod[0]
-        })
+        const findIndex = items.findIndex(i => {return i[0] == mod[0] })
         if (findIndex !== -1) {
           // start, ?deleteCount, ...items
           items.splice(findIndex, 1, mod)
         }
       })
       items = items
-    } else if (d.d) {
-      deleteRows_(d.d)
-    }
+    } else if (d.d) {deleteRows_(d.d) }
   }
   // ============================================================================
   // ================================Filter ======================================
@@ -440,9 +358,7 @@
         quickview.splice(idx, 1)
       }
     })
-    if (isFind) {
-      quickview = quickview
-    }
+    if (isFind) {quickview = quickview }
   }
   const editButtonFocus = async(key) => {
     await tick();
@@ -452,10 +368,7 @@
       }
   }
   const successSave = e => {
-    const { key, d } = e.detail
-    if (key === null) {
-      toogleAddForm()
-    } else {
+    if (e.detail.key === null) {toogleAddForm() } else {
       closeForm_(key)
       editButtonFocus(key)
     }
@@ -475,13 +388,9 @@
       }
     })
     selectedRowsKeys = selectedRowsKeys
-
     closeForms_(keys)
-
     keys.forEach(k => {
-      const findIndex = items.findIndex(i => {
-        return i[0] == k
-      })
+      const findIndex = items.findIndex(i => i[0] == k)
       if (findIndex !== -1) {
         // start, ?deleteCount, ...items
         items.splice(findIndex, 1)
@@ -498,32 +407,21 @@
     if (r == true) {
       mutate_evt.pop()
       mutate_evt.push(key)
-
       const filter = [`="${key}"`]
       const d = await new Promise((resolve, reject) => {
         // send unsubscribe event if edit is open
         const args = ['DEL', filter, fetchConfig]
         if(rowEditDoms[rowIdx]){
           const unsu_event = rowEditDoms[rowIdx]?.f?.unsub_evt ?? null
-          if(unsu_event){
-            args.push(unsu_event)
-          }
+          if(unsu_event){args.push(unsu_event) }
         }
-        S.bindT(
-          mutate_evt,
-          d => {
-            resolve(d)
-          },
-          args
-        )
+        S.bindT(mutate_evt, d => {resolve(d) }, args )
       })
       if (d[0]) {
         const delete_msg = R.view(R.lensPath(['msg', 'delete']), $translation);
         notifier.danger(delete_msg, 3000)
         deleteRows_([key])
-      } else {
-        alert(d[1])
-      }
+      } else {alert(d[1]) }
     }
   }
   const onDeleteSelected = async () => {
@@ -531,22 +429,11 @@
     if (r == true) {
       mutate_evt.pop()
       mutate_evt.push(Unique.id)
-
       const filter = [JSON.stringify(selectedRowsKeys)]
       const d = await new Promise((resolve, reject) => {
-        S.bindT(
-          mutate_evt,
-          d => {
-            resolve(d)
-          },
-          ['DEL', filter]
-        )
+        S.bindT(mutate_evt, d => {resolve(d) }, ['DEL', filter] )
       })
-      if (d[0]) {
-        deleteRows_(selectedRowsKeys)
-      } else {
-        alert(d[1])
-      }
+      d[0] ? {deleteRows_(selectedRowsKeys) } : {alert(d[1]) }
     }
   }
   // ============================================================================
@@ -561,13 +448,9 @@
     } else {
       total_pages = Math.ceil(count / limit)
       const arr = []
-      for (let i = 1; i <= total_pages; i++) {
-        arr.push(i)
-      }
+      for (let i = 1; i <= total_pages; i++) {arr.push(i) }
       pages = arr
-      if (!pages.includes(current_page)) {
-        current_page = 1
-      }
+      if (!pages.includes(current_page)) {current_page = 1 }
     }
     //console.log(count, limit, total_pages, pages, current_page)
   }
@@ -610,39 +493,25 @@
   }
   // ============================================================================
   // ================================Pass event to Parent. DISABLED =============
-  function onItemClick(litem) {
-    dp('onItemClick', {
-      item: litem,
-    })
-  }
-
-  function onDeleteClick(litem) {
-    dp('onDeleteClick', {
-      item: litem,
-    })
-    return true
-  }
+  function onItemClick(litem) {dp('onItemClick', {item: litem, }) }
+  function onDeleteClick(litem) {dp('onDeleteClick', {item: litem, }) }
   // ============================================================================
   // ================================context-menu================================
   let headerMenuDisplayed = false
   let inputheaderMenuDisplayed = false
   let headerMenuColumn = 0
   let inputHeaderMenuColumn = 0
-
   const onHeaderContext = (e, col) => {
     const left = event.clientX
     const top = event.clientY
-
     const menuBox: HTMLElement | null = window.document.querySelector('.menu')
     if (menuBox) {
       menuBox.style.left = left + 'px'
       menuBox.style.top = top + 'px'
       menuBox.style.display = 'block'
-
       headerMenuDisplayed = true
       headerMenuColumn = col
     }
-
     // window.addEventListener("click", function() {
     //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
@@ -651,17 +520,14 @@
   const onTextInputContext = (e, col) => {
     const left = event.clientX
     const top = event.clientY
-
     const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
     if (menuBox) {
       menuBox.style.left = left + 'px'
       menuBox.style.top = top + 'px'
       menuBox.style.display = 'block'
-
       inputheaderMenuDisplayed = true
       inputHeaderMenuColumn = col
     }
-
     // window.addEventListener("click", function() {
     //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
@@ -669,15 +535,11 @@
   }
   const closeHeaderMenu = event => {
     const menuBox: HTMLElement | null = window.document.querySelector('.menu')
-    if (headerMenuDisplayed == true) {
-      menuBox.style.display = 'none'
-    }
+    if (headerMenuDisplayed == true) {menuBox.style.display = 'none'}
   }
   const closeInputMenu = event => {
     const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
-    if (inputheaderMenuDisplayed == true) {
-      menuBox.style.display = 'none'
-    }
+    if (inputheaderMenuDisplayed == true) {menuBox.style.display = 'none'}
   }
   // ============================================================================
   // ================================multiple select=============================
@@ -688,33 +550,18 @@
 
   const onSelectRowClick = e => {
     const index = selectedRowsKeys.findIndex(x => e.target.value == x)
-    if (index > -1) {
-      selectedRowsKeys.splice(index, 1)
-    } else {
-      selectedRowsKeys.push(e.target.value)
-    }
+    index > -1 ? selectedRowsKeys.splice(index, 1) : selectedRowsKeys.push(e.target.value)
     selectedRowsKeys = selectedRowsKeys
     //e.preventDefault();
     //e.stopPropagation();
   }
-  const selectAll_ = (v: boolean) => {
-    if (v) {
-      selectedRowsKeys = items.map(x => x[0])
-    } else {
-      selectedRowsKeys = []
-    }
-  }
-  const onSelectAllClick = e => {
-    selectAll_(e.target.checked)
-  }
+  const selectAll_ = (v: boolean) => selectedRowsKeys = v ? items.map(x => x[0]) : selectedRowsKeys = []
+  const onSelectAllClick = e => {selectAll_(e.target.checked) }
   // ============================================================================
   // ================================config =============================
-  const onConfigClicked = async () => {
-    config = !config
-  }
+  const onConfigClicked = async () => {config = !config }
   const onConfigApply = e => {
-    const { list } = e.detail
-    fetchConfig['columns'] = list
+    fetchConfig['columns'] = e.detail.list
     config = false
     // const e1 = [header_evt, fetchConfig] // fix this(config)
     // S.trigger([e1]) // fix this
@@ -728,55 +575,18 @@
   //   item = litem;
   //   openModal();
   // }
-
-  function closeModal() {
-    modalIsVisible = false
-  }
-
-  function openModal() {
-    modalIsVisible = true
-  }
-
-  function onNewClick() {
-    item = []
-    openModal()
-  }
+  function closeModal() {modalIsVisible = false }
+  function openModal() {modalIsVisible = true }
+  function onNewClick() {item = []; openModal(); }
   // ============================================================================
-  function isGlobal(v) {
-    //return v?.[1] == 'global'
-    if(RA.isArray(v)) {
-      if(v.length >= 2) {
-        return v[1] === 'global'
-      }
-    }
-    return false
-  }
-
-  function onShowRowNum() {
-    showRowNum = !showRowNum
-  }
+  function isGlobal(v) {return RA.isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false }
+  function onShowRowNum() {showRowNum = !showRowNum }
   let mergeRowsCount
   $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
-
-  function getValue(v) {
-    if(RA.isArray(v)) {
-      if(v.length > 0) {
-        return v[0]
-      } else {
-        // console.log("Array Must has one element", schema_key, v)
-        return v
-        // can pass null to display nothing.
-      }
-    } else {
-      return v
-    }
-  }
+    // can pass null to display nothing.
+  function getValue(v) {return RA.isArray(v) ?  v[0] || '' : v }
 </script>
-
-
-
 <div class='table_wrap'>
-
   {#if addnew_pos == "t"}
     <AddForm
       {toogleAddForm}
@@ -789,8 +599,7 @@
       {addnew_labels}
     />
   {/if}
-  <hr />
-
+  <hr >
 <Error {er} />
 {#if showHeader}
   <button class="" on:click={onResetFilter}>Reset Filters</button>
@@ -803,12 +612,8 @@
     {refresh}
     {pages}
   />
-  {#if multipleSelected}
-    <button type="button" on:click={onDeleteSelected}>Delete</button>
-  {/if}
-
+  {#if multipleSelected} <button type="button" on:click={onDeleteSelected}>Delete</button> {/if}
   <button type="button" on:click={onShowRowNum}>Row Numbers</button>
-
   <button type="button" on:click={onConfigClicked}>Config</button>
   {#if config}
     <Config
@@ -817,7 +622,6 @@
       on:configApply={onConfigApply} />
   {/if}
 {/if}
-
 {#if headerTitlesRow.length}
   {#if authorized}
     <table>
@@ -827,8 +631,7 @@
               {mergeRowsCount}
               {allSelected}
               {onSelectAllClick}
-              {headerTitlesRow}
-              
+              {headerTitlesRow}             
               {headerIsvisibleColumnsRow}
               {headerVisibleColTypesRow}
               {sortSettingsRow}
@@ -880,7 +683,6 @@
   {:else}
     <Error {er} />
   {/if}
-
   {#if addnew_pos == "b"}
     <AddForm
       {toogleAddForm}
@@ -893,7 +695,6 @@
       {addnew_labels}
     />
   {/if}
-
   <ContextMenu
     {closeHeaderMenu}
     {contextmenu}
@@ -911,5 +712,4 @@
 {:else}
   <Skeleton/>
 {/if}
-
 </div>

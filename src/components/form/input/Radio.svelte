@@ -6,7 +6,6 @@
 	export let value;
 	export let props = {};
 	export let dom = null
-
 	export let options = []
 </script>
 <Label {name} />
@@ -20,6 +19,6 @@
 		autocomplete={false}
 		{disabled}
 		{...props}
-	/>
+	>
 	<label>{v}</label>
 {/each}

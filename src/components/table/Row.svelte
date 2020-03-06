@@ -4,16 +4,13 @@
   import UrlPattern from 'url-pattern'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
-
   import Text from './display/Text.svelte'
   import Bool from './display/Bool.svelte'
   import Url from './display/Url.svelte'
   import Color from './display/Color.svelte'
   import Time from './display/Time.svelte'
-
   import GeneralForm from '../form/Index.svelte'
   import {FormType} from '../../modules/enums'
-  
   export let selected: boolean
   export let showRowNum
   export let rowIndex
@@ -39,13 +36,10 @@
   export let fetchConfig
   export let rowEditDoms
   export let rowDoms
-
   const org_id_ctx = getContext('org_id')
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
-
   const project_id_ctx = getContext('project_id')
   const project_id = project_id_ctx ? get(project_id_ctx) : ''
-
 
   function makeUrl(props, id){
     if(id) {
@@ -60,8 +54,6 @@
 
 <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
   in:fade={{ y: 200, duration: 200 }}
-  
-
 >
   {#if showRowNum}
     <td>{rowIndex + 1}</td>

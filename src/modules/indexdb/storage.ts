@@ -8,7 +8,6 @@ const putData = Symbol('putData')
 const getData = Symbol('getData')
 const removeData = Symbol('removeData')
 const removeDB = Symbol('removeDB')
-
 /**
  * @param {dbName} string database name
  * @param {version} number database version number

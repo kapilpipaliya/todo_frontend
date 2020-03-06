@@ -5,10 +5,8 @@
 	export let value;
 	export let props;
 	export let dom = null
-	
 	$: props.options = props.options ?? [];
 </script>
-
 {#each props['options'] as v, i (i)}
 	<label>
 		<input 
@@ -19,7 +17,7 @@
 			 bind:group={value}
 			 {required}
 			 {disabled}
-		/>
+		>
 	 {v}
    </label>
 {/each}

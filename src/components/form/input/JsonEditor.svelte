@@ -3,7 +3,6 @@
   import { css_count } from '../../../modules/global_stores/css'
  	export let value = {}
   export let disabled = false
-  
   let jsonediDom = null
   let jsoneditor
   declare let JSONEditor
@@ -29,10 +28,7 @@
   onDestroy(() => {
     css_count.decrease('jsoneditor')
   })
-
 </script>
-
-
 <div>
 	<div name='form' bind:this={jsonediDom} style="width: 1200px; height: 400px;" />
 </div>

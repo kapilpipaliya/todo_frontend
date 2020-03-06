@@ -7,7 +7,6 @@
   import { Debug, showDebug } from '../UI/debug'
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
-  
   import Html from '../UI/Html.svelte'
   import GeneralInput from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'
@@ -16,11 +15,9 @@
   import * as RA from 'ramda-adjunct'
   import * as RD from 'rambda'
   import * as RX from 'rambdax'
-
   export let id = 'insert'
   export let t = []
   export let b = []
-
   export let key = "0"
   export let schema_key
   export let form = []
@@ -29,9 +26,7 @@
   export let selector = []
   export let headerSchema = []
   export let showdbg = true
-
   let doms = {}
-
   let project = getContext('project')
   declare let $project
   let project_ctx = writable([])
@@ -39,9 +34,7 @@
     $project_ctx = $project
   }
   declare let $project_ctx
-
   fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
-
   let events = schemaEvents(Unique.id, schema_key);
   let unsub_evt
   if(events[0]){
@@ -57,13 +50,11 @@
   let data_evt = events[0]
   let mutate_evt = events[1]
   let isUpdate = false
-  
   let mounted = false
   let binded = false
   let er = ''
   let isSaving = false
   let form_disabled = true
-  
   let options = {disabled: false, notify: true}
   let initial_form = []
   let headers = []
@@ -73,24 +64,12 @@
   } else {
     schemaGetEvt = []
   }
-  function clearError() {
-    er = ''
-  }
   function bindAll(){
-    bindSchemaDataGet()
-    bindDataGet()
-    bindMutate()
-  }
-  function bindSchemaDataGet() {
     if(schemaGetEvt) {
       S.bind$(schemaGetEvt, onDataGet, 1)
     }
-  }
-  function bindMutate(){
-    S.bind$(mutate_evt, onMutateGet, 1)
-  }
-  function bindDataGet(){
     S.bind$(data_evt, onDataGet, 1)
+    S.bind$(mutate_evt, onMutateGet, 1)
   }
   function fetch() {
     if(headerSchema.length) {
@@ -124,11 +103,7 @@
     }
     S.trigger([[mutate_evt, args]])
   }
-  function onReset() {
-    if(!isUpdate) {
-      form = RD.clone(initial_form)
-    }
-  }
+  function onReset() {if(!isUpdate) {form = RD.clone(initial_form) } }
   function onDestroy_() {
     if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
     S.unbind_(events)
@@ -221,7 +196,6 @@
   onDestroy(() => { onDestroy_(); css_count.decrease('submit_buttons') })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce(); } else {er = 'Reconnecting...'} }
   function funcBindingOnce () {if (!binded) {bindAll(); binded = true; fetch();}  }
-
   $: {
     if(headerSchema.length) {
       onMutateGet(headerSchema as [any])
@@ -261,8 +235,7 @@
   }
   $: saveLabel = buttonlabels?.save ?? ""
   $: cancelLabel = buttonlabels?.cancel ?? ""
-
-$: {
+  $: {
   if(!key) {
     if(Array.isArray(form)) {
       for(let i = 0; i < form.length ; i++){
@@ -326,18 +299,12 @@ const isDisabled = (form_disabled_, i) => {
   }
 }
 </script>
-
 <Html html={t}/>
-
 {#if showdbg}
   <label>debug</label><input type=checkbox bind:checked={$showDebug} />
 {/if}
-
 {#if form.length}
   <form class={id} on:submit|preventDefault={onSave}>
-
-
-
     {#each form as f, i}
       {#if types[i]}
         <GeneralInput
@@ -349,22 +316,16 @@ const isDisabled = (form_disabled_, i) => {
           description={description[i]}
           bind:dom={doms[i]}
           props={props[i]}
-
         />
-
       {/if}
     {/each}
-
-
     <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
     {#if cancelLabel}
       <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
     {/if}
     {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
-
   </form>
 {/if}
-
 <!-- <Error {er} /> -->
 {er}
 {#if showdbg}
@@ -372,5 +333,4 @@ const isDisabled = (form_disabled_, i) => {
 options:
 {JSON.stringify(options)}
 {/if}
-
 <Html html={b}/>

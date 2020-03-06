@@ -8,7 +8,6 @@ import * as RA from 'ramda-adjunct'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
 import {ws_todo} from './const_strings'
-
 /*
 usage:
 for $ prefix use always check if(mounted) first.
@@ -24,7 +23,6 @@ for $ prefix use always check if(mounted) first.
 
 type callBack = (d: any) => void;
 type event = Array<number | string>
-
 export class ServerEventsDispatcher {
   readonly #path: string;
   #req: {}
@@ -34,7 +32,6 @@ export class ServerEventsDispatcher {
   #isFirst: boolean
   #firstCancelTimeout: number
   #firstPayload: Array<[]>
-
   constructor(path: string, req:{}, res:{}) {
     this.#path = path
     this.#req = req
@@ -60,14 +57,12 @@ export class ServerEventsDispatcher {
     this.batchBind = this.batchBind.bind(this)
     this.batchBindT = this.batchBindT.bind(this)
     this.delay_send = this.delay_send.bind(this)
-
     this.setupConnection()
   }
   setupConnection() {
     this.#conn = new WebSocket(this.#path, [])
     // dispatch to the right handlers
     this.#conn.onmessage = this.onmessage
-
     this.#conn.onclose = this.onclose
     //this.conn.onopen = this.onopen;
     this.#conn.addEventListener('open', this.onopen)
@@ -78,16 +73,9 @@ export class ServerEventsDispatcher {
     this.#conn.removeEventListener('open', this.onopen)
     this.#conn.close()
   }
-
   bind(event: event, callback: callBack, handleMultiple = 0) {
     this.#callbacks[JSON.stringify(event)] = this.#callbacks[JSON.stringify(event)] ?? []
     this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
-    return this
-  }
-  unbind_(event_names: Array<event> = []) {
-    R.map((event:event) => {
-      this.unbind(event)
-    }, event_names)
     return this
   }
   batchBind(events: Array<[event, callBack, number]> = []) {
@@ -112,14 +100,16 @@ export class ServerEventsDispatcher {
   bindT(event: event, callback: callBack, data, handleMultiple=0) {
     this.bind$(event, callback, handleMultiple)
     this.trigger([[event, data]])
-    return this
+    return () => this.unbind(event)
   }
-  unbind(event: event) {
-    this.#callbacks[JSON.stringify(event)] = []
-  }
+  unbind(event: event) {this.#callbacks[JSON.stringify(event)] = [] }
   private delay_send(){
     this.#conn.send(JSON.stringify(this.#firstPayload))
     this.#isFirst = false
+  }
+  unbind_(event_names: Array<event> = []) {
+    R.map((event:event) => {this.unbind(event) }, event_names)
+    return this
   }
   trigger(payload) {
     const f = this.trigger
@@ -196,7 +186,6 @@ export class ServerEventsDispatcher {
     //   this.dispatch(this.event_name, buffer)
     // }
   }
-
   private onclose(evt: CloseEvent) {
     ws_connected.set(false)
     this.dispatch(['close', '', 0], [])
@@ -218,7 +207,6 @@ export class ServerEventsDispatcher {
     //todo depend on error try to reconnect
     this.dispatch(['error', '', 0], [])
   }
-
   private dispatch(event: event, message: Array<{}>) {
     const chain = this.#callbacks[JSON.stringify(event)]
     if (typeof chain == 'undefined') {
@@ -234,7 +222,6 @@ export class ServerEventsDispatcher {
     }
   }
 }
-
 let ws_: ServerEventsDispatcher
 ws_ = new ServerEventsDispatcher(ws_todo, {}, {})
 /*ws_.bind(

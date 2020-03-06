@@ -14,7 +14,6 @@
 		},
 		1
 	)
-
 	/*export function goBackOrNavigate(path) {
 	  if (window.history.length === 1) {
 	    goto('/admin/users')
@@ -23,7 +22,4 @@
 	  }
 	}*/
 </script>
-
-{#if $navigation}
-	{navigation}
-{/if}
+{#if $navigation} {navigation} {/if}

@@ -7,7 +7,6 @@
 	export let props = {};
 	export let dom = null
 </script>
-
 <Label {name} />
 <input 
 	{name}
@@ -18,4 +17,4 @@
 	autocomplete={false}
 	{disabled}
 	{...props}
-/>
+>
