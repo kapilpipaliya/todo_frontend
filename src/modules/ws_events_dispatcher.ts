@@ -25,6 +25,7 @@ type callBack = (d: any) => void;
 type event = Array<number | string>
 export class ServerEventsDispatcher {
   readonly #path: string;
+  private id_ = 0
   #req: {}
   #res: {}
   #callbacks: Record<string, any> 
@@ -58,6 +59,9 @@ export class ServerEventsDispatcher {
     this.batchBindT = this.batchBindT.bind(this)
     this.delay_send = this.delay_send.bind(this)
     this.setupConnection()
+  }
+  get uid(){
+    return ++this.id_
   }
   setupConnection() {
     this.#conn = new WebSocket(this.#path, [])
