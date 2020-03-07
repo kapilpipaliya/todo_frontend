@@ -2,7 +2,7 @@
   import {  ET,E } from '../../modules/index'
   import {translation} from '../../modules/global_stores/translation'
   declare let $translation
-  import * as R from 'ramda'
+  import { view, lensPath } from 'ramda'
   export let currentRoute: {params?: {schema_key?: string}, namedParams?: {schema_key?: string}} = {}
   let schema_key = ''
   $: {
@@ -15,8 +15,8 @@
   }
   let title
   let subtitle
-  $: title    = R.view(R.lensPath([schema_key, 'title']), $translation);
-  $: subtitle = R.view(R.lensPath([schema_key, 'subtitle']), $translation);
+  $: title    = view(lensPath([schema_key, 'title']), $translation);
+  $: subtitle = view(lensPath([schema_key, 'subtitle']), $translation);
 </script>
 <svelte:head>
   <title>{title}</title>

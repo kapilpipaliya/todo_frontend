@@ -1,5 +1,4 @@
 <script>
-import * as R from 'ramda'
 export let menu = []
 </script>
 <ul>

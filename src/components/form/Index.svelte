@@ -11,10 +11,8 @@
   import GeneralInput from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'
   import CancelButton from './_CancelButton.svelte'
-  import * as R from 'ramda'
-  import * as RA from 'ramda-adjunct'
-  import * as RD from 'rambda'
-  import * as RX from 'rambdax'
+  import { view, lensPath } from 'ramda'
+  import { clone } from 'rambda'
   export let id = 'insert'
   export let t = []
   export let b = []
@@ -103,7 +101,7 @@
     }
     S.trigger([[mutate_evt, args]])
   }
-  function onReset() {if(!isUpdate) {form = RD.clone(initial_form) } }
+  function onReset() {if(!isUpdate) {form = clone(initial_form) } }
   function onDestroy_() {
     if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
     S.unbind_(events)
@@ -135,7 +133,7 @@
       }
       const new_form = merge(form, form_new)
       form = new_form
-      initial_form = RD.clone(new_form)
+      initial_form = clone(new_form)
       
       form_disabled = options.ds ?? false // options.disabled
     }
@@ -144,7 +142,7 @@
     console.warn('onMutateGet ', d)
     isSaving = false
     if (d[0]) {
-      const save_msg = R.view(R.lensPath(['msg', 'save']), $translation);
+      const save_msg = view(lensPath(['msg', 'save']), $translation);
       
       if(options.notify){
         notifier.success(save_msg, 3000)

@@ -1,4 +1,4 @@
-import * as RX from 'rambdax'
+import { type } from 'rambdax'
 // Array Functions:----------------------
 export function merge(array1: [], array2: []){
   for(let i=0; i < array2.length; i++){
@@ -15,7 +15,7 @@ export function merge(array1: [], array2: []){
 export function stringifyRawPattern(pattern: Array<number | string>, row: []){
 let str = ''
   pattern.forEach(x => {
-    if(RX.type(x) ==  'Number') {
+    if(type(x) ==  'Number') {
       str += row[x as number]
     } else {
       str += x

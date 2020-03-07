@@ -2,7 +2,6 @@
 	import { Route } from "../../components/svelte-router-spa/src/index";
 	import { onMount, onDestroy, S, ws_connected, ET,E } from '../../modules/index'
 	declare let $ws_connected
-	import * as R from 'ramda'
 	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
 	import Skeleton from '../../components/UI/Skeleton.svelte'
 	export let currentRoute;

@@ -3,8 +3,8 @@
 // Add Two modes on button press change classes
 // Instead of alter show model on delete
   // import * as _ from "lamb";
-  import * as R from 'ramda'
-  import * as RA from 'ramda-adjunct'
+  import { view, lensPath } from 'ramda'
+  import { isArray } from 'ramda-adjunct'
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
@@ -42,7 +42,7 @@
   let headerColumnPropsRow = []
   let options = {}
   //internal:
-  const hiddenColumns = [DisplayType.ARRAY, DisplayType.OBJECT, DisplayType.BINARY]
+  const hiddenColumns = []
   let filterSettings = []
   let quickview = []
   let selectedRowsKeys = []
@@ -418,7 +418,7 @@
         S.bindT(mutate_evt, d => {resolve(d) }, args )
       })
       if (d[0]) {
-        const delete_msg = R.view(R.lensPath(['msg', 'delete']), $translation);
+        const delete_msg = view(lensPath(['msg', 'delete']), $translation);
         notifier.danger(delete_msg, 3000)
         deleteRows_([key])
       } else {alert(d[1]) }
@@ -579,12 +579,12 @@
   function openModal() {modalIsVisible = true }
   function onNewClick() {item = []; openModal(); }
   // ============================================================================
-  function isGlobal(v) {return RA.isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false }
+  function isGlobal(v) {return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false }
   function onShowRowNum() {showRowNum = !showRowNum }
   let mergeRowsCount
   $: mergeRowsCount = 3 + (showRowNum ? 1 : 0);
     // can pass null to display nothing.
-  function getValue(v) {return RA.isArray(v) ?  v[0] || '' : v }
+  function getValue(v) {return isArray(v) ?  v[0] || '' : v }
 </script>
 <div class='table_wrap'>
   {#if addnew_pos == "t"}

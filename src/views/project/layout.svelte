@@ -3,7 +3,7 @@
   	import { onMount, onDestroy, writable, setContext, getContext, get,
   		S, ws_connected, ET,E, ValueType } from '../../modules/index'
   	declare let $ws_connected
-  	import * as R from 'ramda'
+  	import { clone } from 'rambda'
   	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
   	import UrlPattern from 'url-pattern'
   	import Skeleton from '../../components/UI/Skeleton.svelte'
@@ -53,7 +53,7 @@
 	      	if(d[0]){
 	      		if(d[0]){
 	      			m.menu = d[0].project
-	      			menus = processMenu(R.clone(m.menu), $org_id, project_id)
+	      			menus = processMenu(clone(m.menu), $org_id, project_id)
 	      			return
 	      		}
 	      		console.warn("cant set menu")
@@ -82,7 +82,7 @@
 		return menu_
   	}
   	// enable this when need:
-  	//$: {menus = processMenu(R.clone(m.menu), $org_id, project_id) }
+  	//$: {menus = processMenu(clone(m.menu), $org_id, project_id) }
 </script>
 PROJECT LAYOUT
 <h4>Selected Project: {project_id}</h4>

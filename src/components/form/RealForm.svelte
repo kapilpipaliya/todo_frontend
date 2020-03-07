@@ -19,7 +19,7 @@ import CodeMirror from './input/codemirror/CodeMirror.svelte'
 import DropZone from './input/DropZone.svelte'
 import DateRange from './input/DateRange.svelte'
 import Emoji from './input/Emoji.svelte'
-import MindMap from './input/MindMap.svelte'
+//import MindMap from './input/MindMap.svelte'
 import MapCountries from './input/MapCountries.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
 import CLEditor from './input/CLEditor.svelte'
@@ -71,7 +71,7 @@ function getComponent(){
     case FormType.daterange: return DateRange
     case FormType.cleditor: return CLEditor
     case FormType.emoji: return Emoji
-    case FormType.mindmap: return MindMap
+    //case FormType.mindmap: return MindMap
     case FormType.mapcountries: return MapCountries
     default:
       console.warn('Unknown Component type: ', type)

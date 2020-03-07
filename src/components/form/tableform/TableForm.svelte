@@ -1,6 +1,5 @@
 <script lang='ts'>
 	import { onMount, S } from '../../../modules/index'
-	import * as RD from 'rambda'
 	import {_cloneArray} from './clone'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'

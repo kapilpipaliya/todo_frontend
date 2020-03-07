@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import { onMount } from '../../../modules/index'
-	import * as RD from 'rambda'
+	import { find } from 'rambda'
 	import Options from './Options.svelte'
 	export let value = []
 	export let options = []
@@ -17,7 +17,7 @@
 	const onChange = () => {
 		// value = ["backlog", {…}]
  		// options = [ ["backlog", "BackLog", Array(7)] ]
-		const b = RD.find(x=>x[keyIdx]==value[0], options)
+		const b = find(x=>x[keyIdx]==value[0], options)
 		if(!value[1]) { // this will not happen, parent component take care of it
 			value[1]= value[1] ?? {}
 		}

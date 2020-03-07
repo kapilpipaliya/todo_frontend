@@ -3,8 +3,7 @@ Simplified WebSocket events dispatcher
 */
 //import IsomorphicWs from 'isomorphic-ws'
 import { writable } from '../../svelte/src/runtime/store/index'; // no
-import * as R from 'ramda'
-import * as RA from 'ramda-adjunct'
+import { map } from 'ramda'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
 import {ws_todo} from './const_strings'
@@ -108,7 +107,7 @@ export class ServerEventsDispatcher {
     this.#isFirst = false
   }
   unbind_(event_names: Array<event> = []) {
-    R.map((event:event) => {this.unbind(event) }, event_names)
+    map((event:event) => {this.unbind(event) }, event_names)
     return this
   }
   trigger(payload) {

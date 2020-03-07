@@ -1,7 +1,7 @@
 <script>
-import * as R from 'ramda'
+import { compose, length, filter } from 'ramda'
 export let menu = {}
-const h = R.compose(R.length, R.filter(x=>!x.hidden) )
+const h = compose(length, filter(x=>!x.hidden) )
 $: tabsCount = h(menu.tabs);
 </script>
 {#if menu.tabs}

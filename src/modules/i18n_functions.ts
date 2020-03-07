@@ -1,8 +1,8 @@
-import * as RA from 'ramda-adjunct'
+import { isString, isObject } from 'ramda-adjunct'
 export function i18n(name: string | {}, lang = 'en'){
-  if (RA.isString(name)) {
+  if (isString(name)) {
     return name
-  } else if(RA.isObject(name)) {
+  } else if(isObject(name)) {
     return name[lang]
   }
   return "i18n Error"
