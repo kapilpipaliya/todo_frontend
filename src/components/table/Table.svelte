@@ -8,7 +8,7 @@
   import Row from './Row.svelte'
   import Header from './Header.svelte'
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
-   S, ws_connected, event_type, events as e, fade, fly, ValueType, DisplayType, schemaEvents } from '../../modules/index'
+   S, ws_connected, ET, E, fade, fly, ValueType, DisplayType, schemaEvents } from '../../modules/index'
    declare let $ws_connected
   import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
@@ -163,7 +163,7 @@
     config = false
     contextmenu = true
     data_evt = events[0]
-    unsub = [event_type.unsubscribe, ...events[0].slice(1)]
+    unsub = [ET.unsubscribe, ...events[0].slice(1)]
     mutate_evt = events[1]
     console.log('reset complete')
   }

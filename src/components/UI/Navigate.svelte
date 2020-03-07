@@ -1,9 +1,9 @@
 <script lant='ts'>
-	import { writable, S, event_type as et,events as e } from '../../modules/index'
+	import { writable, S, ET,E } from '../../modules/index'
 	import { navigateTo } from '../svelte-router-spa/src/index'
 	const navigation = writable("")
 	// must use id =0
-	S.bind$( [et.get, e.account, e.redirection_event, 0],
+	S.bind$( [ET.get, E.account, E.redirection_event, 0],
 		function(data) {
 		  if(data[1]) {
 		  	navigation.set(data[2])

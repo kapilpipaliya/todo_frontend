@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, setContext, getContext, get, writable, ValueType, event_type as et, events as e, merge, schemaEvents } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, setContext, getContext, get, writable, ValueType, ET, E, merge, schemaEvents } from '../../modules/index'
   // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
@@ -39,11 +39,11 @@
   let unsub_evt
   if(events[0]){
     if(key) {
-      events[0][0] = et.subscribe
+      events[0][0] = ET.subscribe
     } else {
-      events[0][0] = et.get
+      events[0][0] = ET.get
     }
-    unsub_evt = [et.unsubscribe, ...events[0].slice(1)]
+    unsub_evt = [ET.unsubscribe, ...events[0].slice(1)]
   } else {
     unsub_evt = []
   }
@@ -60,7 +60,7 @@
   let headers = []
   let schemaGetEvt = []
   if(!data_evt) {
-    schemaGetEvt = [et.get, e.my, e.form_schema_get, key ]
+    schemaGetEvt = [ET.get, E.my, E.form_schema_get, key ]
   } else {
     schemaGetEvt = []
   }

@@ -1,6 +1,6 @@
 <script lang='ts'>
   // same as confirm page.
-  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, isLoggedIn, event_type as et, events as e, ws_connected } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_todo, isLoggedIn, ET, E, ws_connected } from '../../modules/index'
   import Error from '../../components/UI/Error.svelte'
   declare let $ws_connected
   // export let categories = [];
@@ -13,7 +13,7 @@
   let header = '' // initialised on onMount
   let subtitle = ''
   let loging_out = true
-  const fns = [[et.insert, e.account, e.logout, S.uid]],
+  const fns = [[ET.insert, E.account, E.logout, S.uid]],
     [logout] = fns
   const runOnce = () => {
     if (!binded) {

@@ -1,6 +1,6 @@
 // use function directly on ws_dispatcher..
 import { writable, S } from '../index'
-import { event_type as et, events as e, form_schema_evt } from '../events'
+import { ET, E, form_schema_evt } from '../events'
 export const translation = writable({})
 export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) => S.bindT(form_schema_evt(S.uid), (d: [[{}]]) => {resolve(d[0]) }, ['translation'] ) )
@@ -8,7 +8,7 @@ export const fetchTranslations = async () => {
   return trans
 }
 fetchTranslations()
-/*S.bind$( [et.get, e.account, e.translation_event, 0],
+/*S.bind$( [ET.get, E.account, e.translation_event, 0],
 	function(data) {
 	  console.log(data)
 	},

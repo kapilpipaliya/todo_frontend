@@ -20,7 +20,6 @@ for $ prefix use always check if(mounted) first.
 // same library:
 //A WebSocket JavaScript library https://sarus.anephenix.com
 //https://github.com/anephenix/sarus
-
 type callBack = (d: any) => void;
 type event = Array<number | string>
 export class ServerEventsDispatcher {
@@ -41,7 +40,6 @@ export class ServerEventsDispatcher {
     this.#isFirst = false
     this.#firstCancelTimeout = null
     this.#firstPayload = []
-
     this.bind = this.bind.bind(this)
     this.bind$ = this.bind$.bind(this)
     this.bindT = this.bindT.bind(this)
@@ -60,9 +58,7 @@ export class ServerEventsDispatcher {
     this.delay_send = this.delay_send.bind(this)
     this.setupConnection()
   }
-  get uid(){
-    return ++this.id_
-  }
+  get uid(){return ++this.id_ }
   setupConnection() {
     this.#conn = new WebSocket(this.#path, [])
     // dispatch to the right handlers
@@ -226,13 +222,4 @@ export class ServerEventsDispatcher {
     }
   }
 }
-let ws_: ServerEventsDispatcher
-ws_ = new ServerEventsDispatcher(ws_todo, {}, {})
-/*ws_.bind(
-  ['take_image_meta'],
-  function(data) {
-    ws_.event = data[0] // save value on class.
-  },
-  1
-)*/
-export const S = ws_
+export const S = new ServerEventsDispatcher(ws_todo, {}, {})

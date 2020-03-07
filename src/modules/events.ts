@@ -1,6 +1,6 @@
 import {S} from './ws_events_dispatcher'
-export enum event_type { get = 1, subscribe, unsubscribe, insert, update, delete_ };
-export enum events {
+export enum ET { get = 1, subscribe, unsubscribe, insert, update, delete_ };
+export enum E {
   css_event = 1,
   notification_event,
   cookie_event,
@@ -152,39 +152,39 @@ export enum events {
   form_schema_mutate
 
 }
-export const form_schema_evt = (id) => [event_type.get, events.my, events.form_schema_get, id ]
+export const form_schema_evt = (id) => [ET.get, E.my, E.form_schema_get, id ]
 // generate event from schema:
 export const schemaEvents = (id: number | string = 0, schema: string) => {
-  const h = events[`${schema}_list`]
+  const h = E[`${schema}_list`]
   let e0 = 0
   if(h > 20 && h < 60){
-    e0 = events.e_global
+    e0 = E.e_global
   } else if (h > 60 && h < 80) {
-    e0 = events.account
+    e0 = E.account
   } else if (h > 80 && h < 140) {
-    e0 = events.admin
+    e0 = E.admin
   } else if (h > 140 && h < 160) {
-    e0 = events.my
+    e0 = E.my
   }
   if(h){
     return [
-        [event_type.subscribe, e0, events[`${schema}_list`], id],
-        [event_type.insert, e0, events[`${schema}_mutate`], id],
+        [ET.subscribe, e0, E[`${schema}_list`], id],
+        [ET.insert, e0, E[`${schema}_mutate`], id],
       ]
   } else if(schema == 'register'){
     return [
         null,
-        [event_type.insert, events.account, events.register_user, S.uid],
+        [ET.insert, E.account, E.register_user, S.uid],
       ]
   } else if(schema == 'login'){
     return [
       null,
-      [event_type.insert, events.account, events.login, S.uid],
+      [ET.insert, E.account, E.login, S.uid],
     ]
   }
 }
-export const g = (e1,e2) => [event_type.get, e1, e2, S.uid]
-export const s = (e1,e2) => [event_type.subscribe, e1, e2, S.uid]
-export const i = (e1,e2) => [event_type.insert, e1, e2, S.uid]
-export const u = (e1,e2) => [event_type.update, e1, e2, S.uid]
-export const d = (e1,e2) => [event_type.delete_, e1, e2, S.uid]
+export const g = (e1,e2) => [ET.get, e1, e2, S.uid]
+export const s = (e1,e2) => [ET.subscribe, e1, e2, S.uid]
+export const i = (e1,e2) => [ET.insert, e1, e2, S.uid]
+export const u = (e1,e2) => [ET.update, e1, e2, S.uid]
+export const d = (e1,e2) => [ET.delete_, e1, e2, S.uid]

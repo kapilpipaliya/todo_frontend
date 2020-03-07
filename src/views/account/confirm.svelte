@@ -1,5 +1,5 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, event_type as et, events as e } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, ET, E } from '../../modules/index'
   import Error from '../../components/UI/Error.svelte'
   export let currentRoute
   let mounted = false
@@ -10,9 +10,9 @@
   let confirming = true
   let result_title = ''
   const fns = [
-      [et.insert, e.account, e.confirm_email, S.uid],
-      [et.subscribe, e.account, e.confirm_email_status, S.uid],
-      [et.unsubscribe, e.account, e.confirm_email_status, S.uid],
+      [ET.insert, E.account, E.confirm_email, S.uid],
+      [ET.subscribe, E.account, E.confirm_email_status, S.uid],
+      [ET.unsubscribe, E.account, E.confirm_email_status, S.uid],
     ],
     [doconfirm, sub, unsub] = fns
   const runOnce = () => {

@@ -69,7 +69,6 @@ function getComponent(){
       //return Empty
     case FormType.dropzone: return DropZone
     case FormType.daterange: return DateRange
-    case FormType.prosemirror: //return Prosemirror
     case FormType.cleditor: return CLEditor
     case FormType.emoji: return Emoji
     case FormType.mindmap: return MindMap

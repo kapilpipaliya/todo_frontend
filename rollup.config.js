@@ -32,7 +32,7 @@ const plugins = [
     emitCss: true,
   }),
   html({
-    template: "src/index.html",
+    template: "index.html",
     dest: "dist",
     filename: "index.html",
     absolute: true
