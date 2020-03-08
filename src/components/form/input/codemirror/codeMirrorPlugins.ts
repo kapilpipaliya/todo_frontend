@@ -1,6 +1,6 @@
 // https://github.com/frantic0/svelte-codemirror/blob/master/demo/src/codeMirrorPlugins.js
 // https://frantic0.com/ great man
-import 'codemirror/mode/javascript/javascript.js';
+//import 'codemirror/mode/javascript/javascript.js';
 // import 'codemirror/mode/shell/shell.js';
 // import 'codemirror/mode/ebnf/ebnf';
 // import 'codemirror/mode/handlebars/handlebars.js';

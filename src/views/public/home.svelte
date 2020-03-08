@@ -28,3 +28,8 @@ onDestroy(() => {S.unbind(online_user_evt) })
   {users}
   <textarea bind:value={log}></textarea>
 </div>
+
+
+TODO WRITE COMPLETE HOME PAGE WITH CSS.
+
+

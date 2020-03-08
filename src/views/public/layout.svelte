@@ -11,3 +11,4 @@ PUBLIC LAYOUT
     <Route {currentRoute} />
   </section>
 </div>
+TODO ADD FOOTER TEMPLATE HERE
