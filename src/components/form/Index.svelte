@@ -5,7 +5,8 @@
   const dp = createEventDispatcher();
   import { css_count } from '../../modules/global_stores/css'
   import { Debug, showDebug } from '../UI/debug'
-  import { notifier } from '../thirdparty/svelte-notifications/src/index'
+  import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
+  const { addNotification } = getNotificationsContext();
   import { translation } from '../../modules/global_stores/translation'
   import Html from '../UI/Html.svelte'
   import GeneralInput from './RealForm.svelte'
@@ -145,7 +146,10 @@
       const save_msg = view(lensPath(['msg', 'save']), $translation);
       
       if(options.notify){
-        notifier.success(save_msg, 3000)
+        addNotification({
+            text: save_msg,
+            position: 'bottom-center',
+          })
       }
       er = ''
       dp('successSave', { key: key, d })

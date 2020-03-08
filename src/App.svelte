@@ -11,6 +11,8 @@
   import Logout from './views/account/logout.svelte'
   import Confirm from './views/account/confirm.svelte'
   import Home from './views/public/home.svelte'
+  import About from './views/public/contact.svelte'
+  import Contact from './views/public/about.svelte'
   import PublicLayout from './views/public/layout.svelte'
   import AdminLayout from './views/admin/layout.svelte'
   import AdminIndex from './views/admin/index.svelte'
@@ -20,6 +22,7 @@
   import ProjectIndex from './views/project/index.svelte'
   import { Router } from './components/svelte-router-spa/src/index'
   import { onDestroy, S, form_schema_evt, isLoggedIn, ET,E, R, RD, RA } from './modules/index'
+  import Notifications from './components/thirdparty/svelte-notifications/src/index'
   let e$
   $: e$ = $current_member?.email;
   let m$  = []
@@ -27,7 +30,7 @@
   onDestroy(S.bindT([ET.get, E.my, E.form_schema_get, S.uid ], (d) => {if(d[0]){m$ = d[0] } }, ['menu'], 1))
   onDestroy(S.bindT(form_schema_evt(S.uid), (d) => {if(d[0].routes){r$ = RD.map((x) => modifyObj(x), d[0].routes) } }, ['routes'], 1))
   const modifyObj = o => { 
-    const C = {"PublicLayout": PublicLayout, "Home": Home,
+    const C = {"PublicLayout": PublicLayout, "Home": Home, "Contact": Contact, "About": About,
       "Page": Page, "Form": FormWrapper,
       "Logout": Logout, "Confirm": Confirm,
       "AdminLayout": AdminLayout, "AdminIndex": AdminIndex,
@@ -41,11 +44,13 @@
     const mod_n = o => {if(o.nestedRoutes) o.nestedRoutes = RD.map((x) => modifyObj(x), o.nestedRoutes); return o }
     o = R.pipe(mod_c('component'), mod_c('layout'), mod_g, mod_n)(o); return o }
 </script>
-<TopLevelComps/>
-<nav>
-  {#if e$} Current User: {e$} {/if}
-  {#if m$.navData} <MenuF menu={m$.navData.account}/> {/if}
-  {#if m$.navData} <MenuF menu={m$.navData.global}/> {/if}
-  {#if m$.navData} <MenuF menu={m$.navData.admin}/> {/if}
-</nav>
-{#if r$.length} <Router routes={r$} /> {:else} Loading... {/if}
+<Notifications>
+  <TopLevelComps/>
+  <nav>
+    {#if e$} Current User: {e$} {/if}
+    {#if m$.navData} <MenuF menu={m$.navData.account}/> {/if}
+    {#if m$.navData} <MenuF menu={m$.navData.global}/> {/if}
+    {#if m$.navData} <MenuF menu={m$.navData.admin}/> {/if}
+  </nav>
+  {#if r$.length} <Router routes={r$} /> {:else} Loading... {/if}
+</Notifications>

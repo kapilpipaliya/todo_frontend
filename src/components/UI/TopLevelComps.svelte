@@ -4,11 +4,13 @@
 	import Css from './Css.svelte'
 	import Navigate from './Navigate.svelte'
 	import ScrollTop from './ScrollTop.svelte'
-	import { NotificationDisplay } from '../thirdparty/svelte-notifications/src/index'
+
+  import NightMode from '../NightMode.svelte'
 	let n
 </script>
 <Css/>
 {#if $maintenance} server is going down for sheduled maintenance {/if}
 <Navigate/>
-<NotificationDisplay bind:this={n} />
+
+<NightMode/>
 <ScrollTop/>

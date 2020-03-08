@@ -1,138 +1,224 @@
-<p align="center">
-  <img width="186" height="90" src="https://user-images.githubusercontent.com/218949/44782765-377e7c80-ab80-11e8-9dd8-fce0e37c235b.png" alt="Beyonk" />
-</p>
+# Svelte notifications
 
-## Svelte Notifications
+![build](https://img.shields.io/circleci/build/github/keenethics/svelte-notifications/master.svg)
+![version](https://img.shields.io/github/package-json/v/keenethics/svelte-notifications.svg)
+![license](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com) [![CircleCI](https://circleci.com/gh/beyonk-adventures/svelte-notifications.svg?style=shield)](https://circleci.com/gh/beyonk-adventures/svelte-notifications) [![Svelte v2](https://img.shields.io/badge/svelte-v2-orange.svg)](https://v2.svelte.dev) [![Svelte v3](https://img.shields.io/badge/svelte-v3-blueviolet.svg)](https://svelte.dev)
+Simple and flexible notifications system for Svelte 3
 
-Svelte Notifications component
+![Svelte Notifications](https://github.com/keenethics/svelte-notifications/blob/media/svelte-notifications-preview.png?raw=true)
 
-* v3 compatible
-* uses stores for completely hassle free operation
+## Demonstration
 
-## Demo
+[https://svelte-notifications.netlify.com](https://svelte-notifications.netlify.com)
 
-A [Demo of this component](https://svelte.dev/repl/dd506c546df84c1994a5ae9928ad23b1?version=3.12.1) is available.
-
-## Usage
+## Getting started
 
 ```bash
-npm i -D @beyonk/svelte-notifications
+npm install --save svelte-notifications
 ```
 
-```jsx
-<NotificationDisplay />
+## Basic usage
 
-<button on:click={someFunction}>Show message</button>
+```javascript
+// MainComponent.svelte
 
 <script>
-import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
+  import Notifications from 'svelte-notifications';
 
-function someFunction () {
-  notifier.success('Notifications work!')
-}
+  import App from './App.svelte';
+</script>
+
+<Notifications>
+  <App />
+</Notifications>
+```
+
+```javascript
+// ChildrenComponent.svelte
+
+<script>
+  import { getNotificationsContext } from 'svelte-notifications';
+
+  const { addNotification } = getNotificationsContext();
+</script>
+
+<button
+  on:click={() => addNotification({
+    text: 'Notification',
+    position: 'bottom-center',
+  })}
+>
+  Add notification
+</button>
+```
+
+## Providing custom notification component
+
+```javascript
+// MainComponent.svelte
+
+<script>
+  import Notifications from 'svelte-notifications';
+  import CustomNotification from './CustomNotification.svelte';
+
+  import App from './App.svelte';
+</script>
+
+<Notifications item={CustomNotification}>
+  <App />
+</Notifications>
+```
+
+```javascript
+// CustomNotification.svelte
+
+<script>
+  let notification = {};
+  // `onRemove` function will be passed into your component.
+  let onRemove = null;
+
+  const handleButtonClick = () => {
+    onRemove();
+  }
+</script>
+
+<div class={notification.type === 'error' ? 'error' : ''}>
+  <h4>{notification.heading}</h4>
+  <p>{notification.description}</p>
+  <button on:click={handleButtonClick}>Close me</button>
+</div>
+```
+
+```javascript
+// AnotherComponent.svelte
+
+<script>
+  import { getNotificationsContext } from 'svelte-notifications';
+
+  const { addNotification } = getNotificationsContext();
+
+  const handleButtonClick = () => {
+    addNotification({
+      position: 'bottom-right,
+      heading: 'hi i am custom notification',
+      type: 'error',
+      description: 'lorem ipsum',
+    });
+  }
+</script>
+
+<div>
+  <button on:click={handleButtonClick}>Show notification</button>
+</div>
+```
+
+
+## API
+
+#### `Notifications`
+
+The `Notifications` component supplies descendant components with notifications store through context.
+
+* @prop {component} `[item=null]` - Custom notification component that receives the notification object
+* @prop {boolean} `[withoutStyles=false]` - If you don't want to use the default styles, this flag will remove the classes to which the styles are attached
+
+```javascript
+// MainComponent.svelte
+
+<script>
+  import Notifications from 'svelte-notifications';
+
+  import App from './App.svelte';
+</script>
+
+<Notifications>
+  <App />
+</Notifications>
+```
+
+#### `getNotificationsContext`
+
+A function that allows you to access the store and the functions that control the store.
+
+```javascript
+// ChildrenComponent.svelte
+
+<script>
+  import { getNotificationsContext } from 'svelte-notifications';
+
+  const notificationsContext = getNotificationsContext();
+
+  const {
+    addNotification,
+    removeNotification,
+    clearNotifications,
+    subscribe,
+  } = notificationsContext;
 </script>
 ```
 
-### Notification types
+#### `getNotificationsContext:addNotification`
 
-You can call multiple types of notification:
+You can provide any object that the notification component will receive. The default object looks like this:
 
-```js
-notifier.show('danger', message, displayTimeMs)
-notifier.danger(message, displayTimeMs),
-notifier.warning(message, displayTimeMs),
-notifier.info(message, displayTimeMs),
-notifier.success(message, displayTimeMs)
-```
+* @param {Object} `notification` - The object that will receive the notification component
+* @param {string} `[id=timestamp]` - Unique notification identificator
+* @param {string} `text` – Notification text
+* @param {string} `position` – One of these values: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`
+* @param {string} `type` – One of these values: `success`, `warning`, `danger`
+* @param {number} `[removeAfter]` – After how much the notification will disappear (in milliseconds)
 
-### Notification themes
-
-You can customise the themes:
-
-```jsx
-<NotificationDisplay {themes} />
-
-<button on:click={someFunction}>Show message</button>
+```javascript
+// ChildrenComponent.svelte
 
 <script>
-import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
+  import { getNotificationsContext } from 'svelte-notifications';
 
-let themes = { // These are the defaults
-  danger: '#bb2124',
-  success: '#22bb33',
-  warning: '#f0ad4e',
-  info: '#5bc0de',
-  default: '#aaaaaa' // relates to simply '.show()'
-}
+  const { addNotification } = getNotificationsContext();
 
-function someFunction () {
-  notifier.success('Notifications work!')
-}
+  addNotification({
+    id: 'uniqNotificationId',
+    text: 'Notification',
+    position: 'bottom-center',
+    type: 'success',
+    removeAfter: 4000,
+    ...rest,
+  });
 </script>
 ```
 
-##### Custom types
+#### `getNotificationsContext:removeNotification`
 
-```jsx
-<NotificationDisplay {themes} />
+* @param {string} `id` - Unique notification identificator
 
-<button on:click={someFunction}>Show message</button>
+```javascript
+// ChildrenComponent.svelte
 
 <script>
-import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
+  import { getNotificationsContext } from 'svelte-notifications';
 
-let themes = {
-  myColour: '#ff00bb'
-}
+  const { removeNotification } = getNotificationsContext();
 
-function someFunction () {
-  notifier.send('myColour', 'Notifications work!')
-}
+  removeNotification('uniqNotificationId');
 </script>
 ```
 
-#### Timeouts
+#### `getNotificationsContext:clearNotifications`
 
-You can set a default timeout:
-
-```jsx
-<NotificationDisplay {timeout} />
-
-<button on:click={someFunction}>Show message</button>
+```javascript
+// ChildrenComponent.svelte
 
 <script>
-import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
+  import { getNotificationsContext } from 'svelte-notifications';
 
-let timeout = 3000 // The default
+  const { clearNotifications } = getNotificationsContext();
 
-function someFunction () {
-  notifier.success('Notifications work!')
-}
+  clearNotifications();
 </script>
 ```
 
-##### Custom timeout:
+#### `getNotificationsContext:subscribe`
 
-You can set a timeout per message
+Default Svelte subscribe method that allows interested parties to be notified whenever the store value changes
 
-```jsx
-<NotificationDisplay />
-
-<button on:click={someFunction}>Show message</button>
-
-<script>
-import { NotificationDisplay, notifier } from '@beyonk/svelte-notifications'
-
-function someFunction () {
-  notifier.success('Notifications work!', 5000) // built in theme
-  notifier.send('custom-theme', 'Notifications work!', 5000) // custom theme
-}
-</script>
-```
-
-## Credits
-
-* Original code by [Antony Jones](https://github.com/antony)
-* Animation and performance improvements by jg.

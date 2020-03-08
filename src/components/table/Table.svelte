@@ -10,7 +10,6 @@
   import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
    S, ws_connected, ET, E, fade, fly, ValueType, DisplayType, schemaEvents } from '../../modules/index'
    declare let $ws_connected
-  import { notifier } from '../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../modules/global_stores/translation'
   declare let $translation
   import Pagination from './Pagination.svelte'
@@ -22,6 +21,8 @@
   import { css_count } from '../../modules/global_stores/css'
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte'
+  import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
+  const { addNotification } = getNotificationsContext();
   let events
   let headerTitlesRow
   let items
@@ -419,7 +420,10 @@
       })
       if (d[0]) {
         const delete_msg = view(lensPath(['msg', 'delete']), $translation);
-        notifier.danger(delete_msg, 3000)
+        addNotification({
+            text: delete_msg,
+            position: 'bottom-center',
+          })
         deleteRows_([key])
       } else {alert(d[1]) }
     }
