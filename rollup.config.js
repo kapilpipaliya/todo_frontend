@@ -20,6 +20,20 @@ const extensions = [".ts", ".js"]
 
 const mode = process.env.NODE_ENV;
 
+let dest = "./dist"
+let entry = "src/index.ts"
+if(process.env.V == "micro"){
+  dest = "./distmicro"
+  entry = "src/indexmicro.ts"
+} else if (process.env.V == "mini") {
+  dest = "./distmini"
+  entry = "src/indexmini.ts"
+}
+require('child_process').spawn('rm', ['-rf', dest], {
+          stdio: ['ignore', 'inherit', 'inherit'],
+          shell: true
+        })
+
 const plugins = [
   //analyze(),
   replace({
@@ -33,7 +47,7 @@ const plugins = [
   }),
   html({
     template: "index.html",
-    dest: "dist",
+    dest,
     filename: "index.html",
     absolute: true
   }),
@@ -60,19 +74,20 @@ if (process.env.NODE_ENV === "development") {
     serve(),
     // Watch the `dist` directory and refresh the
     // browser on changes when not in production
-    livereload({ watch: "./dist" })
+    livereload({ watch: dest })
   );
 } else {
   plugins.push(terser({ sourcemap: true }))
 }
 
 module.exports = {
-  input: "src/index.ts",
+  input: entry,
   output: {
     //file: "dist/index.js",
     sourcemap: true,
     format: "iife",
-    file: `dist/index.${hash}.js`,
+    name: 'oktech',
+    file: `${dest}/index.${hash}.js`,
     //dir: 'public/build/',
     //entryFileNames: "[name].[hash].js",
   },
@@ -88,7 +103,7 @@ function serve() {
       if (!started) {
         started = true;
 
-        require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
+        require('child_process').spawn('yarn', ['sirv', dest, '--single', '--dev'], {
           stdio: ['ignore', 'inherit', 'inherit'],
           shell: true
         });
