@@ -26,7 +26,8 @@ export class ServerEventsDispatcher {
   private id_ = 0
   #req: {}
   #res: {}
-  #callbacks: Record<string, any> 
+  #callbacks: Record<string, any>
+  #fetchOnce
   #conn: WebSocket
   #isFirst: boolean
   #firstCancelTimeout: number
@@ -39,6 +40,7 @@ export class ServerEventsDispatcher {
     this.#isFirst = false
     this.#firstCancelTimeout = null
     this.#firstPayload = []
+    this.#fetchOnce = []
     this.bind = this.bind.bind(this)
     this.bind$ = this.bind$.bind(this)
     this.bindT = this.bindT.bind(this)
@@ -72,12 +74,12 @@ export class ServerEventsDispatcher {
     this.#conn.removeEventListener('open', this.onopen)
     this.#conn.close()
   }
-  bind(event: event, callback: callBack, handleMultiple = 0) {
+  bind(event: event, callback: callBack, handleMultiple = 0, data=[]) {
     this.#callbacks[JSON.stringify(event)] = this.#callbacks[JSON.stringify(event)] ?? []
-    this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback]) // 0 means unsubscribe using first time
+    this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback, data]) // 0 means unsubscribe using first time
     return this
   }
-  batchBind(events: Array<[event, callBack, number]> = []) {
+  batchBind(events: Array<[event, callBack, any]> = []) {
     const payload = []
     for (let i = 0; i < events.length; i++) {
       const e = events[i]
@@ -86,29 +88,31 @@ export class ServerEventsDispatcher {
     }
     return payload
   }
-  batchBindT(events: Array<[event, callBack, number]> = []) {
+  batchBindT(events: Array<[event, callBack, any]> = []) {
     const payload = this.batchBind(events)
     this.trigger(payload)
     return this
   }
-  bind$(event: event, callback: callBack, handleMultiple=0) {
+  bind$(event: event, callback: callBack, handleMultiple=0, data=[]) {
     this.unbind(event)
     this.bind(event, callback, handleMultiple)
     return this
   }
   bindT(event: event, callback: callBack, data, handleMultiple=0) {
-    this.bind$(event, callback, handleMultiple)
+    this.bind$(event, callback, handleMultiple, data)
     this.trigger([[event, data]])
     return () => this.unbind(event)
   }
   unbind(event: event) {this.#callbacks[JSON.stringify(event)] = [] }
-  private delay_send(){
-    this.#conn.send(JSON.stringify(this.#firstPayload))
-    this.#isFirst = false
-  }
   unbind_(event_names: Array<event> = []) {
     map((event:event) => {this.unbind(event) }, event_names)
     return this
+  }
+  private delay_send(){
+    if(this.#firstPayload){
+      this.#conn.send(JSON.stringify(this.#firstPayload))
+    }
+    this.#isFirst = false
   }
   trigger(payload) {
     const f = this.trigger
@@ -116,9 +120,10 @@ export class ServerEventsDispatcher {
       case 0: // CONNECTING
         // code block
         //This will added to onopen list, take care
-        this.#conn.addEventListener('open', function() {
-          f(payload)
-        })
+        //this.#conn.addEventListener('open', () => {
+          //f(payload)
+          this.#firstPayload.push(...payload)
+        //})
         return this
       case 1: // OPEN
         if(this.#isFirst){
@@ -135,9 +140,10 @@ export class ServerEventsDispatcher {
       case 3: //CLOSED
         // try to reconnect/logout
         this.setupConnection()
-        this.#conn.addEventListener('open', function() {
-          f(payload)
-        })
+        //this.#conn.addEventListener('open', () => {
+          this.#firstPayload.push(...payload)
+          //f(payload)
+        //})
         return this
       default:
         return this
@@ -198,7 +204,16 @@ export class ServerEventsDispatcher {
     this.#isFirst = true
     //console.log(this.conn.extensions);
     //console.log("Server Opened")
+    this.#firstCancelTimeout = setTimeout(this.delay_send, 50);
     this.dispatch(['open', '', 0], [])
+    // const length = this.#callbacks.length;
+    //   for (let i = 0; i < length; i++) {
+    //     chain[i][1](...message)
+    //     if (chain[i][0] == 0) {
+    //       this.#callbacks[JSON.stringify(event)] = []
+    //     }
+    //   }
+
   }
   private onerror(error) {
     console.warn(error.message)

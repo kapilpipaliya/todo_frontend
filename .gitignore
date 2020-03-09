@@ -6,5 +6,5 @@
 /dist/
 *.txt
 *.log
-/distmicro/
-/distmini/
+/dist*/
+

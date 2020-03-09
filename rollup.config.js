@@ -14,6 +14,14 @@ import analyze from 'rollup-plugin-analyzer'
 import replace from '@rollup/plugin-replace';
 import { compress } from 'brotli'
 import gzipPlugin from 'rollup-plugin-gzip'
+import findFreePort from 'find-free-port-sync'
+let liveport = findFreePort({
+    start: 35000,
+    end: 36000,
+    num: 1,
+    ip: 'localhost'
+})
+console.log(liveport)
 const hash = Date.now()
 
 const extensions = [".ts", ".js"]
@@ -23,11 +31,11 @@ const mode = process.env.NODE_ENV;
 let dest = "./dist"
 let entry = "src/index.ts"
 if(process.env.V == "micro"){
-  dest = "./distmicro"
-  entry = "src/indexmicro.ts"
+  dest = `./dist${process.env.V}`
+  entry = `src/index${process.env.V}.ts`
 } else if (process.env.V == "mini") {
-  dest = "./distmini"
-  entry = "src/indexmini.ts"
+  dest = `./dist${process.env.V}`
+  entry = `src/index${process.env.V}.ts`
 }
 require('child_process').spawn('rm', ['-rf', dest], {
           stdio: ['ignore', 'inherit', 'inherit'],
@@ -74,7 +82,7 @@ if (process.env.NODE_ENV === "development") {
     serve(),
     // Watch the `dist` directory and refresh the
     // browser on changes when not in production
-    livereload({ watch: dest })
+    livereload({ port: liveport, watch: dest })
   );
 } else {
   plugins.push(terser({ sourcemap: true }))
