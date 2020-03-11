@@ -27,7 +27,7 @@ export class ServerEventsDispatcher {
   #req: {}
   #res: {}
   #callbacks: Record<string, any>
-  #fetchOnce
+  #fetchOnce // handle at component level, until i found solution.
   #conn: WebSocket
   #isFirst: boolean
   #firstCancelTimeout: number

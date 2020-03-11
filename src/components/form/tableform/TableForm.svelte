@@ -3,6 +3,8 @@
 	import {_cloneArray} from './clone'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'
+	import Label from '../_Label.svelte'
+	export let name;
 	export let dp = "r[1]+' - '+r[2]" // display pattern
 	export let keyIdx = 0
 	export let value = []
@@ -97,6 +99,8 @@
 		}
 	}
 </script>
+
+<Label {name} />
 
 {#if multiSelect}
 	{#if value.length}

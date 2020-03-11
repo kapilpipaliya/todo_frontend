@@ -36,6 +36,7 @@
   fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
   let events = schemaEvents(S.uid, schema_key);
   let unsub_evt
+  if(!events) console.warn('events array must be defined')
   if(events[0]){
     if(key) {
       events[0][0] = ET.subscribe
@@ -88,6 +89,11 @@
       }
     }
   }
+  let emitEvent = true;
+  function onApply() {
+    emitEvent = false
+    onSave()
+  }
   function onSave() {
     isSaving = true
     const filter = isUpdate ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null
@@ -114,7 +120,6 @@
     // headers.set(d[0])
   }*/
   function onDataGet(d) {
-    console.warn('onDataGet', d)
     if(!d[0]) {
       er = d[1]
     } else if(Array.isArray(d[0])){
@@ -123,6 +128,7 @@
       const newOptions = {...options, ...options_new}
       options = newOptions
       headers = schema
+      if(newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
       if(form_new){
@@ -140,7 +146,6 @@
     }
   }
   function onMutateGet(d) {
-    console.warn('onMutateGet ', d)
     isSaving = false
     if (d[0]) {
       const save_msg = view(lensPath(['msg', 'save']), $translation);
@@ -152,7 +157,9 @@
           })
       }
       er = ''
-      dp('successSave', { key: key, d })
+      if(emitEvent){
+        dp('successSave', { key: key, d })
+      }
       onReset()
     } else {
       er = d[1]
@@ -237,6 +244,7 @@
   }
   $: saveLabel = buttonlabels?.save ?? ""
   $: cancelLabel = buttonlabels?.cancel ?? ""
+  $: applyLabel = buttonlabels?.apply ?? ""
   $: {
   if(!key) {
     if(Array.isArray(form)) {
@@ -322,6 +330,9 @@ const isDisabled = (form_disabled_, i) => {
       {/if}
     {/each}
     <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
+    {#if applyLabel}
+      <SubmitButton isSaving={isSaving} type={'button'} label={applyLabel} save={onApply}/>
+    {/if}
     {#if cancelLabel}
       <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
     {/if}

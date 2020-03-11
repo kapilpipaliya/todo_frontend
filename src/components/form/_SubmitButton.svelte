@@ -4,6 +4,7 @@
   export let title = ''
   export let label = 'Save changes'
   export let save
+  export let type = 'submit'
   $: label = label || 'Save changes'
   let classn;
   $: {
@@ -12,6 +13,6 @@
     if(isSaving) classn += 'loading '
   }
 </script>
-<button type="submit" class={classn} disabled={isSaving || disabled} {title} on:click={save} >
+<button {type} class={classn} disabled={isSaving || disabled} {title} on:click={save} >
   <slot>{label}</slot>
 </button>

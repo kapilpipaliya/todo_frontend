@@ -2,8 +2,9 @@
   // https://github.com/techlab23/ckeditor5-svelte/blob/master/src/Ckeditor.svelte
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import debounce from 'just-debounce-it'
-  
+  import Label from '../../_Label.svelte'
   // Properties
+  export let name;
   export let editor = null
   export let value = ''
   export let config = () => ({})
@@ -73,5 +74,5 @@
       })
     }
 </script>
-
+<Label {name} />
 <div bind:this={editorElement}></div>

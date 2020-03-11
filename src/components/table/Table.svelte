@@ -23,10 +23,6 @@
   import Config from './Config.svelte'
   import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
   const { addNotification } = getNotificationsContext();
-  let events
-  let headerTitlesRow
-  let items
-  let count
   export let customFilter = {}
   export let requiredFilter = {} // always add this filter when fetch
   export let modelcomponent = false
@@ -34,7 +30,15 @@
   export let query = {limit: 0, page: 1} // To get arguments from ?limit=25&page=2
   export let schema_key = ''
   export let pass = [] // [["context", "org_data", "_key", "org"]]
+  let events = schemaEvents(S.uid, schema_key)
+  let headerTitlesRow = []
+  let items = []
+  let count = 0
   $: {setContext('items', items) }
+  let project = getContext('project')
+  let project_ctx = writable([])
+  if(project) {$project_ctx = get(project) }
+  declare let $project_ctx
   // headers
   let headerVisibleColTypesRow = []
   let headerIsvisibleColumnsRow = []
@@ -48,7 +52,7 @@
   let quickview = []
   let selectedRowsKeys = []
   let first_visibile_column = 0
-  let fetchConfig = { type: ValueType.Array, project: null } // also set level latter
+  let fetchConfig = { type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } 
   // pagination:
   let limit = Number(query.limit) || 0
   let pages = [1, 2]
@@ -72,14 +76,11 @@
   let addnew_labels = {save: "Save", cancel : "Cancel"}
   let rowType = "table"
   let showHeader = true;
-  let data_evt
-  let unsub
-  let mutate_evt
+  let data_evt = events[0]
+  let unsub = [ET.unsubscribe, ...events[0].slice(1)]
+  let mutate_evt = events[1]
   let authorized = true
-  let project = getContext('project')
-  let project_ctx = writable([])
-  if(project) {$project_ctx = get(project) }
-  declare let $project_ctx
+
   function setPass() {
     if(Array.isArray(pass)) {
       for(let i = 0; i < pass.length ; i++){
@@ -121,53 +122,13 @@
   }
   setPass()
   // customFilter, not work with filter..
-  $: (query); (requiredFilter); (schema_key); reset()
+  //$: (query); (requiredFilter); (schema_key); reset()
   function unRegister() {
     unsub && S.trigger([[unsub, {}]])
     events && S.unbind_(events)
   }
-  // Note reset() function executed before fetch
-  function reset() {
-    if(!schema_key){console.warn('schema key is invalid in table') }
-    unRegister()
-    events = schemaEvents(S.uid, schema_key)
-    headerTitlesRow = []
-    items = []
-    count = 0
-    // headers
-    headerVisibleColTypesRow = []
-    headerIsvisibleColumnsRow = []
-    sortSettingsRow = []
-    editableColumnsRow = []
-    headerColumnPropsRow = []
-    options = {}
-    // internal:
-    // hiddenColumns = [ARRAY, OBJECT, BINARY]
-    filterSettings = []
-    quickview = []
-    selectedRowsKeys = []
-    first_visibile_column = 0
-    fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null } //  level: $project_data[$project_data.length - 1]?._key ?? "" Fix Lavel not working..
-    // pagination:
-    limit = Number(query.limit) || 0
-    pages = [1, 2]
-    current_page = Number(query.page) || 1
-    total_pages = Math.max(current_page, 1)
-    mounted = true
-    binded = false
-    er = ''
-    // doms = {}
-    addnewform = false
-    headerFetched = false
-    modalIsVisible = false
-    item = []
-    config = false
-    contextmenu = true
-    data_evt = events[0]
-    unsub = [ET.unsubscribe, ...events[0].slice(1)]
-    mutate_evt = events[1]
-    console.log('reset complete')
-  }
+  if(!schema_key){console.warn('schema key is invalid in table') }
+
   css_count.increase('table')
   onMount(() => {mounted = true })
   onDestroy(() => {
@@ -370,8 +331,8 @@
   }
   const successSave = e => {
     if (e.detail.key === null) {toogleAddForm() } else {
-      closeForm_(key)
-      editButtonFocus(key)
+      closeForm_(e.detail.key)
+      editButtonFocus(e.detail.key)
     }
   }
   const onCancel = event => {
@@ -437,7 +398,7 @@
       const d = await new Promise((resolve, reject) => {
         S.bindT(mutate_evt, d => {resolve(d) }, ['DEL', filter] )
       })
-      d[0] ? {deleteRows_(selectedRowsKeys) } : {alert(d[1]) }
+      d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1])
     }
   }
   // ============================================================================
@@ -537,11 +498,11 @@
     //         menuBox.style.display = "none";
     //     }
   }
-  const closeHeaderMenu = event => {
+  const closeHeaderMenu = () => {
     const menuBox: HTMLElement | null = window.document.querySelector('.menu')
     if (headerMenuDisplayed == true) {menuBox.style.display = 'none'}
   }
-  const closeInputMenu = event => {
+  const closeInputMenu = () => {
     const menuBox: HTMLElement | null = window.document.querySelector('.menu-input')
     if (inputheaderMenuDisplayed == true) {menuBox.style.display = 'none'}
   }

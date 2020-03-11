@@ -76,6 +76,7 @@ export enum E {
 
   admin = 80,
   dashboard,
+  save_member_setting,
 
   organization_list,
   organization_mutate,
@@ -180,6 +181,11 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
     return [
       null,
       [ET.insert, E.account, E.login, S.uid],
+    ]
+  } else if(schema == 'member_setting'){
+    return [
+      null,
+      [ET.insert, E.admin, E.save_member_setting, S.uid],
     ]
   }
 }
