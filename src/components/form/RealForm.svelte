@@ -91,5 +91,5 @@ let comp = getComponent()
     {...extraProps}
   />
   {#if description}
-    {description}
+    {@html description}
   {/if}

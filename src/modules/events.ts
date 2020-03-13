@@ -76,7 +76,8 @@ export enum E {
 
   admin = 80,
   dashboard,
-  save_member_setting,
+  setting_list,
+  mutate_member_setting,
   save_work_package_setting,
   save_custom_fields,
   save_system_setting,
@@ -179,7 +180,7 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
   } else if(schema == 'login'){
     return [null, [ET.insert, E.account, E.login, S.uid], ]
   } else if(schema == 'member_setting'){
-    return [null, [ET.insert, E.admin, E.save_member_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.mutate_member_setting, S.uid], ]
   } else if(schema == 'work_package_setting'){
     return [null, [ET.insert, E.admin, E.save_work_package_setting, S.uid], ]
   } else if(schema == 'custom_fields'){

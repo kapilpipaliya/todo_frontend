@@ -12,6 +12,7 @@
   import GeneralInput from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'
   import CancelButton from './_CancelButton.svelte'
+  import { isNumber, isString, isPlainObj } from 'ramda-adjunct'
   import { view, lensPath } from 'ramda'
   import { clone } from 'rambda'
   export let id = 'insert'
@@ -319,23 +320,44 @@ const isDisabled = (form_disabled_, i) => {
 {#if form.length}
   <form class={id} on:submit|preventDefault={onSave}>
 
-  {#each layout as lo, loi (lo)}
-    {#each lo as i, yi (i)}
-        {#if types[i]}
-          <GeneralInput
-            bind:value={form[i]}
-            type ={types[i]}
-            label={labels[i]}
-            required={required[i]}
-            disabled={isDisabled(form_disabled, i)}
-            description={description[i]}
-            bind:dom={doms[i]}
-            props={props[i]}
-          />
+  {#if layout.length}
+    {#each layout as lo, loi (lo)}
+      {#each lo as i, yi (i)}
+        {#if isNumber(i)}
+          {#if types[i]}
+            <GeneralInput
+              bind:value={form[i]}
+              type ={types[i]}
+              label={labels[i]}
+              required={required[i]}
+              disabled={isDisabled(form_disabled, i)}
+              description={description[i]}
+              bind:dom={doms[i]}
+              props={props[i]}
+            />
+          {/if}
+        {:else if isPlainObj(i)}
+          {@html i.l}
         {/if}
+      {/each}
+      <br>
     {/each}
-    <br>
-  {/each}
+  {:else}
+    {#each form as f, i}
+      {#if types[i]}
+        <GeneralInput
+          bind:value={f}
+          type ={types[i]}
+          label={labels[i]}
+          required={required[i]}
+          disabled={isDisabled(form_disabled, i)}
+          description={description[i]}
+          bind:dom={doms[i]}
+          props={props[i]}
+        />
+      {/if}
+    {/each}
+  {/if}
 
   <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
   {#if applyLabel}
