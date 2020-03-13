@@ -77,6 +77,11 @@ export enum E {
   admin = 80,
   dashboard,
   save_member_setting,
+  save_work_package_setting,
+  save_custom_fields,
+  save_system_setting,
+  save_email_setting,
+  save_auth_setting,
 
   organization_list,
   organization_mutate,
@@ -168,25 +173,23 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
     e0 = E.my
   }
   if(h){
-    return [
-        [ET.subscribe, e0, E[`${schema}_list`], id],
-        [ET.insert, e0, E[`${schema}_mutate`], id],
-      ]
+    return [[ET.subscribe, e0, E[`${schema}_list`], id], [ET.insert, e0, E[`${schema}_mutate`], id], ]
   } else if(schema == 'register'){
-    return [
-        null,
-        [ET.insert, E.account, E.register_user, S.uid],
-      ]
+    return [null, [ET.insert, E.account, E.register_user, S.uid], ]
   } else if(schema == 'login'){
-    return [
-      null,
-      [ET.insert, E.account, E.login, S.uid],
-    ]
+    return [null, [ET.insert, E.account, E.login, S.uid], ]
   } else if(schema == 'member_setting'){
-    return [
-      null,
-      [ET.insert, E.admin, E.save_member_setting, S.uid],
-    ]
+    return [null, [ET.insert, E.admin, E.save_member_setting, S.uid], ]
+  } else if(schema == 'work_package_setting'){
+    return [null, [ET.insert, E.admin, E.save_work_package_setting, S.uid], ]
+  } else if(schema == 'custom_fields'){
+    return [null, [ET.insert, E.admin, E.save_custom_fields, S.uid], ]
+  } else if(schema == 'system_setting'){
+    return [null, [ET.insert, E.admin, E.save_system_setting, S.uid], ]
+  } else if(schema == 'email_setting'){
+    return [null, [ET.insert, E.admin, E.save_email_setting, S.uid], ]
+  } else if(schema == 'auth_setting'){
+    return [null, [ET.insert, E.admin, E.save_auth_setting, S.uid], ]
   }
 }
 export const g = (e1,e2) => [ET.get, e1, e2, S.uid]

@@ -59,6 +59,7 @@
   let initial_form = []
   let headers = []
   let schemaGetEvt = []
+  let layout = []
   if(!data_evt) {
     schemaGetEvt = [ET.get, E.my, E.form_schema_get, key ]
   } else {
@@ -129,6 +130,8 @@
       options = newOptions
       headers = schema
       if(newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
+      if(newOptions.l) layout = newOptions.l
+      console.log(layout)
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
       if(form_new){
@@ -315,28 +318,33 @@ const isDisabled = (form_disabled_, i) => {
 {/if}
 {#if form.length}
   <form class={id} on:submit|preventDefault={onSave}>
-    {#each form as f, i}
-      {#if types[i]}
-        <GeneralInput
-          bind:value={f}
-          type ={types[i]}
-          label={labels[i]}
-          required={required[i]}
-          disabled={isDisabled(form_disabled, i)}
-          description={description[i]}
-          bind:dom={doms[i]}
-          props={props[i]}
-        />
-      {/if}
+
+  {#each layout as lo, loi (lo)}
+    {#each lo as i, yi (i)}
+        {#if types[i]}
+          <GeneralInput
+            bind:value={form[i]}
+            type ={types[i]}
+            label={labels[i]}
+            required={required[i]}
+            disabled={isDisabled(form_disabled, i)}
+            description={description[i]}
+            bind:dom={doms[i]}
+            props={props[i]}
+          />
+        {/if}
     {/each}
-    <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
-    {#if applyLabel}
-      <SubmitButton isSaving={isSaving} type={'button'} label={applyLabel} save={onApply}/>
-    {/if}
-    {#if cancelLabel}
-      <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
-    {/if}
-    {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
+    <br>
+  {/each}
+
+  <SubmitButton isSaving={isSaving} label={saveLabel} save={()=>{}} />
+  {#if applyLabel}
+    <SubmitButton isSaving={isSaving} type={'button'} label={applyLabel} save={onApply}/>
+  {/if}
+  {#if cancelLabel}
+    <CancelButton isSaving={isSaving} {key} on:close label={cancelLabel} />
+  {/if}
+  {#if false}<button type='button' on:click={onReset}>Reset</button>{/if}
   </form>
 {/if}
 <!-- <Error {er} /> -->
