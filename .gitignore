@@ -8,3 +8,4 @@
 *.log
 /dist*/
 
+/.yarn/

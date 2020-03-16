@@ -132,7 +132,7 @@
       headers = schema
       if(newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
       if(newOptions.l) layout = newOptions.l
-      console.log(layout)
+      console.warn("layout", layout)
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
       if(form_new){
@@ -214,7 +214,7 @@
       onMutateGet(headerSchema as [any])
     }
   }
-  // $: {console.log(form)} // hell this prints two time.
+  // $: {console.warn("form", form)} // hell this prints two time.
   let labels = []
   let types: number[] = []
   let required = []
