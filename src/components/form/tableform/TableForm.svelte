@@ -1,9 +1,10 @@
 <script lang='ts'>
 	import { onMount, S } from '../../../modules/index'
-	import {_cloneArray} from './clone'
+	import { clone } from 'rambdax'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'
 	import Label from '../_Label.svelte'
+	import { isArray } from 'ramda-adjunct'
 	export let name;
 	export let dp = "r[1]+' - '+r[2]" // display pattern
 	export let keyIdx = 0
@@ -46,13 +47,13 @@
 	const getOptions = (valueIdx) => {
 		if (boolprop){
 			const keys = value.map(x=>x[0])
-			return _cloneArray(data, [], [], true).filter(x=> {
+			return clone(data).filter(x=> {
 				// [['abc',{}],['def',{}]]
 				return !keys.includes(x[keyIdx]) || keys[valueIdx] == x[keyIdx]
 			})
 		} else {
 			// ['abc','def']
-			return _cloneArray(data, [], [], true).filter(x=>!value.includes(x[keyIdx]) || value[valueIdx] == x[keyIdx])
+			return clone(data).filter(x=>!value.includes(x[keyIdx]) || value[valueIdx] == x[keyIdx])
 		}
 	}
 	const onChange = (v) => (e) => {
@@ -84,7 +85,11 @@
 		const [h, d] = all
 		const getData = d?.r?.result ?? false
 		if(getData === false){
-			console.warn('returned data is not proper', all)
+			if(isArray(h)) {
+				data = all
+			} else {
+				console.warn('returned data is not proper', all)
+			}
 		} else {
 			data = getData
 		}

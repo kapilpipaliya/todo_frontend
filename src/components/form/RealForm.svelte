@@ -24,6 +24,7 @@ import Emoji from './input/Emoji.svelte'
 //import Prosemirror from './input/Prosemirror.svelte'
 import CLEditor from './input/CLEditor.svelte'
 import TableForm from './tableform/TableForm.svelte'
+import ArrayForm from './array/Array.svelte'
 export let value
 export let type = FormType.text
 export let label = ''

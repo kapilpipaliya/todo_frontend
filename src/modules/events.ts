@@ -11,6 +11,10 @@ export enum E {
 
   e_global = 20,
 
+  countries,
+  languages,
+  timezones,
+
   user_list,
   user_mutate,
 
@@ -76,13 +80,6 @@ export enum E {
 
   admin = 80,
   dashboard,
-  setting_list,
-  mutate_member_setting,
-  save_work_package_setting,
-  save_custom_fields,
-  save_system_setting,
-  save_email_setting,
-  save_auth_setting,
 
   organization_list,
   organization_mutate,
@@ -150,6 +147,16 @@ export enum E {
   post_list,
   post_mutate,
 
+  setting_list,
+  setting_mutate,
+
+  /*mutate_member_setting,
+  save_work_package_setting,
+  save_custom_fields,
+  save_system_setting,
+  save_email_setting,
+  save_auth_setting,*/
+
   my = 140,
   schema_get,
   my_schema_mutate,
@@ -180,17 +187,17 @@ export const schemaEvents = (id: number | string = 0, schema: string) => {
   } else if(schema == 'login'){
     return [null, [ET.insert, E.account, E.login, S.uid], ]
   } else if(schema == 'member_setting'){
-    return [null, [ET.insert, E.admin, E.mutate_member_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   } else if(schema == 'work_package_setting'){
-    return [null, [ET.insert, E.admin, E.save_work_package_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   } else if(schema == 'custom_fields'){
-    return [null, [ET.insert, E.admin, E.save_custom_fields, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   } else if(schema == 'system_setting'){
-    return [null, [ET.insert, E.admin, E.save_system_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   } else if(schema == 'email_setting'){
-    return [null, [ET.insert, E.admin, E.save_email_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   } else if(schema == 'auth_setting'){
-    return [null, [ET.insert, E.admin, E.save_auth_setting, S.uid], ]
+    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
   }
 }
 export const g = (e1,e2) => [ET.get, e1, e2, S.uid]

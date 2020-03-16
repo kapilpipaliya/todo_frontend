@@ -15,6 +15,8 @@ let users = 0
 const onLineUsers = () => {S.bindT(online_user_evt, (d) => users = d, 0, 1 ) }
 onLineUsers()
 onDestroy(() => {S.unbind(online_user_evt) })
+const getCountries = () => {S.bindT([ET.get, E.e_global, E.countries, S.uid], (d) => console.log(d), 0 ) }
+const getLanguages = () => {S.bindT([ET.get, E.e_global, E.languages, S.uid], (d) => console.log(d), 0 ) }
 </script>
 <div >
   <button on:click={onRestart}>Restart Server</button>
@@ -25,6 +27,8 @@ onDestroy(() => {S.unbind(online_user_evt) })
   <input bind:value={pass} >
   <button on:click={onSuperPasswordCheck}>Super Password Check</button>
   <button on:click={onCssSyncFilesToDB}>CSS Sync Files to DB</button>
+  <button on:click={getCountries}>Countries</button>
+  <button on:click={getLanguages}>Languages</button>
   {users}
   <textarea bind:value={log}></textarea>
 </div>
