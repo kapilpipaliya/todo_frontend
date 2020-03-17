@@ -160,48 +160,32 @@ export enum E {
   my = 140,
   schema_get,
   my_schema_mutate,
-  fields_schema_get,
   fields_schema_mutate,
   form_schema_get,
   form_schema_mutate
 
 }
-export const form_schema_evt = (id) => [ET.get, E.my, E.form_schema_get, id ]
+export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id ]
 // generate event from schema:
-export const schemaEvents = (id: number | string = 0, schema: string) => {
+export const schemaEvents = (schema: string) => {
   const h = E[`${schema}_list`]
-  let e0 = 0
-  if(h > 20 && h < 60){
-    e0 = E.e_global
-  } else if (h > 60 && h < 80) {
-    e0 = E.account
-  } else if (h > 80 && h < 140) {
-    e0 = E.admin
-  } else if (h > 140 && h < 160) {
-    e0 = E.my
-  }
   if(h){
-    return [[ET.subscribe, e0, E[`${schema}_list`], id], [ET.insert, e0, E[`${schema}_mutate`], id], ]
+    return [ E[`${schema}_list`], E[`${schema}_mutate`] ]
   } else if(schema == 'register'){
-    return [null, [ET.insert, E.account, E.register_user, S.uid], ]
+    return [null, E.register_user ]
   } else if(schema == 'login'){
-    return [null, [ET.insert, E.account, E.login, S.uid], ]
+    return [null, E.login ]
   } else if(schema == 'member_setting'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   } else if(schema == 'work_package_setting'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   } else if(schema == 'custom_fields'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   } else if(schema == 'system_setting'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   } else if(schema == 'email_setting'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   } else if(schema == 'auth_setting'){
-    return [null, [ET.insert, E.admin, E.setting_mutate, S.uid], ]
+    return [null, E.setting_mutate ]
   }
 }
-export const g = (e1,e2) => [ET.get, e1, e2, S.uid]
-export const s = (e1,e2) => [ET.subscribe, e1, e2, S.uid]
-export const i = (e1,e2) => [ET.insert, e1, e2, S.uid]
-export const u = (e1,e2) => [ET.update, e1, e2, S.uid]
-export const d = (e1,e2) => [ET.delete_, e1, e2, S.uid]

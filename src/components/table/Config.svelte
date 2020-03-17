@@ -107,7 +107,7 @@
   onMount(async () => {
     const d = await new Promise((resolve, reject) => {
       S.bindT(
-        [ET.get, E.my, E.my_schema_get, S.uid],
+        [ET.get, E.my_schema_get, S.uid],
         d => {
           resolve(d)
         },
@@ -120,7 +120,7 @@
     isSaving = true
     const d = await new Promise((resolve, reject) => {
       S.bindT(
-        [ET.insert, E.my, E.my_schema_mutate, S.uid],
+        [ET.insert, E.my_schema_mutate, S.uid],
         d => {
           resolve(d)
         },

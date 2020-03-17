@@ -10,9 +10,9 @@
   let confirming = true
   let result_title = ''
   const fns = [
-      [ET.insert, E.account, E.confirm_email, S.uid],
-      [ET.subscribe, E.account, E.confirm_email_status, S.uid],
-      [ET.unsubscribe, E.account, E.confirm_email_status, S.uid],
+      [ET.insert, E.confirm_email, S.uid],
+      [ET.subscribe, E.confirm_email_status, S.uid],
+      [ET.unsubscribe, E.confirm_email_status, S.uid],
     ],
     [doconfirm, sub, unsub] = fns
   const runOnce = () => {

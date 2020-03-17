@@ -30,7 +30,7 @@
   export let query = {limit: 0, page: 1} // To get arguments from ?limit=25&page=2
   export let schema_key = ''
   export let pass = [] // [["context", "org_data", "_key", "org"]]
-  let events = schemaEvents(S.uid, schema_key)
+  let events = schemaEvents(schema_key)
   let headerTitlesRow = []
   let items = []
   let count = 0
@@ -76,9 +76,12 @@
   let addnew_labels = {save: "Save", cancel : "Cancel"}
   let rowType = "table"
   let showHeader = true;
-  let data_evt = events[0]
-  let unsub = [ET.unsubscribe, ...events[0].slice(1)]
-  let mutate_evt = events[1]
+
+  if(!events) console.warn('events array must be defined')
+  const uid = S.uid
+  let data_evt = [ET.subscribe, events[0], uid]
+  let unsub_evt = [ET.unsubscribe, events[0], uid]
+  
   let authorized = true
 
   function setPass() {
@@ -124,7 +127,7 @@
   // customFilter, not work with filter..
   //$: (query); (requiredFilter); (schema_key); reset()
   function unRegister() {
-    unsub && S.trigger([[unsub, {}]])
+    unsub_evt && S.trigger([[unsub_evt, {}]])
     events && S.unbind_(events)
   }
   if(!schema_key){console.warn('schema key is invalid in table') }
@@ -367,8 +370,7 @@
   const onDeleteRow = (key, rowIdx) => async () => {
     const r = confirm('Are You Sure?')
     if (r == true) {
-      mutate_evt.pop()
-      mutate_evt.push(key)
+      const mutate_evt = [ET.delete_, events[1], key]
       const filter = [`="${key}"`]
       const d = await new Promise((resolve, reject) => {
         // send unsubscribe event if edit is open
@@ -392,8 +394,7 @@
   const onDeleteSelected = async () => {
     const r = confirm('Are You Sure to delete selected rows?')
     if (r == true) {
-      mutate_evt.pop()
-      mutate_evt.push(S.uid)
+      const mutate_evt = [ET.delete_, events[1], S.uid]
       const filter = [JSON.stringify(selectedRowsKeys)]
       const d = await new Promise((resolve, reject) => {
         S.bindT(mutate_evt, d => {resolve(d) }, ['DEL', filter] )

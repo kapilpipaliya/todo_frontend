@@ -35,22 +35,26 @@
   }
   declare let $project_ctx
   fetchConfig = {...fetchConfig, type: ValueType.Array, project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null }
-  let events = schemaEvents(S.uid, schema_key);
+  let events = schemaEvents(schema_key);
   let unsub_evt
   if(!events) console.warn('events array must be defined')
+  const uid = S.uid
+  let data_evt
   if(events[0]){
     if(key) {
-      events[0][0] = ET.subscribe
+      data_evt = [ET.subscribe, events[0], uid]
+      unsub_evt = [ET.unsubscribe, events[0], uid]
     } else {
-      events[0][0] = ET.get
+      data_evt = [ET.get, events[0], uid]
+      unsub_evt = []
     }
-    unsub_evt = [ET.unsubscribe, ...events[0].slice(1)]
-  } else {
-    unsub_evt = []
   }
-  let data_evt = events[0]
-  let mutate_evt = events[1]
-  let isUpdate = false
+  let mutate_evt
+  if(key){
+   mutate_evt = [ET.update, events[1], uid]
+  } else {
+   mutate_evt = [ET.insert, events[1], uid]
+  }
   let mounted = false
   let binded = false
   let er = ''
@@ -62,7 +66,7 @@
   let schemaGetEvt = []
   let layout = []
   if(!data_evt) {
-    schemaGetEvt = [ET.get, E.my, E.form_schema_get, key ]
+    schemaGetEvt = [ET.get, E.form_schema_get, key ]
   } else {
     schemaGetEvt = []
   }
@@ -98,19 +102,19 @@
   }
   function onSave() {
     isSaving = true
-    const filter = isUpdate ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null
-    // Now auto unsubscribing no need to pass  , ...(isUpdate ?  {unsub: data_evt} : {})
+    const filter = key ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null
+    // Now auto unsubscribing no need to pass  , ...(key ?  {unsub: data_evt} : {})
     const saveConfig = { ...fetchConfig} // , form: true, schema: schema_key
     if(selector.length) {
       saveConfig['sel'] = selector
     }
     const args = [form, filter, saveConfig]
-    if(isUpdate) {
+    if(key) {
       args.push(unsub_evt)
     }
     S.trigger([[mutate_evt, args]])
   }
-  function onReset() {if(!isUpdate) {form = clone(initial_form) } }
+  function onReset() {if(!key) {form = clone(initial_form) } }
   function onDestroy_() {
     if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
     S.unbind_(events)
@@ -135,11 +139,7 @@
       console.warn("layout", layout)
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
-      if(form_new){
-        if (form_new[0]) {
-         isUpdate = true
-        }
-      } else {
+      if(!form_new){
         console.warn('form value is invalid: ', form_values)
       }
       const new_form = merge(form, form_new)
@@ -170,7 +170,7 @@
     }
   }
   function mergeFormValues(f) {
-    /*if(!isUpdate){
+    /*if(!key){
       const s = $default_form[schema_key]
       if(s) {
         for (let i = 0; i < f.length; i++) {

@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import {translation} from './modules/global_stores/translation'
-	import cookie from './modules/ws_events/cookie'
+	import cookie from './modules/cookie'
 	import {member_settings} from './modules/global_stores/member_settings'
 	import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import {current_member} from './modules/global_stores/current_member'
@@ -27,7 +27,7 @@
   $: e$ = $current_member?.email;
   let m$  = []
   let r$  = []
-  onDestroy(S.bindT([ET.get, E.my, E.form_schema_get, S.uid ], (d) => {if(d[0]){m$ = d[0] } }, ['menu'], 1))
+  onDestroy(S.bindT([ET.get, E.form_schema_get, S.uid ], (d) => {if(d[0]){m$ = d[0] } }, ['menu'], 1))
   onDestroy(S.bindT(form_schema_evt(S.uid), (d) => {if(d[0].routes){r$ = RD.map((x) => modifyObj(x), d[0].routes) } }, ['routes'], 1))
   const modifyObj = o => { 
     const C = {"PublicLayout": PublicLayout, "Home": Home, "Contact": Contact, "About": About,

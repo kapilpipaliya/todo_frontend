@@ -22,8 +22,8 @@
 	let er = ''
 	let binded = false
 	let fetch_data = false
-	let project_fetch_evt = [ET.get, E.admin, E.project_list, S.uid ]
-	let menu_evt = [ET.get, E.my, E.form_schema_get, S.uid ]
+	let project_fetch_evt = [ET.get, E.project_list, S.uid ]
+	let menu_evt = [ET.get, E.form_schema_get, S.uid ]
 	let menus  = []
 	onMount(() => {mounted = true})
   	onDestroy(() => {S.unbind_([menu_evt]); 

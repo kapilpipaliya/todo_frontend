@@ -13,7 +13,7 @@
   let header = '' // initialised on onMount
   let subtitle = ''
   let loging_out = true
-  const fns = [[ET.insert, E.account, E.logout, S.uid]],
+  const fns = [[ET.insert, E.logout, S.uid]],
     [logout] = fns
   const runOnce = () => {
     if (!binded) {

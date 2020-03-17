@@ -50,10 +50,12 @@
   }
   //out:fade={{ y: 2000, duration: 150 }}
   //animate:flip
+
+  //note animation is too costly on big data.
 </script>
 
 <tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" 
-  in:fade={{ y: 200, duration: 200 }}
+  in:fade={{ y: 200, duration: 100 }}
 >
   {#if showRowNum}
     <td>{rowIndex + 1}</td>

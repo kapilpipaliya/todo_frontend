@@ -11,7 +11,4 @@ export * from './api_helper'
 export * from './i18n_functions'
 export * from './const_strings'
 export * from './ws_events_dispatcher'
-export * as RD from 'rambda'
-export * as R from 'ramda'
-export * as RA from 'ramda-adjunct'
-export * as RX from 'rambdax'
+

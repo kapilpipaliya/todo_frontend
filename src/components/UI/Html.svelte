@@ -6,7 +6,7 @@
   let er = ''
   let binded = false
   let htmlResult = []
-  const template_evt = [ET.get, E.e_global, E.template_list, S.uid ]
+  const template_evt = [ET.get, E.template_list, S.uid ]
   onMount(() => {mounted = true})
   onDestroy(() => {S.unbind_([template_evt]) })
   $: if (mounted) {if ($ws_connected) {er = ''; funcBindingOnce() } else {er = 'Reconnecting...'} }

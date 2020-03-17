@@ -2,4 +2,4 @@
 import { writable, S } from '../index'
 import { ET, E } from '../events'
 export const current_member = writable({})
-S.bind$( [ET.get, E.account, E.current_member_event, 0], function(data: [[]]) {current_member.set(data) }, 1 )
+S.bind$( [ET.get, E.current_member_event, 0], function(data: [[]]) {current_member.set(data) }, 1 )

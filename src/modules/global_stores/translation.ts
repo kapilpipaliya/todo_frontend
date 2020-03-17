@@ -8,7 +8,7 @@ export const fetchTranslations = async () => {
   return trans
 }
 fetchTranslations()
-/*S.bind$( [ET.get, E.account, e.translation_event, 0],
+ /*S.bind$( [ET.get, e.translation_event, 0],
 	function(data) {
 	  console.log(data)
 	},

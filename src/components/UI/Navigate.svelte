@@ -3,7 +3,7 @@
 	import { navigateTo } from '../svelte-router-spa/src/index'
 	const navigation = writable("")
 	// must use id =0
-	S.bind$( [ET.get, E.account, E.redirection_event, 0],
+	S.bind$( [ET.get, E.redirection_event, 0],
 		function(data) {
 		  if(data[1]) {
 		  	navigation.set(data[2])
