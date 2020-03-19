@@ -13,7 +13,7 @@
     endOfDay
   } from 'date-fns'
   import * as locales from 'date-fns/locale'
-  import SDateRangePicker from  "../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte"
+  import SDateRangePicker from  "../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte"
   const random = false
   const localesArray = Object.keys(locales).map(i => locales[i])
   const locale = random

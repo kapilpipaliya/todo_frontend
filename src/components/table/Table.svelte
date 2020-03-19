@@ -25,7 +25,7 @@
   import { css_count } from '../../css'
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte'
-  import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
+  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
   const { addNotification } = getNotificationsContext();
   export let customFilter = {}
   export let requiredFilter = {} // always add this filter when fetch

@@ -5,7 +5,7 @@
 	import Navigate from './Navigate.svelte'
 	import ScrollTop from './ScrollTop.svelte'
 
-  import NightMode from '../NightMode.svelte'
+  import NightMode from './NightMode.svelte'
 	let n
 </script>
 <Css/>

@@ -11,7 +11,7 @@
   const dp = createEventDispatcher();
   import { css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
-  import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
+  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
   const { addNotification } = getNotificationsContext();
   import { translation } from '../../translation'
   import Html from '../UI/Html.svelte'

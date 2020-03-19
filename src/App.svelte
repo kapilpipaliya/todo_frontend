@@ -27,7 +27,7 @@
   import { isLoggedIn,} from './api_helper'
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
-  import Notifications from './components/thirdparty/svelte-notifications/src/index'
+  import Notifications from '../thirdparty/svelte-notifications/src/index'
   let e$
   $: e$ = $current_member?.email;
   let m$  = []

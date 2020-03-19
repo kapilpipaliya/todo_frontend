@@ -1,9 +1,9 @@
 <script>
    // import the core component
-  import ProsemirrorEditor from "../../thirdparty/prosemirror-svelte/ProsemirrorEditor.svelte";
+  import ProsemirrorEditor from "../../../../thirdparty/prosemirror-svelte/ProsemirrorEditor.svelte";
 
   // import helpers to work with prosemirror state
-  import { createSingleLineEditor, toPlainText } from '../../thirdparty/prosemirror-svelte/state';  
+  import { createSingleLineEditor, toPlainText } from '../../../../thirdparty/prosemirror-svelte/state';  
 
   // create the initial editor state
   let editorState = createSingleLineEditor('Hello world!'); 
