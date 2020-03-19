@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount } from '../../../modules/index'
+	import { onMount } from 'svelte'
 	import { Debug } from '../../UI/debug'
 	export let value = []
 	export let disabled = false

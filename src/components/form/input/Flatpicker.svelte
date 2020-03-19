@@ -1,7 +1,7 @@
 <script lang='ts'>
-	import { onMount, createEventDispatcher } from '../../../modules/index'
-	//import flatpickr from 'flatpickr';
-	import { css_count } from '../../../modules/global_stores/css'
+	import { onMount, createEventDispatcher } from 'svelte'
+	import flatpickr from 'flatpickr';
+	import { css_count } from '../../../css'
 	export let disabled
 
 	const hooks = new Set([

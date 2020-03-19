@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount } from '../../../../modules/index'
+  import { onMount } from 'svelte'
   import { localisedRoute, navigateTo, routeIsActive } from '../router.js'
   export let to = '/'
   export let title = ''

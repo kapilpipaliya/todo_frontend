@@ -1,6 +1,7 @@
 <script lang='ts'>
-  import { DisplayType, getContext, get } from '../../modules/index'
-  import { css } from '../../modules/global_stores/css'
+  import { getContext } from 'svelte'
+  import { get } from 'svelte/store'
+  import { css } from '../../css'
   import UrlPattern from 'url-pattern'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
@@ -10,7 +11,7 @@
   import Color from './display/Color.svelte'
   import Time from './display/Time.svelte'
   import GeneralForm from '../form/Index.svelte'
-  import {FormType} from '../../modules/enums'
+  import {FormType, DisplayType} from '../../enums'
   export let selected: boolean
   export let showRowNum
   export let rowIndex

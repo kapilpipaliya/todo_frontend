@@ -1,7 +1,6 @@
 <script lagn='ts'>
-	import { getContext } from '../../../../modules/index'
-	//import { slide } from 'svelte/transition';
-	import { slide } from '../../../../modules/index';
+	import { getContext } from 'svelte'
+	import { slide } from 'svelte/transition'
 
 	// const { navigate } = getContext('REPL'); // fix
 	const navigate = () => 0

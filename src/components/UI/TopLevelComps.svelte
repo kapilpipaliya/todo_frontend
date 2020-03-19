@@ -1,6 +1,6 @@
 <script lang='ts'>
-	import {maintenance} from '../../modules/global_stores/maintenance'
-	//import {current_time} from '../../modules/global_stores/time_store'
+	import {maintenance} from '../../maintenance'
+	//import {current_time} from '../../time_store'
 	import Css from './Css.svelte'
 	import Navigate from './Navigate.svelte'
 	import ScrollTop from './ScrollTop.svelte'

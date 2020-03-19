@@ -1,5 +1,6 @@
 <script lang='ts'>
-	import { onMount, stringifyRawPattern } from '../../../modules/index'
+	import { onMount } from 'svelte'
+  import { stringifyRawPattern } from '../../../array_functions'
 	export let options = []
 	export let keyIdx = 0
 	export let dp = [1, ' - ',2]

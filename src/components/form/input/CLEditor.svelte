@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { onMount, createEventDispatcher, tick } from '../../../modules/index'
+import { onMount, createEventDispatcher, tick } from 'svelte'
 import Editor from "../../thirdparty/cl-editor/src/Editor.svelte";
 import Label from '../_Label.svelte'
 export let name;

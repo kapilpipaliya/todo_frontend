@@ -1,5 +1,8 @@
 <script lang='ts'>
-  import { onMount, onDestroy, S, ws_connected, ET,E, form_schema_evt, isLoggedIn as isLoggedInFn } from '../../modules/index'
+  import { onMount, onDestroy } from 'svelte'
+  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { ET, E, form_schema_evt } from '../../events'
+  import { isLoggedIn as isLoggedInFn } from '../../api_helper'
   declare let $ws_connected
   export let html = []
   let mounted = false

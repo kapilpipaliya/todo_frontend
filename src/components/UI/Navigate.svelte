@@ -1,5 +1,7 @@
 <script lant='ts'>
-	import { writable, S, ET,E } from '../../modules/index'
+	import { writable } from 'svelte/store'
+	import { S } from '../../ws_events_dispatcher'
+	import { ET, E } from '../../events'
 	import { navigateTo } from '../svelte-router-spa/src/index'
 	const navigation = writable("")
 	// must use id =0

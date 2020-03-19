@@ -1,5 +1,7 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, ET, E } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
+  import { ET,E } from '../../events'
+  import { S, ws_connected } from '../../ws_events_dispatcher'
   import Error from '../../components/UI/Error.svelte'
   export let currentRoute
   let mounted = false

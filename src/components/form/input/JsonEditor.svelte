@@ -1,6 +1,6 @@
 <script lang='ts'>
-  import { onMount, onDestroy, tick } from '../../../modules/index'
-  import { css_count } from '../../../modules/global_stores/css'
+  import { onMount, onDestroy, tick } from 'svelte'
+  import { css_count } from '../../../css'
  	export let value = {}
   export let disabled = false
   let jsonediDom = null

@@ -2,7 +2,7 @@
 Simplified WebSocket events dispatcher
 */
 //import IsomorphicWs from 'isomorphic-ws'
-import { writable } from '../../svelte/src/runtime/store/index'; // no
+import { writable } from 'svelte/store' // no
 import { map } from 'ramda'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";

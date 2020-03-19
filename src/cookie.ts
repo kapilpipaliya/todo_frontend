@@ -1,6 +1,8 @@
 // use function directly on ws_dispatcher..
-import { S } from '../index'
-import { ET, E } from '../events'
+
+import { ET, E } from './events'
+import { S } from './ws_events_dispatcher'
+
 // read more: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
 function saveCookie(name:string, value:string, max_age:number) {document.cookie = `${name}=${value}; path=/; max-age=${max_age}` }
 function clearCookie(d) {document.cookie = `time=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/` }

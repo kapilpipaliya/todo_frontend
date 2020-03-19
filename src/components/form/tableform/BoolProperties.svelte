@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { onMount } from '../../../modules/index'
+	import { onMount } from 'svelte'
 	import { find } from 'rambda'
 	import Options from './Options.svelte'
 	export let value = []

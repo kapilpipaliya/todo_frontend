@@ -1,7 +1,7 @@
 <script lang='ts'>
-  import { onMount, onDestroy } from '../../modules/index'
+  import { onMount, onDestroy } from 'svelte'
   import Modal from '../UI/Model.svelte'
-  import { css_count } from '../../modules/global_stores/css'
+  import { css_count } from '../../css'
   export let closeHeaderMenu
   export let contextmenu
   export let modalIsVisible

@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { onMount } from '../../../../modules/index'
+  import { onMount } from 'svelte'
 
   import { SpaRouter } from '../router.js'
   import Route from './route.svelte'

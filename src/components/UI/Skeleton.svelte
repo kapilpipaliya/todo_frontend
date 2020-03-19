@@ -1,7 +1,7 @@
 <script lang='ts'>
   // https://github.com/dylanblokhuis/svelte-loading-skeleton
-  import { onMount, onDestroy } from '../../modules/index'
-  import { css_count } from '../../modules/global_stores/css'
+  import { onMount, onDestroy } from 'svelte'
+  import { css_count } from '../../css'
   export let width = "100%"
   export let height = "50px"
   export let borderRadius = "4px"

@@ -7,10 +7,14 @@
   import { isArray } from 'ramda-adjunct'
   import Row from './Row.svelte'
   import Header from './Header.svelte'
-  import { onMount, onDestroy, createEventDispatcher, setContext, tick, getContext, get, writable,
-   S, ws_connected, ET, E, fade, fly, ValueType, DisplayType, schemaEvents } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, getContext, setContext, tick } from 'svelte'
+  import { get, writable } from 'svelte/store'
+  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { ET, E, schemaEvents } from '../../events'
+  import { fade, fly } from 'svelte/transition'
+  import { ValueType, DisplayType } from '../../enums'
    declare let $ws_connected
-  import { translation } from '../../modules/global_stores/translation'
+  import { translation } from '../../translation'
   declare let $translation
   import Pagination from './Pagination.svelte'
   import AddForm from './AddForm.svelte'
@@ -18,7 +22,7 @@
   import Error from '../UI/Error.svelte'
   import Skeleton from '../UI/Skeleton.svelte'
   const dp = createEventDispatcher()
-  import { css_count } from '../../modules/global_stores/css'
+  import { css_count } from '../../css'
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte'
   import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'

@@ -1,5 +1,7 @@
 <script>
-  import { quintOut,crossfade, flip  } from '../../modules/index'
+  import { quintOut } from 'svelte/easing';
+  import { crossfade } from 'svelte/transition';
+  import { flip } from 'svelte/animate'
   // FLIP ANIMATION
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),

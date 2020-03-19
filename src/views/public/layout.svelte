@@ -1,6 +1,6 @@
 <script lant='ts'>
   import { Route } from "../../components/svelte-router-spa/src/index";
-  import { setContext, getContext } from '../../modules/index'
+  import { getContext, setContext } from 'svelte'
   //import TopHeader from './top_header.svelte'
   export let currentRoute
 </script>

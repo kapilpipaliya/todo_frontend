@@ -1,7 +1,10 @@
 <script lang='ts'>
-  import { Route } from "../../components/svelte-router-spa/src/index";
-  	import { onMount, onDestroy, writable, setContext, getContext, get,
-  		S, ws_connected, ET,E, ValueType } from '../../modules/index'
+    import { Route } from "../../components/svelte-router-spa/src/index";
+    import { onMount, onDestroy, getContext, setContext } from 'svelte'
+    import { get, writable } from 'svelte/store'
+    import { S, ws_connected } from '../../ws_events_dispatcher'
+    import { ET,E } from '../../events'
+    import { ValueType } from '../../enums'
   	declare let $ws_connected
   	import { clone } from 'rambda'
   	import TreeSidebar from '../../components/UI/TreeSidebar.svelte'

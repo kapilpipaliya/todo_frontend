@@ -1,5 +1,5 @@
 <script lang='ts'>
-import { FormType } from '../../modules/enums'
+import { FormType } from '../../enums'
 import Checkboxes from './input/Checkboxes.svelte';
 import Color from './input/Color.svelte'
 import Email from './input/Email.svelte'

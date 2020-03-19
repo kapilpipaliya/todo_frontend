@@ -1,5 +1,6 @@
 <script lang='ts'>
-	import { onMount, S } from '../../../modules/index'
+	import { onMount } from 'svelte'
+	import { S } from '../../../ws_events_dispatcher'
 	import { clone } from 'rambdax'
 	import Options from './Options.svelte'
 	import BoolProperties from './BoolProperties.svelte'

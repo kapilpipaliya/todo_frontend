@@ -1,6 +1,6 @@
 <script lang='ts'>
-  import {  ET,E } from '../../modules/index'
-  import {translation} from '../../modules/global_stores/translation'
+  import { ET,E } from '../../events'
+  import {translation} from '../../translation'
   declare let $translation
   import { view, lensPath } from 'ramda'
   export let currentRoute: {params?: {schema_key?: string}, namedParams?: {schema_key?: string}} = {}

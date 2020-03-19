@@ -1,6 +1,6 @@
 <script lang='ts'>
-  import { DisplayType } from '../../modules/index'
-  import { css } from '../../modules/global_stores/css'
+  import { DisplayType } from '../../enums'
+  import { css } from '../../css'
   export let mergeRowsCount
   export let allSelected
   export let onSelectAllClick

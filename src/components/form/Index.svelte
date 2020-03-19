@@ -1,13 +1,19 @@
 <script lang='ts'>
-  import { onMount, onDestroy, createEventDispatcher, S, ws_connected, setContext, getContext, get, writable, ValueType, ET, E, merge, schemaEvents } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher, getContext, setContext } from 'svelte'
+  import { get, writable } from 'svelte/store'
+  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { ET, E, schemaEvents } from '../../events'
+  import { merge } from '../../array_functions'
+  import { ValueType } from '../../enums'
+
   // import Error from '../UI/Error.svelte'
   declare let $ws_connected
   const dp = createEventDispatcher();
-  import { css_count } from '../../modules/global_stores/css'
+  import { css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
   import { getNotificationsContext } from '../thirdparty/svelte-notifications/src/index'
   const { addNotification } = getNotificationsContext();
-  import { translation } from '../../modules/global_stores/translation'
+  import { translation } from '../../translation'
   import Html from '../UI/Html.svelte'
   import GeneralInput from './RealForm.svelte'
   import SubmitButton from './_SubmitButton.svelte'

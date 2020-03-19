@@ -1,7 +1,7 @@
 <script>
-  import { onDestroy } from '../../../modules/index'
+  import { onDestroy } from 'svelte'
   import Mindmap from "../../thirdparty/svelte-mindmap/MindMap.svelte"
-  import { css_count } from '../../../modules/global_stores/css'
+  import { css_count } from '../../../css'
   css_count.increase('mindmap')
   onDestroy(()=>{css_count.decrease('mindmap') })
   let map = {

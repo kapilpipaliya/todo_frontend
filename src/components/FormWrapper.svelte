@@ -1,5 +1,5 @@
 <script lang='ts'>
-  import { tick } from '../modules/index'
+  import { tick } from 'svelte'
   import Title from './UI/Title.svelte'
   import GeneralForm from './form/Index.svelte'
   export let currentRoute: {params?: {default_pattern?: string}, namedParams?: {}} = {}

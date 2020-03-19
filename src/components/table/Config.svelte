@@ -1,5 +1,10 @@
 <script>
-  import { onMount, onDestroy, createEventDispatcher, S, ET, E, quintOut,crossfade, flip } from '../../modules/index'
+  import { onMount, onDestroy, createEventDispatcher } from 'svelte'
+  import { flip } from 'svelte/animate'
+  import { S } from '../../ws_events_dispatcher'
+  import { ET, E } from '../../events'
+  import { quintOut } from 'svelte/easing';
+  import { crossfade } from 'svelte/transition';
   import SubmitButton from '../form/_SubmitButton.svelte'
   import CancelButton from '../form/_CancelButton.svelte'
   import Error from '../UI/Error.svelte'

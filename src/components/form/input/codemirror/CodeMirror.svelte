@@ -2,7 +2,7 @@
 <script>
   // imported from https://github.com/frantic0/svelte-codemirror/blob/master/src/CodeMirror.svelte
   import CodeMirror from 'codemirror';
-  import { onMount, createEventDispatcher } from '../../../../modules/index'
+  import { onMount, createEventDispatcher } from 'svelte'
   import "./codeMirrorPlugins";
 
   const dispatch = createEventDispatcher();
