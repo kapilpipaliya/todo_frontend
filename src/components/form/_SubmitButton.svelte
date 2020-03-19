@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let isSaving = false
   export let disabled = false
   export let title = ''
@@ -6,13 +6,19 @@
   export let save
   export let type = 'submit'
   $: label = label || 'Save changes'
-  let classn;
+  let classn
   $: {
     classn = 'submit success '
-    if(isSaving || disabled) classn += 'disabled '
-    if(isSaving) classn += 'loading '
+    if (isSaving || disabled) classn += 'disabled '
+    if (isSaving) classn += 'loading '
   }
 </script>
-<button {type} class={classn} disabled={isSaving || disabled} {title} on:click={save} >
+
+<button
+  {type}
+  class={classn}
+  disabled={isSaving || disabled}
+  {title}
+  on:click={save}>
   <slot>{label}</slot>
 </button>

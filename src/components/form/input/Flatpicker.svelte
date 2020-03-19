@@ -1,100 +1,102 @@
-<script lang='ts'>
-	import { onMount, createEventDispatcher } from 'svelte'
-	import flatpickr from 'flatpickr';
-	import { css_count } from '../../../css'
-	export let disabled
+<script lang="ts">
+  import { onMount, createEventDispatcher } from 'svelte'
+  import flatpickr from 'flatpickr'
+  import { css_count } from '../../../css'
+  export let disabled
 
-	const hooks = new Set([
-		'onChange',
-		'onOpen',
-		'onClose',
-		'onMonthChange',
-		'onYearChange',
-		'onReady',
-		'onValueUpdate',
-		'onDayCreate'
-	]);
+  const hooks = new Set([
+    'onChange',
+    'onOpen',
+    'onClose',
+    'onMonthChange',
+    'onYearChange',
+    'onReady',
+    'onValueUpdate',
+    'onDayCreate'
+  ])
 
-  export let value = '';
-  export let element = null;
-  export let dateFormat = null;
+  export let value = ''
+  export let element = null
+  export let dateFormat = null
 
   declare let $$props
-  let allProps = $$props;
-  
-  const options = allProps.options || {enableTime: true};
-  const props = Object.assign({}, $$props);
-  delete props.options;
+  let allProps = $$props
 
-	let input, fp;
+  const options = allProps.options || { enableTime: true }
+  const props = Object.assign({}, $$props)
+  delete props.options
 
-	$: if (fp) fp.setDate(value, false, dateFormat);
+  let input, fp
 
-	css_count.increase('flatpickr')
-	onMount(async() => {
-	    //let flatpickr
-	    try{
-	      /*const {default: flatpickr_} =*/ await import( "https://unpkg.com/flatpickr/dist/flatpickr.js" );
-	      //flatpickr = flatpickr_
-	    }
-	    catch(err) {
-	      console.warn(err.message)
-	      return
-	    }
-		const elem = element || input
-		fp = flatpickr(elem, Object.assign(
-			addHooks(options),
-			element ? { wrap: true } : {}
-		
-    ));
+  $: if (fp) fp.setDate(value, false, dateFormat)
 
-		return () => {
-			fp.destroy();
-			css_count.decrease('flatpickr')
-		}
-	});
+  css_count.increase('flatpickr')
+  onMount(async () => {
+    //let flatpickr
+    try {
+      /*const {default: flatpickr_} =*/ await import(
+        'https://unpkg.com/flatpickr/dist/flatpickr.js'
+      )
+      //flatpickr = flatpickr_
+    } catch (err) {
+      console.warn(err.message)
+      return
+    }
+    const elem = element || input
+    fp = flatpickr(
+      elem,
+      Object.assign(addHooks(options), element ? { wrap: true } : {})
+    )
 
-	const dispatch = createEventDispatcher();
+    return () => {
+      fp.destroy()
+      css_count.decrease('flatpickr')
+    }
+  })
 
-	$: if (fp) for (const [key, val] of Object.entries(addHooks(options))) {
-		fp.set(key, val);
-	}
+  const dispatch = createEventDispatcher()
 
-	function addHooks(opts:{onChange?: Array<(newValue: any) => void>} = {}) {
-		opts = Object.assign({}, opts);
+  $: if (fp)
+    for (const [key, val] of Object.entries(addHooks(options))) {
+      fp.set(key, val)
+    }
 
-		for (const hook of hooks) {
-			const firer = (selectedDates, dateStr, instance) => {
-				dispatch(stripOn(hook), [selectedDates, dateStr, instance]);
-			};
+  function addHooks(opts: { onChange?: Array<(newValue: any) => void> } = {}) {
+    opts = Object.assign({}, opts)
 
-			if (hook in opts) {
-				// Hooks must be arrays
-				if (!Array.isArray(opts[hook]))
-					opts[hook] = [opts[hook]];
+    for (const hook of hooks) {
+      const firer = (selectedDates, dateStr, instance) => {
+        dispatch(stripOn(hook), [selectedDates, dateStr, instance])
+      }
 
-				opts[hook].push(firer);
-			} else {
-				opts[hook] = [firer];
-			}
-		}
+      if (hook in opts) {
+        // Hooks must be arrays
+        if (!Array.isArray(opts[hook])) opts[hook] = [opts[hook]]
 
-		if (opts.onChange && !opts.onChange.includes(updateValue))
-			opts.onChange.push(updateValue);
+        opts[hook].push(firer)
+      } else {
+        opts[hook] = [firer]
+      }
+    }
 
-		return opts;
-	}
+    if (opts.onChange && !opts.onChange.includes(updateValue))
+      opts.onChange.push(updateValue)
 
-	function updateValue(newValue) {
-		value = (Array.isArray(newValue) && newValue.length === 1)
-			? newValue[0].getTime()
-			: newValue.getTime();
-	}
+    return opts
+  }
 
-	function stripOn(hook) {
-		return hook.charAt(2).toLowerCase() + hook.substring(3);
-	}
+  function updateValue(newValue) {
+    value =
+      Array.isArray(newValue) && newValue.length === 1
+        ? newValue[0].getTime()
+        : newValue.getTime()
+  }
+
+  function stripOn(hook) {
+    return hook.charAt(2).toLowerCase() + hook.substring(3)
+  }
 </script>
+
 <slot>
-<input bind:this={input} {...props} {disabled} >
+  <input bind:this={input} {...props} {disabled} />
 </slot>

@@ -1,7 +1,7 @@
 export enum ValueType {
-  None,    // not yet initialized
+  None, // not yet initialized
   Illegal, // illegal value
-  Null,    // JSON null
+  Null, // JSON null
   Bool,
   Array,
   Object,
@@ -18,8 +18,8 @@ export enum ValueType {
   BCD,
   Custom,
   Tagged
-};
-  // table:
+}
+// table:
 export enum DisplayType {
   UNINITIALIZED,
   Checkbox = 1,
@@ -30,7 +30,7 @@ export enum DisplayType {
   DateTime,
   Url,
   Color
-  };
+}
 export enum FormType {
   button = 1,
   checkbox,
@@ -59,7 +59,7 @@ export enum FormType {
   select,
   jsoneditor,
   internal_true_edge,
-  multi_select,  // enum_string
+  multi_select, // enum_string
   multi_select_hidden,
   text_array,
   multi_select_bool_properties,
@@ -76,4 +76,4 @@ export enum FormType {
   emoji,
   mindmap,
   mapcountries
-  };
+}

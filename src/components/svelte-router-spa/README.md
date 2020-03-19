@@ -97,7 +97,7 @@ export { routes }
 Import the routes into your main component (probably App.svelte)
 
 ```javascript
-<script>
+<script lang="ts">
   import { Router } from 'svelte-router-spa'
   import { routes } from './routes'
 </script>
@@ -116,7 +116,7 @@ You can add any number of layouts nested inside Router. For instance assuming th
 Filename: _public_layout.svelte_
 
 ```javascript
-<script>
+<script lang="ts">
   import { Route } from 'svelte-router-spa'
   import TopHeader from './top_header.svelte'
   export let currentRoute
@@ -134,7 +134,7 @@ Filename: _public_layout.svelte_
 Filename: _admin_layout.svelte_
 
 ```javascript
-<script>
+<script lang="ts">
   import { Route } from "svelte-router-spa";
 
   export let currentRoute;
@@ -256,7 +256,7 @@ This is the main component that needs to be included before any other content as
 The simplest approach (although not required) is to have an App.svelte file like this:
 
 ```javascript
-<script>
+<script lang="ts">
   import { Router } from 'svelte-router-spa'
   import { routes } from './routes'
 
@@ -291,7 +291,7 @@ Route is smart enough to expose the named params in the route component where th
 Example:
 
 ```javascript
-<script>
+<script lang="ts">
   import { Route } from 'svelte-router-spa'
   import TopHeader from './top_header.svelte'
   import FooterContent from './footer_content.svelte'
@@ -363,7 +363,7 @@ Router -> PublicLayout(Route) -> AboutUsLayout(Route) -> PeoplePage
 Inside PeoplePage you can get all the information about the current route like this:
 
 ```javascript
-<script>
+<script lang="ts">
   export let currentRoute
 </script>
 
@@ -396,7 +396,7 @@ Check **navigateTo** belown for more information about the language param.
 Example:
 
 ```javascript
-<script>
+<script lang="ts">
   import { Navigate } from 'svelte-router-spa'
 </script>
 
@@ -454,7 +454,7 @@ The [Navigate](https://github.com/jorgegorka/svelte-router/blob/master/README.md
 Example:
 
 ```javascript
-<script>
+<script lang="ts">
   import { routeIsActive } from 'svelte-router-spa'
 </script>
 

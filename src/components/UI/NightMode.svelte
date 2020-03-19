@@ -1,5 +1,5 @@
-<script>
-  
+<script lang="ts">
+
 </script>
-NightMode
-Todo: Make it saving to the database
+
+NightMode Todo: Make it saving to the database

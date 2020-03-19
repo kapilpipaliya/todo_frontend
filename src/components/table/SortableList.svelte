@@ -1,6 +1,6 @@
-<script>
-  import { quintOut } from 'svelte/easing';
-  import { crossfade } from 'svelte/transition';
+<script lang="ts">
+  import { quintOut } from 'svelte/easing'
+  import { crossfade } from 'svelte/transition'
   import { flip } from 'svelte/animate'
   // FLIP ANIMATION
   const [send, receive] = crossfade({
@@ -14,9 +14,9 @@
         css: t => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
-				`,
+				`
       }
-    },
+    }
   })
   // DRAG AND DROP
   let isOver = false
@@ -56,6 +56,7 @@
   export let list
   export let key
 </script>
+
 {#if list && list.length}
   <ul>
     {#each list as item, index (getKey(item))}

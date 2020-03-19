@@ -8,7 +8,10 @@ export function anyEmptyNestedRoutes(routeObject) {
     return true
   }
 
-  if (routeObject.childRoute && Object.keys(routeObject.childRoute).length === 0) {
+  if (
+    routeObject.childRoute &&
+    Object.keys(routeObject.childRoute).length === 0
+  ) {
     result = true
   } else if (routeObject.childRoute) {
     result = anyEmptyNestedRoutes(routeObject.childRoute)
@@ -44,7 +47,13 @@ export function findLocalisedRoute(pathName, route, language) {
   let exists = false
 
   if (language) {
-    return { exists: route.lang && route.lang[language] && route.lang[language].includes(pathName), language }
+    return {
+      exists:
+        route.lang &&
+        route.lang[language] &&
+        route.lang[language].includes(pathName),
+      language
+    }
   }
 
   exists = compareRoutes(pathName, route.name)
@@ -172,8 +181,15 @@ export function routeNameLocalised(route, language = null) {
  * @param language string
  **/
 
-export function updateRoutePath(basePath, pathNames, route, language, convert = false) {
-  if (basePath === '/' || basePath.trim().length === 0) return { result: basePath, language: null }
+export function updateRoutePath(
+  basePath,
+  pathNames,
+  route,
+  language,
+  convert = false
+) {
+  if (basePath === '/' || basePath.trim().length === 0)
+    return { result: basePath, language: null }
 
   let basePathResult = basePath
   let routeName = route.name
@@ -187,7 +203,11 @@ export function updateRoutePath(basePath, pathNames, route, language, convert = 
   basePathResult = removeSlash(basePathResult)
 
   if (!route.childRoute) {
-    let localisedRoute = findLocalisedRoute(basePathResult, route, currentLanguage)
+    let localisedRoute = findLocalisedRoute(
+      basePathResult,
+      route,
+      currentLanguage
+    )
 
     if (localisedRoute.exists && convert) {
       basePathResult = routeNameLocalised(route, language)
@@ -199,7 +219,11 @@ export function updateRoutePath(basePath, pathNames, route, language, convert = 
     routeNames.shift()
     routeNames.forEach(() => {
       const currentPathName = pathNames[0]
-      localisedRoute = findLocalisedRoute(`${basePathResult}/${currentPathName}`, route, currentLanguage)
+      localisedRoute = findLocalisedRoute(
+        `${basePathResult}/${currentPathName}`,
+        route,
+        currentLanguage
+      )
 
       if (currentPathName && localisedRoute.exists) {
         if (convert) {
@@ -217,4 +241,3 @@ export function updateRoutePath(basePath, pathNames, route, language, convert = 
     return { result: basePath, language: currentLanguage }
   }
 }
-

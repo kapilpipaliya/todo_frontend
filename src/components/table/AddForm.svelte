@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   export let toogleAddForm
   export let doms
   export let addnewform
@@ -12,23 +12,23 @@
   $: {
     showButton = false
     showComponent = false
-    if(addnew_type == "button"){
+    if (addnew_type == 'button') {
       showButton = true
-      if(addnewform){
-       showComponent = true 
+      if (addnewform) {
+        showComponent = true
       }
     } else {
       showComponent = true
     }
   }
 </script>
+
 {#if showButton}
   <button
     name="table_add"
     class={addnewform ? 'pressed' : ''}
     bind:this={doms.addbutton}
-    on:click={toogleAddForm}
-    >
+    on:click={toogleAddForm}>
     {!addnewform ? 'Add New' : 'Close'}
   </button>
 {/if}
@@ -39,6 +39,5 @@
     {schema_key}
     buttonlabels={addnew_labels}
     on:close={toogleAddForm}
-    on:successSave={successSave} 
-    />
+    on:successSave={successSave} />
 {/if}

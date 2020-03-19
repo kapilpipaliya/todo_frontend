@@ -1,6 +1,6 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { ET,E } from '../../events'
+  import { ET, E } from '../../events'
   import { S, ws_connected } from '../../ws_events_dispatcher'
   import Error from '../../components/UI/Error.svelte'
   export let currentRoute
@@ -14,7 +14,7 @@
   const fns = [
       [ET.insert, E.confirm_email, S.uid],
       [ET.subscribe, E.confirm_email_status, S.uid],
-      [ET.unsubscribe, E.confirm_email_status, S.uid],
+      [ET.unsubscribe, E.confirm_email_status, S.uid]
     ],
     [doconfirm, sub, unsub] = fns
   const runOnce = () => {
@@ -51,8 +51,8 @@
     }
   })
   onDestroy(() => {
-      S.trigger([[unsub, {}]])
-      S.unbind_(fns)
+    S.trigger([[unsub, {}]])
+    S.unbind_(fns)
   })
   // some functions:============
   function onSubGet(d) {
@@ -66,6 +66,7 @@
     }
   }
 </script>
+
 {#if confirming}
   <div class="header">
     <h1>{header}</h1>

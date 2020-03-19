@@ -1,9 +1,10 @@
-<script lang='ts'>
-  import Dropzone from "../../../../thirdparty/svelte-dropzone/index.svelte";
-  const addedfile = file => console.log(file);
-  const drop = event => console.log(event.target);
-  const init = () => 0;
+<script lang="ts">
+  import Dropzone from '../../../../thirdparty/svelte-dropzone/index.svelte'
+  const addedfile = file => console.log(file)
+  const drop = event => console.log(event.target)
+  const init = () => 0
 </script>
+
 <Dropzone
   dropzoneClass="dropzone"
   hooveringClass="dropzone-hoovering"

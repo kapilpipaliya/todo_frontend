@@ -1,4 +1,3 @@
-
 import { writable } from 'svelte/store'
 const router = writable({})
 
@@ -15,4 +14,3 @@ export const activeRoute = {
   set,
   remove
 }
-

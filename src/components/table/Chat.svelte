@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { getContext } from 'svelte'
   import { get } from 'svelte/store'
   import { css } from '../../css'
@@ -8,13 +8,13 @@
   import Url from './display/Url.svelte'
   import Color from './display/Color.svelte'
   import GeneralForm from '../form/Index.svelte'
-  import {FormType, DisplayType} from '../../enums'
+  import { FormType, DisplayType } from '../../enums'
   export let selected: boolean
   export let showRowNum
   export let rowIndex
   export let isGlobal
   export let rowValue
-  export let headerIsvisibleColumnsRow= []
+  export let headerIsvisibleColumnsRow = []
   export let headerVisibleColTypesRow = []
   export let editableColumnsRow = []
   export let headerColumnPropsRow = []
@@ -38,29 +38,38 @@
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
   const project_id_ctx = getContext('project_id')
   const project_id = project_id_ctx ? get(project_id_ctx) : ''
-  function makeUrl(props, id){return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id}) }
+  function makeUrl(props, id) {
+    return new UrlPattern(props.dp).stringify({
+      id,
+      org: org_id,
+      project: project_id
+    })
+  }
 </script>
-<tr bind:this={rowDoms[rowIndex]} class="{selected ? $css.table.classes.selected || 'selected' : ''}" >
+
+<tr
+  bind:this={rowDoms[rowIndex]}
+  class={selected ? $css.table.classes.selected || 'selected' : ''}>
   {#if showRowNum}
     <td>{rowIndex + 1}</td>
   {/if}
   <td>
-      {#if !isGlobal}
-        {#if false}
-          <span>ID: {getValue(rowValue[0])}</span>
-        {/if}
-        <input
-          type="checkbox"
-          value={getValue(rowValue[0])}
-          checked={selectedRowsKeys.includes(getValue(rowValue[0]))}
-          on:click={onSelectRowClick} />
+    {#if !isGlobal}
+      {#if false}
+        <span>ID: {getValue(rowValue[0])}</span>
       {/if}
+      <input
+        type="checkbox"
+        value={getValue(rowValue[0])}
+        checked={selectedRowsKeys.includes(getValue(rowValue[0]))}
+        on:click={onSelectRowClick} />
+    {/if}
   </td>
   <td>
-      {#if !isGlobal}
+    {#if !isGlobal}
       {#if quickcomponent && !quickview.includes(getValue(rowValue[0]))}
         <button
-          name='edit'
+          name="edit"
           key={getValue(rowValue[0])}
           type="button"
           on:click={() => {
@@ -70,53 +79,44 @@
           Edit
         </button>
       {/if}
-      {/if}
+    {/if}
   </td>
   <td>
-      {#if !isGlobal}
-      <button name='delete' key={getValue(rowValue[0])} type="button" on:click={e=>onDeleteRow(getValue(rowValue[0]), rowIndex)()}>D</button>
-      {/if}
+    {#if !isGlobal}
+      <button
+        name="delete"
+        key={getValue(rowValue[0])}
+        type="button"
+        on:click={e => onDeleteRow(getValue(rowValue[0]), rowIndex)()}>
+        D
+      </button>
+    {/if}
   </td>
   {#each rowValue as c, index}
     {#if headerIsvisibleColumnsRow[index]}
       <td>
         {#if editableColumnsRow[index]}
           <GeneralForm
-          {schema_key}
-          key={getValue(rowValue[0])}
-          {fetchConfig}
-          selector={["_key", editableColumnsRow[index].s]}
-          id='inline'
-          buttonlabels={{save: "Save", cancel: ""}}
-          headerSchema={[
-            [
-              [
-                [
-                  [],
-                  [FormType.hidden, editableColumnsRow[index].t],
-                  [],
-                  [],
-                  [],
-                  {}
-                ],
-                {}
-              ],
-              {r: {result:[[getValue(rowValue[0]), getValue(c)]]}  } 
-            ]
-          ]
-          }
-          />
+            {schema_key}
+            key={getValue(rowValue[0])}
+            {fetchConfig}
+            selector={['_key', editableColumnsRow[index].s]}
+            id="inline"
+            buttonlabels={{ save: 'Save', cancel: '' }}
+            headerSchema={[[[[[], [FormType.hidden, editableColumnsRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(rowValue[0]), getValue(c)]] } }]]} />
         {:else if c != null}
           {#if headerVisibleColTypesRow[index] === DisplayType.DateTime}
             {new Date(c).toLocaleString()}
           {:else if headerVisibleColTypesRow[index] === DisplayType.Url}
-            <Url href={makeUrl(headerColumnPropsRow[index], c)} value={headerColumnPropsRow[index].l}/>
+            <Url
+              href={makeUrl(headerColumnPropsRow[index], c)}
+              value={headerColumnPropsRow[index].l} />
           {:else if headerVisibleColTypesRow[index] === DisplayType.Checkbox}
-            <Bool value={getValue(c)}/>
+            <Bool value={getValue(c)} />
           {:else if headerVisibleColTypesRow[index] === DisplayType.Color}
-            <Color value={getValue(c)}/>
+            <Color value={getValue(c)} />
           {:else}
-            <Text value={getValue(c)}/>
+            <Text value={getValue(c)} />
           {/if}
         {/if}
       </td>

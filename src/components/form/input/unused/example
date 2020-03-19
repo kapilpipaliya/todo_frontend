@@ -1,5 +1,5 @@
 
-<script>
+<script lang="ts">
   import { Server as S } from "../../_modules/ws_normal.js";
   import { sfx, all, ins_, upd_, del, makeObject, nullFirstarrayFix, getToneName, product_img_url  } from "../../_modules/functions.js";
   import { onMount, onDestroy, createEventDispatcher } from "svelte";

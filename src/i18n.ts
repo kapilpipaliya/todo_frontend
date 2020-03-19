@@ -155,7 +155,7 @@
       'Wednesday',
       'Thursday',
       'Friday',
-      'Saturday',
+      'Saturday'
     ],
     abbr_day_names: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     month_names: [
@@ -171,7 +171,7 @@
       'September',
       'October',
       'November',
-      'December',
+      'December'
     ],
     abbr_month_names: [
       null,
@@ -186,9 +186,9 @@
       'Sep',
       'Oct',
       'Nov',
-      'Dec',
+      'Dec'
     ],
-    meridian: ['AM', 'PM'],
+    meridian: ['AM', 'PM']
   }
 
   // Set default number format.
@@ -196,7 +196,7 @@
     precision: 3,
     separator: '.',
     delimiter: ',',
-    strip_insignificant_zeros: false,
+    strip_insignificant_zeros: false
   }
 
   // Set default currency format.
@@ -206,7 +206,7 @@
     format: '%u%n',
     sign_first: true,
     delimiter: ',',
-    separator: '.',
+    separator: '.'
   }
 
   // Set default percentage format.
@@ -215,7 +215,7 @@
     precision: 3,
     format: '%n%u',
     separator: '.',
-    delimiter: '',
+    delimiter: ''
   }
 
   // Set default size units.
@@ -243,7 +243,7 @@
     // if you use missingBehaviour with 'message', but want to know that the
     // string is actually missing for testing purposes, you can prefix the
     // guessed string by setting the value here. By default, no prefix!
-    missingTranslationPrefix: '',
+    missingTranslationPrefix: ''
   }
 
   // Set default locale. This locale will be used when fallback is enabled and
@@ -976,7 +976,7 @@
             RegExp.$3,
             RegExp.$6,
             RegExp.$4,
-            RegExp.$5,
+            RegExp.$5
           ].join(' ')
         )
       )
@@ -1155,7 +1155,7 @@
       unit: unit,
       precision: precision,
       format: '%n%u',
-      delimiter: '',
+      delimiter: ''
     })
 
     return this.toNumber(size, options)

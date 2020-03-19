@@ -1,17 +1,17 @@
-<script lang='ts'>
-import { onMount, createEventDispatcher, tick } from 'svelte'
-import Editor from "../../../../thirdparty/cl-editor/src/Editor.svelte";
-import Label from '../_Label.svelte'
-export let name;
-export let required;
-export let disabled;
-export let value;
-export let props = {};
-export let dom = null
-let cleditorInstance
-// Initialize editor
-onMount(async()=>{
-/*	await tick()
+<script lang="ts">
+  import { onMount, createEventDispatcher, tick } from 'svelte'
+  import Editor from '../../../../thirdparty/cl-editor/src/Editor.svelte'
+  import Label from '../_Label.svelte'
+  export let name
+  export let required
+  export let disabled
+  export let value
+  export let props = {}
+  export let dom = null
+  let cleditorInstance
+  // Initialize editor
+  onMount(async () => {
+    /*	await tick()
 	const cleditorInstance = new Editor({
 	    // <HTMLElement> required
 	    target: cleditorDom,
@@ -51,19 +51,25 @@ onMount(async()=>{
 	    }
 	})
 */
-	// Methods
-	//cleditorInstance.exec(cmd: string, value?: string) // execute document command (document.executeCommand(cmd, false, value))
-	//cleditorInstance.getHtml(sanitize?: boolean) // returns html string from editor. if passed true as argument, html will be sanitized before return
-	//cleditorInstance.getText() // returns text string from editor
-	//cleditorInstance.setHtml(html: string, sanitize?: boolean) // sets html for editor. if second argument is true, html will be sanitized
-	//cleditorInstance.saveRange() // saves current editor cursor position or user selection
-	//cleditorInstance.restoreRange() // restores cursor position or user selection
-	// saveRange and restoreRange are useful when making custom actions
-	// that demands that focus is shifted from editor to, for example, modal window.
-
-})
-	function onChange(event){value = event.detail }
+    // Methods
+    //cleditorInstance.exec(cmd: string, value?: string) // execute document command (document.executeCommand(cmd, false, value))
+    //cleditorInstance.getHtml(sanitize?: boolean) // returns html string from editor. if passed true as argument, html will be sanitized before return
+    //cleditorInstance.getText() // returns text string from editor
+    //cleditorInstance.setHtml(html: string, sanitize?: boolean) // sets html for editor. if second argument is true, html will be sanitized
+    //cleditorInstance.saveRange() // saves current editor cursor position or user selection
+    //cleditorInstance.restoreRange() // restores cursor position or user selection
+    // saveRange and restoreRange are useful when making custom actions
+    // that demands that focus is shifted from editor to, for example, modal window.
+  })
+  function onChange(event) {
+    value = event.detail
+  }
 </script>
 
 <Label {name} />
-<Editor bind:this={dom} on:change={onChange} height='300px' html={value} removeFormatTags={['h1', 'h2', 'blackquote']}/>
+<Editor
+  bind:this={dom}
+  on:change={onChange}
+  height="300px"
+  html={value}
+  removeFormatTags={['h1', 'h2', 'blackquote']} />

@@ -1,12 +1,13 @@
-<script lang='ts'>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dp = createEventDispatcher()
 </script>
+
 <div class="modal-background" on:click={() => dp('close')} />
 <div class="modal">
   <slot name="header" />
-  <hr >
+  <hr />
   <slot />
   <slot name="footer" />
-  <hr >
+  <hr />
 </div>

@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   /**
    * USED FOR DEVELOPMENT OF COMPONENT ONLY.
    *
@@ -13,7 +13,7 @@
     endOfDay
   } from 'date-fns'
   import * as locales from 'date-fns/locale'
-  import SDateRangePicker from  "../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte"
+  import SDateRangePicker from '../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte'
   const random = false
   const localesArray = Object.keys(locales).map(i => locales[i])
   const locale = random
@@ -36,6 +36,7 @@
     //console.log('onApply: ', detail)
   }
 </script>
+
 <SDateRangePicker
   {maxDate}
   weekGuides
@@ -47,6 +48,6 @@
   timePicker
   timePickerSeconds
   timePickerControls
-  startDate={startDate}
-  endDate={endDate}
+  {startDate}
+  {endDate}
   on:apply={onApply} />

@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { flip } from 'svelte/animate'
   import { S } from '../../ws_events_dispatcher'
   import { ET, E } from '../../events'
-  import { quintOut } from 'svelte/easing';
-  import { crossfade } from 'svelte/transition';
+  import { quintOut } from 'svelte/easing'
+  import { crossfade } from 'svelte/transition'
   import SubmitButton from '../form/_SubmitButton.svelte'
   import CancelButton from '../form/_CancelButton.svelte'
   import Error from '../UI/Error.svelte'
@@ -22,9 +22,9 @@
         css: t => `
 					transform: ${transform} scale(${t});
 					opacity: ${t}
-				`,
+				`
       }
-    },
+    }
   })
   // DRAG AND DROP
   let isOver = false
@@ -145,6 +145,7 @@
   }
   // {JSON.stringify(list)}
 </script>
+
 <form on:submit|preventDefault={onSave}>
   {#if list && list.length}
     <ul>

@@ -17,7 +17,7 @@ export default class Storage {
   public dbName: string
   public storeName: string
   public dbVersion: number
-  constructor(dbName:string, dbVersion:number) {
+  constructor(dbName: string, dbVersion: number) {
     this.dbName = dbName
     this.storeName = dbName
     this.dbVersion = dbVersion
@@ -35,10 +35,10 @@ export default class Storage {
         resolve(this[db])
       }
       request.onupgradeneeded = event => {
-        this[db] = event.target["result"]
+        this[db] = event.target['result']
         if (!this[db].objectStoreNames.contains(this.storeName)) {
           const newStore = this[db].createObjectStore(this.storeName, {
-            keyPath: 'id',
+            keyPath: 'id'
           })
           newStore.transaction.oncomplete = () => {
             resolve(this[db])
@@ -53,14 +53,14 @@ export default class Storage {
     })
   }
   // new and update
-  [putData](key:string, value) {
+  [putData](key: string, value) {
     return new Promise((resolve, reject) => {
       const store = this[db]
         .transaction([this.storeName], 'readwrite')
         .objectStore(this.storeName)
       const request = store.put({
         id: key,
-        value,
+        value
       })
       request.onsuccess = () => {
         resolve(this[db])
@@ -72,7 +72,7 @@ export default class Storage {
   }
 
   // retrieve data
-  [getData](key:string) {
+  [getData](key: string) {
     return new Promise((resolve, reject) => {
       const store = this[db]
         .transaction([this.storeName])
@@ -87,7 +87,7 @@ export default class Storage {
     })
   }
   // delete data
-  [removeData](key:string) {
+  [removeData](key: string) {
     const store = this[db]
       .transaction([this.storeName], 'readwrite')
       .objectStore(this.storeName)
@@ -100,7 +100,7 @@ export default class Storage {
     }
   }
   // delete the database
-  [removeDB](dbName:string) {
+  [removeDB](dbName: string) {
     indexedDB.deleteDatabase(dbName)
   }
   /**
@@ -108,7 +108,7 @@ export default class Storage {
    * @param {value} any
    * @description insert data
    */
-  async setItem(key:string, value) {
+  async setItem(key: string, value) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -119,7 +119,7 @@ export default class Storage {
    * @param {key} string
    * @description Get data
    */
-  async getItem(key:string) {
+  async getItem(key: string) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -130,7 +130,7 @@ export default class Storage {
    * @param {key} string
    * @description delete data
    */
-  async removeItem(key:string) {
+  async removeItem(key: string) {
     if (!this[db]) {
       this[db] = await this[openDB]()
     }
@@ -140,7 +140,7 @@ export default class Storage {
    * @param {dbName} string
    * @description delete database
    */
-  removeDB(dbName:string) {
+  removeDB(dbName: string) {
     this[removeDB](dbName)
   }
 

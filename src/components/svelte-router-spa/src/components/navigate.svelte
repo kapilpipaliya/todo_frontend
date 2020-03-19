@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   import { onMount } from 'svelte'
   import { localisedRoute, navigateTo, routeIsActive } from '../router.js'
   export let to = '/'
@@ -22,6 +22,11 @@
   }
 </script>
 
-<a href={to} {title} on:click={navigate} class={styles} class:active={routeIsActive(to)}>
+<a
+  href={to}
+  {title}
+  on:click={navigate}
+  class={styles}
+  class:active={routeIsActive(to)}>
   <slot />
 </a>

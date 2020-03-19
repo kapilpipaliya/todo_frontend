@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script lang="ts">
   // same as confirm page.
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { S, ws_connected } from '../../ws_events_dispatcher'
@@ -42,7 +42,9 @@
     header = 'Logging out'
     er = 'Please wait ...'
   })
-  onDestroy(() => {S.unbind_(fns) })
+  onDestroy(() => {
+    S.unbind_(fns)
+  })
   // some functions:============
   function onLogout(d) {
     if (d.ok) {
@@ -55,6 +57,7 @@
     }
   }
 </script>
+
 <div class="header">
   <h1>{header}</h1>
   <Error {er} />
@@ -63,6 +66,10 @@
   Logging out...
 {:else}
   <div class="signin">
-    <p> Sign in <a href="/account/login">Sign in</a>. </p>
+    <p>
+      Sign in
+      <a href="/account/login">Sign in</a>
+      .
+    </p>
   </div>
 {/if}

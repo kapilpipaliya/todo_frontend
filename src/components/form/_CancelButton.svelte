@@ -1,12 +1,13 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dp = createEventDispatcher()
   export let isSaving = false
-  export let label = "Cancel"
+  export let label = 'Cancel'
   export let key = 0
   $: label = label || 'Cancel'
   $: buttonSaveClass = isSaving === true ? 'cancel disabled loading' : 'cancel'
 </script>
+
 <button
   type="button"
   class={buttonSaveClass}
