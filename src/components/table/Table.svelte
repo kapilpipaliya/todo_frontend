@@ -180,7 +180,7 @@
   }
   // this function send subscription request everytime ws connection open
   $: {
-    (binded)
+    binded
     if (mounted) {
       if ($ws_connected) {
         runOnce()
@@ -418,9 +418,17 @@
         const args = ['DEL', filter, fetchConfig]
         if (rowEditDoms[rowIdx]) {
           const unsu_event = rowEditDoms[rowIdx]?.f?.unsub_evt ?? null
-          if(unsu_event){args.push(unsu_event) }
+          if (unsu_event) {
+            args.push(unsu_event)
+          }
         }
-        S.bindT(mutate_evt, d => {resolve(d) }, args )
+        S.bindT(
+          mutate_evt,
+          d => {
+            resolve(d)
+          },
+          args
+        )
       })
       if (d[0]) {
         const delete_msg = view(lensPath(['msg', 'delete']), $translation)
@@ -440,7 +448,13 @@
       const mutate_evt = [ET.delete_, events[1], S.uid]
       const filter = [JSON.stringify(selectedRowsKeys)]
       const d = await new Promise((resolve, reject) => {
-        S.bindT(mutate_evt, d => {resolve(d) }, ['DEL', filter] )
+        S.bindT(
+          mutate_evt,
+          d => {
+            resolve(d)
+          },
+          ['DEL', filter]
+        )
       })
       d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1])
     }

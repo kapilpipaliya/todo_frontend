@@ -3,7 +3,10 @@
   import { translation } from '../../translation'
   declare let $translation
   import { view, lensPath } from 'ramda'
-  export let currentRoute: {params?: {schema_key?: string}, namedParams?: {schema_key?: string}} = {}
+  export let currentRoute: {
+    params?: { schema_key?: string },
+    namedParams?: { schema_key?: string }
+  } = {}
   let schema_key = ''
   $: {
     // get schema_key From Route params or namedParams

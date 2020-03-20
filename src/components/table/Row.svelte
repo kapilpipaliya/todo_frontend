@@ -42,9 +42,13 @@
   const project_id_ctx = getContext('project_id')
   const project_id = project_id_ctx ? get(project_id_ctx) : ''
 
-  function makeUrl(props, id){
-    if(id) {
-      return new UrlPattern(props.dp).stringify({id, org: org_id, project: project_id})
+  function makeUrl(props, id) {
+    if (id) {
+      return new UrlPattern(props.dp).stringify({
+        id,
+        org: org_id,
+        project: project_id
+      })
     } else {
       return ''
     }
