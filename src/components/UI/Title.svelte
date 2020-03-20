@@ -4,7 +4,7 @@
   declare let $translation
   import { view, lensPath } from 'ramda'
   export let currentRoute: {
-    params?: { schema_key?: string },
+    params?: { schema_key?: string }
     namedParams?: { schema_key?: string }
   } = {}
   let schema_key = ''

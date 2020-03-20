@@ -77,7 +77,6 @@
   let current_page = Number(query.page) || 1
   let total_pages = Math.max(current_page, 1)
   let mounted = false
-  let binded = false
   let er = ''
   let doms = { addbutton: null }
   let addnewform = false
@@ -160,31 +159,15 @@
     unRegister()
     css_count.decrease('table')
   })
-  const runOnce = () => {
-    if (!binded) {
-      {
-        S.bind$(data_evt, onDataGet, 1)
-        //S.bind$(header_evt, onHeaderGet, 1)
-        //if(header_evt) {
-        //const e1 = [header_evt, fetchConfig]
-        //S.trigger([e1])
-        //}
-      }
-      //binded = true
-    }
-  }
+  S.bind$(data_evt, onDataGet, 1)
   const onWSConnect = () => {
     //if (headerFetched) {
     refresh()
     //}
   }
-  // this function send subscription request everytime ws connection open
   $: {
-    binded
     if (mounted) {
       if ($ws_connected) {
-        runOnce()
-        binded = true
         er = ''
         onWSConnect()
       } else {

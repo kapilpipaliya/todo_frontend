@@ -22,66 +22,53 @@
   setContext('project', project_ctx)
   let mounted = false
   let er = ''
-  let binded = false
-  let fetch_data = false
   let org_fetch_evt = [ET.get, E.organization_list, S.uid]
   let menu_evt = [ET.get, E.form_schema_get, S.uid]
   let menus = []
+  let fetch_data = false
   onMount(() => {
     mounted = true
   })
   onDestroy(() => {
-    S.unbind_([menu_evt])
+    S.unbind_([org_fetch_evt, menu_evt])
     // be very careful: top level component unmount first.
-    // console.warn('organization unmount')
     $project_ctx.pop()
   })
+  S.bind$(
+    org_fetch_evt,
+    d => {
+      const result = d[1].r.result
+      if (result.length == 0) {
+        er = 'no organization found'
+      } else if (result[0]) {
+        const org_data = result[0]
+        $org_data_ctx = org_data
+        $project_ctx = [org_data] // assume that first subscribed to ws_connected trigger first.
+        fetch_data = true
+        return
+      }
+      er = 'cant set organization data'
+    },
+    1
+  )
+  let OldMenu
+  S.bind$(
+    menu_evt,
+    d => {
+      if (d[0]) {
+        if (d[0]) {
+          OldMenu = d[0].organization
+          menus = processMenu(clone(OldMenu), org_id)
+          return
+        }
+        er = 'cant set menu'
+      }
+    },
+    1
+  )
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
-      funcBindingOnce()
-    } else {
-      er = 'Reconnecting...'
-    }
-  }
-  class Menu {
-    public menu = []
-  }
-  const m = new Menu()
-  function funcBindingOnce() {
-    if (!binded) {
-      S.bind$(
-        org_fetch_evt,
-        d => {
-          const result = d[1].r.result
-          if (result.length == 0) {
-            console.warn('no organization found')
-          } else if (result[0]) {
-            const org_data = result[0]
-            $org_data_ctx = org_data
-            $project_ctx = [org_data]
-            fetch_data = true
-            return
-          }
-          console.warn('cant set organization data')
-        },
-        1
-      )
-      S.bind$(
-        menu_evt,
-        d => {
-          if (d[0]) {
-            if (d[0]) {
-              m.menu = d[0].organization
-              menus = processMenu(clone(m.menu), org_id)
-              return
-            }
-            console.warn('cant set menu')
-          }
-        },
-        1
-      )
-      binded = true
       if (org_id) {
         const args = [
           [null, `="${org_id}"`],
@@ -95,13 +82,15 @@
         ])
       } else {
         er = 'Please Select Organization'
-        console.warn('Organization key is invalid')
       }
+    } else {
+      er = 'Reconnecting...'
     }
   }
+
   function processMenu(menu_, org) {
     if (!org) {
-      console.warn('org key must not be empty when processing menu')
+      er = 'org key must not be empty when processing menu'
       return []
     }
     for (let x of menu_) {
@@ -113,7 +102,7 @@
     return menu_
   }
   // enable this when need:
-  //$: {menus = processMenu(R.clone(m.menu), org_id) }
+  //$: {menus = processMenu(R.clone(Oldmenu), org_id) }
 </script>
 
 ORGANIZATION LAYOUT

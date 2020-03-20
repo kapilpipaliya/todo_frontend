@@ -1,36 +1,22 @@
 <script lang="ts">
-  // same as confirm page.
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { S, ws_connected } from '../ws_events_dispatcher'
   import { ET, E } from '../events'
   import Error from '../components/UI/Error.svelte'
   declare let $ws_connected
-  // export let categories = [];
-  // export let footerData = {};
-  // export let headerData = {};
   export let query = {}
   let mounted = false
-  let binded = false
   let er = ''
   let header = '' // initialised on onMount
   let subtitle = ''
   let loging_out = true
   const fns = [[ET.insert, E.logout, S.uid]],
     [logout] = fns
-  const runOnce = () => {
-    if (!binded) {
-      S.bind$(logout, onLogout, 1)
-      binded = true
-    }
-  }
-  // this function send subscription request everytime ws connection open
+  S.bind$(logout, onLogout, 1)
   $: {
     if (mounted) {
       if ($ws_connected) {
         er = ''
-        runOnce()
-        // S.trigger([[ sub, {} ]]);
-
         S.trigger([[logout, query]])
       } else {
         er = 'Reconnecting...'

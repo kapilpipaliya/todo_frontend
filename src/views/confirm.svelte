@@ -5,7 +5,6 @@
   import Error from '../components/UI/Error.svelte'
   export let currentRoute
   let mounted = false
-  let binded = false
   let er = ''
   let header = ''
   let subtitle = ''
@@ -17,18 +16,11 @@
       [ET.unsubscribe, E.confirm_email_status, S.uid]
     ],
     [doconfirm, sub, unsub] = fns
-  const runOnce = () => {
-    if (!binded) {
-      S.bind$(sub, onSubGet, 1)
-      binded = true
-    }
-  }
-  // this function send subscription request everytime ws connection open
+  S.bind$(sub, onSubGet, 1)
   $: {
     if (mounted) {
       if ($ws_connected) {
         er = ''
-        runOnce()
         S.trigger([[sub, {}]])
 
         if (currentRoute.queryParams.token) {

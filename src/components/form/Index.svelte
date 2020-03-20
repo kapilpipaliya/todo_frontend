@@ -72,7 +72,6 @@
     mutate_evt = [ET.insert, events[1], uid]
   }
   let mounted = false
-  let binded = false
   let er = ''
   let isSaving = false
   let form_disabled = true
@@ -234,19 +233,13 @@
     onDestroy_()
     css_count.decrease('submit_buttons')
   })
+  bindAll()
+  fetch()
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
-      funcBindingOnce()
     } else {
       er = 'Reconnecting...'
-    }
-  }
-  function funcBindingOnce() {
-    if (!binded) {
-      bindAll()
-      binded = true
-      fetch()
     }
   }
   $: {

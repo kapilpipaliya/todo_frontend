@@ -9,7 +9,6 @@
   export let currentRoute
   let mounted = false
   let er = ''
-  let binded = false
   let fetch_data = false
   let menu_evt = [ET.get, E.form_schema_get, S.uid]
   let menus = []
@@ -19,28 +18,22 @@
   onDestroy(() => {
     S.unbind_([menu_evt])
   })
+  S.bind$(
+    menu_evt,
+    d => {
+      if (d[0]) {
+        menus = d[0]
+        fetch_data = true // not important on menu
+      }
+    },
+    1
+  )
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
-      funcBindingOnce()
+      S.trigger([[menu_evt, ['side_menu']]])
     } else {
       er = 'Reconnecting...'
-    }
-  }
-  function funcBindingOnce() {
-    if (!binded) {
-      S.bind$(
-        menu_evt,
-        d => {
-          if (d[0]) {
-            menus = d[0]
-            fetch_data = true // not important on menu
-          }
-        },
-        1
-      )
-      binded = true
-      S.trigger([[menu_evt, ['side_menu']]])
     }
   }
 </script>

@@ -4,20 +4,20 @@
   import { S, ws_connected } from '../ws_events_dispatcher'
   import { ET, E } from '../events'
   const onRestart = () => {
-    S.bindT([ET.get, E.restart_server, S.uid], d => 0, [[]])
+    S.bindT([ET.get, E.restart_server, S.uid], d => 0, null)
   }
   const onRecompileFrontend = () => {
-    S.bindT([ET.get, E.recompile_frontend, S.uid], d => 0, [[]])
+    S.bindT([ET.get, E.recompile_frontend, S.uid], d => 0, null)
   }
   const onRecompileCSS = () => {
-    S.bindT([ET.get, E.recompile_css, S.uid], d => 0, [[]])
+    S.bindT([ET.get, E.recompile_css, S.uid], d => 0, null)
   }
   const onTestEmail = () => {
-    S.bindT([ET.get, E.test_mail, S.uid], d => 0, [[]])
+    S.bindT([ET.get, E.test_mail, S.uid], d => 0, null)
   }
   let log = ''
   const onReadLog = () => {
-    S.bindT([ET.get, E.read_log, S.uid], d => (log = d), [[]])
+    S.bindT([ET.get, E.read_log, S.uid], d => (log = d), null)
   }
   let pass = 'super'
   const onSuperPasswordCheck = () => {

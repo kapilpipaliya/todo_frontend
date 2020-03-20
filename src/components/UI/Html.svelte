@@ -7,7 +7,6 @@
   export let html = []
   let mounted = false
   let er = ''
-  let binded = false
   let htmlResult = []
   const template_evt = [ET.get, E.template_list, S.uid]
   onMount(() => {
@@ -16,35 +15,29 @@
   onDestroy(() => {
     S.unbind_([template_evt])
   })
+  S.bind$(
+    template_evt,
+    d => {
+      if (d[1]) {
+        const result = d[1].r.result
+        if (Array.isArray(result)) {
+          for (let i = 0; i < result.length; i++) {
+            htmlResult.push(result[i][2])
+          }
+          htmlResult = htmlResult
+        }
+      }
+    },
+    1
+  )
+  if (html.length) {
+    S.trigger([[template_evt, [[null, join(html)], [], [], { h: false }]]])
+  }
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
-      funcBindingOnce()
     } else {
       er = 'Reconnecting...'
-    }
-  }
-  function funcBindingOnce() {
-    if (!binded) {
-      S.bind$(
-        template_evt,
-        d => {
-          if (d[1]) {
-            const result = d[1].r.result
-            if (Array.isArray(result)) {
-              for (let i = 0; i < result.length; i++) {
-                htmlResult.push(result[i][2])
-              }
-              htmlResult = htmlResult
-            }
-          }
-        },
-        1
-      )
-      binded = true
-      if (html.length) {
-        S.trigger([[template_evt, [[null, join(html)], [], [], { h: false }]]])
-      }
     }
   }
   function join(array) {

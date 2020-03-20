@@ -13,9 +13,8 @@
       schema_key = currentRoute?.namedParams?.schema_key ?? ''
     }
   }
-  /*  export let accountFilter = {};
-  let customFilter = {
-  1 : accountFilter
+  /*let customFilter = {
+    1 : {}
   };*/
   let options = {}
   $: {
@@ -30,21 +29,18 @@
   let pass
   $: pass = currentRoute?.params?.pass ?? [] // [["context", "org_data", "_key", "org"]]
   let show = true
-  class A {
-    isFirst = true
-  }
-  const a = new A()
-  async function remount1() {
+  async function remount() {
     show = false
     await tick()
     show = true
   }
+  let isFirst = true
   $: {
     currentRoute
-    if (!a.isFirst) {
-      remount1()
+    if (!isFirst) {
+      remount()
     } else {
-      a.isFirst = false
+      isFirst = false
     }
   }
 </script>

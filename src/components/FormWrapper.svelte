@@ -6,7 +6,7 @@
     params?: { default_pattern?: string }
     namedParams?: {}
   } = {}
-  //export let default_pattern = [[0, "user"], [1, ''], [2, '']]
+  //[[0, "user"], [1, ''], [2, '']]
   let default_pattern
   $: default_pattern = currentRoute?.params?.default_pattern ?? []
   let default_value = []
@@ -26,21 +26,18 @@
     fillDefaultValue()
   }
   let show = true
-  class A {
-    isFirst = true
-  }
-  const a = new A()
-  async function remount1() {
+  async function remount() {
     show = false
     await tick()
     show = true
   }
+  let isFirst = true
   $: {
     currentRoute
-    if (!a.isFirst) {
-      remount1()
+    if (!isFirst) {
+      remount()
     } else {
-      a.isFirst = false
+      isFirst = false
     }
   }
 </script>
