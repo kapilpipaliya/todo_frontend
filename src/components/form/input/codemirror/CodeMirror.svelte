@@ -220,8 +220,6 @@
 
     if (editor) editor.toTextArea()
 
-    console.log('createEditor:', theme)
-
     const opts = {
       lineNumbers,
       lineWrapping: true,
@@ -292,7 +290,6 @@
   }
   const modeChange = md => () => {
     editor.setOption('mode', md)
-    console.log(md)
     // For html set htmlMode to true
   }
 </script>

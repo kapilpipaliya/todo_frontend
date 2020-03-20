@@ -7,7 +7,6 @@
     onDestroy,
     createEventDispatcher,
     getContext,
-    setContext,
     tick
   } from 'svelte'
   import { view, lensPath } from 'ramda'
@@ -46,7 +45,7 @@
 
   css_count.increase('table')
   let project = getContext('project')
-  let project_ctx = get(project) || []
+  let project_ctx = project ? get(project) || [] : []
   let fetchConfig = {
     type: ValueType.Array,
     project: project_ctx?.[project_ctx.length - 1]?._key ?? null
@@ -91,7 +90,7 @@
     }
   }
   setPass()
-  // ============================================================================
+  // =============================================================================
   // ================================Filter ======================================
   let filterSettings = []
   const delay_refresh = () => {
@@ -212,9 +211,6 @@
   let addnew_labels = { save: 'Save', cancel: 'Cancel' }
   let rowType = 'table'
   let showHeader = true
-  $: {
-    setContext('items', items)
-  }
   // delete this function
   let headerFetched = false
   const onHeaderGet = ([d]) => {
@@ -326,7 +322,7 @@
       if (doms.addbutton) {
         doms.addbutton.focus()
       } else {
-        console.warn('no dom for add button!')
+        er = 'no dom for add button!'
       }
     }
   }

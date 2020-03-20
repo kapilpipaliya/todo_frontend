@@ -36,10 +36,10 @@
     S.unbind(online_user_evt)
   })
   const getCountries = () => {
-    S.bindT([ET.get, E.countries, S.uid], d => console.log(d), 0)
+    S.bindT([ET.get, E.countries, S.uid], d => d, 0)
   }
   const getLanguages = () => {
-    S.bindT([ET.get, E.languages, S.uid], d => console.log(d), 0)
+    S.bindT([ET.get, E.languages, S.uid], d => d, 0)
   }
 </script>
 

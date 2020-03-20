@@ -6,7 +6,7 @@
   S.bindT(
     [ET.get, E.form_schema_get, S.uid],
     d => {
-      console.log(d)
+      d
     },
     ['menu'],
     0

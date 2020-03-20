@@ -1,32 +1,24 @@
 <script lang="ts">
-  import {
-    onMount,
-    onDestroy,
-    createEventDispatcher,
-    getContext,
-    setContext
-  } from 'svelte'
+  import { onMount, onDestroy, createEventDispatcher, getContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
+  declare let $ws_connected
   import { ET, E, schemaEvents } from '../../events'
   import { merge } from '../../array_functions'
   import { ValueType } from '../../enums'
-
-  // import Error from '../UI/Error.svelte'
-  declare let $ws_connected
-  const dp = createEventDispatcher()
   import { css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
-  const { addNotification } = getNotificationsContext()
   import { translation } from '../../translation'
+  import { isNumber, isString, isPlainObj } from 'ramda-adjunct'
+  import { view, lensPath } from 'ramda'
+  import { clone } from 'rambda'
   import Html from '../UI/Html.svelte'
   import GeneralInput from './RealForm.svelte'
   import SubmitButton from './SubmitButton.svelte'
   import CancelButton from './CancelButton.svelte'
-  import { isNumber, isString, isPlainObj } from 'ramda-adjunct'
-  import { view, lensPath } from 'ramda'
-  import { clone } from 'rambda'
+  // import Error from '../UI/Error.svelte'
+
   export let id = 'insert'
   export let t = []
   export let b = []
@@ -38,22 +30,19 @@
   export let selector = []
   export let headerSchema = []
   export let showdbg = true
-  let doms = {}
+
+  // =============================================================================
+  // ================================Fetch Form Data =============================
   let project = getContext('project')
-  declare let $project
-  let project_ctx = writable([])
-  if (project) {
-    $project_ctx = $project
-  }
-  declare let $project_ctx
+  let project_ctx = project ? get(project) || [] : []
   fetchConfig = {
     ...fetchConfig,
     type: ValueType.Array,
-    project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null
+    project: project_ctx?.[project_ctx.length - 1]?._key ?? null
   }
   let events = schemaEvents(schema_key)
   let unsub_evt
-  if (!events) console.warn('events array must be defined')
+  if (!events) er = 'events array must be defined'
   const uid = S.uid
   let data_evt
   if (events[0]) {
@@ -71,30 +60,22 @@
   } else {
     mutate_evt = [ET.insert, events[1], uid]
   }
-  let mounted = false
-  let er = ''
-  let isSaving = false
-  let form_disabled = true
-  let options = { disabled: false, notify: true }
-  let initial_form = []
-  let headers = []
   let schemaGetEvt = []
-  let layout = []
   if (!data_evt) {
     schemaGetEvt = [ET.get, E.form_schema_get, key]
   } else {
     schemaGetEvt = []
   }
-  function bindAll() {
-    if (schemaGetEvt) {
-      S.bind$(schemaGetEvt, onDataGet, 1)
-    }
-    S.bind$(data_evt, onDataGet, 1)
-    S.bind$(mutate_evt, onMutateGet, 1)
+
+  if (schemaGetEvt) {
+    S.bind$(schemaGetEvt, onDataGet, 1)
   }
+  S.bind$(data_evt, onDataGet, 1)
+  S.bind$(mutate_evt, onMutateGet, 1)
+
   function fetch() {
     if (headerSchema.length) {
-      onMutateGet(headerSchema as [any])
+      onDataGet(headerSchema as [any])
       return
     }
     const filter = [`="${key}"`]
@@ -110,11 +91,93 @@
       }
     }
   }
+  fetch()
+  let er = ''
+  let form_disabled = true
+  let options = { disabled: false, notify: true }
+  let headers = []
+  let layout = []
+  function onDataGet(d) {
+    if (!d[0]) {
+      er = d[1]
+    } else if (Array.isArray(d[0])) {
+      const schema = d[0][0]
+      const options_new = d[0][1] ?? {}
+      const newOptions = { ...options, ...options_new }
+      options = newOptions
+      headers = schema
+      if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
+      if (newOptions.l) layout = newOptions.l
+      const form_values = d[1]
+      const form_new = onFormDataGetStatic(form_values)
+      if (!form_new) {
+        er = 'form_values is invalid'
+      }
+      const new_form = merge(form, form_new)
+      form = new_form
+      initial_form = clone(new_form)
+
+      form_disabled = options.ds ?? false // options.disabled
+    }
+  }
+  function onFormDataGetStatic(d) {
+    if (d.r) {
+      const r = d.r.result
+      if (r.length) {
+        return mergeFormValues(r[0])
+      } else {
+        return {}
+      }
+    } else if (d.n) {
+      //d.n.result
+    } else if (d.m) {
+      const r = d.m.result
+      if (r.length) {
+        return r[0]
+      } else {
+        return {}
+      }
+      //d.m.result
+    } else if (d.d) {
+      //
+    }
+  }
+  $: {
+    if (headerSchema.length) {
+      onDataGet(headerSchema as [any])
+    }
+  }
+  let labels = []
+  let types: number[] = []
+  let required = []
+  let disabled = []
+  let description = []
+  let props = []
+  $: {
+    labels = headers[0] ?? []
+    types = headers[1] ?? []
+    required = headers[2] ?? []
+    disabled = headers[3] ?? []
+    description = headers[4] ?? []
+    props = headers[5] ?? []
+  }
+  css_count.increase('submit_buttons')
+  onDestroy(() => {
+    if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
+    S.unbind_([data_evt, mutate_evt])
+    if (schemaGetEvt.length) {
+      S.unbind(schemaGetEvt)
+    }
+    css_count.decrease('submit_buttons')
+  })
+  // =============================================================================
+  // ================================Save Data ===================================
   let emitEvent = true
   function onApply() {
     emitEvent = false
     onSave()
   }
+  let isSaving = false
   function onSave() {
     isSaving = true
     const filter = key
@@ -131,45 +194,14 @@
     }
     S.trigger([[mutate_evt, args]])
   }
+  let initial_form = []
   function onReset() {
     if (!key) {
       form = clone(initial_form)
     }
   }
-  function onDestroy_() {
-    if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
-    S.unbind_(events)
-    if (schemaGetEvt.length) {
-      S.unbind(schemaGetEvt)
-    }
-  }
-  /*function onSchemaDataGet(d){
-    // headers.set(d[0])
-  }*/
-  function onDataGet(d) {
-    if (!d[0]) {
-      er = d[1]
-    } else if (Array.isArray(d[0])) {
-      const schema = d[0][0]
-      const options_new = d[0][1] ?? {}
-      const newOptions = { ...options, ...options_new }
-      options = newOptions
-      headers = schema
-      if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
-      if (newOptions.l) layout = newOptions.l
-      console.warn('layout', layout)
-      const form_values = d[1]
-      const form_new = onFormDataGetStatic(form_values)
-      if (!form_new) {
-        console.warn('form value is invalid: ', form_values)
-      }
-      const new_form = merge(form, form_new)
-      form = new_form
-      initial_form = clone(new_form)
-
-      form_disabled = options.ds ?? false // options.disabled
-    }
-  }
+  const { addNotification } = getNotificationsContext()
+  const dp = createEventDispatcher()
   function onMutateGet(d) {
     isSaving = false
     if (d[0]) {
@@ -203,38 +235,13 @@
     }*/
     return f
   }
-  function onFormDataGetStatic(d) {
-    if (d.r) {
-      const r = d.r.result
-      if (r.length) {
-        return mergeFormValues(r[0])
-      } else {
-        return {}
-      }
-    } else if (d.n) {
-      //d.n.result
-    } else if (d.m) {
-      const r = d.m.result
-      if (r.length) {
-        return r[0]
-      } else {
-        return {}
-      }
-      //d.m.result
-    } else if (d.d) {
-      //
-    }
-  }
-  css_count.increase('submit_buttons')
+
+  // =============================================================================
+  // ================================Other =======================================
+  let mounted = false
   onMount(() => {
     mounted = true
   })
-  onDestroy(() => {
-    onDestroy_()
-    css_count.decrease('submit_buttons')
-  })
-  bindAll()
-  fetch()
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
@@ -242,27 +249,11 @@
       er = 'Reconnecting...'
     }
   }
-  $: {
-    if (headerSchema.length) {
-      onMutateGet(headerSchema as [any])
-    }
-  }
-  // $: {console.warn("form", form)} // hell this prints two time.
-  let labels = []
-  let types: number[] = []
-  let required = []
-  let disabled = []
-  let description = []
-  let props = []
-  $: {
-    labels = headers[0] ?? []
-    types = headers[1] ?? []
-    required = headers[2] ?? []
-    disabled = headers[3] ?? []
-    description = headers[4] ?? []
-    props = headers[5] ?? []
-  }
+
+  //$: {console.warn("form", form)}
   let once = true
+  let doms = {}
+  // Focus first input
   $: {
     if (mounted && once) {
       let index = -1
@@ -281,9 +272,7 @@
       }
     }
   }
-  $: saveLabel = buttonlabels?.save ?? ''
-  $: cancelLabel = buttonlabels?.cancel ?? ''
-  $: applyLabel = buttonlabels?.apply ?? ''
+  // Fix form values:
   $: {
     if (!key) {
       if (Array.isArray(form)) {
@@ -344,6 +333,9 @@
       return disabled[i]
     }
   }
+  $: saveLabel = buttonlabels?.save ?? ''
+  $: cancelLabel = buttonlabels?.cancel ?? ''
+  $: applyLabel = buttonlabels?.apply ?? ''
 </script>
 
 <Html html={t} />
