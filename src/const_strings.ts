@@ -2,7 +2,6 @@ declare const process
 const backend_conf = {
   http_proto: location.protocol,
   domain: window.location.hostname,
-  // @ts-ignore
   port:
     location.protocol == 'http:'
       ? process.env.NODE_ENV == 'development'

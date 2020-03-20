@@ -17,3 +17,11 @@ export const getSettingCache = async key => {
   const setting = await db.getItem(key)
   return setting
 }
+
+// read more: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
+export function saveCookie(name: string, value: string, max_age: number) {
+  document.cookie = `${name}=${value}; path=/; max-age=${max_age}`
+}
+export function clearCookie(d) {
+  document.cookie = `time=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+}

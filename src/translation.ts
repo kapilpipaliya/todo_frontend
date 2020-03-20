@@ -16,6 +16,7 @@ export const fetchTranslations = async () => {
   translation.set(trans)
   return trans
 }
+// Todo Make Live Translations work
 fetchTranslations()
 /*S.bind$( [ET.get, e.translation_event, 0],
 	function(data) {

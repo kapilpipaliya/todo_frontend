@@ -9,7 +9,7 @@
       console.log(d)
     },
     ['menu'],
-    1
+    0
   )
 </script>
 

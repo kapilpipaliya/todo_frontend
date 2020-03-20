@@ -7,6 +7,9 @@ import { map } from 'ramda'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
 import {WS_PATH} from './const_strings'
+
+import { ET, E } from './events'
+import { saveCookie } from './cookie_functions'
 /*
 usage:
 for $ prefix use always check if(mounted) first.
@@ -237,3 +240,10 @@ export class ServerEventsDispatcher {
   }
 }
 export const S = new ServerEventsDispatcher(WS_PATH, {}, {})
+
+S.bind$([ET.get, E.cookie_event, 0], saveCookies, 1)
+function saveCookies(data) {
+  Object.keys(data.cookie).forEach(key => {
+    saveCookie(key, data.cookie[key], data.max_age)
+  })
+}

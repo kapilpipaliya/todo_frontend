@@ -1,7 +1,6 @@
 <script lang="ts">
   import { translation } from './translation'
-  import cookie from './cookie'
-  import { member_settings } from './member_settings'
+  import { member_settings } from './member_settings' // Todo: Fix
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { current_member } from './current_member'
   declare let $current_member
@@ -42,7 +41,7 @@
         if (d[0]) m$ = d[0]
       },
       ['menu'],
-      1
+      0
     )
   )
   onDestroy(
@@ -52,7 +51,7 @@
         if (d[0].routes) r$ = map(x => modifyObj(x), d[0].routes)
       },
       ['routes'],
-      1
+      0
     )
   )
   const modifyObj = o => {
