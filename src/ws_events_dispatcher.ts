@@ -6,7 +6,7 @@ import { writable } from 'svelte/store' // no
 import { map } from 'ramda'
 export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
-import {ws_todo} from './const_strings'
+import {WS_PATH} from './const_strings'
 /*
 usage:
 for $ prefix use always check if(mounted) first.
@@ -236,4 +236,4 @@ export class ServerEventsDispatcher {
     }
   }
 }
-export const S = new ServerEventsDispatcher(ws_todo, {}, {})
+export const S = new ServerEventsDispatcher(WS_PATH, {}, {})

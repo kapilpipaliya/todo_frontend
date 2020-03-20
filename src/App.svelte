@@ -8,18 +8,7 @@
   import MenuF from './components/UI/MenuF.svelte'
   import Page from './components/Page.svelte'
   import FormWrapper from './components/FormWrapper.svelte'
-  import Logout from './views/account/logout.svelte'
-  import Confirm from './views/account/confirm.svelte'
-  import Home from './views/public/home.svelte'
-  import About from './views/public/contact.svelte'
-  import Contact from './views/public/about.svelte'
-  import PublicLayout from './views/public/layout.svelte'
-  import AdminLayout from './views/admin/layout.svelte'
-  import AdminIndex from './views/admin/index.svelte'
-  import OrganizationLayout from './views/organization/layout.svelte'
-  import OrganizationIndex from './views/organization/index.svelte'
-  import ProjectLayout from './views/project/layout.svelte'
-  import ProjectIndex from './views/project/index.svelte'
+
   import { Router } from './components/svelte-router-spa/src/index'
   import { ET, E, form_schema_evt } from './events'
   import { onDestroy } from 'svelte'
@@ -28,6 +17,20 @@
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
+
+  import Logout from './views/logout.svelte'
+  import Confirm from './views/confirm.svelte'
+  import Home from './views/home.svelte'
+  import About from './views/contact.svelte'
+  import Contact from './views/about.svelte'
+  import PublicLayout from './views/public_layout.svelte'
+  import AdminLayout from './views/admin_layout.svelte'
+  import AdminIndex from './views/admin_index.svelte'
+  import OrganizationLayout from './views/org_layout.svelte'
+  import OrganizationIndex from './views/org_index.svelte'
+  import ProjectLayout from './views/project_layout.svelte'
+  import ProjectIndex from './views/project_index.svelte'
+
   let e$
   $: e$ = $current_member?.email
   let m$ = []
@@ -36,9 +39,7 @@
     S.bindT(
       [ET.get, E.form_schema_get, S.uid],
       d => {
-        if (d[0]) {
-          m$ = d[0]
-        }
+        if (d[0]) m$ = d[0]
       },
       ['menu'],
       1
@@ -48,9 +49,7 @@
     S.bindT(
       form_schema_evt(S.uid),
       d => {
-        if (d[0].routes) {
-          r$ = map(x => modifyObj(x), d[0].routes)
-        }
+        if (d[0].routes) r$ = map(x => modifyObj(x), d[0].routes)
       },
       ['routes'],
       1
