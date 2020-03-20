@@ -4,12 +4,26 @@ Simplified WebSocket events dispatcher
 //import IsomorphicWs from 'isomorphic-ws'
 import { writable } from 'svelte/store' // no
 import { map } from 'ramda'
-export const ws_connected = writable(false)
 import * as M from "@msgpack/msgpack";
-import {WS_PATH} from './const_strings'
+import { ET, E } from './enums'
 
-import { ET, E } from './events'
-import { saveCookie } from './cookie_functions'
+const http_proto = location.protocol
+const domain = window.location.hostname
+declare const process
+const port =
+  location.protocol == 'http:'
+    ? process.env.NODE_ENV == 'development'
+      ? ':8500'
+      : ''
+    : process.env.NODE_ENV == 'development'
+    ? ':8504'
+    : ''
+const ws_proto = http_proto == 'http:' ? 'ws' : 'wss'
+//export const product_img_url = `${http_proto}://${domain}:${port}/http/v1/user/download_id`
+//export const thumb_url = `${http_proto}://${domain}:${port}/http/v1/user/thumb_id`
+export const WS_PATH = `${ws_proto}://${domain}${port}/todo`
+
+export const ws_connected = writable(false)
 /*
 usage:
 for $ prefix use always check if(mounted) first.
@@ -248,6 +262,14 @@ export class ServerEventsDispatcher {
   }
 }
 export const S = new ServerEventsDispatcher(WS_PATH, {}, {})
+
+// read more: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
+export function saveCookie(name: string, value: string, max_age: number) {
+  document.cookie = `${name}=${value}; path=/; max-age=${max_age}`
+}
+export function clearCookie(d) {
+  document.cookie = `time=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+}
 
 S.bind$([ET.get, E.cookie_event, 0], saveCookies, 1)
 function saveCookies(data) {

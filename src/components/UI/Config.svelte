@@ -2,7 +2,7 @@
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { flip } from 'svelte/animate'
   import { S } from '../../ws_events_dispatcher'
-  import { ET, E } from '../../events'
+  import { ET, E } from '../../enums'
   import { quintOut } from 'svelte/easing'
   import { crossfade } from 'svelte/transition'
   import SubmitButton from '../form/SubmitButton.svelte'

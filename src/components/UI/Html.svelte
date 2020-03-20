@@ -1,8 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte'
   import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { ET, E, form_schema_evt } from '../../events'
-  import { isLoggedIn as isLoggedInFn } from '../../api_helper'
+  import { ET, E, form_schema_evt } from '../../enums'
   declare let $ws_connected
   export let html = []
   let mounted = false
@@ -17,7 +16,7 @@
   })
   S.bind$(
     template_evt,
-    d => {
+    (d) => {
       if (d[1]) {
         const result = d[1].r.result
         if (Array.isArray(result)) {

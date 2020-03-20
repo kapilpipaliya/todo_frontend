@@ -12,7 +12,7 @@
     const options = {
       mode: disabled ? 'view' : 'code',
       modes: ['code', 'tree'],
-      onChange: function() {
+      onChange: function () {
         try {
           value = jsoneditor.get()
         } catch (err) {

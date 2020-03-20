@@ -1,7 +1,9 @@
 // use function directly on ws_dispatcher..
 import { writable } from 'svelte/store'
 import { S } from './ws_events_dispatcher'
-import { ET, E, form_schema_evt } from './events'
+import { ET, E, form_schema_evt } from './enums'
+import { isString, isObject } from 'ramda-adjunct'
+
 export const translation = writable({})
 export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) =>
@@ -24,3 +26,11 @@ fetchTranslations()
 	},
 	1
 )*/
+export function i18n(name: string | {}, lang = 'en') {
+  if (isString(name)) {
+    return name
+  } else if (isObject(name)) {
+    return name[lang]
+  }
+  return 'i18n Error'
+}

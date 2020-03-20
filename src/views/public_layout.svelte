@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Route } from '../components/svelte-router-spa/src/index'
+  import { Route } from '../components/svelte-router-spa/index'
   import { getContext, setContext } from 'svelte'
   export let currentRoute
 </script>

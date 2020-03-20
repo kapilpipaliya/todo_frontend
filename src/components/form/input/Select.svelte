@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Mindmap from '../../../../thirdparty/svelte-select/src/Select.svelte'
+  import Select from '../../../../thirdparty/svelte-select/src/Select.svelte'
   let items = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'pizza', label: 'Pizza' },

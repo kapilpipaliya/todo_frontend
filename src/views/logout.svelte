@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { ET, E } from '../events'
+  import { ET, E } from '../enums'
   import Error from '../components/UI/Error.svelte'
   declare let $ws_connected
   export let query = {}

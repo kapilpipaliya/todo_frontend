@@ -2,11 +2,11 @@
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { ET, E } from '../events'
+  import { ET, E } from '../enums'
   import { ValueType } from '../enums'
   declare let $ws_connected
   import { clone } from 'rambda'
-  import { Route } from '../components/svelte-router-spa/src/index'
+  import { Route } from '../components/svelte-router-spa/index'
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'
   import UrlPattern from 'url-pattern'
   import Skeleton from '../components/UI/Skeleton.svelte'
@@ -37,7 +37,7 @@
   })
   S.bind$(
     project_fetch_evt,
-    d => {
+    (d) => {
       const result = d[1].r.result
       if (result.length == 0) {
         er = 'no project found'
@@ -55,7 +55,7 @@
   let OldMenu
   S.bind$(
     menu_evt,
-    d => {
+    (d) => {
       if (d[0]) {
         if (d[0]) {
           OldMenu = d[0].project

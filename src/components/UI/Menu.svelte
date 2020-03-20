@@ -23,7 +23,7 @@
   // });
   //})
 
-  const onHeaderClick = m => () => {
+  const onHeaderClick = (m) => () => {
     //const response = new messages.MenuResponse;
     //const m = response.getMenuList()[0]
     if (!m.children.length) {

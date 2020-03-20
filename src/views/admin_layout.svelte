@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { Route } from '../components/svelte-router-spa/src/index'
+  import { Route } from '../components/svelte-router-spa/index'
   import { onMount, onDestroy } from 'svelte'
-  import { ET, E } from '../events'
+  import { ET, E } from '../enums'
   import { S, ws_connected } from '../ws_events_dispatcher'
   declare let $ws_connected
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'

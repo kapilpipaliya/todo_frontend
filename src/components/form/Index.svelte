@@ -3,8 +3,7 @@
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
   declare let $ws_connected
-  import { ET, E, schemaEvents } from '../../events'
-  import { merge } from '../../array_functions'
+  import { ET, E, schemaEvents } from '../../enums'
   import { ValueType } from '../../enums'
   import { css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
@@ -42,6 +41,7 @@
   }
   let events = schemaEvents(schema_key)
   let unsub_evt
+  let er = ''
   if (!events) er = 'events array must be defined'
   const uid = S.uid
   let data_evt
@@ -92,11 +92,19 @@
     }
   }
   fetch()
-  let er = ''
+  
   let form_disabled = true
   let options = { disabled: false, notify: true }
   let headers = []
   let layout = []
+  function merge(array1: [], array2: []) {
+    for (let i = 0; i < array2.length; i++) {
+      if (array1[i] && !array2[i]) {
+        array2[i] = array1[i]
+      }
+    }
+    return array2
+  }
   function onDataGet(d) {
     if (!d[0]) {
       er = d[1]

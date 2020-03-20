@@ -13,7 +13,7 @@
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { ET, E, schemaEvents } from '../../events'
+  import { ET, E, schemaEvents } from '../../enums'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
   import { ValueType, FormType, DisplayType } from '../../enums'

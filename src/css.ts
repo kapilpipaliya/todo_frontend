@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import { ET, E } from './events'
+import { ET, E } from './enums'
 import { S } from './ws_events_dispatcher'
 export const css_frameworks = writable({
   bootstrap:

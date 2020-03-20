@@ -1,6 +1,5 @@
 <script lang="ts">
   import { translation } from './translation'
-  import { member_settings } from './member_settings' // Todo: Fix
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { current_member } from './current_member'
   declare let $current_member
@@ -8,11 +7,10 @@
   import Page from './components/Page.svelte'
   import FormWrapper from './components/FormWrapper.svelte'
 
-  import { Router } from './components/svelte-router-spa/src/index'
-  import { ET, E, form_schema_evt } from './events'
+  import { Router } from './components/svelte-router-spa/index'
+  import { ET, E, form_schema_evt } from './enums'
   import { onDestroy } from 'svelte'
   import { S } from './ws_events_dispatcher'
-  import { isLoggedIn } from './api_helper'
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
@@ -54,6 +52,17 @@
       0
     )
   )
+  const isLoggedIn = async S =>
+    await new Promise((resolve, reject) => {
+      S.bindT(
+        [ET.get, E.is_logged_in, S.uid],
+        (d: [[]]) => {
+          resolve(d)
+        },
+        null
+      )
+    })
+
   const modifyObj = o => {
     const C = {
       PublicLayout: PublicLayout,

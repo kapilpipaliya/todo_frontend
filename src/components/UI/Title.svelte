@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { ET, E } from '../../events'
+  import { ET, E } from '../../enums'
   import { translation } from '../../translation'
   declare let $translation
   import { view, lensPath } from 'ramda'

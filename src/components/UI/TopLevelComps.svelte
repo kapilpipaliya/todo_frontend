@@ -1,16 +1,23 @@
 <script lang="ts">
-  import { maintenance } from '../../maintenance'
-  //import {current_time} from '../../time_store'
+  import { S } from '../../ws_events_dispatcher'
+  import { ET, E } from '../../enums'
   import Css from './Css.svelte'
   import Navigate from './Navigate.svelte'
   import ScrollTop from './ScrollTop.svelte'
 
   import NightMode from './NightMode.svelte'
-  let n
+  let maintenance = false
+  S.bind$(
+    [ET.get, E.maintenance_event, 0],
+    function (data: boolean) {
+      maintenance = data
+    },
+    1
+  )
 </script>
 
 <Css />
-{#if $maintenance}server is going down for sheduled maintenance{/if}
+{#if maintenance}server is going down for sheduled maintenance{/if}
 <Navigate />
 
 <NightMode />
