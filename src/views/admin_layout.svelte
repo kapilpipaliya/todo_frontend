@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Route } from '../../components/svelte-router-spa/src/index'
+  import { Route } from '../components/svelte-router-spa/src/index'
   import { onMount, onDestroy } from 'svelte'
-  import { ET, E } from '../../events'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { ET, E } from '../events'
+  import { S, ws_connected } from '../ws_events_dispatcher'
   declare let $ws_connected
-  import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
-  import Skeleton from '../../components/UI/Skeleton.svelte'
+  import TreeSidebar from '../components/UI/TreeSidebar.svelte'
+  import Skeleton from '../components/UI/Skeleton.svelte'
   export let currentRoute
   let mounted = false
   let er = ''

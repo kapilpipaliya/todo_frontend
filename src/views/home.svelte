@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { ET, E } from '../../events'
+  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { ET, E } from '../events'
   const onRestart = () => {
     S.bindT([ET.get, E.restart_server, S.uid], d => 0, [[]])
   }

@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { ET, E } from '../../events'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
-  import Error from '../../components/UI/Error.svelte'
+  import { ET, E } from '../events'
+  import { S, ws_connected } from '../ws_events_dispatcher'
+  import Error from '../components/UI/Error.svelte'
   export let currentRoute
   let mounted = false
   let binded = false

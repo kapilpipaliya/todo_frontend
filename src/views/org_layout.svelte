@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { Route } from '../../components/svelte-router-spa/src/index'
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { ET, E } from '../../events'
-  import { ValueType } from '../../enums'
+  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { ET, E } from '../events'
+  import { ValueType } from '../enums'
   declare let $ws_connected
   import { clone } from 'rambda'
-  import TreeSidebar from '../../components/UI/TreeSidebar.svelte'
+  import { Route } from '../components/svelte-router-spa/src/index'
+  import TreeSidebar from '../components/UI/TreeSidebar.svelte'
   import UrlPattern from 'url-pattern'
-  import Skeleton from '../../components/UI/Skeleton.svelte'
+  import Skeleton from '../components/UI/Skeleton.svelte'
   export let currentRoute
   const org_id = currentRoute.namedParams.org
   const org_id_ctx = writable(org_id)
