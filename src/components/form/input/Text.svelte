@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Label from '../_Label.svelte'
+  import Label from '../Label.svelte'
   export let name
   export let required
   export let disabled

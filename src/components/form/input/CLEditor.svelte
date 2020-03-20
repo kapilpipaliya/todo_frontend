@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, createEventDispatcher, tick } from 'svelte'
   import Editor from '../../../../thirdparty/cl-editor/src/Editor.svelte'
-  import Label from '../_Label.svelte'
+  import Label from '../Label.svelte'
   export let name
   export let required
   export let disabled

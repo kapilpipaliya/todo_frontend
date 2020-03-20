@@ -1,7 +1,7 @@
 <script lang="ts">
   import { tick } from 'svelte'
   import Title from './UI/Title.svelte'
-  import Table from './table/Table.svelte'
+  import Table from './UI/Table.svelte'
   import GeneralForm from './form/Index.svelte'
   export let currentRoute
   let schema_key = ''

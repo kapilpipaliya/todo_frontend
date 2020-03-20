@@ -5,8 +5,8 @@
   import { ET, E } from '../../events'
   import { quintOut } from 'svelte/easing'
   import { crossfade } from 'svelte/transition'
-  import SubmitButton from '../form/_SubmitButton.svelte'
-  import CancelButton from '../form/_CancelButton.svelte'
+  import SubmitButton from '../form/SubmitButton.svelte'
+  import CancelButton from '../form/CancelButton.svelte'
   import Error from '../UI/Error.svelte'
   export let schema_key = ''
   const dp = createEventDispatcher()

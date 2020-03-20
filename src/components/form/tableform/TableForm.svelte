@@ -4,7 +4,7 @@
   import { clone } from 'rambdax'
   import Options from './Options.svelte'
   import BoolProperties from './BoolProperties.svelte'
-  import Label from '../_Label.svelte'
+  import Label from '../Label.svelte'
   import { isArray } from 'ramda-adjunct'
   export let name
   export let dp = "r[1]+' - '+r[2]" // display pattern
