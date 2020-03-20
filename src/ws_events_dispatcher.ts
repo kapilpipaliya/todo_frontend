@@ -61,6 +61,14 @@ export class ServerEventsDispatcher {
     this.batchBindT = this.batchBindT.bind(this)
     this.delay_send = this.delay_send.bind(this)
     this.setupConnection()
+    window.addEventListener('online', function () {
+        console.log('online')
+    });
+
+    window.addEventListener('offline', function () {
+       console.log('offline') 
+    });
+
   }
   get uid(){return ++this.id_ }
   setupConnection() {

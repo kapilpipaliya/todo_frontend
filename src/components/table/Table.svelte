@@ -1,12 +1,7 @@
 <script lang="ts">
-  //TODO fix table row hightlight not working properly when some row is deleted.
+  // TODO fix table row hightlight not working properly when some row is deleted.
   // Add Two modes on button press change classes
   // Instead of alter show model on delete
-  // import * as _ from "lamb";
-  import { view, lensPath } from 'ramda'
-  import { isArray } from 'ramda-adjunct'
-  import Row from './Row.svelte'
-  import Header from './Header.svelte'
   import {
     onMount,
     onDestroy,
@@ -15,92 +10,47 @@
     setContext,
     tick
   } from 'svelte'
+  import { view, lensPath } from 'ramda'
+  import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
   import { ET, E, schemaEvents } from '../../events'
   import { fade, fly } from 'svelte/transition'
-  import { ValueType, DisplayType } from '../../enums'
+  import { flip } from 'svelte/animate'
+  import { ValueType, FormType, DisplayType } from '../../enums'
   declare let $ws_connected
   import { translation } from '../../translation'
   declare let $translation
-  import Pagination from './Pagination.svelte'
-  import AddForm from './AddForm.svelte'
-  import ContextMenu from './ContextMenu.svelte'
+  import Modal from '../UI/Model.svelte'
   import Error from '../UI/Error.svelte'
   import Skeleton from '../UI/Skeleton.svelte'
-  const dp = createEventDispatcher()
-  import { css_count } from '../../css'
+  import { css, css_count } from '../../css'
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
-  const { addNotification } = getNotificationsContext()
-  export let customFilter = {}
-  export let requiredFilter = {} // always add this filter when fetch
+
+  import UrlPattern from 'url-pattern'
+  import Text from './display/Text.svelte'
+  import Bool from './display/Bool.svelte'
+  import Url from './display/Url.svelte'
+  import Color from './display/Color.svelte'
+  import Time from './display/Time.svelte'
+  import GeneralForm from '../form/Index.svelte'
+
   export let modelcomponent = false
   export let quickcomponent = false
-  export let query = { limit: 0, page: 1 } // To get arguments from ?limit=25&page=2
   export let schema_key = ''
   export let pass = [] // [["context", "org_data", "_key", "org"]]
-  let events = schemaEvents(schema_key)
-  let headerTitlesRow = []
-  let items = []
-  let count = 0
-  $: {
-    setContext('items', items)
-  }
+  export let query = { limit: 0, page: 1 } // To get arguments from ?limit=25&page=2
+  export let requiredFilter = [] // always add this filter when fetch // used when showing custom table
+
+  css_count.increase('table')
   let project = getContext('project')
-  let project_ctx = writable([])
-  if (project) {
-    $project_ctx = get(project)
-  }
-  declare let $project_ctx
-  // headers
-  let headerVisibleColTypesRow = []
-  let headerIsvisibleColumnsRow = []
-  let sortSettingsRow = []
-  let editableColumnsRow = []
-  let headerColumnPropsRow = []
-  let options = {}
-  //internal:
-  const hiddenColumns = []
-  let filterSettings = []
-  let quickview = []
-  let selectedRowsKeys = []
-  let first_visibile_column = 0
+  let project_ctx = get(project) || []
   let fetchConfig = {
     type: ValueType.Array,
-    project: $project_ctx?.[$project_ctx.length - 1]?._key ?? null
+    project: project_ctx?.[project_ctx.length - 1]?._key ?? null
   }
-  // pagination:
-  let limit = Number(query.limit) || 0
-  let pages = [1, 2]
-  let current_page = Number(query.page) || 1
-  let total_pages = Math.max(current_page, 1)
-  let mounted = false
-  let er = ''
-  let doms = { addbutton: null }
-  let addnewform = false
-  let headerFetched = false
-  let modalIsVisible = false
-  let item = []
-  let config = false
-  let contextmenu = true
-  let showRowNum = true
-  let rowEditDoms = []
-  let rowDoms = []
-  let addnew_pos = 't'
-  let addnew_type = 'button'
-  let addnew_labels = { save: 'Save', cancel: 'Cancel' }
-  let rowType = 'table'
-  let showHeader = true
-
-  if (!events) console.warn('events array must be defined')
-  const uid = S.uid
-  let data_evt = [ET.subscribe, events[0], uid]
-  let unsub_evt = [ET.unsubscribe, events[0], uid]
-
-  let authorized = true
-
   function setPass() {
     if (Array.isArray(pass)) {
       for (let i = 0; i < pass.length; i++) {
@@ -141,29 +91,87 @@
     }
   }
   setPass()
-  // customFilter, not work with filter..
-  //$: (query); (requiredFilter); (schema_key); reset()
-  function unRegister() {
-    unsub_evt && S.trigger([[unsub_evt, {}]])
-    events && S.unbind_(events)
+  // ============================================================================
+  // ================================Filter ======================================
+  let filterSettings = []
+  const delay_refresh = () => {
+    // when filter applied, change current_page to 1 before fetching data, to prevent
+    // empty result
+    current_page = 1
+    refresh()
   }
+  //store the timeout, cancel it on each change, then set a new one
+  let filter_timeout
+  const onHandleFilter = col => event => {
+    clearTimeout(filter_timeout)
+    filter_timeout = setTimeout(delay_refresh, 250)
+  }
+  const resetFilter_ = () => {
+    const array = new Array(headerColTitlesRow.length)
+    array.fill(null)
+    for (let key in requiredFilter) {
+      array[key] = requiredFilter[key]
+    }
+    filterSettings = array
+  }
+  const onResetFilter = event => {
+    resetFilter_()
+    refresh()
+  }
+  // ============================================================================
+  // ================================Pagination==================================
+  let limit = Number(query.limit) || 0
+  let pages = [1, 2]
+  let current_page = Number(query.page) || 1
+  let total_pages = Math.max(current_page, 1)
+  let count = 0
+  const calc_pagination = () => {
+    //console.log(count, limit, total_pages, pages, current_page)
+    if (limit <= 0) {
+      limit = 0
+      total_pages = 1
+      pages = [1]
+      current_page = 1
+    } else {
+      total_pages = Math.ceil(count / limit)
+      const arr = []
+      for (let i = 1; i <= total_pages; i++) {
+        arr.push(i)
+      }
+      pages = arr
+      if (!pages.includes(current_page)) {
+        current_page = 1
+      }
+    }
+    //console.log(count, limit, total_pages, pages, current_page)
+  }
+  const onLimitChange = () => {
+    calc_pagination()
+    refresh()
+    //note: after refresh calc_pagination() will be called again.
+  }
+  // ================================Re Fetch Data ===============================
+  let er = ''
   if (!schema_key) {
-    console.warn('schema key is invalid in table')
+    er = 'schema key is invalid in table'
   }
-
-  css_count.increase('table')
+  let events = schemaEvents(schema_key)
+  if (!events) er = 'events array must be defined'
+  const uid = S.uid
+  let data_evt = [ET.subscribe, events[0], uid]
+  let unsub_evt = [ET.unsubscribe, events[0], uid]
+  let mounted = false
   onMount(() => {
     mounted = true
   })
   onDestroy(() => {
-    unRegister()
+    unsub_evt && S.trigger([[unsub_evt, {}]])
+    events && S.unbind_(events)
     css_count.decrease('table')
   })
   S.bind$(data_evt, onDataGet, 1)
   const onWSConnect = () => {
-    //if (headerFetched) {
     refresh()
-    //}
   }
   $: {
     if (mounted) {
@@ -175,7 +183,6 @@
       }
     }
   }
-  // ================================Re Fetch Data ===============================
   function mergeFilter(f) {
     /*const s = $default_filter[schema_key]
     if(s) {
@@ -190,7 +197,7 @@
   export const refresh = () => {
     const args = [
       mergeFilter(filterSettings),
-      sortSettingsRow,
+      headerColSortSettingsRow,
       [limit, 0, current_page],
       fetchConfig
     ]
@@ -199,23 +206,44 @@
   }
   // =============================================================================
   // ================================On Headers and Data Receive =================
+  let items = []
+  let addnew_pos = 't'
+  let addnew_type = 'button'
+  let addnew_labels = { save: 'Save', cancel: 'Cancel' }
+  let rowType = 'table'
+  let showHeader = true
+  $: {
+    setContext('items', items)
+  }
   // delete this function
+  let headerFetched = false
   const onHeaderGet = ([d]) => {
     fillHeadersArray(d)
     refresh()
     headerFetched = true
   }
+  let headerColTitlesRow = []
+  let headerColTypesRow = []
+  let headerColIsvisibleRow = []
+  let headerColSortSettingsRow = []
+  let headerColEditableRow = []
+  let headerColPropsRow = []
+  let headerColCustomFilter = [] // Todo Make it set by backend
+  let options = {}
+  let first_visibile_column = 0
+  let authorized = true
+  let selectedRowsKeys = []
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
-    headerTitlesRow = d[0] ?? []
-    headerVisibleColTypesRow = d[1] ?? []
-    headerIsvisibleColumnsRow = d[2] ?? []
-    sortSettingsRow = d[3] ?? []
-    editableColumnsRow = d[4] ?? []
-    headerColumnPropsRow = d[5] ?? []
+    headerColTitlesRow = d[0] ?? []
+    headerColTypesRow = d[1] ?? []
+    headerColIsvisibleRow = d[2] ?? []
+    headerColSortSettingsRow = d[3] ?? []
+    headerColEditableRow = d[4] ?? []
+    headerColPropsRow = d[5] ?? []
     let i
-    for (i = 0; i < headerIsvisibleColumnsRow.length; i++) {
-      if (headerIsvisibleColumnsRow[i]) {
+    for (i = 0; i < headerColIsvisibleRow.length; i++) {
+      if (headerColIsvisibleRow[i]) {
         first_visibile_column = i
         break
       }
@@ -253,12 +281,12 @@
       fillHeadersArray(h)
     }
     if (d.r) {
-      // reset quickview with empty array:
+      // reset quickViewKeys with empty array:
       // [...Array(20)].map(_=>0)
-      // quickview = Array.from({length: d.length}, ()=>0);
+      // quickViewKeys = Array.from({length: d.length}, ()=>0);
 
       items = d.r.result ?? []
-      count = d.r.extra.stats.fullCount
+      count = d.r.fullCount
       current_page = d.r.pagination[2] // change page if not same.
       calc_pagination()
       // selectAll_(false)
@@ -287,34 +315,11 @@
       deleteRows_(d.d)
     }
   }
-  // ============================================================================
-  // ================================Filter ======================================
-  const delay_refresh = () => {
-    // when filter applied, change current_page to 1 before fetching data, to prevent
-    // empty result
-    current_page = 1
-    refresh()
-  }
-  //store the timeout, cancel it on each change, then set a new one
-  let filter_timeout
-  const onHandleFilter = col => event => {
-    clearTimeout(filter_timeout)
-    filter_timeout = setTimeout(delay_refresh, 250)
-  }
-  const resetFilter_ = () => {
-    const array = new Array(headerTitlesRow.length)
-    array.fill(null)
-    for (let key in requiredFilter) {
-      array[key] = requiredFilter[key]
-    }
-    filterSettings = array
-  }
-  const onResetFilter = event => {
-    resetFilter_()
-    refresh()
-  }
   // =============================================================================
   // ================================Add Edit Row ===============================
+  let doms = { addbutton: null }
+  let addnewform = false
+  let quickViewKeys = []
   const toogleAddForm = () => {
     if (addnew_type == 'button') {
       addnewform = !addnewform
@@ -326,23 +331,23 @@
     }
   }
   const closeForm_ = key => {
-    const idx = quickview.findIndex(x => x == key)
+    const idx = quickViewKeys.findIndex(x => x == key)
     if (idx !== -1) {
-      quickview.splice(idx, 1)
-      quickview = quickview
+      quickViewKeys.splice(idx, 1)
+      quickViewKeys = quickViewKeys
     }
   }
   const closeForms_ = keys => {
     let isFind = false
     keys.forEach(key => {
-      const idx = quickview.findIndex(x => x == key)
+      const idx = quickViewKeys.findIndex(x => x == key)
       if (idx !== -1) {
         isFind = true
-        quickview.splice(idx, 1)
+        quickViewKeys.splice(idx, 1)
       }
     })
     if (isFind) {
-      quickview = quickview
+      quickViewKeys = quickViewKeys
     }
   }
   const editButtonFocus = async key => {
@@ -369,6 +374,7 @@
   }
   // ============================================================================
   // ================================Delete Row =================================
+  let rowEditDoms = []
   const deleteRows_ = keys => {
     keys.forEach(k => {
       const index = selectedRowsKeys.findIndex(x => k === x)
@@ -391,6 +397,7 @@
     const { key } = e.detail
     deleteRows_([key])
   }
+  const { addNotification } = getNotificationsContext()
   const onDeleteRow = (key, rowIdx) => async () => {
     const r = confirm('Are You Sure?')
     if (r == true) {
@@ -443,50 +450,23 @@
     }
   }
   // ============================================================================
-  // ================================Pagination==================================
-  const calc_pagination = () => {
-    //console.log(count, limit, total_pages, pages, current_page)
-    if (limit <= 0) {
-      limit = 0
-      total_pages = 1
-      pages = [1]
-      current_page = 1
-    } else {
-      total_pages = Math.ceil(count / limit)
-      const arr = []
-      for (let i = 1; i <= total_pages; i++) {
-        arr.push(i)
-      }
-      pages = arr
-      if (!pages.includes(current_page)) {
-        current_page = 1
-      }
-    }
-    //console.log(count, limit, total_pages, pages, current_page)
-  }
-  const onLimitChange = () => {
-    calc_pagination()
-    refresh()
-    //note: after refresh calc_pagination() will be called again.
-  }
-  // ============================================================================
   // ================================Sorting=====================================
   const onHandleSort = (e, col, order) => {
     if (e.ctrlKey) {
     } else {
       if (order !== undefined) {
-        sortSettingsRow = []
-        sortSettingsRow[col] = order
+        headerColSortSettingsRow = []
+        headerColSortSettingsRow[col] = order
         closeHeaderMenu()
       } else {
-        const sortOrder = sortSettingsRow[col]
-        sortSettingsRow = []
+        const sortOrder = headerColSortSettingsRow[col]
+        headerColSortSettingsRow = []
         if (sortOrder === null || sortOrder === undefined) {
-          sortSettingsRow[col] = 0
+          headerColSortSettingsRow[col] = 0
         } else if (sortOrder === 0) {
-          sortSettingsRow[col] = 1
+          headerColSortSettingsRow[col] = 1
         } else {
-          sortSettingsRow[col] = null
+          headerColSortSettingsRow[col] = null
         }
       }
     }
@@ -503,6 +483,7 @@
   }
   // ============================================================================
   // ================================Pass event to Parent. DISABLED =============
+  const dp = createEventDispatcher()
   function onItemClick(litem) {
     dp('onItemClick', { item: litem })
   }
@@ -585,7 +566,8 @@
     selectAll_(e.target.checked)
   }
   // ============================================================================
-  // ================================config =============================
+  // ================================config =====================================
+  let config = false
   const onConfigClicked = async () => {
     config = !config
   }
@@ -595,11 +577,13 @@
     // const e1 = [header_evt, fetchConfig] // fix this(config)
     // S.trigger([e1]) // fix this
     //resetFilter_(); onHeaderGet() will do this.
-    sortSettingsRow = []
+    headerColSortSettingsRow = []
     // refresh();
   }
   // ============================================================================
   // ================================model functions=============================
+  let modalIsVisible = false
+  let modelItem = []
   // function onItemClick(litem) {
   //   item = litem;
   //   openModal();
@@ -611,13 +595,30 @@
     modalIsVisible = true
   }
   function onNewClick() {
-    item = []
+    modelItem = []
     openModal()
   }
   // ============================================================================
   function isGlobal(v) {
     return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false
   }
+
+  let showButton = false
+  let showComponent = false
+  $: {
+    showButton = false
+    showComponent = false
+    if (addnew_type == 'button') {
+      showButton = true
+      if (addnewform) {
+        showComponent = true
+      }
+    } else {
+      showComponent = true
+    }
+  }
+
+  let showRowNum = true
   function onShowRowNum() {
     showRowNum = !showRowNum
   }
@@ -627,32 +628,93 @@
   function getValue(v) {
     return isArray(v) ? v[0] || '' : v
   }
+  let contextmenu = true
+  let rowDoms = []
+
+  function makeUrl(props, id) {
+    if (id) {
+      return new UrlPattern(props.dp).stringify({
+        id,
+        org: org_id,
+        project: project_id
+      })
+    } else {
+      return ''
+    }
+  }
+  let rowNumScroll
+  let scrolledRow
+  function removeScrollFocus() {
+    if (scrolledRow) {
+      scrolledRow.classList.remove('onScrollFocus')
+    }
+  }
+  function onRowNumChange() {
+    removeScrollFocus()
+    scrolledRow = rowDoms[rowNumScroll - 1]
+    if (scrolledRow) {
+      const offsetTop = scrolledRow.offsetTop
+      window.scrollTo(0, offsetTop)
+      scrolledRow.classList.add('onScrollFocus')
+      setTimeout(removeScrollFocus, 1500)
+    }
+  }
+  const org_id_ctx = getContext('org_id')
+  const org_id = org_id_ctx ? get(org_id_ctx) : ''
+  const project_id_ctx = getContext('project_id')
+  const project_id = project_id_ctx ? get(project_id_ctx) : ''
+
+  css_count.increase('table_context_menu')
+  onDestroy(() => {
+    css_count.decrease('table_context_menu')
+  })
 </script>
 
 <div class="table_wrap">
   {#if addnew_pos == 't'}
-    <AddForm
-      {toogleAddForm}
-      {doms}
-      {addnewform}
-      {quickcomponent}
-      {schema_key}
-      {successSave}
-      {addnew_type}
-      {addnew_labels} />
+    {#if showButton}
+      <button
+        name="table_add"
+        class={addnewform ? 'pressed' : ''}
+        bind:this={doms.addbutton}
+        on:click={toogleAddForm}>
+        {!addnewform ? 'Add New' : 'Close'}
+      </button>
+    {/if}
+    {#if showComponent}
+      <svelte:component
+        this={quickcomponent}
+        key={null}
+        {schema_key}
+        buttonlabels={addnew_labels}
+        on:close={toogleAddForm}
+        on:successSave={successSave} />
+    {/if}
   {/if}
   <hr />
   <Error {er} />
   {#if showHeader}
     <button class="" on:click={onResetFilter}>Reset Filters</button>
-    <Pagination
-      {items}
-      bind:limit
-      bind:current_page
-      {total_pages}
-      {onLimitChange}
-      {refresh}
-      {pages} />
+
+    <span>{items.length}{items.length <= 1 ? ' item' : ' items'}</span>
+    Page Size:
+    <input
+      class="w60"
+      type="number"
+      bind:value={limit}
+      on:change={onLimitChange}
+      min="0"
+      title="press Enter/Tab" />
+    {#if false}
+      <button class="" on:click={refresh}>Refresh</button>
+    {/if}
+    Page:
+    <select bind:value={current_page} on:change={refresh}>
+      {#each pages as p}
+        <option value={p}>{p}</option>
+      {/each}
+    </select>
+    &nbsp;/&nbsp;{total_pages}
     {#if multipleSelected}
       <button type="button" on:click={onDeleteSelected}>Delete</button>
     {/if}
@@ -665,59 +727,211 @@
         on:configApply={onConfigApply} />
     {/if}
   {/if}
-  {#if headerTitlesRow.length}
+  {#if headerColTitlesRow.length}
     {#if authorized}
       <table>
         {#if showHeader}
           <thead>
-            <Header
-              {mergeRowsCount}
-              {allSelected}
-              {onSelectAllClick}
-              {headerTitlesRow}
-              {headerIsvisibleColumnsRow}
-              {headerVisibleColTypesRow}
-              {sortSettingsRow}
-              {customFilter}
-              {filterSettings}
-              {hiddenColumns}
-              {onHeaderContext}
-              {onHandleFilter}
-              {onTextInputContext}
-              {onHandleSort}
-              {showRowNum}
-              {rowDoms}
-              {items} />
+
+            <tr>
+              <th colspan={mergeRowsCount}>
+                <input
+                  type="checkbox"
+                  bind:checked={allSelected}
+                  on:click={onSelectAllClick} />
+                Actions
+              </th>
+              {#each headerColTitlesRow as h, index}
+                {#if headerColIsvisibleRow[index]}
+                  <th
+                    on:click={e => onHandleSort(e, index)}
+                    on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
+                    {h}
+                    {#if headerColSortSettingsRow[index] === 0}
+                      ▲
+                    {:else if headerColSortSettingsRow[index] === 1}
+                      ▼
+                    {:else}
+                      <!-- content here -->
+                    {/if}
+                  </th>
+                {/if}
+              {/each}
+              <!-- <th width="100px">Actions</th> -->
+            </tr>
+            <tr>
+              {#if showRowNum}
+                <th>
+                  <input
+                    type="number"
+                    class="w60"
+                    bind:value={rowNumScroll}
+                    min="1"
+                    max={items.length}
+                    on:change={onRowNumChange} />
+                </th>
+              {/if}
+              <th colspan={mergeRowsCount - (showRowNum ? 1 : 0)} />
+              {#each headerColTitlesRow as h, index}
+                {#if headerColIsvisibleRow[index]}
+                  {#if headerColCustomFilter[index]}
+                    <th>
+                      <select
+                        bind:value={filterSettings[index]}
+                        on:change={onHandleFilter(index)}>
+                        {#each headerColCustomFilter[index] as f}
+                          <option value={f[1]}>{f[0]}</option>
+                        {/each}
+                      </select>
+                    </th>
+                  {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double}
+                    <th>
+                      <input
+                        type="search"
+                        placeholder=" &#128269;"
+                        bind:value={filterSettings[index]}
+                        on:input={onHandleFilter(index)}
+                        on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+                    </th>
+                  {:else if headerColTypesRow[index] === DisplayType.Checkbox}
+                    <th>
+                      <input
+                        type="checkbox"
+                        bind:checked={filterSettings[index]}
+                        on:change={onHandleFilter(index)}
+                        on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+                    </th>
+                  {:else if headerColTypesRow[index] === DisplayType.DateTime}
+                    <th>Date</th>
+                  {:else if headerColTypesRow[index] === DisplayType.Url}
+                    <th />
+                  {:else if headerColTypesRow[index] === DisplayType.Color}
+                    <th />
+                  {:else}
+                    <th>Unknown Type {headerColTypesRow[index]}</th>
+                  {/if}
+                {/if}
+              {/each}
+              <!-- <th width="100px"></th> -->
+            </tr>
+
           </thead>
         {/if}
         <tbody>
-          {#each items as l, cindex (getValue(l[0]))}
-            <Row
-              selected={selectedRowsKeys.includes(getValue(l[0]))}
-              {showRowNum}
-              rowIndex={cindex}
-              isGlobal={isGlobal(l[0])}
-              rowValue={l}
-              {headerIsvisibleColumnsRow}
-              {headerVisibleColTypesRow}
-              {editableColumnsRow}
-              {headerColumnPropsRow}
-              {selectedRowsKeys}
-              {onSelectRowClick}
-              {onItemClick}
-              {onDeleteClick}
-              {onDeleteRow}
-              bind:quickview
-              showQuickView={quickview.includes(getValue(l[0]))}
-              {quickcomponent}
-              {schema_key}
-              {onCancel}
-              {successSave}
-              {deleteRow}
-              {getValue}
-              {fetchConfig}
-              {rowEditDoms}
-              {rowDoms} />
+          {#each items as r, rowIndex (getValue(r[0]))}
+            <tr
+              bind:this={rowDoms[rowIndex]}
+              class={selectedRowsKeys.includes(getValue(r[0])) ? $css.table.classes.selected || 'selected' : ''}
+              in:fade={{ y: 200, duration: 100 }}>
+              {#if showRowNum}
+                <td>{rowIndex + 1}</td>
+              {/if}
+              <td>
+                {#if !isGlobal(r[0])}
+                  {#if false}
+                    <span>ID: {getValue(r[0])}</span>
+                  {/if}
+                  <input
+                    type="checkbox"
+                    value={getValue(r[0])}
+                    checked={selectedRowsKeys.includes(getValue(r[0]))}
+                    on:click={onSelectRowClick} />
+                {/if}
+              </td>
+              <td>
+                {#if !isGlobal(r[0])}
+                  {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
+                    <button
+                      name="edit"
+                      key={getValue(r[0])}
+                      type="button"
+                      on:click={() => {
+                        quickViewKeys.push(getValue(r[0]))
+                        quickViewKeys = quickViewKeys
+                      }}>
+                      Edit
+                    </button>
+                  {/if}
+                {/if}
+              </td>
+              <td>
+                {#if !isGlobal(r[0])}
+                  <button
+                    name="delete"
+                    key={getValue(r[0])}
+                    type="button"
+                    on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}>
+                    D
+                  </button>
+                {/if}
+              </td>
+              {#each r as c, index}
+                {#if headerColIsvisibleRow[index]}
+                  <td>
+                    {#if headerColEditableRow[index]}
+                      <GeneralForm
+                        {schema_key}
+                        key={getValue(r[0])}
+                        {fetchConfig}
+                        selector={['_key', headerColEditableRow[index].s]}
+                        id="inline"
+                        buttonlabels={{ save: 'Save', cancel: '' }}
+                        headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(r[0]), getValue(c)]] } }]} />
+                    {:else if c != null}
+                      {#if headerColTypesRow[index] === DisplayType.DateTime}
+                        {new Date(c).toLocaleString()}
+                      {:else if headerColTypesRow[index] === DisplayType.Url}
+                        <Url
+                          href={makeUrl(headerColPropsRow[index], c)}
+                          value={headerColPropsRow[index].l} />
+                      {:else if headerColTypesRow[index] === DisplayType.Checkbox}
+                        <Bool value={getValue(c)} />
+                      {:else if headerColTypesRow[index] === DisplayType.Color}
+                        <Color value={getValue(c)} />
+                      {:else if headerColTypesRow[index] === DisplayType.Time}
+                        <Time value={getValue(c)} />
+                      {:else}
+                        <Text value={getValue(c)} />
+                      {/if}
+                    {/if}
+                  </td>
+                {/if}
+              {/each}
+              <!-- <td> -->
+              {#if false}
+                <a href="javascript:;" on:click={() => onItemClick(r)}>
+                  <span class="icon is-small">
+                    <i class="fas fa-edit" />
+                    edit
+                  </span>
+                </a>
+
+                <a href="javascript:;" on:click={() => onDeleteClick(r)}>
+                  <span class="icon is-small">
+                    <i class="fas fa-trash" />
+                    delete
+                  </span>
+                </a>
+              {/if}
+              <!-- </td> -->
+            </tr>
+            {#if quickViewKeys.includes(getValue(r[0]))}
+              <tr>
+                <td colspan={r.length + 3}>
+                  {#if quickcomponent}
+                    <svelte:component
+                      this={quickcomponent}
+                      bind:this={rowEditDoms[rowIndex]}
+                      key={getValue(r[0])}
+                      {schema_key}
+                      {fetchConfig}
+                      on:close={onCancel}
+                      on:successSave={successSave}
+                      on:deleteRow={deleteRow} />
+                  {/if}
+                </td>
+              </tr>
+            {/if}
           {/each}
         </tbody>
       </table>
@@ -725,29 +939,75 @@
       <Error {er} />
     {/if}
     {#if addnew_pos == 'b'}
-      <AddForm
-        {toogleAddForm}
-        {doms}
-        {addnewform}
-        {quickcomponent}
-        {schema_key}
-        {successSave}
-        {addnew_type}
-        {addnew_labels} />
+      {#if showButton}
+        <button
+          name="table_add"
+          class={addnewform ? 'pressed' : ''}
+          bind:this={doms.addbutton}
+          on:click={toogleAddForm}>
+          {!addnewform ? 'Add New' : 'Close'}
+        </button>
+      {/if}
+      {#if showComponent}
+        <svelte:component
+          this={quickcomponent}
+          key={null}
+          {schema_key}
+          buttonlabels={addnew_labels}
+          on:close={toogleAddForm}
+          on:successSave={successSave} />
+      {/if}
     {/if}
-    <ContextMenu
-      {closeHeaderMenu}
-      {contextmenu}
-      {modalIsVisible}
-      {closeModal}
-      {modelcomponent}
-      {refresh}
-      {headerTitlesRow}
-      {items}
-      {closeInputMenu}
-      {onHandleSort}
-      {headerMenuColumn}
-      {inputHeaderMenuColumn} />
+    {#if contextmenu}
+      <div class="menu">
+        <div
+          class="menu-item"
+          on:click={e => onHandleSort(e, headerMenuColumn, 0)}>
+          Sort Ascending
+        </div>
+        <div
+          class="menu-item"
+          on:click={e => onHandleSort(e, headerMenuColumn, 1)}>
+          Sort Descending
+        </div>
+        <div
+          class="menu-item"
+          on:click={e => onHandleSort(e, headerMenuColumn, null)}>
+          No Sorting
+        </div>
+        <hr />
+        <div class="menu-item" on:click={closeHeaderMenu}>Close</div>
+      </div>
+      <div class="menu-input">
+        <div class="menu-item">Is NULL</div>
+        <div class="menu-item">Is not NULL</div>
+        <div class="menu-item">Is empty</div>
+        <div class="menu-item">Is not empty</div>
+        <hr />
+        <div class="menu-item">Equal to...</div>
+        <div class="menu-item">Not equal to...</div>
+        <div class="menu-item">Greater than...</div>
+        <div class="menu-item">Less than...</div>
+        <div class="menu-item">Greater or equal...</div>
+        <div class="menu-item">Less or equal...</div>
+        <div class="menu-item">In range...</div>
+        <hr />
+        <div class="menu-item" on:click={closeInputMenu}>Close</div>
+      </div>
+    {/if}
+    {#if modalIsVisible}
+      <Modal on:close={closeModal}>
+        <header slot="header">
+          <button class="" aria-label="close" on:click={closeModal}>X</button>
+        </header>
+        <svelte:component
+          this={modelcomponent}
+          on:close={closeModal}
+          on:successSave={refresh}
+          {headerColTitlesRow}
+          {items} />
+      </Modal>
+    {/if}
   {:else}
     <Skeleton />
   {/if}

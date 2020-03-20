@@ -1926,6 +1926,11 @@ kleur@^3.0.0:
   resolved "https://registry.yarnpkg.com/kleur/-/kleur-3.0.3.tgz#a79c9ecc86ee1ce3fa6206d1216c501f147fc07e"
   integrity sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==
 
+lamb@^0.58.0:
+  version "0.58.0"
+  resolved "https://registry.yarnpkg.com/lamb/-/lamb-0.58.0.tgz#abd06d03cc824f311e24bfbbe28650f264da57ff"
+  integrity sha512-u0SZOM8/Tptt8ZDDmhdHmiH9yL+AmtZgkRcKv6r3vVljTm1BpOb4Xq5dW8OlA8QJpV2TQcJg6YKCsJ6t4u6BHA==
+
 "livereload@0.8.0 || ^0.8.2":
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/livereload/-/livereload-0.8.2.tgz#0ebb756cd5150bc956e33110b884bc2d7d87b723"
