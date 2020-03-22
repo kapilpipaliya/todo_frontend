@@ -124,11 +124,8 @@
     {#if e$}Current User: {e$}{/if}
     {#if m$.navData}
       <MenuF menu={m$.navData.account} />
-    {/if}
-    {#if m$.navData}
       <MenuF menu={m$.navData.global} />
-    {/if}
-    {#if m$.navData}
+      <MenuF menu={m$.navData.home} />
       <MenuF menu={m$.navData.admin} />
     {/if}
   </nav>

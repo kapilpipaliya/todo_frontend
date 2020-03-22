@@ -1,7 +1,7 @@
 describe('Color Page Test', () => {
   beforeEach(() => {
   	cy.login()
-    cy.visit('/page/color')
+    cy.visit('/page/global_color')
   })
 
   it('List', () => {

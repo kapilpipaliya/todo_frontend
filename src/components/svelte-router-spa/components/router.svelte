@@ -8,7 +8,7 @@
   export let routes = []
   export let options = {}
 
-  onMount(async function () {
+  onMount(async function() {
     await SpaRouter(routes, document.location.href, options).setActiveRoute()
   })
 </script>

@@ -16,7 +16,7 @@
   })
   S.bind$(
     template_evt,
-    (d) => {
+    d => {
       if (d[1]) {
         const result = d[1].r.result
         if (Array.isArray(result)) {

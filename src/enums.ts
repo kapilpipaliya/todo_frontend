@@ -145,6 +145,7 @@ export enum E {
   super_pass_check,
   css_sync_files_to_db,
   subscribe_online_users,
+  collections_size,
 
   account = 60,
 

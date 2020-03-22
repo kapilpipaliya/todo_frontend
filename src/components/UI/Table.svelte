@@ -267,7 +267,9 @@
     }
     return newa1
   }
+  let isLoading = true
   function onDataGet(all) {
+    if (isLoading) isLoading = false
     const [h, d] = all
     if (h === false) {
       authorized = false
@@ -913,7 +915,7 @@
             </tr>
             {#if quickViewKeys.includes(getValue(r[0]))}
               <tr>
-                <td colspan={r.length + 3}>
+                <td colspan={r.length + mergeRowsCount}>
                   {#if quickcomponent}
                     <svelte:component
                       this={quickcomponent}
@@ -931,9 +933,8 @@
           {/each}
         </tbody>
       </table>
-    {:else}
-      <Error {er} />
     {/if}
+    <Error {er} />
     {#if addnew_pos == 'b'}
       {#if showButton}
         <button
@@ -1004,7 +1005,8 @@
           {items} />
       </Modal>
     {/if}
-  {:else}
+  {/if}
+  {#if isLoading}
     <Skeleton />
   {/if}
 </div>

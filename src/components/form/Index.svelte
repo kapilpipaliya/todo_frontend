@@ -18,7 +18,6 @@
   import CancelButton from './CancelButton.svelte'
   // import Error from '../UI/Error.svelte'
 
-  export let id = 'insert'
   export let t = []
   export let b = []
   export let key = '0'
@@ -29,7 +28,10 @@
   export let selector = []
   export let headerSchema = []
   export let showdbg = true
-
+  let options = { disabled: false, notify: true }
+  let headers = []
+  let initial_form = []
+  let form_disabled = true
   // =============================================================================
   // ================================Fetch Form Data =============================
   let project = getContext('project')
@@ -75,6 +77,7 @@
 
   function fetch() {
     if (headerSchema.length) {
+      console.log(headerSchema)
       onDataGet(headerSchema as [any])
       return
     }
@@ -92,10 +95,7 @@
     }
   }
   fetch()
-  
-  let form_disabled = true
-  let options = { disabled: false, notify: true }
-  let headers = []
+
   let layout = []
   function merge(array1: [], array2: []) {
     for (let i = 0; i < array2.length; i++) {
@@ -170,6 +170,7 @@
     props = headers[5] ?? []
   }
   css_count.increase('submit_buttons')
+  css_count.increase(schema_key)
   onDestroy(() => {
     if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
     S.unbind_([data_evt, mutate_evt])
@@ -177,6 +178,7 @@
       S.unbind(schemaGetEvt)
     }
     css_count.decrease('submit_buttons')
+    css_count.decrease(schema_key)
   })
   // =============================================================================
   // ================================Save Data ===================================
@@ -202,7 +204,7 @@
     }
     S.trigger([[mutate_evt, args]])
   }
-  let initial_form = []
+
   function onReset() {
     if (!key) {
       form = clone(initial_form)
@@ -352,7 +354,7 @@
   <input type="checkbox" bind:checked={$showDebug} />
 {/if}
 {#if form.length}
-  <form class={id} on:submit|preventDefault={onSave}>
+  <form class={schema_key} on:submit|preventDefault={onSave}>
 
     {#if layout.length}
       {#each layout as lo, loi (lo)}
@@ -409,5 +411,5 @@
 {/if}
 <!-- <Error {er} /> -->
 {er}
-{#if showdbg}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
+{#if $showDebug}}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
 <Html html={b} />

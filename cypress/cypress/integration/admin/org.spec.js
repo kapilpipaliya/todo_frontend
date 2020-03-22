@@ -1,7 +1,7 @@
 describe('Org Page Test', () => {
   beforeEach(() => {
   	cy.login()
-  	cy.visit('/admin/orgs')
+  	cy.visit('/organizations')
 
   })
 

@@ -12,7 +12,7 @@
     const options = {
       mode: disabled ? 'view' : 'code',
       modes: ['code', 'tree'],
-      onChange: function () {
+      onChange: function() {
         try {
           value = jsoneditor.get()
         } catch (err) {
@@ -31,9 +31,7 @@
   })
 </script>
 
-<div>
-  <div
-    name="form"
-    bind:this={jsonediDom}
-    style="width: 1200px; height: 400px;" />
-</div>
+<div
+  name="form"
+  bind:this={jsonediDom}
+  style="width: 600px; height: 400px; display: inline-block;" />

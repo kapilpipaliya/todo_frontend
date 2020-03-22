@@ -9,7 +9,7 @@
   let maintenance = false
   S.bind$(
     [ET.get, E.maintenance_event, 0],
-    function (data: boolean) {
+    function(data: boolean) {
       maintenance = data
     },
     1

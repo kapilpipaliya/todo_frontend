@@ -37,7 +37,7 @@
   })
   S.bind$(
     project_fetch_evt,
-    (d) => {
+    d => {
       const result = d[1].r.result
       if (result.length == 0) {
         er = 'no project found'
@@ -55,7 +55,7 @@
   let OldMenu
   S.bind$(
     menu_evt,
-    (d) => {
+    d => {
       if (d[0]) {
         if (d[0]) {
           OldMenu = d[0].project

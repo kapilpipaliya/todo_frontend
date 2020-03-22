@@ -7,10 +7,10 @@
   // must use id =0
   S.bind$(
     [ET.get, E.redirection_event, 0],
-    function (data) {
+    function(data) {
       if (data[1]) {
         navigation.set(data[2])
-        setTimeout(function () {
+        setTimeout(function() {
           navigateTo(data[0])
         }, data[1])
       } else {

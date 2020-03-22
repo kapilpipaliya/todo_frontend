@@ -8,7 +8,8 @@
     "serve": "NODE_ENV=development rollup --config --watch",
     "build": "NODE_ENV=production rollup --config",
     "ps": "prettier  --write 'src/**/*.svelte'",
-    "pt": "prettier  --write 'src/**/*.ts'"
+    "pt": "prettier  --write 'src/**/*.ts'",
+    "cy": "cypress open -P cypress/"
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^5.12.1",
@@ -24,7 +25,7 @@
     "just-debounce-it": "^1.1.0",
     "lamb": "^0.58.0",
     "popper.js": "^1.16.1",
-    "qs": "^6.9.1",
+    "qs": "^6.9.2",
     "rambda": "^5.0.0",
     "rambdax": "^3.7.0",
     "ramda": "^0.27.0",
