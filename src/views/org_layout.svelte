@@ -2,8 +2,7 @@
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { ET, E } from '../enums'
-  import { ValueType } from '../enums'
+  import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
   declare let $ws_connected
   import { clone } from 'rambda'
   import { Route } from '../components/svelte-router-spa/index'
@@ -105,7 +104,7 @@
   //$: {menus = processMenu(R.clone(Oldmenu), org_id) }
 </script>
 
-ORGANIZATION LAYOUT
+{#if !IS_PRODUCTION}ORGANIZATION LAYOUT{/if}
 <div style="display: flex">
   <h4>Selected Organization:&nbsp</h4>
   <h3>{org_id}</h3>

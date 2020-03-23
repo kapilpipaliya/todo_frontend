@@ -3,7 +3,7 @@
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { current_member } from './current_member'
   declare let $current_member
-  import MenuF from './components/UI/MenuF.svelte'
+  import TreeSidebar from './components/UI/TreeSidebar.svelte'
   import Page from './components/Page.svelte'
   import FormWrapper from './components/FormWrapper.svelte'
 
@@ -18,8 +18,8 @@
   import Logout from './views/logout.svelte'
   import Confirm from './views/confirm.svelte'
   import Home from './views/home.svelte'
-  import About from './views/contact.svelte'
-  import Contact from './views/about.svelte'
+  import About from './views/about.svelte'
+  import Contact from './views/contact.svelte'
   import PublicLayout from './views/public_layout.svelte'
   import AdminLayout from './views/admin_layout.svelte'
   import AdminIndex from './views/admin_index.svelte'
@@ -30,15 +30,15 @@
 
   let e$
   $: e$ = $current_member?.email
-  let m$ = []
+  let mS$: {}
   let r$ = []
   onDestroy(
     S.bindT(
       [ET.get, E.form_schema_get, S.uid],
       d => {
-        if (d[0]) m$ = d[0]
+        if (d[0]) mS$ = d[0]
       },
-      ['menu'],
+      ['side_menu'],
       0
     )
   )
@@ -121,12 +121,18 @@
 <Notifications>
   <TopLevelComps />
   <nav>
-    {#if e$}Current User: {e$}{/if}
-    {#if m$.navData}
-      <MenuF menu={m$.navData.account} />
-      <MenuF menu={m$.navData.global} />
-      <MenuF menu={m$.navData.home} />
-      <MenuF menu={m$.navData.admin} />
+    {#if mS$}
+      <TreeSidebar class="public" menu={mS$.public} />
+      {#if e$}
+        Logged In: {e$}
+        <TreeSidebar class="account" menu={mS$.account} />
+      {:else}
+        <TreeSidebar class="guest" menu={mS$.guest} />
+      {/if}
+      {#if e$}
+        <TreeSidebar class="global" menu={mS$.global} />
+        <TreeSidebar class="home" menu={mS$.home} />
+      {/if}
     {/if}
   </nav>
   {#if r$.length}

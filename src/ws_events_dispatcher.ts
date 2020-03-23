@@ -49,6 +49,8 @@ export class ServerEventsDispatcher {
   #isFirst: boolean
   #firstCancelTimeout: number
   #firstPayload: Array<[]>
+  //https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine
+  private isOnline = window.navigator.onLine
   constructor(path: string, req:{}, res:{}) {
     this.#path = path
     this.#req = req
@@ -75,14 +77,13 @@ export class ServerEventsDispatcher {
     this.batchBindT = this.batchBindT.bind(this)
     this.delay_send = this.delay_send.bind(this)
     this.setupConnection()
-    window.addEventListener('online', function () {
-        console.log('online')
+    window.addEventListener('online', () => {
+        this.isOnline = true
+        this.setupConnection()
     });
-
-    window.addEventListener('offline', function () {
-       console.log('offline') 
+    window.addEventListener('offline', () => {
+       this.isOnline = false
     });
-
   }
   get uid(){return ++this.id_ }
   setupConnection() {
@@ -220,7 +221,9 @@ export class ServerEventsDispatcher {
     ws_connected.set(false)
     this.dispatch(['close', '', 0], [])
     setTimeout(() => {
-      this.setupConnection()
+      if(this.isOnline){
+        this.setupConnection()
+      }
     }, 1000)
     // on reconnection all subscribtion needs to resubscribe.
   }

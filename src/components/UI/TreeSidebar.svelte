@@ -1,8 +1,10 @@
 <script lang="ts">
   export let menu = []
+  let className
+  export { className as class }
 </script>
 
-<ul>
+<ul class={className}>
   {#each menu as m}
     {#if !m.hidden}
       <li>

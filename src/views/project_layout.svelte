@@ -2,8 +2,7 @@
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { ET, E } from '../enums'
-  import { ValueType } from '../enums'
+  import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
   declare let $ws_connected
   import { clone } from 'rambda'
   import { Route } from '../components/svelte-router-spa/index'
@@ -112,7 +111,7 @@
   //$: {menus = processMenu(clone(OldMenu), $org_id, project_id) }
 </script>
 
-PROJECT LAYOUT
+{#if !IS_PRODUCTION}PROJECT LAYOUT{/if}
 <h4>Selected Project: {project_id}</h4>
 <div style="display: flex">
   <div>

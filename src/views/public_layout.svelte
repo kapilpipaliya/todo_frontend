@@ -1,13 +1,14 @@
 <script lang="ts">
   import { Route } from '../components/svelte-router-spa/index'
   import { getContext, setContext } from 'svelte'
+  import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
   export let currentRoute
 </script>
 
-PUBLIC LAYOUT
+{#if !IS_PRODUCTION}PUBLIC LAYOUT{/if}
 <div class="app">
   <section class="section">
     <Route {currentRoute} />
   </section>
 </div>
-TODO ADD FOOTER TEMPLATE HERE
+{#if !IS_PRODUCTION}TODO ADD FOOTER TEMPLATE HERE{/if}

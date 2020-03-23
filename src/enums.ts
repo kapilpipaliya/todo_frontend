@@ -1,3 +1,6 @@
+declare const process
+export const IS_PRODUCTION =
+  process.env.NODE_ENV == 'development' ? false : true
 export enum ValueType {
   None, // not yet initialized
   Illegal, // illegal value
@@ -84,6 +87,7 @@ export enum ET {
   unsubscribe,
   insert,
   update,
+  replace,
   delete_
 }
 export enum E {

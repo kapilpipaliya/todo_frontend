@@ -1,10 +1,17 @@
 <script lang="ts">
+  /*
+  make model form working  
+  make user able to add custom fields to any form
+  make form work for multiple level modification by user 
+  make update & delete return preojection of inserted/updated members too
+  schema can be made to not make projection for inserted/updated/deleted members 
+*/
   import { onMount, onDestroy, createEventDispatcher, getContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
   declare let $ws_connected
   import { ET, E, schemaEvents } from '../../enums'
-  import { ValueType } from '../../enums'
+  import { IS_PRODUCTION, ValueType } from '../../enums'
   import { css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
@@ -27,7 +34,7 @@
   export let buttonlabels = { save: 'Save', cancel: 'Cancel' }
   export let selector = []
   export let headerSchema = []
-  export let showdbg = true
+  export let showdbg = !IS_PRODUCTION
   let options = { disabled: false, notify: true }
   let headers = []
   let initial_form = []
@@ -116,6 +123,10 @@
       headers = schema
       if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
       if (newOptions.l) layout = newOptions.l
+      if (newOptions.replace && key) {
+        mutate_evt[0] = ET.replace
+        S.bind$(mutate_evt, onMutateGet, 1)
+      }
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
       if (!form_new) {
@@ -411,5 +422,5 @@
 {/if}
 <!-- <Error {er} /> -->
 {er}
-{#if $showDebug}}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
+{#if $showDebug}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
 <Html html={b} />

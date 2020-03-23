@@ -2,6 +2,24 @@
   // TODO fix table row hightlight not working properly when some row is deleted.
   // Add Two modes on button press change classes
   // Instead of alter show model on delete
+  /*
+   https://datatables.net/examples/api/select_row.html
+   context menu 
+    1. serve list from schema
+    2. show edit/delete links on  menu.
+   use star component to show priorities. 
+   make two modes bordered / Overflow 
+   use svelte simple model for delele 
+   no extra json info pass by server to table 
+   if select id is empty not show link
+   make custom filter object fetch from database
+   Implement pagination button
+   make dynamic filter form for table too 
+   when write Task table -> enable drag and drop rows. -> tree support -> make grantt chart 
+   make drag handle bar on action column
+   Make Filter Dialogs to easily input filter on table
+   HOW JS TABLE drag and drop
+ */
   import {
     onMount,
     onDestroy,
@@ -13,10 +31,17 @@
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { ET, E, schemaEvents } from '../../enums'
   import { fade, fly } from 'svelte/transition'
   import { flip } from 'svelte/animate'
-  import { ValueType, FormType, DisplayType } from '../../enums'
+  import {
+    IS_PRODUCTION,
+    ET,
+    E,
+    schemaEvents,
+    ValueType,
+    FormType,
+    DisplayType
+  } from '../../enums'
   declare let $ws_connected
   import { translation } from '../../translation'
   declare let $translation
@@ -717,7 +742,9 @@
       <button type="button" on:click={onDeleteSelected}>Delete</button>
     {/if}
     <button type="button" on:click={onShowRowNum}>Row Numbers</button>
-    <button type="button" on:click={onConfigClicked}>Config</button>
+    {#if !IS_PRODUCTION}
+      <button type="button" on:click={onConfigClicked}>Config</button>
+    {/if}
     {#if config}
       <Config
         {schema_key}

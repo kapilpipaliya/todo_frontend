@@ -11,7 +11,7 @@
   "dependencies": {
     "@parachutehealth/chat": "^0.6.11",
     "cl-editor": "^2.0.0",
-    "jsoneditor": "^8.6.1",
+    "jsoneditor": "^8.6.3",
     "just-extend": "^4.1.0",
     "pancake": "^3.4.1",
     "prosemirror-svelte": "^0.2.3",
@@ -26,16 +26,16 @@
     "svelte-mindmap": "^1.0.4",
     "svelte-notifications": "^0.9.9",
     "svelte-pixi": "^0.0.1",
-    "svelte-router-spa": "^5.3.3",
+    "svelte-router-spa": "^5.4.4",
     "svelte-select": "^3.4.0",
     "svelte-shortcodes": "^1.0.0",
     "svelte-stars-rating": "^1.0.3",
     "svelte-swipe": "^1.4.0",
     "svelte-table": "^0.1.7",
     "svelte-tabs": "^1.1.0",
-    "sveltejs-forms": "^1.1.0",
-    "sveltejs-tippy": "^2.0.0",
-    "yup": "^0.28.1",
+    "sveltejs-forms": "^1.1.1",
+    "sveltejs-tippy": "^3.0.0",
+    "yup": "^0.28.3",
     "carbon-components-svelte": "latest"
   }
 }
