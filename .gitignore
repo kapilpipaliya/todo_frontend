@@ -3,9 +3,9 @@
 
 .DS_Store
 
-/dist/
 *.txt
 *.log
+/dist/
 /dist*/
 
 /.yarn/

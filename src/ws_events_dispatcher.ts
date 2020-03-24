@@ -12,16 +12,18 @@ const domain = window.location.hostname
 declare const process
 const port =
   location.protocol == 'http:'
+  // @ts-ignore
     ? process.env.NODE_ENV == 'development'
       ? ':8500'
       : ''
+      // @ts-ignore
     : process.env.NODE_ENV == 'development'
     ? ':8504'
     : ''
 const ws_proto = http_proto == 'http:' ? 'ws' : 'wss'
 //export const product_img_url = `${http_proto}://${domain}:${port}/http/v1/user/download_id`
 //export const thumb_url = `${http_proto}://${domain}:${port}/http/v1/user/thumb_id`
-export const WS_PATH = `${ws_proto}://${domain}${port}/todo`
+export const WS_PATH = `${ws_proto}://${domain}${port}/ws`
 
 export const ws_connected = writable(false)
 /*

@@ -37,7 +37,7 @@ const extensions = [".ts", ".js"]
 
 const mode = process.env.NODE_ENV;
 
-let dest = "./dist"
+let dest = process.env.NODE_ENV === "development" ? "./dist" : "./distrel"
 let entry = "src/index.ts"
 if(process.env.V == "micro"){
   dest = `./dist${process.env.V}`
