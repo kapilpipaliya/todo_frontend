@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { Debug } from '../../UI/debug'
   import Label from '../Label.svelte'
+  export let name
   export let value = []
   export let disabled = false
   export let ar = false

@@ -2,6 +2,7 @@
   import { onMount, onDestroy, tick } from 'svelte'
   import Label from '../Label.svelte'
   import { css_count } from '../../../css'
+  export let name
   export let value = {}
   export let disabled = false
   let jsonediDom = null

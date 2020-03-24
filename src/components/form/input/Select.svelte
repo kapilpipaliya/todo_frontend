@@ -1,6 +1,7 @@
 <script lang="ts">
   import Select from '../../../../thirdparty/svelte-select/src/Select.svelte'
   import Label from '../Label.svelte'
+  export let name
   let items = [
     { value: 'chocolate', label: 'Chocolate' },
     { value: 'pizza', label: 'Pizza' },

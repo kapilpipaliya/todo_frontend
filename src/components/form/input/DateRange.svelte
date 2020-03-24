@@ -15,6 +15,7 @@
   import Label from '../Label.svelte'
   import * as locales from 'date-fns/locale'
   import SDateRangePicker from '../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte'
+  export let name
   const random = false
   const localesArray = Object.keys(locales).map(i => locales[i])
   const locale = random

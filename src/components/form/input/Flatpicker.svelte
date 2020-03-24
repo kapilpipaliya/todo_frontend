@@ -3,6 +3,7 @@
   import flatpickr from 'flatpickr'
   import Label from '../Label.svelte'
   import { css_count } from '../../../css'
+  export let name
   export let disabled
 
   const hooks = new Set([

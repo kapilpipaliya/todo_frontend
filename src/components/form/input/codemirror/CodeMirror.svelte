@@ -3,9 +3,10 @@
   import CodeMirror from 'codemirror'
   import { onMount, createEventDispatcher } from 'svelte'
   import './codeMirrorPlugins'
+  import Label from '../Label.svelte'
 
   const dispatch = createEventDispatcher()
-
+  export let name
   export let value = ''
   export let readonly = false
   export let errorLoc = null
@@ -318,7 +319,7 @@
     -moz-tab-size: 2;
   }
 </style>
-
+<Label {name} />
 <button type="button" on:click={modeChange('text/html')}>Html</button>
 <button type="button" on:click={modeChange('text/css')}>CSS</button>
 <button type="button" on:click={modeChange('text/x-scss')}>SCSS</button>
