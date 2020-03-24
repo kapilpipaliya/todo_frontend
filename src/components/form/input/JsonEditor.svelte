@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, tick } from 'svelte'
+  import Label from '../Label.svelte'
   import { css_count } from '../../../css'
   export let value = {}
   export let disabled = false
@@ -31,6 +32,7 @@
   })
 </script>
 
+<Label {name} />
 <div
   name="form"
   bind:this={jsonediDom}

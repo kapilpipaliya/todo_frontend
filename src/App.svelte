@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { translation } from './translation'
-  import TopLevelComps from './components/UI/TopLevelComps.svelte'
-  import { current_member } from './current_member'
-  declare let $current_member
-  import TreeSidebar from './components/UI/TreeSidebar.svelte'
-  import Page from './components/Page.svelte'
-  import FormWrapper from './components/FormWrapper.svelte'
-
-  import { Router } from './components/svelte-router-spa/index'
-  import { ET, E, form_schema_evt } from './enums'
   import { onDestroy } from 'svelte'
-  import { S } from './ws_events_dispatcher'
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
+  import { translation } from './translation'
+  import { current_member } from './current_member'
+  import { css_count } from './css'
+  declare let $current_member
+  import TopLevelComps from './components/UI/TopLevelComps.svelte'
+  import { ET, E, form_schema_evt } from './enums'
+  import { S } from './ws_events_dispatcher'
+  import TreeSidebar from './components/UI/TreeSidebar.svelte'
+  import { Router } from './components/svelte-router-spa/index'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
 
+  import Page from './components/Page.svelte'
+  import FormWrapper from './components/FormWrapper.svelte'
   import Logout from './views/logout.svelte'
   import Confirm from './views/confirm.svelte'
   import Home from './views/home.svelte'
@@ -28,6 +28,7 @@
   import ProjectLayout from './views/project_layout.svelte'
   import ProjectIndex from './views/project_index.svelte'
 
+  css_count.increase('all_menu')
   let e$
   $: e$ = $current_member?.email
   let mS$: {}

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, createEventDispatcher } from 'svelte'
   import flatpickr from 'flatpickr'
+  import Label from '../Label.svelte'
   import { css_count } from '../../../css'
   export let disabled
 
@@ -97,6 +98,7 @@
   }
 </script>
 
+<Label {name} />
 <slot>
   <input bind:this={input} {...props} {disabled} />
 </slot>

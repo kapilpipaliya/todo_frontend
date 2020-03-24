@@ -12,13 +12,13 @@ describe('Translation Page Test', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
     //cy.inputType('Subject', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('translation')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     //cy.inputType('Subject', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('translation')
    })
 
    it('Delete', () => {

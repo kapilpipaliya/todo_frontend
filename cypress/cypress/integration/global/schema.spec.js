@@ -13,14 +13,14 @@ describe('Schema Page Test', () => {
     cy.wait(1500)
     cy.inputType(' key', 'test')
     cy.get('.jsoneditor')
-    cy.submitButtonClick()
+    cy.submitButtonClick('schema')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.wait(1500)
     cy.get('.jsoneditor')
-    cy.submitButtonClick()
+    cy.submitButtonClick('schema')
    })
 
    it('Delete', () => {

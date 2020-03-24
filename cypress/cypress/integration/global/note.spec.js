@@ -12,13 +12,13 @@ describe('Note Page Test', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
     cy.inputType('Subject', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('note')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Subject', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('note')
    })
 
    it('Delete', () => {

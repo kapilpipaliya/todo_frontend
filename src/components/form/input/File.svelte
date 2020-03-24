@@ -1,4 +1,5 @@
 <script lang="ts">
+  import Label from '../Label.svelte'
   export let name
   export let required
   export let disabled
@@ -86,6 +87,7 @@
   }
 </script>
 
+<Label {name} />
 <progress bind:this={progressBar} value="0" max="100" style="width: 300px;" />
 <span bind:this={percentageDiv} />
 <span id="time" />

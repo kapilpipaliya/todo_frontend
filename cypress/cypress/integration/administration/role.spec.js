@@ -14,14 +14,14 @@ describe('Role Page Test', () => {
     cy.inputType(' key', 'test')
     cy.inputType('Id', 'role1')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('role')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Id', 'role2')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('role')
    })
 
    it('Delete', () => {

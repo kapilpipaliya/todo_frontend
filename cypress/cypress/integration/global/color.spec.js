@@ -12,13 +12,13 @@ describe('Color Page Test', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
     cy.inputType('Code', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('global_color')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Code', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('global_color')
    })
 
    it('Delete', () => {

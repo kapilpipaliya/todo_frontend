@@ -12,6 +12,7 @@
     startOfDay,
     endOfDay
   } from 'date-fns'
+  import Label from '../Label.svelte'
   import * as locales from 'date-fns/locale'
   import SDateRangePicker from '../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte'
   const random = false
@@ -37,6 +38,7 @@
   }
 </script>
 
+<Label {name} />
 <SDateRangePicker
   {maxDate}
   weekGuides

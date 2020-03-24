@@ -12,13 +12,13 @@ describe('Role Page Test', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
     cy.inputType('Name', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('global_role')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Name', 'test2')
-    cy.submitButtonClick()
+    cy.submitButtonClick('global_role')
    })
 
    it('Delete', () => {

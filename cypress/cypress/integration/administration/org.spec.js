@@ -14,14 +14,14 @@ describe('Org Page Test', () => {
     cy.inputType(' key', 'test')
     cy.inputType('Id', 'Kapil')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('organization')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Id', 'Kapil1')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('organization')
    })
 
    it('Delete', () => {

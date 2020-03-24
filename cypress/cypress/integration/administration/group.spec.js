@@ -14,14 +14,14 @@ describe('Group Page Test', () => {
     cy.inputType(' key', 'test')
     cy.inputType('Id', 'group1')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('group')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Id', 'group2')
     cy.inputType('Name', 'Pipaliya')
-    cy.submitButtonClick()
+    cy.submitButtonClick('group')
    })
 
    it('Delete', () => {

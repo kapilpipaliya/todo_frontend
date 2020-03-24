@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { Debug } from '../../UI/debug'
+  import Label from '../Label.svelte'
   export let value = []
   export let disabled = false
   export let ar = false
@@ -30,6 +31,7 @@
 </script>
 
 <Debug title="Array" data={{ $$props }} />
+<Label {name} />
 <table>
   <tbody>
     {#each value as v, i (i)}

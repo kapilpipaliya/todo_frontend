@@ -13,13 +13,13 @@ describe('Member Page Test', () => {
     cy.addClick()
     cy.inputType(' key', 'test')
     cy.inputType('Email', 'kapil@g.com')
-    cy.submitButtonClick()
+    cy.submitButtonClick('member')
   })
 
    it('Update', () => {
    	cy.editKeyClick('test')
     cy.inputType('Email', 'k@g.com')
-    cy.submitButtonClick()
+    cy.submitButtonClick('member')
    })
 
    it('Delete', () => {

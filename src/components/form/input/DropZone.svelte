@@ -1,10 +1,12 @@
 <script lang="ts">
   import Dropzone from '../../../../thirdparty/svelte-dropzone/index.svelte'
+  import Label from '../Label.svelte'
   const addedfile = file => console.log(file)
   const drop = event => console.log(event.target)
   const init = () => 0
 </script>
 
+<Label {name} />
 <Dropzone
   dropzoneClass="dropzone"
   hooveringClass="dropzone-hoovering"
