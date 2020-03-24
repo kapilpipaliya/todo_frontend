@@ -5,6 +5,7 @@
   export let disabled
   export let value
   export let props = {}
+  export let placeholder = ''
   export let dom = null
 </script>
 
@@ -17,4 +18,5 @@
   {required}
   autocomplete={false}
   {disabled}
+  {placeholder}
   {...props} />

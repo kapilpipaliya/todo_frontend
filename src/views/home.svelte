@@ -2,7 +2,8 @@
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { ET, E } from '../enums'
+
+  import { IS_PRODUCTION, ET, E } from '../enums'
   const onRestart = () => {
     S.bindT([ET.get, E.restart_server, S.uid], d => 0, null)
   }
@@ -46,23 +47,27 @@
   }
 </script>
 
-<div>
-  <button on:click={onRestart}>Restart Server</button>
-  <button on:click={onRecompileFrontend}>ReCompile Frontend</button>
-  <button on:click={onRecompileCSS}>ReCompile CSS</button>
-  <button on:click={onTestEmail}>Test Email</button>
-  <button on:click={onReadLog}>Read Log</button>
-  <input bind:value={pass} />
-  <button on:click={onSuperPasswordCheck}>Super Password Check</button>
-  <button on:click={onCssSyncFilesToDB}>CSS Sync Files to DB</button>
-  <button on:click={getCountries}>Countries</button>
-  <button on:click={getLanguages}>Languages</button>
-  {users}
-  <textarea bind:value={log} />
-  <button on:click={getCollectionCount}>Collection count</button>
-</div>
-TODO WRITE COMPLETE HOME PAGE WITH CSS.
-<pre>
-  main tasks 1. Live Talk 2. Notification(Activity) 3. Search 4. Form 5. Wiki 6.
-  Task Management 7. Git 8. Payment Gateway
-</pre>
+{#if !IS_PRODUCTION}
+  <div>
+    <button on:click={onRestart}>Restart Server</button>
+    <button on:click={onRecompileFrontend}>ReCompile Frontend</button>
+    <button on:click={onRecompileCSS}>ReCompile CSS</button>
+    <button on:click={onTestEmail}>Test Email</button>
+    <button on:click={onReadLog}>Read Log</button>
+    <input bind:value={pass} />
+    <button on:click={onSuperPasswordCheck}>Super Password Check</button>
+    <button on:click={onCssSyncFilesToDB}>CSS Sync Files to DB</button>
+    <button on:click={getCountries}>Countries</button>
+    <button on:click={getLanguages}>Languages</button>
+    {users}
+    <textarea bind:value={log} />
+    <button on:click={getCollectionCount}>Collection count</button>
+  </div>
+  TODO WRITE COMPLETE HOME PAGE WITH CSS.
+  <pre>
+    main tasks 1. Live Talk 2. Notification(Activity) 3. Search 4. Form 5. Wiki
+    6. Task Management 7. Git 8. Payment Gateway
+  </pre>
+{:else}
+  <h1>O-K.TECH</h1>
+{/if}

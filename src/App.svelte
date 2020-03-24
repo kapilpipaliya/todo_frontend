@@ -7,7 +7,7 @@
   import { css_count } from './css'
   declare let $current_member
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
-  import { ET, E, form_schema_evt } from './enums'
+  import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
   import { S } from './ws_events_dispatcher'
   import TreeSidebar from './components/UI/TreeSidebar.svelte'
   import { Router } from './components/svelte-router-spa/index'
@@ -131,7 +131,9 @@
         <TreeSidebar class="guest" menu={mS$.guest} />
       {/if}
       {#if e$}
+      {#if !IS_PRODUCTION}
         <TreeSidebar class="global" menu={mS$.global} />
+      {/if}
         <TreeSidebar class="home" menu={mS$.home} />
       {/if}
     {/if}

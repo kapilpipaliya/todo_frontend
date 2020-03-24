@@ -48,7 +48,7 @@
       case FormType.file:
         return File
       case FormType.hidden:
-        return Hidden
+        return null
       case FormType.number:
         return Number
       case FormType.password:
@@ -103,15 +103,19 @@
   let comp = getComponent()
 </script>
 
-<svelte:component
-  this={comp}
-  bind:value
-  name={label}
-  {required}
-  {disabled}
-  bind:dom={doms}
-  {...props}
-  {...extraProps} />
-{#if description}
-  {@html description}
+{#if comp}
+  <div class="form-item">
+    <svelte:component
+      this={comp}
+      bind:value
+      name={label}
+      {required}
+      {disabled}
+      bind:dom={doms}
+      {...props}
+      {...extraProps} />
+    {#if description}
+      {@html description}
+    {/if}
+  </div>
 {/if}
