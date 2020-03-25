@@ -262,6 +262,12 @@
     headerColSortSettingsRow = d[3] ?? []
     headerColEditableRow = d[4] ?? []
     headerColPropsRow = d[5] ?? []
+    if(IS_PRODUCTION){
+      const keyIdx = headerColTitlesRow.findIndex(x=>x==='Key')
+      if(keyIdx > -1){
+        headerColIsvisibleRow[keyIdx] = 0
+      }
+    }
     let i
     for (i = 0; i < headerColIsvisibleRow.length; i++) {
       if (headerColIsvisibleRow[i]) {
@@ -647,6 +653,7 @@
   }
   let mergeRowsCount
   $: mergeRowsCount = 3 + (showRowNum ? 1 : 0)
+  $: colCount = headerColIsvisibleRow.filter(x=> !!x).length
   // can pass null to display nothing.
   function getValue(v) {
     return isArray(v) ? v[0] || '' : v
@@ -942,7 +949,7 @@
             </tr>
             {#if quickViewKeys.includes(getValue(r[0]))}
               <tr>
-                <td colspan={r.length + mergeRowsCount}>
+                <td colspan={colCount + mergeRowsCount}>
                   {#if quickcomponent}
                     <svelte:component
                       this={quickcomponent}

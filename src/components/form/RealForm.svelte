@@ -22,6 +22,7 @@
   import CLEditor from './input/CLEditor.svelte'
   import TableForm from './tableform/TableForm.svelte'
   import ArrayForm from './input/Array.svelte'
+  import { IS_PRODUCTION } from '../../enums'
   export let value
   export let type = FormType.text
   export let label = ''
@@ -103,7 +104,7 @@
   let comp = getComponent()
 </script>
 
-{#if comp}
+{#if comp && !(IS_PRODUCTION && label == ' key')}
   <div class="form-item">
     <svelte:component
       this={comp}

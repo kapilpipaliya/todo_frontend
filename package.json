@@ -45,7 +45,7 @@
     "prettier": "^1.19.1",
     "prettier-plugin-svelte": "^0.7.0",
     "replace-in-file": "^5.0.2",
-    "rollup": "2.1.0",
+    "rollup": "2.2.0",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-bundle-html": "^0.2.2",
     "rollup-plugin-css-porter": "^1.0.2",
