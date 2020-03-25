@@ -364,7 +364,7 @@
   <label>debug</label>
   <input type="checkbox" bind:checked={$showDebug} />
 {/if}
-{#if form.length}
+{#if types.length}
   <form class={schema_key} on:submit|preventDefault={onSave}>
 
     {#if layout.length}
