@@ -359,12 +359,9 @@
   $: saveLabel = buttonlabels?.save ?? ''
   $: cancelLabel = buttonlabels?.cancel ?? ''
   $: applyLabel = buttonlabels?.apply ?? ''
-  let isFirst = true
   let css_loaded = false
   $: {
-    if (isFirst) {
-      isFirst = false
-    } else if (!css_loaded) {
+    if (!css_loaded) {
       if (!$css_loading) {
         css_loaded = true
       }

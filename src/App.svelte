@@ -4,7 +4,7 @@
   import { map } from 'rambda'
   import { translation } from './translation'
   import { current_member } from './current_member'
-  import { css_count } from './css'
+  import { css_loading, css_count } from './css'
   declare let $current_member
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
@@ -118,30 +118,40 @@
     o = pipe(mod_c('component'), mod_c('layout'), mod_g, mod_n)(o)
     return o
   }
+  let css_loaded = false
+  $: {
+    if (!css_loaded) {
+      if (!$css_loading) {
+        css_loaded = true
+      }
+    }
+  }
 </script>
 
 <Notifications>
-  <TopLevelComps />
-  <nav>
-    {#if mS$}
-      <TreeSidebar class="public" menu={mS$.public} />
-      {#if e$}
-        Logged In: {e$}
-        <TreeSidebar class="account" menu={mS$.account} />
-      {:else}
-        <TreeSidebar class="guest" menu={mS$.guest} />
-      {/if}
-      {#if e$}
-        {#if !IS_PRODUCTION}
-          <TreeSidebar class="global" menu={mS$.global} />
+  {#if css_loaded}
+    <TopLevelComps />
+    <nav>
+      {#if mS$}
+        <TreeSidebar class="public" menu={mS$.public} />
+        {#if e$}
+          Logged In: {e$}
+          <TreeSidebar class="account" menu={mS$.account} />
+        {:else}
+          <TreeSidebar class="guest" menu={mS$.guest} />
         {/if}
-        <TreeSidebar class="home" menu={mS$.home} />
+        {#if e$}
+          {#if !IS_PRODUCTION}
+            <TreeSidebar class="global" menu={mS$.global} />
+          {/if}
+          <TreeSidebar class="home" menu={mS$.home} />
+        {/if}
       {/if}
+    </nav>
+    {#if r$.length}
+      <Router routes={r$} />
+    {:else}
+      <LoadAwesome />
     {/if}
-  </nav>
-  {#if r$.length}
-    <Router routes={r$} />
-  {:else}
-    <LoadAwesome />
   {/if}
 </Notifications>
