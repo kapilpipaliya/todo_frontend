@@ -87,7 +87,8 @@ const generateHtmlBuild = (options) => {
 const plugins = [
   //analyze(),
   replace({
-    'process.env.NODE_ENV': JSON.stringify(mode)
+    'process.env.NODE_ENV': JSON.stringify(mode),
+    'process.env.b': JSON.stringify(process.env.b)
   }),
   svelte({
     dev: process.env.NODE_ENV === "development",

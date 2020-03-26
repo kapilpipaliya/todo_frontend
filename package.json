@@ -12,6 +12,7 @@
     "pt": "prettier  --write 'src/**/*.ts'",
     "pj": "prettier  --write 'src/**/*.js'",
     "pcj": "prettier  --write 'cypress/**/*.js'",
+    "hbs": "http-server distrel",
     "cy": "cypress open -P cypress/"
   },
   "dependencies": {

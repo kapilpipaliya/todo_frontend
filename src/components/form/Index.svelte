@@ -12,7 +12,7 @@
   declare let $ws_connected
   import { ET, E, schemaEvents } from '../../enums'
   import { IS_PRODUCTION, ValueType } from '../../enums'
-  import { css_count } from '../../css'
+  import { css_loading, css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
   import { translation } from '../../translation'
@@ -181,6 +181,7 @@
     description = headers[4] ?? []
     props = headers[5] ?? []
   }
+  console.log('increasing registration css count')
   css_count.increase('submit_buttons')
   css_count.increase(schema_key)
   onDestroy(() => {
@@ -359,71 +360,91 @@
   $: saveLabel = buttonlabels?.save ?? ''
   $: cancelLabel = buttonlabels?.cancel ?? ''
   $: applyLabel = buttonlabels?.apply ?? ''
+  let isFirst = true
+  let css_loaded = false
+  $: {
+    console.log('run registration function', isFirst, css_loaded, $css_loading)
+    if (isFirst) {
+      isFirst = false
+    } else if (!css_loaded) {
+      if (!$css_loading) {
+        css_loaded = true
+        console.log('set css registration: true')
+      }
+    }
+  }
+  $: console.log($css_loading)
 </script>
 
-<Html html={t} />
-{#if showdbg}
-  <label>debug</label>
-  <input type="checkbox" bind:checked={$showDebug} />
-{/if}
-{#if types.length}
-  <form class={schema_key} on:submit|preventDefault={onSave}>
+{#if css_loaded}
+  <Html html={t} />
+  {#if showdbg}
+    <label>debug</label>
+    <input type="checkbox" bind:checked={$showDebug} />
+  {/if}
+  {#if types.length}
+    <form class={schema_key} on:submit|preventDefault={onSave}>
 
-    {#if layout.length}
-      {#each layout as lo, loi (lo)}
-        {#each lo as i, yi (i)}
-          {#if isNumber(i)}
-            {#if types[i]}
-              <GeneralInput
-                bind:value={form[i]}
-                type={types[i]}
-                label={labels[i]}
-                required={required[i]}
-                disabled={isDisabled(form_disabled, i)}
-                description={description[i]}
-                bind:dom={doms[i]}
-                props={props[i]} />
+      {#if layout.length}
+        {#each layout as lo, loi (lo)}
+          {#each lo as i, yi (i)}
+            {#if isNumber(i)}
+              {#if types[i]}
+                <GeneralInput
+                  bind:value={form[i]}
+                  type={types[i]}
+                  label={labels[i]}
+                  required={required[i]}
+                  disabled={isDisabled(form_disabled, i)}
+                  description={description[i]}
+                  bind:dom={doms[i]}
+                  props={props[i]} />
+              {/if}
+            {:else if isPlainObj(i)}
+              {@html i.l}
             {/if}
-          {:else if isPlainObj(i)}
-            {@html i.l}
+          {/each}
+          <br />
+        {/each}
+      {:else}
+        {#each form as f, i}
+          {#if types[i]}
+            <GeneralInput
+              {showKey}
+              bind:value={f}
+              type={types[i]}
+              label={labels[i]}
+              required={required[i]}
+              disabled={isDisabled(form_disabled, i)}
+              description={description[i]}
+              bind:dom={doms[i]}
+              props={props[i]} />
           {/if}
         {/each}
-        <br />
-      {/each}
-    {:else}
-      {#each form as f, i}
-        {#if types[i]}
-          <GeneralInput
-            showKey
-            bind:value={f}
-            type={types[i]}
-            label={labels[i]}
-            required={required[i]}
-            disabled={isDisabled(form_disabled, i)}
-            description={description[i]}
-            bind:dom={doms[i]}
-            props={props[i]} />
-        {/if}
-      {/each}
-    {/if}
+      {/if}
 
-    <SubmitButton {isSaving} label={saveLabel} save={() => {}} />
-    {#if applyLabel}
-      <SubmitButton
-        {isSaving}
-        type={'button'}
-        label={applyLabel}
-        save={onApply} />
-    {/if}
-    {#if cancelLabel}
-      <CancelButton {isSaving} {key} on:close label={cancelLabel} />
-    {/if}
-    {#if false}
-      <button type="button" on:click={onReset}>Reset</button>
-    {/if}
-  </form>
+      <SubmitButton {isSaving} label={saveLabel} save={() => {}} />
+      {#if applyLabel}
+        <SubmitButton
+          {isSaving}
+          type={'button'}
+          label={applyLabel}
+          save={onApply} />
+      {/if}
+      {#if cancelLabel}
+        <CancelButton {isSaving} {key} on:close label={cancelLabel} />
+      {/if}
+      {#if false}
+        <button type="button" on:click={onReset}>Reset</button>
+      {/if}
+    </form>
+  {/if}
+  <!-- <Error {er} /> -->
+  {er}
+  {#if $showDebug}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
+  <Html html={b} />
+  11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+{:else}
+  <div style="width: 1000px; height: 1000px; background-color: red;" />
 {/if}
-<!-- <Error {er} /> -->
-{er}
-{#if $showDebug}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
-<Html html={b} />
+{JSON.stringify(css_loaded)}

@@ -35,6 +35,85 @@ S.bind$(
   1
 )
 */
+
+// https://github.com/pyrsmk/toast
+class Toast {
+  /**
+   * Load several resources from URLs
+   *
+   * @param {string[]} urls
+   * @return {Promise<HTMLElement[]>}
+   */
+  public all(urls: string[]): Promise<HTMLElement[]> {
+    return Promise.all(
+      urls.map(
+        (url): Promise<HTMLElement> => {
+          switch (
+            url
+              .split('.')
+              .pop()!
+              .toLowerCase()
+          ) {
+            case 'css':
+              return this.css(url)
+            case 'js':
+              return this.js(url)
+            default:
+              return Promise.reject(
+                new Error(`Unable to detect extension of '${url}'`)
+              )
+          }
+        }
+      )
+    )
+  }
+
+  /**
+   * Load a CSS URL
+   *
+   * @param {string} url
+   * @return {Promise<HTMLElement>}
+   */
+  public css(url: string): Promise<HTMLElement> {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.href = url
+    document.querySelector('head')!.appendChild(link)
+    return this.promise(link)
+  }
+
+  /**
+   * Load a JS URL
+   *
+   * @param {string} url
+   * @return {Promise<HTMLElement>}
+   */
+  public js(url: string): Promise<HTMLElement> {
+    const script = document.createElement('script')
+    script.src = url
+    document.querySelector('head')!.appendChild(script)
+    return this.promise(script)
+  }
+
+  /**
+   * Create a promise based on an HTMLElement
+   * @param {HTMLElement} element
+   * @return {Promise<HTMLElement>}
+   */
+  private promise(element: HTMLElement): Promise<HTMLElement> {
+    return new Promise((resolve, reject): void => {
+      element.addEventListener('load', (): void => {
+        resolve(element)
+      })
+      element.addEventListener('error', (): void => {
+        reject()
+      })
+    })
+  }
+}
+
+const T = new Toast()
+
 export const css_loading = writable(false)
 let cssRaw = {}
 
@@ -47,10 +126,10 @@ export const css_count = {
       css_loading.set(true)
       ++css_add_count
       console.log('css_add ', css_add_count, cssRaw[name].link)
-      style.import(cssRaw[name].link).then(function() {
+      T.css(cssRaw[name].link).then(function() {
         --css_add_count
         console.log('css_remove ', css_add_count, cssRaw[name].link)
-        if(css_add_count == 0) css_loading.set(false)
+        if (css_add_count == 0) css_loading.set(false)
         console.log('css files have been loaded!', cssRaw[name].link)
       })
     }
@@ -59,12 +138,13 @@ export const css_count = {
     setTimeout(_ => {
       css_count_[name] = css_count_[name] - 1
       if (css_count_[name] == 0) {
+        // note: not calling css_loading.set(true) because onDestory life cycle is called too late!
         ++css_add_count
         console.log('css_add ', css_add_count, cssRaw[name].link)
         style.unload(cssRaw[name].link).then(function() {
           --css_add_count
           console.log('css_remove ', css_add_count, cssRaw[name].link)
-          if(css_add_count == 0) css_loading.set(false)
+          if (css_add_count == 0) css_loading.set(false)
           console.log('css files have been unloaded!', cssRaw[name].link)
         })
       }
@@ -81,22 +161,22 @@ S.bind$(
     for (let [k, v] of Object.entries(data)) {
       if (cssRaw[k]?.link !== v.link) {
         if (css_count_[k] > 0) {
-          if(cssRaw[k]?.link) {
+          if (cssRaw[k]?.link) {
             ++css_add_count
             console.log('css_add ', css_add_count, cssRaw[k].link)
             style.unload(cssRaw[k].link).then(function() {
               --css_add_count
               console.log('css_remove ', css_add_count, cssRaw[k].link)
-              if(css_add_count == 0) css_loading.set(false)
+              if (css_add_count == 0) css_loading.set(false)
               console.log('css files have been unloaded when setting data!')
             })
           }
           ++css_add_count
           console.log('css_add ', css_add_count, v.link)
-          style.import(v.link).then(function() {
+          T.css(v.link).then(function() {
             --css_add_count
             console.log('css_remove ', css_add_count, v.link)
-            if(css_add_count == 0) css_loading.set(false)
+            if (css_add_count == 0) css_loading.set(false)
             console.log('css files have been loaded when setting data!', v.link)
           })
         }

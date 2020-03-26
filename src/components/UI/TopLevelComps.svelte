@@ -1,7 +1,7 @@
 <script lang="ts">
   import { S } from '../../ws_events_dispatcher'
   import { ET, E } from '../../enums'
-  import Css from './Css.svelte'
+  // import Css from './Css.svelte'
   import Navigate from './Navigate.svelte'
   import ScrollTop from './ScrollTop.svelte'
 
@@ -16,7 +16,7 @@
   )
 </script>
 
-<Css />
+<!-- <Css /> -->
 {#if maintenance}server is going down for sheduled maintenance{/if}
 <Navigate />
 

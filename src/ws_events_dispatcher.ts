@@ -9,6 +9,7 @@ import { ET, E } from './enums'
 
 const http_proto = location.protocol
 const domain = window.location.hostname
+
 declare const process
 const port =
   location.protocol == 'http:'
@@ -21,10 +22,13 @@ const port =
     ? ':8504'
     : ''
 const ws_proto = http_proto == 'http:' ? 'ws' : 'wss'
+
+// @ts-ignore
+const BACKEND = process.env.b  ? process.env.b : `${domain}${port}`
 //export const product_img_url = `${http_proto}://${domain}:${port}/http/v1/user/download_id`
 //export const thumb_url = `${http_proto}://${domain}:${port}/http/v1/user/thumb_id`
-export const WS_PATH = `${ws_proto}://${domain}${port}/ws`
-export const SERVER_PATH = `${http_proto}://${domain}${port}`
+export const WS_PATH = `${ws_proto}://${BACKEND}/ws`
+export const SERVER_PATH = `${http_proto}://${BACKEND}`
 
 export const ws_connected = writable(false)
 /*
