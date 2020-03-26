@@ -31,6 +31,7 @@
   export let description = ''
   export let props = {}
   export let doms = {}
+  export let showKey
   const extraProps = {}
   if (type === FormType.select) {
     extraProps.multiSelect = false
@@ -104,7 +105,7 @@
   let comp = getComponent()
 </script>
 
-{#if comp && !(IS_PRODUCTION && label == ' key')}
+{#if comp && !(showKey && label !== ' key')}
   <div class="form-item">
     <svelte:component
       this={comp}

@@ -84,7 +84,6 @@
 
   function fetch() {
     if (headerSchema.length) {
-      console.log(headerSchema)
       onDataGet(headerSchema as [any])
       return
     }
@@ -112,6 +111,7 @@
     }
     return array2
   }
+  let showKey = false
   function onDataGet(d) {
     if (!d[0]) {
       er = d[1]
@@ -123,6 +123,7 @@
       headers = schema
       if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels
       if (newOptions.l) layout = newOptions.l
+      if (newOptions.k) showKey = newOptions.k
       if (newOptions.replace && key) {
         mutate_evt[0] = ET.replace
         S.bind$(mutate_evt, onMutateGet, 1)
@@ -393,6 +394,7 @@
       {#each form as f, i}
         {#if types[i]}
           <GeneralInput
+            showKey
             bind:value={f}
             type={types[i]}
             label={labels[i]}

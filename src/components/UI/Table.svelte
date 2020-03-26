@@ -277,7 +277,8 @@
     headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? []
     headerColEditableRow = d[4] ?? []
     headerColPropsRow = d[5] ?? []
-    if (IS_PRODUCTION) {
+    options = d[6]
+    if (IS_PRODUCTION && !options.k) {
       const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key')
       if (keyIdx > -1) {
         headerColIsvisibleRow[keyIdx] = 0
@@ -290,7 +291,7 @@
         break
       }
     }
-    options = d[6]
+
     addnew_pos = options?.add?.pos ?? 't'
     addnew_type = options?.add?.type ?? 'button'
     const l = options?.add?.l

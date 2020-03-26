@@ -1,6 +1,7 @@
 import { writable } from 'svelte/store'
 import { ET, E } from './enums'
 import { S } from './ws_events_dispatcher'
+import { style } from 'node_modules/dynamic-import/dist/import.js'
 export const css_frameworks = writable({
   bootstrap:
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">'
