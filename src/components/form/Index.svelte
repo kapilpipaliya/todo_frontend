@@ -181,7 +181,6 @@
     description = headers[4] ?? []
     props = headers[5] ?? []
   }
-  console.log('increasing registration css count')
   css_count.increase('submit_buttons')
   css_count.increase(schema_key)
   onDestroy(() => {
@@ -363,17 +362,14 @@
   let isFirst = true
   let css_loaded = false
   $: {
-    console.log('run registration function', isFirst, css_loaded, $css_loading)
     if (isFirst) {
       isFirst = false
     } else if (!css_loaded) {
       if (!$css_loading) {
         css_loaded = true
-        console.log('set css registration: true')
       }
     }
   }
-  $: console.log($css_loading)
 </script>
 
 {#if css_loaded}
@@ -443,8 +439,4 @@
   {er}
   {#if $showDebug}{JSON.stringify(form)} options: {JSON.stringify(options)}{/if}
   <Html html={b} />
-  11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
-{:else}
-  <div style="width: 1000px; height: 1000px; background-color: red;" />
 {/if}
-{JSON.stringify(css_loaded)}

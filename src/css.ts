@@ -125,12 +125,12 @@ export const css_count = {
     if (cssRaw[name] && css_count_[name] !== 0) {
       css_loading.set(true)
       ++css_add_count
-      console.log('css_add ', css_add_count, cssRaw[name].link)
+      //console.log('css_add ', css_add_count, cssRaw[name].link)
       T.css(cssRaw[name].link).then(function() {
         --css_add_count
-        console.log('css_remove ', css_add_count, cssRaw[name].link)
+        //console.log('css_remove ', css_add_count, cssRaw[name].link)
         if (css_add_count == 0) css_loading.set(false)
-        console.log('css files have been loaded!', cssRaw[name].link)
+        //console.log('css files have been loaded!', cssRaw[name].link)
       })
     }
   },
@@ -140,12 +140,12 @@ export const css_count = {
       if (css_count_[name] == 0) {
         // note: not calling css_loading.set(true) because onDestory life cycle is called too late!
         ++css_add_count
-        console.log('css_add ', css_add_count, cssRaw[name].link)
+        //console.log('css_add ', css_add_count, cssRaw[name].link)
         style.unload(cssRaw[name].link).then(function() {
           --css_add_count
-          console.log('css_remove ', css_add_count, cssRaw[name].link)
+          //console.log('css_remove ', css_add_count, cssRaw[name].link)
           if (css_add_count == 0) css_loading.set(false)
-          console.log('css files have been unloaded!', cssRaw[name].link)
+          //console.log('css files have been unloaded!', cssRaw[name].link)
         })
       }
     }, 2000)
@@ -163,21 +163,21 @@ S.bind$(
         if (css_count_[k] > 0) {
           if (cssRaw[k]?.link) {
             ++css_add_count
-            console.log('css_add ', css_add_count, cssRaw[k].link)
+            //console.log('css_add ', css_add_count, cssRaw[k].link)
             style.unload(cssRaw[k].link).then(function() {
               --css_add_count
-              console.log('css_remove ', css_add_count, cssRaw[k].link)
+              //console.log('css_remove ', css_add_count, cssRaw[k].link)
               if (css_add_count == 0) css_loading.set(false)
-              console.log('css files have been unloaded when setting data!')
+              //console.log('css files have been unloaded when setting data!')
             })
           }
           ++css_add_count
-          console.log('css_add ', css_add_count, v.link)
+          //console.log('css_add ', css_add_count, v.link)
           T.css(v.link).then(function() {
             --css_add_count
-            console.log('css_remove ', css_add_count, v.link)
+            //console.log('css_remove ', css_add_count, v.link)
             if (css_add_count == 0) css_loading.set(false)
-            console.log('css files have been loaded when setting data!', v.link)
+            //console.log('css files have been loaded when setting data!', v.link)
           })
         }
       }
