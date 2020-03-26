@@ -227,11 +227,12 @@
     isSaving = false
     if (d[0]) {
       const save_msg = view(lensPath(['msg', 'save']), $translation)
-
       if (options.notify) {
         addNotification({
           text: save_msg,
-          position: 'bottom-center'
+          position: 'bottom-right',
+          type: 'success',
+          removeAfter: 4000
         })
       }
       er = ''

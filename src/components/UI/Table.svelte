@@ -453,7 +453,9 @@
         const delete_msg = view(lensPath(['msg', 'delete']), $translation)
         addNotification({
           text: delete_msg,
-          position: 'bottom-center'
+          position: 'bottom-right',
+          type: 'danger',
+          removeAfter: 4000
         })
         deleteRows_([key])
       } else {
@@ -651,10 +653,9 @@
   function onShowRowNum() {
     showRowNum = !showRowNum
   }
-  let mergeRowsCount
-  $: mergeRowsCount = 3 + (showRowNum ? 1 : 0)
   $: colCount = headerColIsvisibleRow.filter(x => !!x).length
-  $: showResetFilterButton = filterSettings.filter(x => !x).length > 0
+  $: showResetFilterButton = filterSettings.filter(x => !!x).length > 0
+  $: operationsCount = 2
   // can pass null to display nothing.
   function getValue(v) {
     return isArray(v) ? v[0] || '' : v
@@ -751,7 +752,7 @@
     {#if multipleSelected}
       <button type="button" on:click={onDeleteSelected}>Delete</button>
     {/if}
-    <button type="button" on:click={onShowRowNum}>Row Numbers</button>
+    <!-- <button type="button" on:click={onShowRowNum}>Row Numbers</button> -->
     {#if !IS_PRODUCTION}
       <button type="button" on:click={onConfigClicked}>Config</button>
     {/if}
@@ -767,15 +768,14 @@
       <table>
         {#if showHeader}
           <thead>
-
             <tr>
-              <th colspan={mergeRowsCount}>
+              <th>
                 <input
                   type="checkbox"
                   bind:checked={allSelected}
                   on:click={onSelectAllClick} />
-                Actions
               </th>
+              <th>No</th>
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   <th
@@ -792,9 +792,11 @@
                   </th>
                 {/if}
               {/each}
+              <th colspan={operationsCount}>Actions</th>
               <!-- <th width="100px">Actions</th> -->
             </tr>
             <tr>
+              <th />
               {#if showRowNum}
                 <th>
                   <input
@@ -806,7 +808,6 @@
                     on:change={onRowNumChange} />
                 </th>
               {/if}
-              <th colspan={mergeRowsCount - (showRowNum ? 1 : 0)} />
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   {#if headerColCustomFilter[index]}
@@ -838,7 +839,7 @@
                     </th>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
                     <th>Date</th>
-                  <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
+                    <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <th /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
                     <th />
@@ -847,7 +848,9 @@
                   {/if}
                 {/if}
               {/each}
-              <!-- <th width="100px"></th> -->
+              <th colspan={operationsCount}>
+                <!-- <th width="100px"></th> -->
+              </th>
             </tr>
 
           </thead>
@@ -858,9 +861,6 @@
               bind:this={rowDoms[rowIndex]}
               class={selectedRowsKeys.includes(getValue(r[0])) ? $css.table.classes.selected || 'selected' : ''}
               in:fade={{ y: 200, duration: 100 }}>
-              {#if showRowNum}
-                <td>{rowIndex + 1}</td>
-              {/if}
               <td>
                 {#if !isGlobal(r[0])}
                   {#if false}
@@ -873,33 +873,9 @@
                     on:click={onSelectRowClick} />
                 {/if}
               </td>
-              <td>
-                {#if !isGlobal(r[0])}
-                  {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
-                    <button
-                      name="edit"
-                      key={getValue(r[0])}
-                      type="button"
-                      on:click={() => {
-                        quickViewKeys.push(getValue(r[0]))
-                        quickViewKeys = quickViewKeys
-                      }}>
-                      Edit
-                    </button>
-                  {/if}
-                {/if}
-              </td>
-              <td>
-                {#if !isGlobal(r[0])}
-                  <button
-                    name="delete"
-                    key={getValue(r[0])}
-                    type="button"
-                    on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}>
-                    D
-                  </button>
-                {/if}
-              </td>
+              {#if showRowNum}
+                <td>{rowIndex + 1}</td>
+              {/if}
               {#each r as c, index}
                 {#if headerColIsvisibleRow[index]}
                   <td>
@@ -932,7 +908,62 @@
                   </td>
                 {/if}
               {/each}
+              {#if !isGlobal(r[0])}
+                <td>
+                  {#if !isGlobal(r[0])}
+                    {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
+                      <svg
+                        tabindex="0"
+                        on:keypress={e => {
+                          if (e.keyCode == 13 || e.which == 13) {
+                            quickViewKeys.push(getValue(r[0]))
+                            quickViewKeys = quickViewKeys
+                          }
+                        }}
+                        name="edit"
+                        key={getValue(r[0])}
+                        type="button"
+                        on:click={() => {
+                          quickViewKeys.push(getValue(r[0]))
+                          quickViewKeys = quickViewKeys
+                        }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24">
+                        <path
+                          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3
+                          17.25zM20.71 7.04c.39-.39.39-1.02
+                          0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83
+                          3.75 3.75 1.83-1.83z" />
+                        <path d="M0 0h24v24H0z" fill="none" />
+                      </svg>
+                    {/if}
+                  {/if}
+                </td>
+                <td>
+                  {#if !isGlobal(r[0])}
+                    <svg
+                      tabindex="0"
+                      on:keypress={e => {
+                        if (e.keyCode == 13 || e.which == 13) {
+                          onDeleteRow(getValue(r[0]), rowIndex)()
+                        }
+                      }}
+                      name="delete"
+                      key={getValue(r[0])}
+                      type="button"
+                      on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24">
+                      <path
+                        d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19
+                        4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+                      <path d="M0 0h24v24H0z" fill="none" />
+                    </svg>
+                  {/if}
+                </td>
+              {/if}
               <!-- <td> -->
+
               {#if false}
                 <a href="javascript:;" on:click={() => onItemClick(r)}>
                   <span class="icon is-small">
@@ -952,7 +983,7 @@
             </tr>
             {#if quickViewKeys.includes(getValue(r[0]))}
               <tr>
-                <td colspan={colCount + mergeRowsCount}>
+                <td colspan={colCount + (showRowNum ? 1 : 0) + 3}>
                   {#if quickcomponent}
                     <svelte:component
                       this={quickcomponent}
