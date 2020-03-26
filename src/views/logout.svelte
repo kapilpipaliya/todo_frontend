@@ -33,13 +33,13 @@
   })
   // some functions:============
   function onLogout(d) {
-    if (d.ok) {
+    if (d[0]) {
       loging_out = false
       header = 'Logged out successfully!'
       er = 'Thank you for visiting. See you again soon.'
     } else {
       header = 'Error'
-      er = d.error
+      er = d[1]
     }
   }
 </script>

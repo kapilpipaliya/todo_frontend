@@ -262,9 +262,9 @@
     headerColSortSettingsRow = d[3] ?? []
     headerColEditableRow = d[4] ?? []
     headerColPropsRow = d[5] ?? []
-    if(IS_PRODUCTION){
-      const keyIdx = headerColTitlesRow.findIndex(x=>x==='Key')
-      if(keyIdx > -1){
+    if (IS_PRODUCTION) {
+      const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key')
+      if (keyIdx > -1) {
         headerColIsvisibleRow[keyIdx] = 0
       }
     }
@@ -653,7 +653,8 @@
   }
   let mergeRowsCount
   $: mergeRowsCount = 3 + (showRowNum ? 1 : 0)
-  $: colCount = headerColIsvisibleRow.filter(x=> !!x).length
+  $: colCount = headerColIsvisibleRow.filter(x => !!x).length
+  $: showResetFilterButton = filterSettings.filter(x => !x).length > 0
   // can pass null to display nothing.
   function getValue(v) {
     return isArray(v) ? v[0] || '' : v
@@ -724,7 +725,9 @@
   <hr />
   <Error {er} />
   {#if showHeader}
-    <button class="" on:click={onResetFilter}>Reset Filters</button>
+    {#if showResetFilterButton}
+      <button class="" on:click={onResetFilter}>Reset Filters</button>
+    {/if}
 
     <span>{items.length}{items.length <= 1 ? ' item' : ' items'}</span>
     Page Size:

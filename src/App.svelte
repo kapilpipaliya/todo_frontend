@@ -131,9 +131,9 @@
         <TreeSidebar class="guest" menu={mS$.guest} />
       {/if}
       {#if e$}
-      {#if !IS_PRODUCTION}
-        <TreeSidebar class="global" menu={mS$.global} />
-      {/if}
+        {#if !IS_PRODUCTION}
+          <TreeSidebar class="global" menu={mS$.global} />
+        {/if}
         <TreeSidebar class="home" menu={mS$.home} />
       {/if}
     {/if}
