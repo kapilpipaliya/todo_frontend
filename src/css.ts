@@ -115,7 +115,7 @@ class Toast {
 
 const T = new Toast()
 
-export const css_loading = writable(false)
+export const css_loading = writable(true)
 let cssRaw = {}
 
 let css_add_count = 0
