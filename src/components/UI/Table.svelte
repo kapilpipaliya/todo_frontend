@@ -819,7 +819,7 @@
                         {/each}
                       </select>
                     </th>
-                  {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double}
+                  {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
                     <th>
                       <input
                         type="search"
@@ -838,8 +838,8 @@
                     </th>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
                     <th>Date</th>
-                  {:else if headerColTypesRow[index] === DisplayType.Url}
-                    <th />
+                  <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
+                    <th /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
                     <th />
                   {:else}
@@ -918,7 +918,7 @@
                       {:else if headerColTypesRow[index] === DisplayType.Url}
                         <Url
                           href={makeUrl(headerColPropsRow[index], c)}
-                          value={headerColPropsRow[index].l} />
+                          value={getValue(c)} />
                       {:else if headerColTypesRow[index] === DisplayType.Checkbox}
                         <Bool value={getValue(c)} />
                       {:else if headerColTypesRow[index] === DisplayType.Color}
