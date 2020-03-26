@@ -65,7 +65,7 @@
   export let quickcomponent = false
   export let schema_key = ''
   export let pass = [] // [["context", "org_data", "_key", "org"]]
-  export let query = { limit: 0, page: 1 } // To get arguments from ?limit=25&page=2
+  export let query = { limit: 0, page: 1, filter: [] } // To get arguments from ?limit=25&page=2
   export let requiredFilter = [] // always add this filter when fetch // used when showing custom table
 
   css_count.increase('table')
@@ -115,9 +115,24 @@
     }
   }
   setPass()
+
   // =============================================================================
   // ================================Filter ======================================
-  let filterSettings = []
+  let filterSettings = query.filter ? JSON.parse(query.filter) : []
+  $: {
+    history.pushState(
+      {},
+      '',
+      '?limit=' +
+        limit +
+        '&page=' +
+        current_page +
+        '&sort=' +
+        JSON.stringify(headerColSortSettingsRow) +
+        '&filter=' +
+        JSON.stringify(filterSettings)
+    )
+  }
   const delay_refresh = () => {
     // when filter applied, change current_page to 1 before fetching data, to prevent
     // empty result
@@ -259,7 +274,7 @@
     headerColTitlesRow = d[0] ?? []
     headerColTypesRow = d[1] ?? []
     headerColIsvisibleRow = d[2] ?? []
-    headerColSortSettingsRow = d[3] ?? []
+    headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? []
     headerColEditableRow = d[4] ?? []
     headerColPropsRow = d[5] ?? []
     if (IS_PRODUCTION) {
@@ -284,7 +299,7 @@
     }
     showHeader = options?.table?.header ?? true
     rowType = options?.table?.row ?? 'table'
-    resetFilter_() // Take care....
+    // resetFilter_() // Take care.... why this is needed?
   }
   function dropNotExisting(a1: string[], b1: string[]) {
     // if a1 not contains element in b1 remove it from a1 and return it.
