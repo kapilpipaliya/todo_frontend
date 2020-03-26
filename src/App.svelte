@@ -10,6 +10,7 @@
   import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
   import { S } from './ws_events_dispatcher'
   import TreeSidebar from './components/UI/TreeSidebar.svelte'
+  import LoadAwesome from './components/UI/LoadAwesome.svelte'
   import { Router } from './components/svelte-router-spa/index'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
 
@@ -140,5 +141,7 @@
   </nav>
   {#if r$.length}
     <Router routes={r$} />
-  {:else}Loading...{/if}
+  {:else}
+    <LoadAwesome />
+  {/if}
 </Notifications>
