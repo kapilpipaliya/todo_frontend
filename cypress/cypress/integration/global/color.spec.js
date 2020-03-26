@@ -1,6 +1,6 @@
 describe('Color Page Test', () => {
   beforeEach(() => {
-  	cy.login()
+    cy.login()
     cy.visit('/page/global_color')
   })
 
@@ -15,14 +15,13 @@ describe('Color Page Test', () => {
     cy.submitButtonClick('global_color')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Code', 'test2')
     cy.submitButtonClick('global_color')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

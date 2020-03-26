@@ -1,8 +1,7 @@
 describe('Org Page Test', () => {
   beforeEach(() => {
-  	cy.login()
-  	cy.visit('/organizations')
-
+    cy.login()
+    cy.visit('/organizations')
   })
 
   it('List', () => {
@@ -17,15 +16,14 @@ describe('Org Page Test', () => {
     cy.submitButtonClick('organization')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Id', 'Kapil1')
     cy.inputType('Name', 'Pipaliya')
     cy.submitButtonClick('organization')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

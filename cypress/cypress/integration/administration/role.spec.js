@@ -1,8 +1,7 @@
 describe('Role Page Test', () => {
   beforeEach(() => {
-  	cy.login()
-  	cy.visit('/admin/roles')
-
+    cy.login()
+    cy.visit('/admin/roles')
   })
 
   it('List', () => {
@@ -17,15 +16,14 @@ describe('Role Page Test', () => {
     cy.submitButtonClick('role')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Id', 'role2')
     cy.inputType('Name', 'Pipaliya')
     cy.submitButtonClick('role')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

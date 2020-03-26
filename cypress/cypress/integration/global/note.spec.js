@@ -1,6 +1,6 @@
 describe('Note Page Test', () => {
   beforeEach(() => {
-  	cy.login()
+    cy.login()
     cy.visit('/page/note')
   })
 
@@ -15,14 +15,13 @@ describe('Note Page Test', () => {
     cy.submitButtonClick('note')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Subject', 'test2')
     cy.submitButtonClick('note')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

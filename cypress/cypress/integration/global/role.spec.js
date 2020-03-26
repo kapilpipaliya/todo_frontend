@@ -1,6 +1,6 @@
 describe('Role Page Test', () => {
   beforeEach(() => {
-  	cy.login()
+    cy.login()
     cy.visit('/page/global_role')
   })
 
@@ -15,14 +15,13 @@ describe('Role Page Test', () => {
     cy.submitButtonClick('global_role')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Name', 'test2')
     cy.submitButtonClick('global_role')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

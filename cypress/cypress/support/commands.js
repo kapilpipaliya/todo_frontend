@@ -23,32 +23,42 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-Cypress.Commands.add("login", (email='test@o-k.tech', password='1') => { 
-	cy.visit('/account/login', {failOnStatusCode: false})
-    cy.get("input[name='Email']").focus().type(email)
-    cy.get("input[name='Pass']").focus().type(password)
-    cy.get("button.success[type='submit']").click()
-    cy.wait(500) // must wait to get cookie from server
+Cypress.Commands.add('login', (email = 'test@o-k.tech', password = '1') => {
+  cy.visit('/account/login', { failOnStatusCode: false })
+  cy.get("input[name='Email']")
+    .focus()
+    .type(email)
+  cy.get("input[name='Pass']")
+    .focus()
+    .type(password)
+  cy.get("button.success[type='submit']").click()
+  cy.wait(500) // must wait to get cookie from server
 })
-Cypress.Commands.add("addClick", () => { 
-	cy.get("button[name='table_add']").click()
+Cypress.Commands.add('addClick', () => {
+  cy.get("button[name='table_add']").click()
 })
-Cypress.Commands.add("editClick", () => { 
-	cy.get("table tbody td button[name='edit'][type='button']").click()
+Cypress.Commands.add('editClick', () => {
+  cy.get("table tbody td button[name='edit'][type='button']").click()
 })
-Cypress.Commands.add("editKeyClick", (key) => { 
-	cy.get(`table tbody td button[type='button'][key='${key}'][name='edit']`).click()
+Cypress.Commands.add('editKeyClick', key => {
+  cy.get(
+    `table tbody td button[type='button'][key='${key}'][name='edit']`
+  ).click()
 })
-Cypress.Commands.add("deleteClick", () => { 
-	cy.get("table tbody td button[name='delete'][type='button']").click()
+Cypress.Commands.add('deleteClick', () => {
+  cy.get("table tbody td button[name='delete'][type='button']").click()
 })
-Cypress.Commands.add("deleteKeyClick", (key) => { 
-	cy.get(`table tbody td button[name='delete'][key='${key}'][type='button']`).click()
+Cypress.Commands.add('deleteKeyClick', key => {
+  cy.get(
+    `table tbody td button[name='delete'][key='${key}'][type='button']`
+  ).click()
 })
-Cypress.Commands.add("submitButtonClick", (key='insert') => { 
-	cy.get(`form.${key} button.success[type='submit']`).click()
+Cypress.Commands.add('submitButtonClick', (key = 'insert') => {
+  cy.get(`form.${key} button.success[type='submit']`).click()
 })
-Cypress.Commands.add("inputType", (key, value) => {
-	cy.wait(300)
-	cy.get(`input[name='${key}']`).focus().type(value)
+Cypress.Commands.add('inputType', (key, value) => {
+  cy.wait(300)
+  cy.get(`input[name='${key}']`)
+    .focus()
+    .type(value)
 })

@@ -1,8 +1,7 @@
 describe('Member Page Test', () => {
   beforeEach(() => {
-  	cy.login()
-  	cy.visit('/admin/members')
-
+    cy.login()
+    cy.visit('/admin/members')
   })
 
   it('List', () => {
@@ -16,14 +15,13 @@ describe('Member Page Test', () => {
     cy.submitButtonClick('member')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Email', 'k@g.com')
     cy.submitButtonClick('member')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

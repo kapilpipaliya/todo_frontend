@@ -1,6 +1,6 @@
 describe('Schema Page Test', () => {
   beforeEach(() => {
-  	cy.login()
+    cy.login()
     cy.visit('/page/schema')
   })
 
@@ -16,15 +16,14 @@ describe('Schema Page Test', () => {
     cy.submitButtonClick('schema')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.wait(1500)
     cy.get('.jsoneditor')
     cy.submitButtonClick('schema')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

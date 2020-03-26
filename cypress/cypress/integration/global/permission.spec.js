@@ -15,14 +15,13 @@ describe('Permission Page Test', () => {
     cy.submitButtonClick('global_permission')
   })
 
-   it('Update', () => {
-     cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Name', 'test2')
     cy.submitButtonClick('global_permission')
-   })
+  })
 
-   it('Delete', () => {
-     cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

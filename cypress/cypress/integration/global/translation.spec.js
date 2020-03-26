@@ -1,6 +1,6 @@
 describe('Translation Page Test', () => {
   beforeEach(() => {
-  	cy.login()
+    cy.login()
     cy.visit('/page/translation')
   })
 
@@ -15,14 +15,13 @@ describe('Translation Page Test', () => {
     cy.submitButtonClick('translation')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     //cy.inputType('Subject', 'test2')
     cy.submitButtonClick('translation')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })

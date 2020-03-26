@@ -1,8 +1,7 @@
 describe('Group Page Test', () => {
   beforeEach(() => {
-  	cy.login()
-  	cy.visit('/admin/groups')
-
+    cy.login()
+    cy.visit('/admin/groups')
   })
 
   it('List', () => {
@@ -17,15 +16,14 @@ describe('Group Page Test', () => {
     cy.submitButtonClick('group')
   })
 
-   it('Update', () => {
-   	cy.editKeyClick('test')
+  it('Update', () => {
+    cy.editKeyClick('test')
     cy.inputType('Id', 'group2')
     cy.inputType('Name', 'Pipaliya')
     cy.submitButtonClick('group')
-   })
+  })
 
-   it('Delete', () => {
-   	cy.deleteKeyClick('test')
-   })
-
+  it('Delete', () => {
+    cy.deleteKeyClick('test')
+  })
 })
