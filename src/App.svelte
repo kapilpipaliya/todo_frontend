@@ -11,7 +11,7 @@
   import { S } from './ws_events_dispatcher'
   import TreeSidebar from './components/UI/TreeSidebar.svelte'
   import LoadAwesome from './components/UI/LoadAwesome.svelte'
-  import { Router } from './components/svelte-router-spa/index'
+  import { Router } from '../thirdparty/svelte-router-spa/index'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
 
   import Page from './components/Page.svelte'

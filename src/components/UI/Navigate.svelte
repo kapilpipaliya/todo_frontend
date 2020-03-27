@@ -2,7 +2,7 @@
   import { writable } from 'svelte/store'
   import { S } from '../../ws_events_dispatcher'
   import { ET, E } from '../../enums'
-  import { navigateTo } from '../svelte-router-spa/index'
+  import { navigateTo } from '../../../thirdparty/svelte-router-spa/index'
   const navigation = writable('')
   // must use id =0
   S.bind$(

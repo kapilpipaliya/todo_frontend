@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Route } from '../components/svelte-router-spa/index'
+  import { Route } from '../../thirdparty/svelte-router-spa/index'
   import { getContext, setContext } from 'svelte'
   import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
   export let currentRoute

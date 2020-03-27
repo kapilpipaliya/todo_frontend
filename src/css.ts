@@ -49,12 +49,7 @@ class Toast {
     return Promise.all(
       urls.map(
         (url): Promise<HTMLElement> => {
-          switch (
-            url
-              .split('.')
-              .pop()!
-              .toLowerCase()
-          ) {
+          switch (url.split('.').pop()!.toLowerCase()) {
             case 'css':
               return this.css(url)
             case 'js':
@@ -121,13 +116,13 @@ let cssRaw = {}
 let css_add_count = 0
 const css_count_ = { table: 0, normalize: 0, body: 1 }
 export const css_count = {
-  increase: name => {
+  increase: (name) => {
     css_count_[name] = (css_count_[name] || 0) + 1
     if (cssRaw[name] && css_count_[name] === 1) {
       css_loading.set(true)
       ++css_add_count
       //console.log('css_add ', css_add_count, cssRaw[name].link)
-      T.css(cssRaw[name].link).then(function() {
+      T.css(cssRaw[name].link).then(function () {
         --css_add_count
         //console.log('css_remove ', css_add_count, cssRaw[name].link)
         if (css_add_count == 0) css_loading.set(false)
@@ -135,8 +130,8 @@ export const css_count = {
       })
     }
   },
-  decrease: name => {
-    setTimeout(_ => {
+  decrease: (name) => {
+    setTimeout((_) => {
       css_count_[name] = css_count_[name] - 1
       if (cssRaw[name] && css_count_[name] == 0) {
         // note: not calling css_loading.set(true) because onDestory life cycle is called too late!
@@ -155,7 +150,7 @@ export const css_count = {
 // {"table":{"classes":{},"link":"/table.5efd916f.css"}}
 S.bind$(
   [ET.get, E.css_event, 0],
-  function(data: { table: { link: '' } }) {
+  function (data: { table: { link: '' } }) {
     css_loading.set(true)
     css.set(data)
     for (let [k, v] of Object.entries(data)) {
@@ -172,7 +167,7 @@ S.bind$(
           }
           ++css_add_count
           //console.log('css_add ', css_add_count, v.link)
-          T.css(v.link).then(function() {
+          T.css(v.link).then(function () {
             --css_add_count
             //console.log('css_remove ', css_add_count, v.link)
             if (css_add_count == 0) css_loading.set(false)

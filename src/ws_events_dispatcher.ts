@@ -4,7 +4,7 @@ Simplified WebSocket events dispatcher
 //import IsomorphicWs from 'isomorphic-ws'
 import { writable } from 'svelte/store' // no
 import { map } from 'ramda'
-import * as M from "@msgpack/msgpack";
+import * as M from '@msgpack/msgpack'
 import { ET, E } from './enums'
 
 const http_proto = location.protocol
@@ -13,18 +13,18 @@ const domain = window.location.hostname
 declare const process
 const port =
   location.protocol == 'http:'
-  // @ts-ignore
-    ? process.env.NODE_ENV == 'development'
+    ? // @ts-ignore
+      process.env.NODE_ENV == 'development'
       ? ':8500'
       : ''
-      // @ts-ignore
-    : process.env.NODE_ENV == 'development'
+    : // @ts-ignore
+    process.env.NODE_ENV == 'development'
     ? ':8504'
     : ''
 const ws_proto = http_proto == 'http:' ? 'ws' : 'wss'
 
 // @ts-ignore
-const BACKEND = process.env.b  ? process.env.b : `${domain}${port}`
+const BACKEND = process.env.b ? process.env.b : `${domain}${port}`
 //export const product_img_url = `${http_proto}://${domain}:${port}/http/v1/user/download_id`
 //export const thumb_url = `${http_proto}://${domain}:${port}/http/v1/user/thumb_id`
 export const WS_PATH = `${ws_proto}://${BACKEND}/ws`
@@ -43,10 +43,10 @@ for $ prefix use always check if(mounted) first.
 // same library:
 //A WebSocket JavaScript library https://sarus.anephenix.com
 //https://github.com/anephenix/sarus
-type callBack = (d: any) => void;
+type callBack = (d: any) => void
 type event = Array<number | string>
 export class ServerEventsDispatcher {
-  readonly #path: string;
+  readonly #path: string
   private id_ = 0
   #req: {}
   #res: {}
@@ -58,7 +58,7 @@ export class ServerEventsDispatcher {
   #firstPayload: Array<[]>
   //https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine
   private isOnline = window.navigator.onLine
-  constructor(path: string, req:{}, res:{}) {
+  constructor(path: string, req: {}, res: {}) {
     this.#path = path
     this.#req = req
     this.#res = res
@@ -85,14 +85,16 @@ export class ServerEventsDispatcher {
     this.delay_send = this.delay_send.bind(this)
     this.setupConnection()
     window.addEventListener('online', () => {
-        this.isOnline = true
-        this.setupConnection()
-    });
+      this.isOnline = true
+      this.setupConnection()
+    })
     window.addEventListener('offline', () => {
-       this.isOnline = false
-    });
+      this.isOnline = false
+    })
   }
-  get uid(){return ++this.id_ }
+  get uid() {
+    return ++this.id_
+  }
   setupConnection() {
     this.#conn = new WebSocket(this.#path, [])
     // dispatch to the right handlers
@@ -107,9 +109,14 @@ export class ServerEventsDispatcher {
     this.#conn.removeEventListener('open', this.onopen)
     this.#conn.close()
   }
-  bind(event: event, callback: callBack, handleMultiple = 0, data=[]) {
-    this.#callbacks[JSON.stringify(event)] = this.#callbacks[JSON.stringify(event)] ?? []
-    this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback, data]) // 0 means unsubscribe using first time
+  bind(event: event, callback: callBack, handleMultiple = 0, data = []) {
+    this.#callbacks[JSON.stringify(event)] =
+      this.#callbacks[JSON.stringify(event)] ?? []
+    this.#callbacks[JSON.stringify(event)].push([
+      handleMultiple,
+      callback,
+      data
+    ]) // 0 means unsubscribe using first time
     return this
   }
   batchBind(events: Array<[event, callBack, any]> = []) {
@@ -126,23 +133,27 @@ export class ServerEventsDispatcher {
     this.trigger(payload)
     return this
   }
-  bind$(event: event, callback: callBack, handleMultiple=0, data=[]) {
+  bind$(event: event, callback: callBack, handleMultiple = 0, data = []) {
     this.unbind(event)
     this.bind(event, callback, handleMultiple)
     return this
   }
-  bindT(event: event, callback: callBack, data, handleMultiple=0) {
+  bindT(event: event, callback: callBack, data, handleMultiple = 0) {
     this.bind$(event, callback, handleMultiple, data)
     this.trigger([[event, data]])
     return () => this.unbind(event)
   }
-  unbind(event: event) {this.#callbacks[JSON.stringify(event)] = [] }
+  unbind(event: event) {
+    this.#callbacks[JSON.stringify(event)] = []
+  }
   unbind_(event_names: Array<event> = []) {
-    map((event:event) => {this.unbind(event) }, event_names)
+    map((event: event) => {
+      this.unbind(event)
+    }, event_names)
     return this
   }
-  private delay_send(){
-    if(this.#firstPayload){
+  private delay_send() {
+    if (this.#firstPayload) {
       this.#conn.send(JSON.stringify(this.#firstPayload))
     }
     this.#isFirst = false
@@ -154,17 +165,17 @@ export class ServerEventsDispatcher {
         // code block
         //This will added to onopen list, take care
         //this.#conn.addEventListener('open', () => {
-          //f(payload)
-          this.#firstPayload.push(...payload)
+        //f(payload)
+        this.#firstPayload.push(...payload)
         //})
         return this
       case 1: // OPEN
-        if(this.#isFirst){
-          for(let i = 0; i < payload.length; i++){
+        if (this.#isFirst) {
+          for (let i = 0; i < payload.length; i++) {
             this.#firstPayload.push(payload[i])
           }
           clearTimeout(this.#firstCancelTimeout)
-          this.#firstCancelTimeout = setTimeout(this.delay_send, 50);
+          this.#firstCancelTimeout = setTimeout(this.delay_send, 50)
         } else {
           this.#conn.send(JSON.stringify(payload)) // <= send JSON data to socket server
         }
@@ -174,8 +185,8 @@ export class ServerEventsDispatcher {
         // try to reconnect/logout
         this.setupConnection()
         //this.#conn.addEventListener('open', () => {
-          this.#firstPayload.push(...payload)
-          //f(payload)
+        this.#firstPayload.push(...payload)
+        //f(payload)
         //})
         return this
       default:
@@ -183,14 +194,14 @@ export class ServerEventsDispatcher {
       // code block
     }
   }
-  private stringHandle(data: [   [[number, number, string], Array<{}>]  ]){
-    if(!Array.isArray(data)){
+  private stringHandle(data: [[[number, number, string], Array<{}>]]) {
+    if (!Array.isArray(data)) {
       console.warn('return data must be an array.', data)
     } else {
       try {
         for (let i = 0; i < data.length; i++) {
           const e = data[i]
-          if(!Array.isArray(e) || e.length < 2){
+          if (!Array.isArray(e) || e.length < 2) {
             console.warn('event array should have >= 2 elements, got: ', e)
           }
           const event = e[0]
@@ -212,7 +223,7 @@ export class ServerEventsDispatcher {
     // if(evt.data instanceof ArrayBuffer ){
     else {
       const blob = evt.data
-      const buffer = await blob.arrayBuffer();
+      const buffer = await blob.arrayBuffer()
       const data = M['default']['decode'](buffer)
       this.stringHandle(data)
       //console.log('Received arraybuffer')
@@ -228,7 +239,7 @@ export class ServerEventsDispatcher {
     ws_connected.set(false)
     this.dispatch(['close', '', 0], [])
     setTimeout(() => {
-      if(this.isOnline){
+      if (this.isOnline) {
         this.setupConnection()
       }
     }, 1000)
@@ -239,7 +250,7 @@ export class ServerEventsDispatcher {
     this.#isFirst = true
     //console.log(this.conn.extensions);
     //console.log("Server Opened")
-    this.#firstCancelTimeout = setTimeout(this.delay_send, 50);
+    this.#firstCancelTimeout = setTimeout(this.delay_send, 50)
     this.dispatch(['open', '', 0], [])
     // const length = this.#callbacks.length;
     //   for (let i = 0; i < length; i++) {
@@ -248,7 +259,6 @@ export class ServerEventsDispatcher {
     //       this.#callbacks[JSON.stringify(event)] = []
     //     }
     //   }
-
   }
   private onerror(error) {
     console.warn(error.message)
@@ -259,9 +269,9 @@ export class ServerEventsDispatcher {
   private dispatch(event: event, message: Array<{}>) {
     const chain = this.#callbacks[JSON.stringify(event)]
     if (typeof chain == 'undefined') {
-      console.warn("no callbacks for this event: ", event)
+      console.warn('no callbacks for this event: ', event)
     } else {
-      const length = chain.length;
+      const length = chain.length
       for (let i = 0; i < length; i++) {
         chain[i][1](...message)
         if (chain[i][0] == 0) {
@@ -283,7 +293,7 @@ export function clearCookie(d) {
 
 S.bind$([ET.get, E.cookie_event, 0], saveCookies, 1)
 function saveCookies(data) {
-  Object.keys(data.cookie).forEach(key => {
+  Object.keys(data.cookie).forEach((key) => {
     saveCookie(key, data.cookie[key], data.max_age)
   })
 }

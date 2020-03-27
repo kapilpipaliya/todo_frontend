@@ -5,7 +5,7 @@
   import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
   declare let $ws_connected
   import { clone } from 'rambda'
-  import { Route } from '../components/svelte-router-spa/index'
+  import { Route } from '../../thirdparty/svelte-router-spa/index'
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'
   import UrlPattern from 'url-pattern'
   import Skeleton from '../components/UI/Skeleton.svelte'

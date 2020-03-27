@@ -3,7 +3,11 @@ export const IS_PRODUCTION =
   // @ts-ignore
   process.env.NODE_ENV == 'development' ? false : true
 
-export enum SortDirection { None, Ascending, Descending };
+export enum SortDirection {
+  None,
+  Ascending,
+  Descending
+}
 
 export enum ValueType {
   None, // not yet initialized
@@ -259,7 +263,7 @@ export enum E {
   form_schema_get,
   form_schema_mutate
 }
-export const form_schema_evt = id => [ET.get, E.form_schema_get, id]
+export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id]
 // generate event from schema:
 export const schemaEvents = (schema: string) => {
   const h = E[`${schema}_list`]

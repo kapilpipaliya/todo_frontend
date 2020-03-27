@@ -27,14 +27,14 @@ export default class Storage {
   [openDB]() {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.dbVersion)
-      request.onerror = err => {
+      request.onerror = (err) => {
         reject(err)
       }
       request.onsuccess = () => {
         this[db] = request.result
         resolve(this[db])
       }
-      request.onupgradeneeded = event => {
+      request.onupgradeneeded = (event) => {
         this[db] = event.target['result']
         if (!this[db].objectStoreNames.contains(this.storeName)) {
           const newStore = this[db].createObjectStore(this.storeName, {
@@ -43,7 +43,7 @@ export default class Storage {
           newStore.transaction.oncomplete = () => {
             resolve(this[db])
           }
-          newStore.transaction.onerror = err => {
+          newStore.transaction.onerror = (err) => {
             reject(err)
           }
         } else {
@@ -65,7 +65,7 @@ export default class Storage {
       request.onsuccess = () => {
         resolve(this[db])
       }
-      request.onerror = err => {
+      request.onerror = (err) => {
         reject(err)
       }
     })
@@ -78,10 +78,10 @@ export default class Storage {
         .transaction([this.storeName])
         .objectStore(this.storeName)
       const request = store.get(key)
-      request.onsuccess = e => {
+      request.onsuccess = (e) => {
         resolve(e.target.result)
       }
-      request.onerror = err => {
+      request.onerror = (err) => {
         reject(err)
       }
     })
@@ -92,10 +92,10 @@ export default class Storage {
       .transaction([this.storeName], 'readwrite')
       .objectStore(this.storeName)
     const request = store.delete(key)
-    request.onsuccess = e => {
+    request.onsuccess = (e) => {
       /// resolve(this[db])  //// must fix this
     }
-    request.onerror = err => {
+    request.onerror = (err) => {
       /// reject(err) /// must fix this
     }
   }
@@ -152,7 +152,7 @@ export default class Storage {
     const store = this[db]
       .transaction([this.storeName], 'readwrite')
       .objectStore(this.storeName)
-    store.openCursor().onsuccess = function(event) {
+    store.openCursor().onsuccess = function (event) {
       var cursor = event.target.result
       func(cursor)
     }

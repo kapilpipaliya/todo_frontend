@@ -366,11 +366,19 @@
           : JSON.stringify(headerColSortSettingsRow)) +
         '&filter=' +
         JSON.stringify(filterSettings)
-        const pathAndSearch = window.location.pathname + q
-        if(pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
-          console.log(window.location.pathname , window.location.search, 'replaced url query', pathAndSearch)
-          history.replaceState({ page: pathAndSearch }, '', pathAndSearch)
-        }
+      const pathAndSearch = window.location.pathname + q
+      if (
+        pathAndSearch !== window.location.pathname + window.location.search &&
+        q + q !== window.location.search
+      ) {
+        console.log(
+          window.location.pathname,
+          window.location.search,
+          'replaced url query',
+          pathAndSearch
+        )
+        history.replaceState({ page: pathAndSearch }, '', pathAndSearch)
+      }
     }
   }
   // =============================================================================
