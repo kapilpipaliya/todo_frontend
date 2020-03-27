@@ -115,25 +115,32 @@ let cssRaw = {}
 
 let css_add_count = 0
 const css_count_ = { table: 0, normalize: 0, body: 1 }
+const css_loaded = {}
 export const css_count = {
   increase: (name) => {
     css_count_[name] = (css_count_[name] || 0) + 1
-    if (cssRaw[name] && css_count_[name] === 1) {
+    if (cssRaw[name] && !css_loaded[name]) {
       css_loading.set(true)
       ++css_add_count
       //console.log('css_add ', css_add_count, cssRaw[name].link)
       T.css(cssRaw[name].link).then(function () {
         --css_add_count
+        css_loaded[name] = true
         //console.log('css_remove ', css_add_count, cssRaw[name].link)
         if (css_add_count == 0) css_loading.set(false)
         //console.log('css files have been loaded!', cssRaw[name].link)
-      })
+      }).catch(function(reason) {
+          --css_add_count
+          css_loaded[name] = false
+          if (css_add_count == 0) css_loading.set(false)
+        })
     }
   },
   decrease: (name) => {
     setTimeout((_) => {
       css_count_[name] = css_count_[name] - 1
       if (cssRaw[name] && css_count_[name] == 0) {
+        css_loaded[name] = false
         // note: not calling css_loading.set(true) because onDestory life cycle is called too late!
         const l = `head link[rel='stylesheet'][href='${cssRaw[name].link}']`
         const link = document.querySelector(l)
@@ -165,16 +172,28 @@ S.bind$(
               console.log('link not found: ', l)
             }
           }
+        }
+      }
+
+      if (cssRaw[k]?.link !== v.link || !css_loaded[k]) {
+        if (css_count_[k] > 0) {
           ++css_add_count
           //console.log('css_add ', css_add_count, v.link)
           T.css(v.link).then(function () {
             --css_add_count
+            css_loaded[k] = true
             //console.log('css_remove ', css_add_count, v.link)
             if (css_add_count == 0) css_loading.set(false)
             //console.log('css files have been loaded when setting data!', v.link)
+          }).catch(function(reason) {
+            --css_add_count
+            css_loaded[k] = false
+            if (css_add_count == 0) css_loading.set(false)
           })
         }
       }
+
+
     }
     cssRaw = data
   },
