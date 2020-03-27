@@ -31,8 +31,6 @@
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
-  import { fade, fly } from 'svelte/transition'
-  import { flip } from 'svelte/animate'
   import {
     IS_PRODUCTION,
     ET,
@@ -909,8 +907,7 @@
             {#each items as r, rowIndex (getValue(r[0]))}
               <tr
                 bind:this={rowDoms[rowIndex]}
-                class={selectedRowsKeys.includes(getValue(r[0])) ? $css.table.classes.selected || 'selected' : ''}
-                in:fade={{ y: 200, duration: 100 }}>
+                class={selectedRowsKeys.includes(getValue(r[0])) ? $css.table.classes.selected || 'selected' : ''}>
                 <td>
                   {#if !isGlobal(r[0])}
                     {#if false}

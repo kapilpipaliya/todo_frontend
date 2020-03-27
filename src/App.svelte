@@ -4,8 +4,9 @@
   import { map } from 'rambda'
   import { translation } from './translation'
   import { current_member } from './current_member'
-  import { css_loading, css_count } from './css'
   declare let $current_member
+  import { css_loading, css_count } from './css'
+  declare let $css_loading
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
   import { S } from './ws_events_dispatcher'
@@ -28,6 +29,8 @@
   import OrganizationIndex from './views/org_index.svelte'
   import ProjectLayout from './views/project_layout.svelte'
   import ProjectIndex from './views/project_index.svelte'
+  import MyPage from './views/my_page.svelte'
+  import AccountLayout from './views/account_layout.svelte'
 
   css_count.increase('all_menu')
   let e$
@@ -88,7 +91,9 @@
       OrganizationLayout: OrganizationLayout,
       OrganizationIndex: OrganizationIndex,
       ProjectLayout: ProjectLayout,
-      ProjectIndex: ProjectIndex
+      ProjectIndex: ProjectIndex,
+      MyPage: MyPage,
+      AccountLayout: AccountLayout
     }
     const G = {
       userIsAdmin: () => true,
@@ -144,7 +149,7 @@
         <TreeSidebar class="public" menu={mS$.public} />
         {#if e$}
           Logged In: {e$}
-          <TreeSidebar class="account" menu={mS$.account} />
+          <TreeSidebar class="top_right" menu={mS$.top_right} />
         {:else}
           <TreeSidebar class="guest" menu={mS$.guest} />
         {/if}
