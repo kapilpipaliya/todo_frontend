@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { localisedRoute, navigateTo, routeIsActive } from '../router.js'
+  import { localisedRoute, navigateTo, routeIsActive } from '../spa_router'
   export let to = '/'
   export let title = ''
   export let styles = ''

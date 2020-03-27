@@ -97,7 +97,7 @@ export { routes }
 Import the routes into your main component (probably App.svelte)
 
 ```javascript
-<script lang="ts">
+<script>
   import { Router } from 'svelte-router-spa'
   import { routes } from './routes'
 </script>
@@ -116,7 +116,7 @@ You can add any number of layouts nested inside Router. For instance assuming th
 Filename: _public_layout.svelte_
 
 ```javascript
-<script lang="ts">
+<script>
   import { Route } from 'svelte-router-spa'
   import TopHeader from './top_header.svelte'
   export let currentRoute
@@ -134,10 +134,11 @@ Filename: _public_layout.svelte_
 Filename: _admin_layout.svelte_
 
 ```javascript
-<script lang="ts">
+<script>
   import { Route } from "svelte-router-spa";
 
   export let currentRoute;
+  const params = {}
 </script>
 
 <div>
@@ -256,7 +257,7 @@ This is the main component that needs to be included before any other content as
 The simplest approach (although not required) is to have an App.svelte file like this:
 
 ```javascript
-<script lang="ts">
+<script>
   import { Router } from 'svelte-router-spa'
   import { routes } from './routes'
 
@@ -291,7 +292,7 @@ Route is smart enough to expose the named params in the route component where th
 Example:
 
 ```javascript
-<script lang="ts">
+<script>
   import { Route } from 'svelte-router-spa'
   import TopHeader from './top_header.svelte'
   import FooterContent from './footer_content.svelte'
@@ -363,7 +364,7 @@ Router -> PublicLayout(Route) -> AboutUsLayout(Route) -> PeoplePage
 Inside PeoplePage you can get all the information about the current route like this:
 
 ```javascript
-<script lang="ts">
+<script>
   export let currentRoute
 </script>
 
@@ -396,7 +397,7 @@ Check **navigateTo** belown for more information about the language param.
 Example:
 
 ```javascript
-<script lang="ts">
+<script>
   import { Navigate } from 'svelte-router-spa'
 </script>
 
@@ -454,7 +455,7 @@ The [Navigate](https://github.com/jorgegorka/svelte-router/blob/master/README.md
 Example:
 
 ```javascript
-<script lang="ts">
+<script>
   import { routeIsActive } from 'svelte-router-spa'
 </script>
 
@@ -658,3 +659,5 @@ I would like to thank all the people that create issues and comment on [Github](
 ### Contributors
 
 [Mark Kopenga](https://github.com/mjarkk)
+
+[Fidel Ramos](https://github.com/haplo)
