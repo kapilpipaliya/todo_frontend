@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
+  import { onMount, onDestroy } from 'svelte'
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
   import { translation } from './translation'
@@ -34,6 +34,14 @@
   $: e$ = $current_member?.email
   let mS$: {}
   let r$ = []
+
+  onMount(() => {
+    const loading_div = document.getElementsByClassName(
+      'loading-placeholder'
+    )[0]
+    if (loading_div) loading_div.remove()
+  })
+
   onDestroy(
     S.bindT(
       [ET.get, E.form_schema_get, S.uid],
