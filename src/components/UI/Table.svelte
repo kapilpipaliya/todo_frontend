@@ -27,7 +27,7 @@
     getContext,
     tick
   } from 'svelte'
-  import { view, lensPath } from 'ramda'
+  import { view, lensPath, all, equals } from 'ramda'
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
@@ -38,6 +38,7 @@
     ET,
     E,
     schemaEvents,
+    SortDirection,
     ValueType,
     FormType,
     DisplayType
@@ -49,6 +50,7 @@
   import Error from '../UI/Error.svelte'
   import Skeleton from '../UI/Skeleton.svelte'
   import { css_loading, css, css_count } from '../../css'
+  declare let $css_loading
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
@@ -119,20 +121,6 @@
   // =============================================================================
   // ================================Filter ======================================
   let filterSettings = query.filter ? JSON.parse(query.filter) : []
-  $: {
-    history.pushState(
-      {},
-      '',
-      '?limit=' +
-        limit +
-        '&page=' +
-        current_page +
-        '&sort=' +
-        JSON.stringify(headerColSortSettingsRow) +
-        '&filter=' +
-        JSON.stringify(filterSettings)
-    )
-  }
   const delay_refresh = () => {
     // when filter applied, change current_page to 1 before fetching data, to prevent
     // empty result
@@ -360,6 +348,31 @@
       deleteRows_(d.d)
     }
   }
+
+  // ================================Set Query Params ===========================
+  let isFirstFSet = true
+  $: {
+    if (isFirstFSet) {
+      isFirstFSet = false
+    } else {
+      const q =
+        '?limit=' +
+        limit +
+        '&page=' +
+        current_page +
+        '&sort=' +
+        (all(equals(SortDirection.None), headerColSortSettingsRow)
+          ? JSON.stringify([])
+          : JSON.stringify(headerColSortSettingsRow)) +
+        '&filter=' +
+        JSON.stringify(filterSettings)
+        const pathAndSearch = window.location.pathname + q
+        if(pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
+          console.log(window.location.pathname , window.location.search, 'replaced url query', pathAndSearch)
+          history.replaceState({ page: pathAndSearch }, '', pathAndSearch)
+        }
+    }
+  }
   // =============================================================================
   // ================================Add Edit Row ===============================
   let doms = { addbutton: null }
@@ -508,12 +521,16 @@
       } else {
         const sortOrder = headerColSortSettingsRow[col]
         headerColSortSettingsRow = []
-        if (sortOrder === null || sortOrder === undefined) {
-          headerColSortSettingsRow[col] = 0
+        if (
+          sortOrder === null ||
+          sortOrder === undefined ||
+          SortDirection.None
+        ) {
+          headerColSortSettingsRow[col] = SortDirection.Ascending
         } else if (sortOrder === 0) {
-          headerColSortSettingsRow[col] = 1
+          headerColSortSettingsRow[col] = SortDirection.Descending
         } else {
-          headerColSortSettingsRow[col] = null
+          headerColSortSettingsRow[col] = SortDirection.None
         }
       }
     }
@@ -807,9 +824,9 @@
                       on:click={e => onHandleSort(e, index)}
                       on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
                       {h}
-                      {#if headerColSortSettingsRow[index] === 0}
+                      {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
                         ▲
-                      {:else if headerColSortSettingsRow[index] === 1}
+                      {:else if headerColSortSettingsRow[index] === SortDirection.Descending}
                         ▼
                       {:else}
                         <!-- content here -->

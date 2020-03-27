@@ -106,6 +106,7 @@ export function SpaRouter(routes, currentUrl, options = {}) {
     if (typeof window !== 'undefined') {
       const pathAndSearch = pathWithQueryParams(currentRoute)
       window.history.pushState({ page: pathAndSearch }, '', pathAndSearch)
+      // console.log('pushed history', pathAndSearch), pathAndSearch should be string
       if (routerOptions.gaPageviews) {
         gaTracking(pathAndSearch)
       }
@@ -309,5 +310,6 @@ if (typeof window !== 'undefined') {
 
   window.onpopstate = function(_event) {
     navigateTo(window.location.pathname + window.location.search)
+    // console.log(window.location.pathname , window.location.search)
   }
 }

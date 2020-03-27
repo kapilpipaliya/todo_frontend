@@ -1,11 +1,33 @@
-/node_modules/
-/public/build/
-
+# OS Generated Files #
 .DS_Store
 
-*.txt
-*.log
+# IDE Files
+*.ipr
+*.iws
+*.iml
+.idea/
+
+# Node Files #
+npm-debug.log
+node_modules/
+test/google/node_modules/
+yarn-error.log
+/.yarn/
+
+# Build Files
+.cache-loader/
+.awcache/
+.gradle/
+.happypack/
+build/
+dist/
+lib/
+transpiled/
 /dist/
 /dist*/
 
-/.yarn/
+# Test Results
+test-results.xml
+
+# Test Coverage
+coverage/
