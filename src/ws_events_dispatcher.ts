@@ -35,10 +35,14 @@ export const ws_connected = writable(false)
 usage:
 for $ prefix use always check if(mounted) first.
 */
-// import * as cookie from 'cookie';
-//import m from "@msgpack/msgpack";
-//const {encode, decode} = m;
-// const data = decode(evt.data)
+/**
+ *
+ * Ws Event Dispatcher class:
+ * 1. keep constant open connection to the backend server.
+ * component can bind and unbind function for the events
+ * keep event identifier different to not call same event's different binded functions.
+ * \todo show internet is connected or not on one place, not at every place.
+ */
 
 // same library:
 //A WebSocket JavaScript library https://sarus.anephenix.com

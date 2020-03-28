@@ -1,4 +1,9 @@
 <script lang="ts">
+  /**
+   * Table wrapper to re render table. its not possible to use same table component without re rendering it.
+   *
+   */
+
   import { tick } from 'svelte'
   import Title from './UI/Title.svelte'
   import Table from './UI/Table.svelte'

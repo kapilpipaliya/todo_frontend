@@ -1,4 +1,9 @@
 <script lang="ts">
+  /**
+   * Form wrapper to re render Form when there is same router.
+   * It is not possible to use same form component without re rendering.
+   */
+
   import { tick } from 'svelte'
   import Title from './UI/Title.svelte'
   import GeneralForm from './form/Index.svelte'
