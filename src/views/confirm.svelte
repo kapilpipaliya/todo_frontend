@@ -1,61 +1,70 @@
 <script lang="ts">
+  /**
+    * This Component does 2 thigs:
+    * 1. Wait for confirmation to be done and redirect to /
+    * 2. show the confirmation status. user can request reconfirmation email
+
+    /todo if member is already confirmed and visit this page, it should say that email is alreay verified.
+    */
+
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { ET, E } from '../enums'
   import { S, ws_connected } from '../ws_events_dispatcher'
   import Error from '../components/UI/Error.svelte'
   export let currentRoute
-  let mounted = false
+
   let er = ''
   let header = ''
   let subtitle = ''
   let confirming = true
   let result_title = ''
-  const fns = [
-      [ET.insert, E.confirm_email, S.uid],
-      [ET.subscribe, E.confirm_email_status, S.uid],
-      [ET.unsubscribe, E.confirm_email_status, S.uid]
-    ],
-    [doconfirm, sub, unsub] = fns
-  S.bind$(sub, onSubGet, 1)
-  $: {
-    if (mounted) {
-      if ($ws_connected) {
-        er = ''
-        S.trigger([[sub, {}]])
 
-        if (currentRoute.queryParams.token) {
-          S.trigger([[doconfirm, currentRoute.queryParams]])
+  const uid = S.uid
+  onDestroy(
+    S.bindT(
+      [ET.subscribe, E.confirm_email_status, uid],
+      d => {
+        if (d[0]) {
+          confirming = false
+          result_title = 'Confirmed'
+          er = 'Email Successfully confirmed.'
+        } else {
+          result_title = 'Error'
+          er = d.error
         }
-      } else {
-        er = 'Reconnecting...'
-      }
-    }
-  }
-  onMount(async () => {
-    mounted = true
+      },
+      null,
+      0
+    )
+  )
+  onDestroy(_ =>
+    S.trigger([[[ET.unsubscribe, E.confirm_email_status, uid], {}]])
+  )
 
-    if (currentRoute.queryParams.token) {
-      header = 'Confirming'
-      subtitle = 'Please wait ...'
-    } else {
-      header = 'Email Verification'
-      subtitle = 'Please check your inbox to verify email.'
-    }
-  })
-  onDestroy(() => {
-    S.trigger([[unsub, {}]])
-    S.unbind_(fns)
-  })
-  // some functions:============
-  function onSubGet(d) {
-    if (d.ok) {
-      confirming = false
-      result_title = 'Success'
-      er = 'Your Email is confirmed.'
-    } else {
-      result_title = 'Error'
-      er = d.error
-    }
+  /** try to confirm email */
+  if (currentRoute.queryParams.token) {
+    onDestroy(
+      S.bindT(
+        [ET.insert, E.confirm_email, S.uid],
+        d => {
+          if (d[0]) {
+            confirming = false
+            header = 'Confirmed'
+            er = 'Email Successfully confirmed'
+          }
+        },
+        currentRoute.queryParams,
+        0
+      )
+    )
+  }
+
+  if (currentRoute.queryParams.token) {
+    header = 'Confirming'
+    subtitle = 'Please wait ...'
+  } else {
+    header = 'Email Verification'
+    subtitle = 'Please check your inbox to verify email.'
   }
 </script>
 

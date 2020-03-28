@@ -7,6 +7,10 @@
    * display home menu
    * display routes when loaded else show load awesome circles(but its not displayed because of lagging css)
    *
+   * Internal:
+   * remove template.html's loading svg
+   * fetch side_menu and routes
+   * replace routes component(Heart of the app)
    */
   import { onMount, onDestroy } from 'svelte'
   import { curry, pipe } from 'ramda'
