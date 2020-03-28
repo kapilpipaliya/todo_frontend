@@ -1,4 +1,9 @@
 declare const process
+/**
+ * const variable
+ * process.env.NODE_ENV is replaced
+ *
+ */
 export const IS_PRODUCTION =
   // @ts-ignore
   process.env.NODE_ENV == 'development' ? false : true
