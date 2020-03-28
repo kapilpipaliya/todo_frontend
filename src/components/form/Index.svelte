@@ -1,10 +1,11 @@
 <script lang="ts">
-  /*
-  make model form working  
-  make user able to add custom fields to any form
-  make form work for multiple level modification by user 
-  make update & delete return preojection of inserted/updated members too
-  schema can be made to not make projection for inserted/updated/deleted members 
+  /**
+  * This is the Main Component for the form. it render form from the schema.
+  \todo make model form working  
+  \todo make user able to add custom fields to any form
+  \todo make form work for multiple level modification by user 
+  \todo make update & delete return preojection of inserted/updated members too
+  \todo schema can be made to not make projection for inserted/updated/deleted members 
 */
   import { onMount, onDestroy, createEventDispatcher, getContext } from 'svelte'
   import { get, writable } from 'svelte/store'
@@ -144,7 +145,7 @@
     if (d.r) {
       const r = d.r.result
       if (r.length) {
-        return mergeFormValues(r[0])
+        return r[0]
       } else {
         return {}
       }
@@ -244,19 +245,6 @@
     } else {
       er = d[1]
     }
-  }
-  function mergeFormValues(f) {
-    /*if(!key){
-      const s = $default_form[schema_key]
-      if(s) {
-        for (let i = 0; i < f.length; i++) {
-          if (s[i]) {
-            f[i] = s[i]
-          }
-        }
-      }
-    }*/
-    return f
   }
 
   // =============================================================================
