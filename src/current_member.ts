@@ -2,7 +2,10 @@
 import { writable } from 'svelte/store'
 import { ET, E } from './enums'
 import { S } from './ws_events_dispatcher'
-
+/**
+ * store used to save basic info of logged in memeber.
+ *
+ */
 export const current_member = writable({})
 S.bind$(
   [ET.get, E.current_member_event, 0],
@@ -12,7 +15,11 @@ S.bind$(
   1
 )
 
-// member_settings
-// when logout every pages should be redirect to login page.
+/**
+ * Member Settings:
+ * Store to save various ui preferences for logged in member
+ * \todo implement this
+ */
 export const member_settings = writable({})
-//Todo Fix this
+
+/* todo: when logout every pages should be redirect to login page. */

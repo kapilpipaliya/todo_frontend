@@ -2,39 +2,27 @@ import { writable } from 'svelte/store'
 import { ET, E } from './enums'
 import { S } from './ws_events_dispatcher'
 import { style } from 'dynamic-import'
+/**
+ * currently not used this store anywhere and not using any css framework:
+ * \todo fetch frameworks from server:
+ */
 export const css_frameworks = writable({
   bootstrap:
     '<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">'
 })
 export const selected_frameworks = writable(['bootstrap'])
+
+/**
+ * Css store used to change class names of component.
+ * it's used rarely when wanted to use custom css framework.
+ */
 export const css = writable({})
-/*const css_count_ = writable({ table: 0, normalize: 0, body: 1 })
-export const css_count = {
-  subscribe: css_count_.subscribe,
-  increase: name => {
-    css_count_.update(val => {
-      val[name] = (val[name] || 0) + 1
-      return val
-    })
-  },
-  decrease: name => {
-    setTimeout(_ => {
-      css_count_.update(val => {
-        val[name] = val[name] - 1
-        return val
-      })
-    }, 2000)
-  }
-}
-// {"table":{"classes":{},"link":"/table.5efd916f.css"}}
-S.bind$(
-  [ET.get, E.css_event, 0],
-  function(data) {
-    css.set(data)
-  },
-  1
-)
-*/
+
+/**
+ *
+ * Manually Load css:
+ *
+ */
 
 // https://github.com/pyrsmk/toast
 // other good library: https://github.com/yefremov/loadcss

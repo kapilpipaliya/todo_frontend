@@ -1,4 +1,13 @@
 <script lang="ts">
+  /**
+   * Wrap everything inside Notification Component
+   * display public menu
+   * display auth or guest menu
+   * display global menu on developement
+   * display home menu
+   * display routes when loaded else show load awesome circles(but its not displayed because of lagging css)
+   *
+   */
   import { onMount, onDestroy } from 'svelte'
   import { curry, pipe } from 'ramda'
   import { map } from 'rambda'
@@ -161,10 +170,10 @@
         {/if}
       {/if}
     </nav>
-    {#if r$.length}
-      <Router routes={r$} />
-    {:else}
-      <LoadAwesome />
-    {/if}
+  {/if}
+  {#if r$.length}
+    <Router routes={r$} />
+  {:else}
+    <LoadAwesome />
   {/if}
 </Notifications>
