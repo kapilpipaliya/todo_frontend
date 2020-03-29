@@ -5,6 +5,7 @@
     * 2. show the confirmation status. user can request reconfirmation email
 
     /todo if member is already confirmed and visit this page, it should say that email is alreay verified.
+    /todo add confirmation page in menu if not confirmed, to resend verification email.
     */
 
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'

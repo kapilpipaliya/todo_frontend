@@ -1,4 +1,10 @@
 <script lang="ts">
+  /**
+   *
+   * If not want to show subtitle, remove it from translation
+   * This component is properly written
+   */
+
   import { ET, E } from '../../enums'
   import { translation } from '../../translation'
   declare let $translation

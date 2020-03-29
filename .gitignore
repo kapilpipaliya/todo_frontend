@@ -7,11 +7,17 @@
 *.iml
 .idea/
 
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Node Files #
-npm-debug.log
 node_modules/
+jspm_packages/
 test/google/node_modules/
-yarn-error.log
 /.yarn/
 
 # Build Files
