@@ -104,6 +104,7 @@ export enum ET {
   delete_
 }
 export enum E {
+  // routes
   css_event = 1,
   notification_event,
   cookie_event,
@@ -163,6 +164,7 @@ export enum E {
   css_sync_files_to_db,
   subscribe_online_users,
   collections_size,
+  urlshortener,
 
   account = 60,
 
@@ -267,6 +269,7 @@ export enum E {
   fields_schema_mutate,
   form_schema_get,
   form_schema_mutate
+  // routes
 }
 export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id]
 // generate event from schema:

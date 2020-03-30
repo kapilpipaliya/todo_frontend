@@ -73,6 +73,10 @@ const generateHtmlBuild = (options) => {
             try {
                 const results = await replaceInFile(replaceOptions)
                 console.log('Replacement results:', results);
+                require('child_process').spawn('brotli', [`${dest}/index.html`], {
+                    stdio: ['ignore', 'inherit', 'inherit'],
+                    shell: true
+                  });
                 htmlDone = true;
             }
             catch (error) {

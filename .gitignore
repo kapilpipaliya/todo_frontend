@@ -37,3 +37,6 @@ test-results.xml
 
 # Test Coverage
 coverage/
+
+tmp/
+.vscode/
