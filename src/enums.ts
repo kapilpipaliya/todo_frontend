@@ -171,6 +171,7 @@ export enum E {
   register_user,
   register_member,
   login,
+  member_login,
   logout,
   confirm_email,
   confirm_email_status,
@@ -279,8 +280,12 @@ export const schemaEvents = (schema: string) => {
     return [E[`${schema}_list`], E[`${schema}_mutate`]]
   } else if (schema == 'register') {
     return [null, E.register_user]
+  } else if (schema == 'mregister') {
+    return [null, E.register_member]
   } else if (schema == 'login') {
     return [null, E.login]
+  } else if (schema == 'mlogin') {
+    return [null, E.member_login]
   } else if (schema == 'member_setting') {
     return [null, E.setting_mutate]
   } else if (schema == 'work_package_setting') {
@@ -293,5 +298,7 @@ export const schemaEvents = (schema: string) => {
     return [null, E.setting_mutate]
   } else if (schema == 'auth_setting') {
     return [null, E.setting_mutate]
+  } else {
+    console.warn('cant generate events for schem key: ', schema)
   }
 }

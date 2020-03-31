@@ -11,6 +11,9 @@
    * remove template.html's loading svg
    * fetch side_menu and routes
    * replace routes component(Heart of the app)
+
+
+   * todo\ Make all project follow The A11Y Project https://a11yproject.com/
    */
   import { onMount, onDestroy } from 'svelte'
   import { curry, pipe } from 'ramda'

@@ -52,36 +52,41 @@
   let events = schemaEvents(schema_key)
   let unsub_evt
   let er = ''
-  if (!events) er = 'events array must be defined'
   const uid = S.uid
   let data_evt
-  if (events[0]) {
-    if (key) {
-      data_evt = [ET.subscribe, events[0], uid]
-      unsub_evt = [ET.unsubscribe, events[0], uid]
-    } else {
-      data_evt = [ET.get, events[0], uid]
-      unsub_evt = []
-    }
-  }
   let mutate_evt
-  if (key) {
-    mutate_evt = [ET.update, events[1], uid]
-  } else {
-    mutate_evt = [ET.insert, events[1], uid]
-  }
   let schemaGetEvt = []
-  if (!data_evt) {
-    schemaGetEvt = [ET.get, E.form_schema_get, key]
+  if (!events) {
+    er = 'events array must be defined '
+    console.warn(er, schema_key)
   } else {
-    schemaGetEvt = []
-  }
+    if (events[0]) {
+      if (key) {
+        data_evt = [ET.subscribe, events[0], uid]
+        unsub_evt = [ET.unsubscribe, events[0], uid]
+      } else {
+        data_evt = [ET.get, events[0], uid]
+        unsub_evt = []
+      }
+    }
 
-  if (schemaGetEvt) {
-    S.bind$(schemaGetEvt, onDataGet, 1)
+    if (key) {
+      mutate_evt = [ET.update, events[1], uid]
+    } else {
+      mutate_evt = [ET.insert, events[1], uid]
+    }
+    if (!data_evt) {
+      schemaGetEvt = [ET.get, E.form_schema_get, key]
+    } else {
+      schemaGetEvt = []
+    }
+
+    if (schemaGetEvt) {
+      S.bind$(schemaGetEvt, onDataGet, 1)
+    }
+    S.bind$(data_evt, onDataGet, 1)
+    S.bind$(mutate_evt, onMutateGet, 1)
   }
-  S.bind$(data_evt, onDataGet, 1)
-  S.bind$(mutate_evt, onMutateGet, 1)
 
   function fetch() {
     if (headerSchema.length) {
@@ -101,7 +106,7 @@
       }
     }
   }
-  fetch()
+  if (events) fetch()
 
   let layout = []
   function merge(array1: [], array2: []) {
