@@ -22,6 +22,7 @@
   import CLEditor from './input/CLEditor.svelte'
   import TableForm from './tableform/TableForm.svelte'
   import ArrayForm from './input/Array.svelte'
+  import Url from './input/Url.svelte'
   import { IS_PRODUCTION } from '../../enums'
   export let value
   export let type = FormType.text
@@ -95,6 +96,8 @@
         return CLEditor
       case FormType.emoji:
         return Emoji
+      case FormType.url:
+        return Url
       //case FormType.mindmap: return MindMap
       //case FormType.mapcountries: return MapCountries
       default:
