@@ -22,14 +22,13 @@
   let mounted = false
   let er = ''
   let org_fetch_evt = [ET.get, E.organization_list, S.uid]
-  let menu_evt = [ET.get, E.form_schema_get, S.uid]
-  let menus = []
+  let items = []
+  let organization_menu = []
   let fetch_data = false
   onMount(() => {
     mounted = true
   })
   onDestroy(() => {
-    S.unbind_([org_fetch_evt, menu_evt])
     // be very careful: top level component unmount first.
     $project_ctx.pop()
   })
@@ -50,21 +49,66 @@
     },
     1
   )
+
   let OldMenu
-  S.bind$(
-    menu_evt,
-    d => {
-      if (d[0]) {
-        if (d[0]) {
-          OldMenu = d[0].organization
-          menus = processMenu(clone(OldMenu), org_id)
-          return
+
+  const getMenuDataGet = all => {
+    // if (isLoading) isLoading = false
+    const [h, d] = all
+    if (h === false) {
+      //authorized = false
+      //er = d
+    }
+    if (d.r) {
+      items = d.r.result ?? []
+    } else if (d.n) {
+    } else if (d.m) {
+      d.m.result.forEach(mod => {
+        const findIndex = items.findIndex(i => {
+          return i._key == mod._key
+        })
+        if (findIndex !== -1) {
+          // start, ?deleteCount, ...items
+          items.splice(findIndex, 1, mod)
         }
-        er = 'cant set menu'
-      }
-    },
-    1
+      })
+      items = items
+    } else if (d.d) {
+    }
+  }
+  const findIdx = name => {
+    const findIndex = items.findIndex(i => {
+      return i._key == name
+    })
+    return findIndex
+  }
+  $: {
+    let idx = findIdx('organization')
+    if (idx > -1) {
+      OldMenu = items[idx].menu
+      organization_menu = processMenu(clone(OldMenu), org_id)
+    }
+  }
+
+  onDestroy(
+    S.bindT(
+      [ET.subscribe, E.menu_list, S.uid],
+      d => {
+        getMenuDataGet(d)
+        fetch_data = true // not important on menu
+      },
+      [
+        [`['organization']`],
+        [],
+        [0, 0, 0],
+        {
+          type: ValueType.Object
+        }
+      ],
+      1
+    )
   )
+
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
@@ -75,10 +119,7 @@
           [0, 0, 1],
           { type: ValueType.Object }
         ]
-        S.trigger([
-          [org_fetch_evt, args],
-          [menu_evt, ['side_menu']]
-        ])
+        S.trigger([[org_fetch_evt, args]])
       } else {
         er = 'Please Select Organization'
       }
@@ -111,7 +152,9 @@
 </div>
 <div style="display: flex">
   <div>
-    <TreeSidebar menu={menus} />
+    {#if organization_menu.length}
+      <TreeSidebar menu={organization_menu} />
+    {/if}
   </div>
   {#if fetch_data}
     <Route {currentRoute} />

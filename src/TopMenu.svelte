@@ -7,7 +7,7 @@
    * display routes when loaded else show load awesome circles(but its not displayed because of lagging css)
    *
    * Internal:
-   * fetch side_menu
+   * fetch menu
    */
   import { onMount, onDestroy } from 'svelte'
   import { current_member } from './current_member'
@@ -134,7 +134,7 @@
       {#if !IS_PRODUCTION && global_menu.length}
         <TreeSidebar class="global" menu={global_menu} />
       {/if}
-      {#if home_menu}
+      {#if home_menu.length}
         <TreeSidebar class="home" menu={home_menu} />
       {/if}
     {/if}

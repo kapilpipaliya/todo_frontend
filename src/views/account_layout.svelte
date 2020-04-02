@@ -1,47 +1,77 @@
 <script lang="ts">
   import { Route } from '../../thirdparty/svelte-router-spa/index'
   import { onMount, onDestroy } from 'svelte'
-  import { ET, E } from '../enums'
+  import { ValueType, ET, E } from '../enums'
   import { S, ws_connected } from '../ws_events_dispatcher'
   declare let $ws_connected
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'
   import Skeleton from '../components/UI/Skeleton.svelte'
   export let currentRoute
-  let mounted = false
-  let er = ''
+
+  //let er = ''
   let fetch_data = false
-  let menu_evt = [ET.get, E.form_schema_get, S.uid]
-  let menus = []
-  onMount(() => {
-    mounted = true
-  })
-  onDestroy(() => {
-    S.unbind_([menu_evt])
-  })
-  S.bind$(
-    menu_evt,
-    d => {
-      if (d[0]) {
-        menus = d[0]
-        fetch_data = true // not important on menu
-      }
-    },
-    1
-  )
-  $: if (mounted) {
-    if ($ws_connected) {
-      er = ''
-      S.trigger([[menu_evt, ['side_menu']]])
-    } else {
-      er = 'Reconnecting...'
+  let items = []
+  let account_menu = []
+
+  const getMenuDataGet = all => {
+    // if (isLoading) isLoading = false
+    const [h, d] = all
+    if (h === false) {
+      //authorized = false
+      //er = d
+    }
+    if (d.r) {
+      items = d.r.result ?? []
+    } else if (d.n) {
+    } else if (d.m) {
+      d.m.result.forEach(mod => {
+        const findIndex = items.findIndex(i => {
+          return i._key == mod._key
+        })
+        if (findIndex !== -1) {
+          // start, ?deleteCount, ...items
+          items.splice(findIndex, 1, mod)
+        }
+      })
+      items = items
+    } else if (d.d) {
     }
   }
+  const findIdx = name => {
+    const findIndex = items.findIndex(i => {
+      return i._key == name
+    })
+    return findIndex
+  }
+  $: {
+    let idx = findIdx('account')
+    if (idx > -1) account_menu = items[idx].menu
+  }
+
+  onDestroy(
+    S.bindT(
+      [ET.subscribe, E.menu_list, S.uid],
+      d => {
+        getMenuDataGet(d)
+        fetch_data = true // not important on menu
+      },
+      [
+        [`['account']`],
+        [],
+        [0, 0, 0],
+        {
+          type: ValueType.Object
+        }
+      ],
+      1
+    )
+  )
 </script>
 
 <div style="display: flex">
   <div>
-    {#if menus.account}
-      <TreeSidebar menu={menus.account} />
+    {#if account_menu.length}
+      <TreeSidebar menu={account_menu} />
     {/if}
   </div>
   {#if fetch_data}

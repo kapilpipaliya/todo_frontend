@@ -23,14 +23,14 @@
   let mounted = false
   let er = ''
   let project_fetch_evt = [ET.get, E.project_list, S.uid]
-  let menu_evt = [ET.get, E.form_schema_get, S.uid]
-  let menus = []
+  let items = []
+  let project_menu = []
   let fetch_data = false
   onMount(() => {
     mounted = true
   })
   onDestroy(() => {
-    S.unbind_([project_fetch_evt, menu_evt])
+    S.unbind_([project_fetch_evt])
     // be very careful: top level component unmount first.
     $project_ctx.pop()
   })
@@ -51,21 +51,66 @@
     },
     1
   )
+
   let OldMenu
-  S.bind$(
-    menu_evt,
-    d => {
-      if (d[0]) {
-        if (d[0]) {
-          OldMenu = d[0].project
-          menus = processMenu(clone(OldMenu), $org_id, project_id)
-          return
+
+  const getMenuDataGet = all => {
+    // if (isLoading) isLoading = false
+    const [h, d] = all
+    if (h === false) {
+      //authorized = false
+      //er = d
+    }
+    if (d.r) {
+      items = d.r.result ?? []
+    } else if (d.n) {
+    } else if (d.m) {
+      d.m.result.forEach(mod => {
+        const findIndex = items.findIndex(i => {
+          return i._key == mod._key
+        })
+        if (findIndex !== -1) {
+          // start, ?deleteCount, ...items
+          items.splice(findIndex, 1, mod)
         }
-        er = 'cant set menu'
-      }
-    },
-    1
+      })
+      items = items
+    } else if (d.d) {
+    }
+  }
+  const findIdx = name => {
+    const findIndex = items.findIndex(i => {
+      return i._key == name
+    })
+    return findIndex
+  }
+  $: {
+    let idx = findIdx('project')
+    if (idx > -1) {
+      OldMenu = items[idx].menu
+      project_menu = processMenu(clone(OldMenu), $org_id, project_id)
+    }
+  }
+
+  onDestroy(
+    S.bindT(
+      [ET.subscribe, E.menu_list, S.uid],
+      d => {
+        getMenuDataGet(d)
+        fetch_data = true // not important on menu
+      },
+      [
+        [`['project']`],
+        [],
+        [0, 0, 0],
+        {
+          type: ValueType.Object
+        }
+      ],
+      1
+    )
   )
+
   $: if (mounted) {
     if ($ws_connected) {
       er = ''
@@ -79,10 +124,7 @@
             org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null
           }
         ]
-        S.trigger([
-          [project_fetch_evt, args],
-          [menu_evt, ['side_menu']]
-        ])
+        S.trigger([[project_fetch_evt, args]])
       } else {
         er = 'Please Select Project'
       }
@@ -115,7 +157,9 @@
 <h4>Selected Project: {project_id}</h4>
 <div style="display: flex">
   <div>
-    <TreeSidebar menu={menus} />
+    {#if project_menu.length}
+      <TreeSidebar menu={project_menu} />
+    {/if}
   </div>
   {#if fetch_data}
     <Route {currentRoute} />
