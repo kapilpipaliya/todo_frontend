@@ -146,6 +146,9 @@ export enum E {
   global_permission_list,
   global_permission_mutate,
 
+  global_menu_list,
+  global_menu_mutate,
+
   support_list,
   support_mutate,
 
@@ -217,6 +220,9 @@ export enum E {
 
   permission_list,
   permission_mutate,
+
+  menu_list,
+  menu_mutate,
 
   color_list,
   color_mutate,

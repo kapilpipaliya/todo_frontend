@@ -1,17 +1,12 @@
 <script lang="ts">
   /**
    * Wrap everything inside Notification Component
-   * display public menu
-   * display auth or guest menu
-   * display global menu on developement
-   * display home menu
    * display routes when loaded else show load awesome circles(but its not displayed because of lagging css)
    *
    * Internal:
    * remove template.html's loading svg
-   * fetch side_menu and routes
+   * fetch routes
    * replace routes component(Heart of the app)
-
 
    * todo\ Make all project follow The A11Y Project https://a11yproject.com/
    */
@@ -26,7 +21,7 @@
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
   import { S } from './ws_events_dispatcher'
-  import TreeSidebar from './components/UI/TreeSidebar.svelte'
+  import TopMenu from './TopMenu.svelte'
   import LoadAwesome from './components/UI/LoadAwesome.svelte'
   import { Router } from '../thirdparty/svelte-router-spa/index'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
@@ -48,10 +43,6 @@
   import MyPage from './views/my_page.svelte'
   import AccountLayout from './views/account_layout.svelte'
 
-  css_count.increase('all_menu')
-  let e$
-  $: e$ = $current_member?.email
-  let mS$: {}
   let r$ = []
 
   onMount(() => {
@@ -61,16 +52,6 @@
     if (loading_div) loading_div.remove()
   })
 
-  onDestroy(
-    S.bindT(
-      [ET.get, E.form_schema_get, S.uid],
-      d => {
-        if (d[0]) mS$ = d[0]
-      },
-      ['side_menu'],
-      0
-    )
-  )
   onDestroy(
     S.bindT(
       form_schema_evt(S.uid),
@@ -164,23 +145,7 @@
 <Notifications>
   {#if css_loaded}
     <TopLevelComps />
-    <nav>
-      {#if mS$}
-        <TreeSidebar class="public" menu={mS$.public} />
-        {#if e$}
-          Logged In: {e$}
-          <TreeSidebar class="top_right" menu={mS$.top_right} />
-        {:else}
-          <TreeSidebar class="guest" menu={mS$.guest} />
-        {/if}
-        {#if e$}
-          {#if !IS_PRODUCTION}
-            <TreeSidebar class="global" menu={mS$.global} />
-          {/if}
-          <TreeSidebar class="home" menu={mS$.home} />
-        {/if}
-      {/if}
-    </nav>
+    <TopMenu />
   {/if}
   {#if r$.length}
     <Router routes={r$} />

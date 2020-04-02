@@ -72,7 +72,7 @@
       S.bind$(fetch_evt, onFetchGet, 1)
       S.trigger([[fetch_evt, []]])
     } else {
-      console.warn('cant get fetch_evt')
+      console.warn('cant get fetch_evt on TableForm component at e[0]', e)
     }
 
     // set single select first value if empty:

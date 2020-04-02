@@ -1071,40 +1071,44 @@
         {/if}
       {/if}
       {#if contextmenu}
-        <div class="menu">
+        <div class="table-context-menu">
           <div
-            class="menu-item"
+            class="table-context-menu-item"
             on:click={e => onHandleSort(e, headerMenuColumn, 0)}>
             Sort Ascending
           </div>
           <div
-            class="menu-item"
+            class="table-context-menu-item"
             on:click={e => onHandleSort(e, headerMenuColumn, 1)}>
             Sort Descending
           </div>
           <div
-            class="menu-item"
+            class="table-context-menu-item"
             on:click={e => onHandleSort(e, headerMenuColumn, null)}>
             No Sorting
           </div>
           <hr />
-          <div class="menu-item" on:click={closeHeaderMenu}>Close</div>
+          <div class="table-context-menu-item" on:click={closeHeaderMenu}>
+            Close
+          </div>
         </div>
-        <div class="menu-input">
-          <div class="menu-item">Is NULL</div>
-          <div class="menu-item">Is not NULL</div>
-          <div class="menu-item">Is empty</div>
-          <div class="menu-item">Is not empty</div>
+        <div class="table-context-menu-input">
+          <div class="table-context-menu-item">Is NULL</div>
+          <div class="table-context-menu-item">Is not NULL</div>
+          <div class="table-context-menu-item">Is empty</div>
+          <div class="table-context-menu-item">Is not empty</div>
           <hr />
-          <div class="menu-item">Equal to...</div>
-          <div class="menu-item">Not equal to...</div>
-          <div class="menu-item">Greater than...</div>
-          <div class="menu-item">Less than...</div>
-          <div class="menu-item">Greater or equal...</div>
-          <div class="menu-item">Less or equal...</div>
-          <div class="menu-item">In range...</div>
+          <div class="table-context-menu-item">Equal to...</div>
+          <div class="table-context-menu-item">Not equal to...</div>
+          <div class="table-context-menu-item">Greater than...</div>
+          <div class="table-context-menu-item">Less than...</div>
+          <div class="table-context-menu-item">Greater or equal...</div>
+          <div class="table-context-menu-item">Less or equal...</div>
+          <div class="table-context-menu-item">In range...</div>
           <hr />
-          <div class="menu-item" on:click={closeInputMenu}>Close</div>
+          <div class="table-context-menu-item" on:click={closeInputMenu}>
+            Close
+          </div>
         </div>
       {/if}
       {#if modalIsVisible}
