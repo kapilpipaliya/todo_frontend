@@ -530,10 +530,11 @@
         if (
           sortOrder === null ||
           sortOrder === undefined ||
-          SortDirection.None
+          sortOrder === SortDirection.None
         ) {
+          console.warn('setting ass')
           headerColSortSettingsRow[col] = SortDirection.Ascending
-        } else if (sortOrder === 0) {
+        } else if (sortOrder === SortDirection.Ascending) {
           headerColSortSettingsRow[col] = SortDirection.Descending
         } else {
           headerColSortSettingsRow[col] = SortDirection.None
