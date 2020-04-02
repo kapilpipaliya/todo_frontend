@@ -24,7 +24,16 @@
   let items = []
   let public_menu = []
   let top_right_menu = []
-  let guest_menu = []
+  let guest_menu = [
+    {
+      name: 'Register',
+      path: '/super_register'
+    },
+    {
+      name: 'Login',
+      path: '/super_login'
+    }
+  ]
   let global_menu = []
   let home_menu = []
   let subdomain_guest_menu = []
@@ -66,8 +75,8 @@
     if (idx > -1) public_menu = items[idx].menu
     idx = findIdx('top_right')
     if (idx > -1) top_right_menu = items[idx].menu
-    idx = findIdx('guest')
-    if (idx > -1) guest_menu = items[idx].menu
+    // idx = findIdx('guest')
+    // if (idx > -1) guest_menu = items[idx].menu
     idx = findIdx('global')
     if (idx > -1) global_menu = items[idx].menu
     idx = findIdx('home')
@@ -82,9 +91,7 @@
         getMenuDataGet(d)
       },
       [
-        [
-          `['public', 'top_right', 'guest', 'global', 'home', 'subdomain_guest']`
-        ],
+        [`['public', 'top_right', 'global', 'home', 'subdomain_guest']`],
         [],
         [0, 0, 0],
         {

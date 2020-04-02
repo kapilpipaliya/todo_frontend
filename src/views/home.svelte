@@ -71,5 +71,3 @@
 {:else}
   <h1>O-K.TECH</h1>
 {/if}
-<a href="/account/login">Login</a>
-<a href="/account/register">Regiser</a>

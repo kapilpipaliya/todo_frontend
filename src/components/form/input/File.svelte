@@ -1,4 +1,10 @@
 <script lang="ts">
+  /**
+   *
+   * \todo Implement drag and drop from: Svelte-File-Upload-Component
+   * https://github.com/vipero07/svelte-file-upload-component
+   */
+
   import Label from '../Label.svelte'
   export let name
   export let required
