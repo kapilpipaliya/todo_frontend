@@ -70,19 +70,16 @@
     return findIndex
   }
   $: {
-    //console.warn(items)
     let idx = findIdx('public')
     if (idx > -1) public_menu = items[idx].menu
     idx = findIdx('top_right')
     if (idx > -1) top_right_menu = items[idx].menu
-    // idx = findIdx('guest')
-    // if (idx > -1) guest_menu = items[idx].menu
-    idx = findIdx('global')
-    if (idx > -1) global_menu = items[idx].menu
+    if (!IS_PRODUCTION) {
+      idx = findIdx('global')
+      if (idx > -1) global_menu = items[idx].menu
+    }
     idx = findIdx('home')
     if (idx > -1) home_menu = items[idx].menu
-    idx = findIdx('subdomain_guest')
-    if (idx > -1) subdomain_guest_menu = items[idx].menu
   }
   onDestroy(
     S.bindT(
@@ -91,7 +88,7 @@
         getMenuDataGet(d)
       },
       [
-        [`['public', 'top_right', 'global', 'home', 'subdomain_guest']`],
+        [`['top_right', ${!IS_PRODUCTION ? `'global'` : `''`}, 'home']`],
         [],
         [0, 0, 0],
         {
@@ -115,28 +112,16 @@
 {#if css_loaded}
 
   <nav>
-    {#if public_menu.length}
-      <TreeSidebar class="public" menu={public_menu} />
+    {#if top_right_menu.length}
+      Logged In: {e$}
+      <TreeSidebar class="top_right" menu={top_right_menu} />
     {/if}
 
-    {#if e$}
-      {#if top_right_menu.length}
-        Logged In: {e$}
-        <TreeSidebar class="top_right" menu={top_right_menu} />
-      {/if}
-    {:else if isSubdmomain}
-      <TreeSidebar class="subdomain_guest" menu={subdomain_guest_menu} />
-    {:else}
-      <TreeSidebar class="guest" menu={guest_menu} />
+    {#if !IS_PRODUCTION && global_menu.length}
+      <TreeSidebar class="global" menu={global_menu} />
     {/if}
-
-    {#if e$}
-      {#if !IS_PRODUCTION && global_menu.length}
-        <TreeSidebar class="global" menu={global_menu} />
-      {/if}
-      {#if home_menu.length}
-        <TreeSidebar class="home" menu={home_menu} />
-      {/if}
+    {#if home_menu.length}
+      <TreeSidebar class="home" menu={home_menu} />
     {/if}
 
   </nav>

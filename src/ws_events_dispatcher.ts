@@ -40,6 +40,7 @@ for $ prefix use always check if(mounted) first.
  * component can bind and unbind function for the events
  * keep event identifier different to not call same event's different binded functions.
  * \todo show internet is connected or not on one place, not at every place.
+ * \todo(optional) First ws retry = 0s, second = 2s then 4s..
  */
 
 // same library:

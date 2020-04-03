@@ -25,6 +25,7 @@
   import LoadAwesome from './components/UI/LoadAwesome.svelte'
   import { Router } from '../thirdparty/svelte-router-spa/index'
   import Notifications from '../thirdparty/svelte-notifications/src/index'
+  import TreeSidebar from './components/UI/TreeSidebar.svelte'
 
   import Page from './components/Page.svelte'
   import FormWrapper from './components/FormWrapper.svelte'
@@ -42,6 +43,41 @@
   import ProjectIndex from './views/project_index.svelte'
   import MyPage from './views/my_page.svelte'
   import AccountLayout from './views/account_layout.svelte'
+
+  let e$
+  $: e$ = $current_member?.email
+  const isSubdmomain = window.location.hostname.split('.').length > 1
+  let guest_menu = [
+    {
+      name: 'Register',
+      path: '/super_register'
+    },
+    {
+      name: 'Login',
+      path: '/super_login'
+    }
+  ]
+  let subdomain_guest_menu = [
+    {
+      name: 'Register',
+      path: '/register'
+    },
+    {
+      name: 'Login',
+      path: '/login'
+    }
+  ]
+  let public_menu = [
+    {
+      name: 'Contact',
+      path: '/contact'
+    },
+    {
+      name: 'About',
+      path: '/about'
+    }
+  ]
+  css_count.increase('all_menu')
 
   let r$ = []
 
@@ -145,7 +181,16 @@
 <Notifications>
   {#if css_loaded}
     <TopLevelComps />
-    <TopMenu />
+    {#if public_menu.length}
+      <TreeSidebar class="public" menu={public_menu} />
+    {/if}
+    {#if e$}
+      <TopMenu />
+    {:else if isSubdmomain}
+      <TreeSidebar class="subdomain_guest" menu={subdomain_guest_menu} />
+    {:else}
+      <TreeSidebar class="guest" menu={guest_menu} />
+    {/if}
   {/if}
   {#if r$.length}
     <Router routes={r$} />
