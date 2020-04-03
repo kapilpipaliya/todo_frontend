@@ -798,6 +798,7 @@
   export let border = true
   export let fixed
   let table
+  let height
   $: bodyStyle = {
     overflow: fixed !== undefined && fixed !== false ? 'auto' : 'hidden',
     height:
@@ -904,7 +905,6 @@
 
             </div>
             <div class="drag-tree-table-header">
-
               <div />
               {#if showRowNum}
                 <div>
@@ -969,157 +969,158 @@
             style={bodyStyle}
             on:dragover={draging}
             on:dragend={drop}
-            class:is-draging={isDraing} />
-          <div class="drag-line" />
-        </div>
+            class:is-draging={isDraing}>
 
-        <table>
-
-          <tbody>
             {#each items as r, rowIndex (getValue(r[0]))}
-              <tr
-                bind:this={rowDoms[rowIndex]}
-                class={selectedRowsKeys.includes(getValue(r[0])) ? $css.table.classes.selected || 'selected' : ''}>
-                <td>
-                  {#if !isGlobal(r[0])}
-                    {#if false}
-                      <span>ID: {getValue(r[0])}</span>
+              <div class="tree-block" bind:this={rowDoms[rowIndex]}>
+                <div class="tree-row">
+
+                  <td>
+                    {#if !isGlobal(r[0])}
+                      {#if false}
+                        <span>ID: {getValue(r[0])}</span>
+                      {/if}
+                      <input
+                        type="checkbox"
+                        value={getValue(r[0])}
+                        checked={selectedRowsKeys.includes(getValue(r[0]))}
+                        on:click={onSelectRowClick} />
                     {/if}
-                    <input
-                      type="checkbox"
-                      value={getValue(r[0])}
-                      checked={selectedRowsKeys.includes(getValue(r[0]))}
-                      on:click={onSelectRowClick} />
+                  </td>
+                  {#if showRowNum}
+                    <td>{rowIndex + 1}</td>
                   {/if}
-                </td>
-                {#if showRowNum}
-                  <td>{rowIndex + 1}</td>
-                {/if}
-                {#each r as c, index}
-                  {#if headerColIsvisibleRow[index]}
+                  {#each r as c, index}
+                    {#if headerColIsvisibleRow[index]}
+                      <td>
+                        {#if headerColEditableRow[index]}
+                          <GeneralForm
+                            {schema_key}
+                            key={getValue(r[0])}
+                            {fetchConfig}
+                            selector={['_key', headerColEditableRow[index].s]}
+                            id="inline"
+                            buttonlabels={{ save: 'Save', cancel: '' }}
+                            headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(r[0]), getValue(c)]] } }]} />
+                        {:else if c != null}
+                          {#if headerColTypesRow[index] === DisplayType.DateTime}
+                            {new Date(c).toLocaleString()}
+                          {:else if headerColTypesRow[index] === DisplayType.Url}
+                            <Url
+                              href={makeUrl(headerColPropsRow[index], c)}
+                              value={getValue(c)} />
+                          {:else if headerColTypesRow[index] === DisplayType.Checkbox}
+                            <Bool value={getValue(c)} />
+                          {:else if headerColTypesRow[index] === DisplayType.Color}
+                            <Color value={getValue(c)} />
+                          {:else if headerColTypesRow[index] === DisplayType.Time}
+                            <Time value={getValue(c)} />
+                          {:else}
+                            <Text value={getValue(c)} />
+                          {/if}
+                        {/if}
+                      </td>
+                    {/if}
+                  {/each}
+                  {#if !isGlobal(r[0])}
                     <td>
-                      {#if headerColEditableRow[index]}
-                        <GeneralForm
-                          {schema_key}
-                          key={getValue(r[0])}
-                          {fetchConfig}
-                          selector={['_key', headerColEditableRow[index].s]}
-                          id="inline"
-                          buttonlabels={{ save: 'Save', cancel: '' }}
-                          headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(r[0]), getValue(c)]] } }]} />
-                      {:else if c != null}
-                        {#if headerColTypesRow[index] === DisplayType.DateTime}
-                          {new Date(c).toLocaleString()}
-                        {:else if headerColTypesRow[index] === DisplayType.Url}
-                          <Url
-                            href={makeUrl(headerColPropsRow[index], c)}
-                            value={getValue(c)} />
-                        {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                          <Bool value={getValue(c)} />
-                        {:else if headerColTypesRow[index] === DisplayType.Color}
-                          <Color value={getValue(c)} />
-                        {:else if headerColTypesRow[index] === DisplayType.Time}
-                          <Time value={getValue(c)} />
-                        {:else}
-                          <Text value={getValue(c)} />
+                      {#if !isGlobal(r[0])}
+                        {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
+                          <svg
+                            tabindex="0"
+                            on:keypress={e => {
+                              if (e.keyCode == 13 || e.which == 13) {
+                                quickViewKeys.push(getValue(r[0]))
+                                quickViewKeys = quickViewKeys
+                              }
+                            }}
+                            name="edit"
+                            key={getValue(r[0])}
+                            type="button"
+                            on:click={() => {
+                              quickViewKeys.push(getValue(r[0]))
+                              quickViewKeys = quickViewKeys
+                            }}
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
+                            <path
+                              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3
+                              17.25zM20.71 7.04c.39-.39.39-1.02
+                              0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83
+                              1.83 3.75 3.75 1.83-1.83z" />
+                            <path d="M0 0h24v24H0z" fill="none" />
+                          </svg>
                         {/if}
                       {/if}
                     </td>
-                  {/if}
-                {/each}
-                {#if !isGlobal(r[0])}
-                  <td>
-                    {#if !isGlobal(r[0])}
-                      {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
+                    <td>
+                      {#if !isGlobal(r[0])}
                         <svg
                           tabindex="0"
                           on:keypress={e => {
                             if (e.keyCode == 13 || e.which == 13) {
-                              quickViewKeys.push(getValue(r[0]))
-                              quickViewKeys = quickViewKeys
+                              onDeleteRow(getValue(r[0]), rowIndex)()
                             }
                           }}
-                          name="edit"
+                          name="delete"
                           key={getValue(r[0])}
                           type="button"
-                          on:click={() => {
-                            quickViewKeys.push(getValue(r[0]))
-                            quickViewKeys = quickViewKeys
-                          }}
+                          on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24">
                           <path
-                            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3
-                            17.25zM20.71 7.04c.39-.39.39-1.02
-                            0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83
-                            1.83 3.75 3.75 1.83-1.83z" />
+                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19
+                            4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
                           <path d="M0 0h24v24H0z" fill="none" />
                         </svg>
                       {/if}
-                    {/if}
-                  </td>
-                  <td>
-                    {#if !isGlobal(r[0])}
-                      <svg
-                        tabindex="0"
-                        on:keypress={e => {
-                          if (e.keyCode == 13 || e.which == 13) {
-                            onDeleteRow(getValue(r[0]), rowIndex)()
-                          }
-                        }}
-                        name="delete"
-                        key={getValue(r[0])}
-                        type="button"
-                        on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24">
-                        <path
-                          d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19
-                          4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                        <path d="M0 0h24v24H0z" fill="none" />
-                      </svg>
-                    {/if}
-                  </td>
-                {/if}
-                <!-- <td> -->
+                    </td>
+                  {/if}
+                  <!-- <td> -->
 
-                {#if false}
-                  <a href="javascript:;" on:click={() => onItemClick(r)}>
-                    <span class="icon is-small">
-                      <i class="fas fa-edit" />
-                      edit
-                    </span>
-                  </a>
+                  {#if false}
+                    <a href="javascript:;" on:click={() => onItemClick(r)}>
+                      <span class="icon is-small">
+                        <i class="fas fa-edit" />
+                        edit
+                      </span>
+                    </a>
 
-                  <a href="javascript:;" on:click={() => onDeleteClick(r)}>
-                    <span class="icon is-small">
-                      <i class="fas fa-trash" />
-                      delete
-                    </span>
-                  </a>
-                {/if}
-                <!-- </td> -->
-              </tr>
+                    <a href="javascript:;" on:click={() => onDeleteClick(r)}>
+                      <span class="icon is-small">
+                        <i class="fas fa-trash" />
+                        delete
+                      </span>
+                    </a>
+                  {/if}
+                  <!-- </td> -->
+                </div>
+              </div>
               {#if quickViewKeys.includes(getValue(r[0]))}
-                <tr>
-                  <td colspan={colCount + (showRowNum ? 1 : 0) + 3}>
-                    {#if quickcomponent}
-                      <svelte:component
-                        this={quickcomponent}
-                        bind:this={rowEditDoms[rowIndex]}
-                        key={getValue(r[0])}
-                        {schema_key}
-                        {fetchConfig}
-                        on:close={onCancel}
-                        on:successSave={successSave}
-                        on:deleteRow={deleteRow} />
-                    {/if}
-                  </td>
-                </tr>
+                <div class="tree-block">
+                  <div class="tree-row">
+                    <div colspan={colCount + (showRowNum ? 1 : 0) + 3}>
+                      {#if quickcomponent}
+                        <svelte:component
+                          this={quickcomponent}
+                          bind:this={rowEditDoms[rowIndex]}
+                          key={getValue(r[0])}
+                          {schema_key}
+                          {fetchConfig}
+                          on:close={onCancel}
+                          on:successSave={successSave}
+                          on:deleteRow={deleteRow} />
+                      {/if}
+                    </div>
+                  </div>
+                </div>
               {/if}
             {/each}
-          </tbody>
-        </table>
+
+          </div>
+
+          <div class="drag-line" />
+        </div>
       {/if}
       <Error {er} />
       {#if addnew_pos == 'b'}
