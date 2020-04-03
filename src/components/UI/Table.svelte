@@ -116,8 +116,9 @@
   }
   setPass()
 
-  // =============================================================================
-  // ================================Filter ======================================
+  /*==============================
+  =            filter            =
+  ==============================*/
   let filterSettings = query.filter ? JSON.parse(query.filter) : []
   const delay_refresh = () => {
     // when filter applied, change current_page to 1 before fetching data, to prevent
@@ -143,8 +144,11 @@
     resetFilter_()
     refresh()
   }
-  // ============================================================================
-  // ================================Pagination==================================
+  /*=====  End of filter  ======*/
+
+  /*==================================
+  =            Pagination            =
+  ==================================*/
   let limit = Number(query.limit) || 0
   let pages = [1, 2]
   let current_page = Number(query.page) || 1
@@ -175,7 +179,11 @@
     refresh()
     //note: after refresh calc_pagination() will be called again.
   }
-  // ================================Re Fetch Data ===============================
+  /*=====  End of Pagination  ======*/
+
+  /*=====================================
+  =            Re Fetch Data            =
+  =====================================*/
   let er = ''
   if (!schema_key) {
     er = 'schema key is invalid in table'
@@ -229,8 +237,11 @@
     const e1 = [data_evt, args]
     S.trigger([e1])
   }
-  // =============================================================================
-  // ================================On Headers and Data Receive =================
+  /*=====  End of Re Fetch Data  ======*/
+
+  /*===================================================
+  =            On Headers and Data Receive            =
+  ===================================================*/
   let items = []
   let addnew_pos = 't'
   let addnew_type = 'button'
@@ -346,8 +357,11 @@
       deleteRows_(d.d)
     }
   }
+  /*=====  End of On Headers and Data Receive  ======*/
 
-  // ================================Set Query Params ===========================
+  /*========================================
+  =            Set Query Params            =
+  ========================================*/
   let isFirstFSet = true
   $: {
     if (isFirstFSet) {
@@ -379,8 +393,11 @@
       }
     }
   }
-  // =============================================================================
-  // ================================Add Edit Row ===============================
+  /*=====  End of Set Query Params  ======*/
+
+  /*====================================
+  =            Add Edit Row            =
+  ====================================*/
   let doms = { addbutton: null }
   let addnewform = false
   let quickViewKeys = []
@@ -436,8 +453,11 @@
     closeForm_(key)
     editButtonFocus(key)
   }
-  // ============================================================================
-  // ================================Delete Row =================================
+  /*=====  End of Add Edit Row  ======*/
+
+  /*==================================
+  =            Delete Row            =
+  ==================================*/
   let rowEditDoms = []
   const deleteRows_ = keys => {
     keys.forEach(k => {
@@ -515,8 +535,11 @@
       d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1])
     }
   }
-  // ============================================================================
-  // ================================Sorting=====================================
+  /*=====  End of Delete Row  ======*/
+
+  /*===============================
+  =            Sorting            =
+  ===============================*/
   const onHandleSort = (e, col, order) => {
     if (e.ctrlKey) {
     } else {
@@ -552,8 +575,12 @@
     //   }
     // }
   }
-  // ============================================================================
-  // ================================Pass event to Parent. DISABLED =============
+  /*=====  End of Sorting  ======*/
+
+  /*======================================================
+  =            Pass event to Parent. DISABLED            =
+  ======================================================*/
+
   const dp = createEventDispatcher()
   function onItemClick(litem) {
     dp('onItemClick', { item: litem })
@@ -561,8 +588,12 @@
   function onDeleteClick(litem) {
     dp('onDeleteClick', { item: litem })
   }
-  // ============================================================================
-  // ================================context-menu================================
+
+  /*=====  End of Pass event to Parent. DISABLED  ======*/
+
+  /*====================================
+    =            context-menu            =
+    ====================================*/
   let headerMenuDisplayed = false
   let inputheaderMenuDisplayed = false
   let headerMenuColumn = 0
@@ -615,8 +646,12 @@
       menuBox.style.display = 'none'
     }
   }
-  // ============================================================================
-  // ================================multiple select=============================
+  /*=====  End of context-menu  ======*/
+
+  /*=======================================
+  =            multiple select            =
+  =======================================*/
+
   let allSelected
   let multipleSelected
   $: allSelected = selectedRowsKeys.length == items.length ? true : false
@@ -636,8 +671,13 @@
   const onSelectAllClick = e => {
     selectAll_(e.target.checked)
   }
-  // ============================================================================
-  // ================================config =====================================
+
+  /*=====  End of multiple select  ======*/
+
+  /*==============================
+  =            config            =
+  ==============================*/
+
   let config = false
   const onConfigClicked = async () => {
     config = !config
@@ -651,8 +691,13 @@
     headerColSortSettingsRow = []
     // refresh();
   }
-  // ============================================================================
-  // ================================model functions=============================
+
+  /*=====  End of config  ======*/
+
+  /*=======================================
+  =            model functions            =
+  =======================================*/
+
   let modalIsVisible = false
   let modelItem = []
   // function onItemClick(litem) {
@@ -669,7 +714,9 @@
     modelItem = []
     openModal()
   }
-  // ============================================================================
+
+  /*=====  End of model functions  ======*/
+
   function isGlobal(v) {
     return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false
   }
