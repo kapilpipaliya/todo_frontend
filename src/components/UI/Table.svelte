@@ -60,6 +60,7 @@
   import Color from './display/Color.svelte'
   import Time from './display/Time.svelte'
   import GeneralForm from '../form/Index.svelte'
+  import Column from './table/Column.svelte'
 
   export let modelcomponent = false
   export let quickcomponent = false
@@ -262,6 +263,7 @@
   let headerColEditableRow = []
   let headerColPropsRow = []
   let headerColCustomFilter = [] // Todo Make it set by backend
+  let headerColWidthRow = []
   let options = {}
   let first_visibile_column = 0
   let authorized = true
@@ -795,6 +797,7 @@
       }
     }
   }
+  export let resize // String
   export let border = true
   export let fixed
   let table
@@ -807,6 +810,7 @@
   const draging = () => 0
   const drop = () => 0
   let isDraing = false
+  const mousedown = () => 0
 </script>
 
 {#if css_loaded}
@@ -877,37 +881,104 @@
           {#if showHeader}
             <div class="drag-tree-table-header">
 
-              <div>
+              <Column
+                width={100}
+                flex={false}
+                border={border === undefined ? resize : border}
+                class={['align-' + 'center', 'colIndex' + 0]}
+                key={0}>
                 <input
                   type="checkbox"
                   bind:checked={allSelected}
                   on:click={onSelectAllClick} />
-              </div>
-              <div>No</div>
+                <div
+                  class="resize-line"
+                  on:mousedown={event => mousedown(index, event)}
+                  v-show="resize!== undefined" />
+              </Column>
+
+              <Column
+                width={100}
+                flex={false}
+                border={border === undefined ? resize : border}
+                class={['align-' + 'center', 'colIndex' + 0]}
+                key={0}>
+                <span>No</span>
+                <div
+                  class="resize-line"
+                  on:mousedown={event => mousedown(index, event)}
+                  v-show="resize!== undefined" />
+              </Column>
+
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
-                  <div
-                    on:click={e => onHandleSort(e, index)}
-                    on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
-                    {h}
-                    {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
-                      ▲
-                    {:else if headerColSortSettingsRow[index] === SortDirection.Descending}
-                      ▼
-                    {:else}
-                      <!-- content here -->
-                    {/if}
-                  </div>
+                  <Column
+                    width={100}
+                    flex={false}
+                    border={border === undefined ? resize : border}
+                    class={['align-' + 'center', 'colIndex' + index]}
+                    key={index}>
+                    <div
+                      on:click={e => onHandleSort(e, index)}
+                      on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
+                      {h}
+                      {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
+                        ▲
+                      {:else if headerColSortSettingsRow[index] === SortDirection.Descending}
+                        ▼
+                      {:else}
+                        <!-- content here -->
+                      {/if}
+                    </div>
+
+                    <div
+                      class="resize-line"
+                      on:mousedown={event => mousedown(index, event)}
+                      v-show="resize!== undefined" />
+                  </Column>
                 {/if}
               {/each}
-              <div colspan={operationsCount}>Actions</div>
+
+              <Column
+                width={100}
+                flex={true}
+                border={border === undefined ? resize : border}
+                class={['align-' + 'center', 'colIndex' + 0]}
+                key={0}
+                colspan={operationsCount}>
+
+                <span>Actions</span>
+                <div
+                  class="resize-line"
+                  on:mousedown={event => mousedown(index, event)}
+                  v-show="resize!== undefined" />
+              </Column>
+
               <!-- <div width="100px">Actions</div> -->
 
             </div>
             <div class="drag-tree-table-header">
-              <div />
+              <Column
+                width={100}
+                flex={false}
+                border={border === undefined ? resize : border}
+                class={['align-' + 'center', 'colIndex' + 0]}
+                key={0}>
+
+                <span />
+                <div
+                  class="resize-line"
+                  on:mousedown={event => mousedown(index, event)}
+                  v-show="resize!== undefined" />
+              </Column>
               {#if showRowNum}
-                <div>
+                <Column
+                  width={100}
+                  flex={false}
+                  border={border === undefined ? resize : border}
+                  class={['align-' + 'center', 'colIndex' + 0]}
+                  key={0}>
+
                   <input
                     type="number"
                     class="w60"
@@ -915,12 +986,22 @@
                     min="1"
                     max={items.length}
                     on:change={onRowNumChange} />
-                </div>
+                  <div
+                    class="resize-line"
+                    on:mousedown={event => mousedown(index, event)}
+                    v-show="resize!== undefined" />
+                </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   {#if headerColCustomFilter[index]}
-                    <div>
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
                       <select
                         bind:value={filterSettings[index]}
                         on:change={onHandleFilter(index)}>
@@ -928,38 +1009,112 @@
                           <option value={f[1]}>{f[0]}</option>
                         {/each}
                       </select>
-                    </div>
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
-                    <div>
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
                       <input
                         type="search"
                         placeholder=" &#128269;"
                         bind:value={filterSettings[index]}
                         on:input={onHandleFilter(index)}
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                    </div>
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                    <div>
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
                       <input
                         type="checkbox"
                         bind:checked={filterSettings[index]}
                         on:change={onHandleFilter(index)}
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                    </div>
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
-                    <div>Date</div>
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
+                      <span>Date</span>
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <div /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
-                    <div />
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
+                      <span />
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                   {:else}
-                    <div>Unknown Type {headerColTypesRow[index]}</div>
+                    <Column
+                      width={100}
+                      flex={false}
+                      border={border === undefined ? resize : border}
+                      class={['align-' + 'center', 'colIndex' + 0]}
+                      key={0}>
+
+                      <span>Unknown Type {headerColTypesRow[index]}</span>
+                      <div
+                        class="resize-line"
+                        on:mousedown={event => mousedown(index, event)}
+                        v-show="resize!== undefined" />
+                    </Column>
                   {/if}
                 {/if}
               {/each}
-              <div colspan={operationsCount}>
-                <!-- <div width="100px"></th> -->
-              </div>
+
+              <Column
+                width={100}
+                flex={true}
+                border={border === undefined ? resize : border}
+                class={['align-' + 'center', 'colIndex' + 0]}
+                key={0}
+                colspan={operationsCount}>
+
+                <div>
+                  <!-- <div width="100px"></th> -->
+                </div>
+                <div
+                  class="resize-line"
+                  on:mousedown={event => mousedown(index, event)}
+                  v-show="resize!== undefined" />
+              </Column>
 
             </div>
           {/if}
@@ -975,7 +1130,7 @@
               <div class="tree-block" bind:this={rowDoms[rowIndex]}>
                 <div class="tree-row">
 
-                  <td>
+                  <div>
                     {#if !isGlobal(r[0])}
                       {#if false}
                         <span>ID: {getValue(r[0])}</span>
@@ -986,13 +1141,13 @@
                         checked={selectedRowsKeys.includes(getValue(r[0]))}
                         on:click={onSelectRowClick} />
                     {/if}
-                  </td>
+                  </div>
                   {#if showRowNum}
-                    <td>{rowIndex + 1}</td>
+                    <div>{rowIndex + 1}</div>
                   {/if}
                   {#each r as c, index}
                     {#if headerColIsvisibleRow[index]}
-                      <td>
+                      <div>
                         {#if headerColEditableRow[index]}
                           <GeneralForm
                             {schema_key}
@@ -1019,11 +1174,11 @@
                             <Text value={getValue(c)} />
                           {/if}
                         {/if}
-                      </td>
+                      </div>
                     {/if}
                   {/each}
                   {#if !isGlobal(r[0])}
-                    <td>
+                    <div>
                       {#if !isGlobal(r[0])}
                         {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
                           <svg
@@ -1036,7 +1191,6 @@
                             }}
                             name="edit"
                             key={getValue(r[0])}
-                            type="button"
                             on:click={() => {
                               quickViewKeys.push(getValue(r[0]))
                               quickViewKeys = quickViewKeys
@@ -1052,8 +1206,8 @@
                           </svg>
                         {/if}
                       {/if}
-                    </td>
-                    <td>
+                    </div>
+                    <div>
                       {#if !isGlobal(r[0])}
                         <svg
                           tabindex="0"
@@ -1074,9 +1228,9 @@
                           <path d="M0 0h24v24H0z" fill="none" />
                         </svg>
                       {/if}
-                    </td>
+                    </div>
                   {/if}
-                  <!-- <td> -->
+                  <!-- <div> -->
 
                   {#if false}
                     <a href="javascript:;" on:click={() => onItemClick(r)}>
@@ -1093,7 +1247,7 @@
                       </span>
                     </a>
                   {/if}
-                  <!-- </td> -->
+                  <!-- </div> -->
                 </div>
               </div>
               {#if quickViewKeys.includes(getValue(r[0]))}
