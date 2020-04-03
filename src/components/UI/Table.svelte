@@ -795,6 +795,17 @@
       }
     }
   }
+  export let border = true
+  export let fixed
+  let table
+  $: bodyStyle = {
+    overflow: fixed !== undefined && fixed !== false ? 'auto' : 'hidden',
+    height:
+      fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
+  }
+  const draging = () => 0
+  const drop = () => 0
+  let isDraing = false
 </script>
 
 {#if css_loaded}
@@ -861,96 +872,109 @@
     {/if}
     {#if headerColTitlesRow.length}
       {#if authorized}
-        <table>
+        <div class="drag-tree-table" bind:this={table} class:border>
           {#if showHeader}
-            <thead>
-              <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    bind:checked={allSelected}
-                    on:click={onSelectAllClick} />
-                </th>
-                <th>No</th>
-                {#each headerColTitlesRow as h, index}
-                  {#if headerColIsvisibleRow[index]}
-                    <th
-                      on:click={e => onHandleSort(e, index)}
-                      on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
-                      {h}
-                      {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
-                        ▲
-                      {:else if headerColSortSettingsRow[index] === SortDirection.Descending}
-                        ▼
-                      {:else}
-                        <!-- content here -->
-                      {/if}
-                    </th>
-                  {/if}
-                {/each}
-                <th colspan={operationsCount}>Actions</th>
-                <!-- <th width="100px">Actions</th> -->
-              </tr>
-              <tr>
-                <th />
-                {#if showRowNum}
-                  <th>
-                    <input
-                      type="number"
-                      class="w60"
-                      bind:value={rowNumScroll}
-                      min="1"
-                      max={items.length}
-                      on:change={onRowNumChange} />
-                  </th>
-                {/if}
-                {#each headerColTitlesRow as h, index}
-                  {#if headerColIsvisibleRow[index]}
-                    {#if headerColCustomFilter[index]}
-                      <th>
-                        <select
-                          bind:value={filterSettings[index]}
-                          on:change={onHandleFilter(index)}>
-                          {#each headerColCustomFilter[index] as f}
-                            <option value={f[1]}>{f[0]}</option>
-                          {/each}
-                        </select>
-                      </th>
-                    {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
-                      <th>
-                        <input
-                          type="search"
-                          placeholder=" &#128269;"
-                          bind:value={filterSettings[index]}
-                          on:input={onHandleFilter(index)}
-                          on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                      </th>
-                    {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                      <th>
-                        <input
-                          type="checkbox"
-                          bind:checked={filterSettings[index]}
-                          on:change={onHandleFilter(index)}
-                          on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                      </th>
-                    {:else if headerColTypesRow[index] === DisplayType.DateTime}
-                      <th>Date</th>
-                      <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
-                    <th /> -->
-                    {:else if headerColTypesRow[index] === DisplayType.Color}
-                      <th />
-                    {:else}
-                      <th>Unknown Type {headerColTypesRow[index]}</th>
-                    {/if}
-                  {/if}
-                {/each}
-                <th colspan={operationsCount}>
-                  <!-- <th width="100px"></th> -->
-                </th>
-              </tr>
+            <div class="drag-tree-table-header">
 
-            </thead>
+              <div>
+                <input
+                  type="checkbox"
+                  bind:checked={allSelected}
+                  on:click={onSelectAllClick} />
+              </div>
+              <div>No</div>
+              {#each headerColTitlesRow as h, index}
+                {#if headerColIsvisibleRow[index]}
+                  <div
+                    on:click={e => onHandleSort(e, index)}
+                    on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
+                    {h}
+                    {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
+                      ▲
+                    {:else if headerColSortSettingsRow[index] === SortDirection.Descending}
+                      ▼
+                    {:else}
+                      <!-- content here -->
+                    {/if}
+                  </div>
+                {/if}
+              {/each}
+              <div colspan={operationsCount}>Actions</div>
+              <!-- <div width="100px">Actions</div> -->
+
+            </div>
+            <div class="drag-tree-table-header">
+
+              <div />
+              {#if showRowNum}
+                <div>
+                  <input
+                    type="number"
+                    class="w60"
+                    bind:value={rowNumScroll}
+                    min="1"
+                    max={items.length}
+                    on:change={onRowNumChange} />
+                </div>
+              {/if}
+              {#each headerColTitlesRow as h, index}
+                {#if headerColIsvisibleRow[index]}
+                  {#if headerColCustomFilter[index]}
+                    <div>
+                      <select
+                        bind:value={filterSettings[index]}
+                        on:change={onHandleFilter(index)}>
+                        {#each headerColCustomFilter[index] as f}
+                          <option value={f[1]}>{f[0]}</option>
+                        {/each}
+                      </select>
+                    </div>
+                  {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
+                    <div>
+                      <input
+                        type="search"
+                        placeholder=" &#128269;"
+                        bind:value={filterSettings[index]}
+                        on:input={onHandleFilter(index)}
+                        on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+                    </div>
+                  {:else if headerColTypesRow[index] === DisplayType.Checkbox}
+                    <div>
+                      <input
+                        type="checkbox"
+                        bind:checked={filterSettings[index]}
+                        on:change={onHandleFilter(index)}
+                        on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
+                    </div>
+                  {:else if headerColTypesRow[index] === DisplayType.DateTime}
+                    <div>Date</div>
+                    <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
+                    <div /> -->
+                  {:else if headerColTypesRow[index] === DisplayType.Color}
+                    <div />
+                  {:else}
+                    <div>Unknown Type {headerColTypesRow[index]}</div>
+                  {/if}
+                {/if}
+              {/each}
+              <div colspan={operationsCount}>
+                <!-- <div width="100px"></th> -->
+              </div>
+
+            </div>
           {/if}
+
+          <div
+            class="drag-tree-table-body"
+            style={bodyStyle}
+            on:dragover={draging}
+            on:dragend={drop}
+            class:is-draging={isDraing} />
+          <div class="drag-line" />
+        </div>
+
+        <table>
+
           <tbody>
             {#each items as r, rowIndex (getValue(r[0]))}
               <tr
