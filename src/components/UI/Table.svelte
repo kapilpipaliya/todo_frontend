@@ -61,6 +61,7 @@
   import Time from './display/Time.svelte'
   import GeneralForm from '../form/Index.svelte'
   import Column from './table/Column.svelte'
+  import Row from './table/Row.svelte'
 
   export let modelcomponent = false
   export let quickcomponent = false
@@ -268,6 +269,7 @@
   let first_visibile_column = 0
   let authorized = true
   let selectedRowsKeys = []
+  let expandedRowsKeys = []
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
     headerColTitlesRow = d[0] ?? []
@@ -811,6 +813,7 @@
   const drop = () => 0
   let isDraing = false
   const mousedown = () => 0
+  const onSingleCheckChange = () => 0
 </script>
 
 {#if css_loaded}
@@ -893,7 +896,7 @@
                   on:click={onSelectAllClick} />
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(index, event)}
+                  on:mousedown={event => mousedown(0, event)}
                   v-show="resize!== undefined" />
               </Column>
 
@@ -906,7 +909,7 @@
                 <span>No</span>
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(index, event)}
+                  on:mousedown={event => mousedown(1, event)}
                   v-show="resize!== undefined" />
               </Column>
 
@@ -933,7 +936,7 @@
 
                     <div
                       class="resize-line"
-                      on:mousedown={event => mousedown(index, event)}
+                      on:mousedown={event => mousedown(index + 2, event)}
                       v-show="resize!== undefined" />
                   </Column>
                 {/if}
@@ -950,7 +953,7 @@
                 <span>Actions</span>
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(index, event)}
+                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)}
                   v-show="resize!== undefined" />
               </Column>
 
@@ -968,7 +971,7 @@
                 <span />
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(index, event)}
+                  on:mousedown={event => mousedown(0, event)}
                   v-show="resize!== undefined" />
               </Column>
               {#if showRowNum}
@@ -988,7 +991,7 @@
                     on:change={onRowNumChange} />
                   <div
                     class="resize-line"
-                    on:mousedown={event => mousedown(index, event)}
+                    on:mousedown={event => mousedown(1, event)}
                     v-show="resize!== undefined" />
                 </Column>
               {/if}
@@ -1011,7 +1014,7 @@
                       </select>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
@@ -1030,7 +1033,7 @@
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
@@ -1048,7 +1051,7 @@
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
@@ -1062,7 +1065,7 @@
                       <span>Date</span>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
@@ -1078,7 +1081,7 @@
                       <span />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                   {:else}
@@ -1092,7 +1095,7 @@
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index, event)}
+                        on:mousedown={event => mousedown(index + 2, event)}
                         v-show="resize!== undefined" />
                     </Column>
                   {/if}
@@ -1112,7 +1115,7 @@
                 </div>
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(index, event)}
+                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)}
                   v-show="resize!== undefined" />
               </Column>
 
@@ -1127,148 +1130,43 @@
             class:is-draging={isDraing}>
 
             {#each items as r, rowIndex (getValue(r[0]))}
-              <div class="tree-block" bind:this={rowDoms[rowIndex]}>
-                <div class="tree-row">
-
-                  <div>
-                    {#if !isGlobal(r[0])}
-                      {#if false}
-                        <span>ID: {getValue(r[0])}</span>
-                      {/if}
-                      <input
-                        type="checkbox"
-                        value={getValue(r[0])}
-                        checked={selectedRowsKeys.includes(getValue(r[0]))}
-                        on:click={onSelectRowClick} />
-                    {/if}
-                  </div>
-                  {#if showRowNum}
-                    <div>{rowIndex + 1}</div>
-                  {/if}
-                  {#each r as c, index}
-                    {#if headerColIsvisibleRow[index]}
-                      <div>
-                        {#if headerColEditableRow[index]}
-                          <GeneralForm
-                            {schema_key}
-                            key={getValue(r[0])}
-                            {fetchConfig}
-                            selector={['_key', headerColEditableRow[index].s]}
-                            id="inline"
-                            buttonlabels={{ save: 'Save', cancel: '' }}
-                            headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(r[0]), getValue(c)]] } }]} />
-                        {:else if c != null}
-                          {#if headerColTypesRow[index] === DisplayType.DateTime}
-                            {new Date(c).toLocaleString()}
-                          {:else if headerColTypesRow[index] === DisplayType.Url}
-                            <Url
-                              href={makeUrl(headerColPropsRow[index], c)}
-                              value={getValue(c)} />
-                          {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                            <Bool value={getValue(c)} />
-                          {:else if headerColTypesRow[index] === DisplayType.Color}
-                            <Color value={getValue(c)} />
-                          {:else if headerColTypesRow[index] === DisplayType.Time}
-                            <Time value={getValue(c)} />
-                          {:else}
-                            <Text value={getValue(c)} />
-                          {/if}
-                        {/if}
-                      </div>
-                    {/if}
-                  {/each}
-                  {#if !isGlobal(r[0])}
-                    <div>
-                      {#if !isGlobal(r[0])}
-                        {#if quickcomponent && !quickViewKeys.includes(getValue(r[0]))}
-                          <svg
-                            tabindex="0"
-                            on:keypress={e => {
-                              if (e.keyCode == 13 || e.which == 13) {
-                                quickViewKeys.push(getValue(r[0]))
-                                quickViewKeys = quickViewKeys
-                              }
-                            }}
-                            name="edit"
-                            key={getValue(r[0])}
-                            on:click={() => {
-                              quickViewKeys.push(getValue(r[0]))
-                              quickViewKeys = quickViewKeys
-                            }}
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
-                            <path
-                              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3
-                              17.25zM20.71 7.04c.39-.39.39-1.02
-                              0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83
-                              1.83 3.75 3.75 1.83-1.83z" />
-                            <path d="M0 0h24v24H0z" fill="none" />
-                          </svg>
-                        {/if}
-                      {/if}
-                    </div>
-                    <div>
-                      {#if !isGlobal(r[0])}
-                        <svg
-                          tabindex="0"
-                          on:keypress={e => {
-                            if (e.keyCode == 13 || e.which == 13) {
-                              onDeleteRow(getValue(r[0]), rowIndex)()
-                            }
-                          }}
-                          name="delete"
-                          key={getValue(r[0])}
-                          type="button"
-                          on:click={e => onDeleteRow(getValue(r[0]), rowIndex)()}
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24">
-                          <path
-                            d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19
-                            4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
-                          <path d="M0 0h24v24H0z" fill="none" />
-                        </svg>
-                      {/if}
-                    </div>
-                  {/if}
-                  <!-- <div> -->
-
-                  {#if false}
-                    <a href="javascript:;" on:click={() => onItemClick(r)}>
-                      <span class="icon is-small">
-                        <i class="fas fa-edit" />
-                        edit
-                      </span>
-                    </a>
-
-                    <a href="javascript:;" on:click={() => onDeleteClick(r)}>
-                      <span class="icon is-small">
-                        <i class="fas fa-trash" />
-                        delete
-                      </span>
-                    </a>
-                  {/if}
-                  <!-- </div> -->
-                </div>
-              </div>
-              {#if quickViewKeys.includes(getValue(r[0]))}
-                <div class="tree-block">
-                  <div class="tree-row">
-                    <div colspan={colCount + (showRowNum ? 1 : 0) + 3}>
-                      {#if quickcomponent}
-                        <svelte:component
-                          this={quickcomponent}
-                          bind:this={rowEditDoms[rowIndex]}
-                          key={getValue(r[0])}
-                          {schema_key}
-                          {fetchConfig}
-                          on:close={onCancel}
-                          on:successSave={successSave}
-                          on:deleteRow={deleteRow} />
-                      {/if}
-                    </div>
-                  </div>
-                </div>
-              {/if}
+              <Row
+                depth="0"
+                columns={[]}
+                isdraggable={true}
+                model={r}
+                custom_field={{}}
+                onCheck={onSingleCheckChange}
+                border={border === undefined ? resize : border}
+                isContainChildren={false}
+                selected={selectedRowsKeys.includes(getValue(r[0]))}
+                isGlobal={isGlobal(r[0])}
+                rowValue={r}
+                showQuickView={selectedRowsKeys.includes(getValue(r[0]))}
+                {rowDoms}
+                {rowIndex}
+                {getValue}
+                {selectedRowsKeys}
+                {onSelectRowClick}
+                {showRowNum}
+                {headerColIsvisibleRow}
+                {headerColTypesRow}
+                {headerColEditableRow}
+                {headerColPropsRow}
+                {schema_key}
+                {fetchConfig}
+                {quickcomponent}
+                {quickViewKeys}
+                {onDeleteRow}
+                {onItemClick}
+                {onDeleteClick}
+                {colCount}
+                {rowEditDoms}
+                {onCancel}
+                {successSave}
+                {deleteRow}
+                {expandedRowsKeys}
+                {makeUrl} />
             {/each}
 
           </div>

@@ -55,6 +55,7 @@ require('child_process').spawn('rm', ['-rf', dest], {
 const hash = Date.now()
 // file: `public/bundles/bundle-${hash}.js`
 // Date.now()
+/* on development dont create .br files */
 let htmlDone = false;
 const generateHtmlBuild = (options) => {
     return {
