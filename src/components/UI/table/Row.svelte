@@ -222,7 +222,7 @@
             name="delete"
             {key}
             type="button"
-            on:click={e => onDeleteRow(key, rowIndex)()}
+            on:click={onDeleteRow(key)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
@@ -261,7 +261,7 @@
           {#if quickcomponent}
             <svelte:component
               this={quickcomponent}
-              bind:this={rowEditDoms[rowIndex]}
+              bind:this={rowEditDoms[key]}
               {key}
               {schema_key}
               {fetchConfig}

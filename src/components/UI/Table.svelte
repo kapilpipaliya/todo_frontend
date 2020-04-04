@@ -486,7 +486,7 @@
     deleteRows_([key])
   }
   const { addNotification } = getNotificationsContext()
-  const onDeleteRow = (key, rowIdx) => async () => {
+  const onDeleteRow = key => async () => {
     const r = confirm('Are You Sure?')
     if (r == true) {
       const mutate_evt = [ET.delete_, events[1], key]
@@ -494,8 +494,8 @@
       const d = await new Promise((resolve, reject) => {
         // send unsubscribe event if edit is open
         const args = ['DEL', filter, fetchConfig]
-        if (rowEditDoms[rowIdx]) {
-          const unsu_event = rowEditDoms[rowIdx]?.f?.unsub_evt ?? null
+        if (rowEditDoms[key]) {
+          const unsu_event = rowEditDoms[key]?.f?.unsub_evt ?? null
           if (unsu_event) {
             args.push(unsu_event)
           }
@@ -799,10 +799,10 @@
       }
     }
   }
+  let table = null
   export let border = true
   export let fixed
-  let table
-  let height
+  export let height
   $: bodyStyle = {
     overflow: fixed !== undefined && fixed !== false ? 'auto' : 'hidden',
     height:
@@ -826,7 +826,7 @@
   }
   const onDeleteSvgKeyPress = key => e => {
     if (e.keyCode == 13 || e.which == 13) {
-      onDeleteRow(key, rowIndex)
+      onDeleteRow(key)()
     }
   }
   const toggleexpandedRowsKeys = key => {
@@ -939,8 +939,7 @@
                     width={100}
                     flex={false}
                     {border}
-                    class={['align-' + 'center', 'colIndex' + index]}
-                    key={index}>
+                    class={['align-' + 'center', 'colIndex' + index]}>
                     <div
                       on:click={e => onHandleSort(e, index)}
                       on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
