@@ -492,7 +492,7 @@
       const mutate_evt = [ET.delete_, events[1], key]
       const filter = [`="${key}"`]
       const d = await new Promise((resolve, reject) => {
-        // send unsubscribe event if edit is open
+        /*send unsubscribe event if edit is open*/
         const args = ['DEL', filter, fetchConfig]
         if (rowEditDoms[key]) {
           const unsu_event = rowEditDoms[key]?.f?.unsub_evt ?? null
@@ -752,7 +752,6 @@
     return isArray(v) ? v[0] || '' : v
   }
   let contextmenu = true
-  let rowDoms = []
 
   function makeUrl(props, id) {
     if (id) {
@@ -765,23 +764,7 @@
       return ''
     }
   }
-  let rowNumScroll
-  let scrolledRow
-  function removeScrollFocus() {
-    if (scrolledRow) {
-      scrolledRow.classList.remove('onScrollFocus')
-    }
-  }
-  function onRowNumChange() {
-    removeScrollFocus()
-    scrolledRow = rowDoms[rowNumScroll - 1]
-    if (scrolledRow) {
-      const offsetTop = scrolledRow.offsetTop
-      window.scrollTo(0, offsetTop)
-      scrolledRow.classList.add('onScrollFocus')
-      setTimeout(removeScrollFocus, 1500)
-    }
-  }
+
   const org_id_ctx = getContext('org_id')
   const org_id = org_id_ctx ? get(org_id_ctx) : ''
   const project_id_ctx = getContext('project_id')
@@ -994,13 +977,7 @@
                   {border}
                   class={['align-' + 'center', 'colIndex' + 0]}>
 
-                  <input
-                    type="number"
-                    class="w60"
-                    bind:value={rowNumScroll}
-                    min="1"
-                    max={items.length}
-                    on:change={onRowNumChange} />
+                  <span />
                   <div
                     class="resize-line"
                     on:mousedown={event => mousedown(1, event)} />
@@ -1132,7 +1109,6 @@
                 {border}
                 isGlobalRow={isGlobal}
                 rowValue={r}
-                bind:rowDoms
                 {rowIndex}
                 {getValue}
                 {selectedRowsKeys}

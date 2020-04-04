@@ -21,7 +21,6 @@
   export let isdraggable
   export let border
   export let rowValue
-  export let rowDoms
   export let rowIndex
   export let isGlobalRow
   export let getValue
@@ -106,8 +105,7 @@
   class="tree-block"
   draggable={!!isdraggable}
   on:dragstart={dragstart}
-  on:dragend={dragend}
-  bind:this={rowDoms[rowIndex]}>
+  on:dragend={dragend}>
   <div
     class={clsx('tree-row', selectedRowsKeys.includes(key) ? $css.table.classes.selected || 'selected' : '')}
     on:click={toggle}
@@ -283,7 +281,6 @@
             {isdraggable}
             {border}
             rowValue={item}
-            bind:rowDoms
             {rowIndex}
             {isGlobalRow}
             {getValue}
