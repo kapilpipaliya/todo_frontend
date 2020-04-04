@@ -140,7 +140,20 @@ export const css_count = {
           console.log('link not found: ', l)
         }
       }
-    }, 2000)
+    }, 1000)
+  },
+  decreaseNow: (name) => {
+    if (cssRaw[name]) {
+      css_loaded[name] = false
+      // note: not calling css_loading.set(true) because onDestory life cycle is called too late!
+      const l = `head link[rel='stylesheet'][href='${cssRaw[name].link}']`
+      const link = document.querySelector(l)
+      if (link) {
+        link.remove()
+      } else {
+        console.log('link not found: ', l)
+      }
+    }
   }
 }
 

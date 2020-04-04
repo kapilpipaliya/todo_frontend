@@ -821,7 +821,14 @@
     }
     expandedRowsKeys = expandedRowsKeys
   }
+  const unMountCss = () => {
+    css_count.decreaseNow('table')
+  }
 </script>
+
+{#if !IS_PRODUCTION}
+  <button on:click={unMountCss}>Unmount css</button>
+{/if}
 
 {#if css_loaded}
   <div class="table_wrap">
