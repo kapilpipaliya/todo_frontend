@@ -919,8 +919,7 @@
                   on:click={onSelectAllClick} />
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(0, event)}
-                  v-show="resize!== undefined" />
+                  on:mousedown={event => mousedown(0, event)} />
               </Column>
               {#if showRowNum}
                 <Column
@@ -931,8 +930,7 @@
                   <span>No</span>
                   <div
                     class="resize-line"
-                    on:mousedown={event => mousedown(1, event)}
-                    v-show="resize!== undefined" />
+                    on:mousedown={event => mousedown(1, event)} />
                 </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
@@ -958,8 +956,7 @@
 
                     <div
                       class="resize-line"
-                      on:mousedown={event => mousedown(index + 2, event)}
-                      v-show="resize!== undefined" />
+                      on:mousedown={event => mousedown(index + 2, event)} />
                   </Column>
                 {/if}
               {/each}
@@ -973,8 +970,7 @@
                 <span>Actions</span>
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)}
-                  v-show="resize!== undefined" />
+                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
               </Column>
 
               <!-- <div width="100px">Actions</div> -->
@@ -990,8 +986,7 @@
                 <span />
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(0, event)}
-                  v-show="resize!== undefined" />
+                  on:mousedown={event => mousedown(0, event)} />
               </Column>
               {#if showRowNum}
                 <Column
@@ -1009,8 +1004,7 @@
                     on:change={onRowNumChange} />
                   <div
                     class="resize-line"
-                    on:mousedown={event => mousedown(1, event)}
-                    v-show="resize!== undefined" />
+                    on:mousedown={event => mousedown(1, event)} />
                 </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
@@ -1031,8 +1025,7 @@
                       </select>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
                     <Column
@@ -1049,8 +1042,7 @@
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
                     <Column
@@ -1066,8 +1058,7 @@
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
                     <Column
@@ -1079,8 +1070,7 @@
                       <span>Date</span>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <div /> -->
@@ -1094,8 +1084,7 @@
                       <span />
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else}
                     <Column
@@ -1107,8 +1096,7 @@
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div
                         class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)}
-                        v-show="resize!== undefined" />
+                        on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {/if}
                 {/if}
@@ -1125,8 +1113,7 @@
                 </div>
                 <div
                   class="resize-line"
-                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)}
-                  v-show="resize!== undefined" />
+                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
               </Column>
 
             </div>
