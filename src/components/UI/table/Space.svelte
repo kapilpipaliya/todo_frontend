@@ -2,11 +2,9 @@
   export let depth
   $: spaces = (() => {
     const aArr = []
-
     for (let i = 0; i < depth; i++) {
       aArr.push('')
     }
-
     return aArr
   })()
 </script>

@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import clsx from 'clsx'
-
-  export let width
-  //export let field;
-  //export let label;
-  export let flex
-  export let border
-
   let className = ''
   export { className as class }
+  export let border = false
+  export let width = 100
+  export let flex = false
 </script>
 
 <div

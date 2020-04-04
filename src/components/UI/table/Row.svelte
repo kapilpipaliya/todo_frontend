@@ -4,65 +4,26 @@
 </script>
 
 <script lang="ts">
-  import {
-    onMount,
-    onDestroy,
-    createEventDispatcher,
-    getContext,
-    tick
-  } from 'svelte'
-  import { view, lensPath, all, equals } from 'ramda'
-  import { isArray } from 'ramda-adjunct'
-  import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../../../ws_events_dispatcher'
-  import {
-    IS_PRODUCTION,
-    ET,
-    E,
-    schemaEvents,
-    SortDirection,
-    ValueType,
-    FormType,
-    DisplayType
-  } from '../../../enums'
-  declare let $ws_connected
-  import { translation } from '../../../translation'
-  declare let $translation
-  import Modal from '../../UI/Model.svelte'
-  import Error from '../../UI/Error.svelte'
-  import Skeleton from '../../UI/Skeleton.svelte'
-  import { css_loading, css, css_count } from '../../../css'
-  declare let $css_loading
-  // import Card from "../components/Card.svelte";
-  import Config from '../Config.svelte'
-  import { getNotificationsContext } from '../../../../thirdparty/svelte-notifications/src/index'
-
-  import UrlPattern from 'url-pattern'
+  import clsx from 'clsx'
+  import { FormType, DisplayType } from '../../../enums'
+  import { css } from '../../../css'
+  declare let $css
   import Text from '../display/Text.svelte'
   import Bool from '../display/Bool.svelte'
   import Url from '../display/Url.svelte'
   import Color from '../display/Color.svelte'
   import Time from '../display/Time.svelte'
+  // import Modal from '../../UI/Model.svelte'
+  // import Card from "../../UI/Card.svelte";
   import GeneralForm from '../../form/Index.svelte'
 
-  import clsx from 'clsx'
-
-  export let model
   export let depth
-  export let columns
   export let isdraggable
   export let border
-  export let custom_field
-  export let onCheck
-  export let isContainChildren
-
-  export let selected: boolean
   export let rowValue
-  export let showQuickView
-
   export let rowDoms
   export let rowIndex
-  export let isGlobal
+  export let isGlobalRow
   export let getValue
   export let selectedRowsKeys
   export let onSelectRowClick
@@ -85,24 +46,27 @@
   export let deleteRow
   export let expandedRowsKeys
   export let makeUrl
-  $: console.log(rowValue)
+  export let onEditSvgKeyPress
+  export let onEditSvgClick
+  export let onDeleteSvgKeyPress
+  export let toggleexpandedRowsKeys
 
-  let open = false
-  let visibility = 'visible'
-  let isfolder
+  let key
+  $: key = getValue(rowValue[0])
+  let isGlobal
+  $: isGlobal = isGlobalRow(rowValue[0])
+  let isFolder
   $: isFolder = rowValue && rowValue[0][1] && rowValue[0][1].length
 
   function toggle() {
     if (isFolder) {
-      model[custom_field.open] = !model[custom_field.open]
-      //this.$forceUpdate(); //todo fix this
+      toggleexpandedRowsKeys(key)
     }
   }
-
   function dragstart(e) {
     if (navigator.userAgent.indexOf('Firefox') >= 0) {
       // Firefox drag have a bug
-      e.dataTransfer.setData('Text', id)
+      e.dataTransfer.setData('Text', key)
     }
 
     window.dragId = e.target.children[0].getAttribute('tree-id')
@@ -110,13 +74,11 @@
     window.dragParentNode = e.target
     e.target.style.opacity = 0.2
   }
-
   function dragend(e) {
     e.target.style.opacity = 1
   }
-
   function setAllCheckData(curList, flag) {
-    const listKey = custom_field.lists
+    const listKey = 'lists'
 
     for (let i = 0; i < curList.length; i++) {
       var item = curList[i]
@@ -127,87 +89,62 @@
       }
     }
   }
+  function onCheckboxClick(evt) {
+    const list = rowValue['lists'] // Determine if there is a child node, recursively if necessary
 
-  function onCheckboxClick(evt, model) {
-    const list = model[custom_field.lists] // Determine if there is a child node, recursively if necessary
-
-    if (list && isContainChildren) {
-      setAllCheckData([model] || [], !!evt.target.checked)
+    if (list) {
+      setAllCheckData([rowValue] || [], !!evt.target.checked)
     } else {
-      //this.$set(model, 'checked', !!evt.target.checked); //todo fix this
+      //this.$set(rowValue, 'checked', !!evt.target.checked); //todo fix this
     }
-
-    onCheck && onCheck()
   }
 
-  const onEditSvgKeyPress = key => e => {
-    if (e.keyCode == 13 || e.which == 13) {
-      quickViewKeys.push(key)
-      quickViewKeys = quickViewKeys
-    }
-  }
-  const onEditSvgClick = key => () => {
-    quickViewKeys.push(key)
-    quickViewKeys = quickViewKeys
-  }
-  const onDeleteSvgKeyPress = key => e => {
-    if (e.keyCode == 13 || e.which == 13) {
-      onDeleteRow(key, rowIndex)
-    }
-  }
-  export let highlight = true
+  let highlight = false // todo: based on headerColPropsRow[index] logic
 </script>
 
 <div
   class="tree-block"
   draggable={!!isdraggable}
-  on:dragstart={event => dragstart(event)}
-  on:dragend={event => dragend(event)}
+  on:dragstart={dragstart}
+  on:dragend={dragend}
   bind:this={rowDoms[rowIndex]}>
   <div
-    class="tree-row"
+    class={clsx('tree-row', selectedRowsKeys.includes(key) ? $css.table.classes.selected || 'selected' : '')}
     on:click={toggle}
     data-level={depth}
-    tree-id={model[custom_field.id]}
-    tree-p-id={model[custom_field.parent_id]}
-    class:highlight-row={highlight}
-    style={{ backgroundColor: model.backgroundColor }}>
-
+    tree-id={key}
+    tree-p-id={rowValue['parent_id']}
+    class:highlight-row={highlight}>
     <Column
       class={['align-' + 'center', 'colIndex' + 0]}
-      field={''}
-      width={100}
+      width={25}
       flex={false}
       {border}>
       {#if !isGlobal}
-        {#if false}
-          <span>ID: {getValue(rowValue[0])}</span>
-        {/if}
         <input
           type="checkbox"
-          value={getValue(rowValue[0])}
-          checked={selectedRowsKeys.includes(getValue(rowValue[0]))}
+          value={key}
+          checked={selectedRowsKeys.includes(key)}
           on:click={onSelectRowClick} />
       {/if}
     </Column>
     {#if showRowNum}
       <Column
         class={['align-' + 'center', 'colIndex' + 1]}
-        field={''}
-        width={100}
+        width={50}
         flex={false}
         {border}>
         <span>
           <Space {depth} />
           {#if rowValue[0][1] && rowValue[0][1].length}
             <span
-              class={clsx('zip-icon', expandedRowsKeys.includes(getValue(rowValue[0])) ? 'arrow-bottom' : 'arrow-right')} />
+              class={clsx('zip-icon', expandedRowsKeys.includes(key) ? 'arrow-bottom' : 'arrow-right')} />
           {:else}
             <span class="zip-icon arrow-transparent" />
           {/if}
           <span />
         </span>
-        <div>{rowIndex + 1}</div>
+        <span>{rowIndex + 1}</span>
       </Column>
     {/if}
 
@@ -215,7 +152,6 @@
       {#if headerColIsvisibleRow[index]}
         <Column
           class={['align-' + 'center', 'colIndex' + (index + 2)]}
-          field={''}
           width={100}
           flex={false}
           {border}>
@@ -223,12 +159,12 @@
             {#if headerColEditableRow[index]}
               <GeneralForm
                 {schema_key}
-                key={getValue(rowValue[0])}
+                {key}
                 {fetchConfig}
                 selector={['_key', headerColEditableRow[index].s]}
                 id="inline"
                 buttonlabels={{ save: 'Save', cancel: '' }}
-                headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[getValue(rowValue[0]), getValue(c)]] } }]} />
+                headerSchema={[[[[], [FormType.hidden, headerColEditableRow[index].t], [], [], [], {}], {}], { r: { result: [[key, getValue(c)]] } }]} />
             {:else if c != null}
               {#if headerColTypesRow[index] === DisplayType.DateTime}
                 {new Date(c).toLocaleString()}
@@ -254,17 +190,16 @@
     {#if !isGlobal}
       <Column
         class={['align-' + 'center', 'colIndex' + (2 + rowValue.length)]}
-        field={''}
-        width={100}
+        width={25}
         flex={false}
         {border}>
-        {#if quickcomponent && !quickViewKeys.includes(getValue(rowValue[0]))}
+        {#if quickcomponent && !quickViewKeys.includes(key)}
           <svg
             tabindex="0"
-            on:keypress={onEditSvgKeyPress(getValue(rowValue[0]))}
+            on:keypress={onEditSvgKeyPress(key)}
             name="edit"
-            key={getValue(rowValue[0])}
-            on:click={onEditSvgClick(getValue(rowValue[0]))}
+            {key}
+            on:click={onEditSvgClick(key)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
@@ -277,18 +212,17 @@
       </Column>
       <Column
         class={['align-' + 'center', 'colIndex' + (2 + rowValue.length + 1)]}
-        field={''}
-        width={100}
+        width={25}
         flex={false}
         {border}>
         {#if !isGlobal}
           <svg
             tabindex="0"
-            on:keypress={onDeleteSvgKeyPress(getValue(rowValue[0]))}
+            on:keypress={onDeleteSvgKeyPress(key)}
             name="delete"
-            key={getValue(rowValue[0])}
+            {key}
             type="button"
-            on:click={e => onDeleteRow(getValue(rowValue[0]), rowIndex)()}
+            on:click={e => onDeleteRow(key, rowIndex)()}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
@@ -299,8 +233,8 @@
         {/if}
       </Column>
     {/if}
-    <!-- <div> -->
 
+    <!-- <Column> -->
     {#if false}
       <a href="javascript:;" on:click={() => onItemClick(rowValue)}>
         <span class="icon is-small">
@@ -318,27 +252,9 @@
     {/if}
     <!-- </div> -->
 
-    {#if rowValue[0][1] && rowValue[0][1].length}
-      {#each rowValue[0][1] as item, index}
-        {#if false}
-          {#if isFolder}
-            <svelte:self
-              v-show="model[custom_field.open]"
-              model={item}
-              {columns}
-              {isdraggable}
-              {border}
-              depth={depth * 1 + 1}
-              {custom_field}
-              {onCheck}
-              {isContainChildren} />
-          {/if}
-        {/if}
-      {/each}
-    {/if}
   </div>
 
-  {#if showQuickView}
+  {#if quickViewKeys.includes(key)}
     <div class="tree-block">
       <div class="tree-row">
         <div colspan={colCount + (showRowNum ? 1 : 0) + 3}>
@@ -346,7 +262,7 @@
             <svelte:component
               this={quickcomponent}
               bind:this={rowEditDoms[rowIndex]}
-              key={getValue(rowValue[0])}
+              {key}
               {schema_key}
               {fetchConfig}
               on:close={onCancel}
@@ -356,6 +272,49 @@
         </div>
       </div>
     </div>
+  {/if}
+
+  {#if rowValue[0][1] && rowValue[0][1].length}
+    {#each rowValue[0][1] as item, index}
+      {#if expandedRowsKeys.includes(key)}
+        {#if isFolder}
+          <svelte:self
+            depth={depth * 1 + 1}
+            {isdraggable}
+            {border}
+            rowValue={item}
+            bind:rowDoms
+            {rowIndex}
+            {isGlobalRow}
+            {getValue}
+            {selectedRowsKeys}
+            {onSelectRowClick}
+            {showRowNum}
+            {headerColIsvisibleRow}
+            {headerColTypesRow}
+            {headerColEditableRow}
+            {headerColPropsRow}
+            {schema_key}
+            {fetchConfig}
+            {quickcomponent}
+            {quickViewKeys}
+            {onDeleteRow}
+            {onItemClick}
+            {onDeleteClick}
+            {colCount}
+            bind:rowEditDoms
+            {onCancel}
+            {successSave}
+            {deleteRow}
+            {expandedRowsKeys}
+            {makeUrl}
+            {onEditSvgKeyPress}
+            {onEditSvgClick}
+            {onDeleteSvgKeyPress}
+            {toggleexpandedRowsKeys} />
+        {/if}
+      {/if}
+    {/each}
   {/if}
 
 </div>

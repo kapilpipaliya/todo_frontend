@@ -799,7 +799,6 @@
       }
     }
   }
-  export let resize // String
   export let border = true
   export let fixed
   let table
@@ -814,6 +813,31 @@
   let isDraing = false
   const mousedown = () => 0
   const onSingleCheckChange = () => 0
+
+  const onEditSvgKeyPress = key => e => {
+    if (e.keyCode == 13 || e.which == 13) {
+      quickViewKeys.push(key)
+      quickViewKeys = quickViewKeys
+    }
+  }
+  const onEditSvgClick = key => () => {
+    quickViewKeys.push(key)
+    quickViewKeys = quickViewKeys
+  }
+  const onDeleteSvgKeyPress = key => e => {
+    if (e.keyCode == 13 || e.which == 13) {
+      onDeleteRow(key, rowIndex)
+    }
+  }
+  const toggleexpandedRowsKeys = key => {
+    const idx = expandedRowsKeys.findIndex(x => x === key)
+    if (idx > -1) {
+      expandedRowsKeys.push(key)
+    } else {
+      expandedRowsKeys.splice(idx)
+    }
+    expandedRowsKeys = expandedRowsKeys
+  }
 </script>
 
 {#if css_loaded}
@@ -885,11 +909,10 @@
             <div class="drag-tree-table-header">
 
               <Column
-                width={100}
+                width={25}
                 flex={false}
-                border={border === undefined ? resize : border}
-                class={['align-' + 'center', 'colIndex' + 0]}
-                key={0}>
+                {border}
+                class={['align-' + 'center', 'colIndex' + 0]}>
                 <input
                   type="checkbox"
                   bind:checked={allSelected}
@@ -899,26 +922,25 @@
                   on:mousedown={event => mousedown(0, event)}
                   v-show="resize!== undefined" />
               </Column>
-
-              <Column
-                width={100}
-                flex={false}
-                border={border === undefined ? resize : border}
-                class={['align-' + 'center', 'colIndex' + 0]}
-                key={0}>
-                <span>No</span>
-                <div
-                  class="resize-line"
-                  on:mousedown={event => mousedown(1, event)}
-                  v-show="resize!== undefined" />
-              </Column>
-
+              {#if showRowNum}
+                <Column
+                  width={50}
+                  flex={false}
+                  {border}
+                  class={['align-' + 'center', 'colIndex' + 0]}>
+                  <span>No</span>
+                  <div
+                    class="resize-line"
+                    on:mousedown={event => mousedown(1, event)}
+                    v-show="resize!== undefined" />
+                </Column>
+              {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   <Column
                     width={100}
                     flex={false}
-                    border={border === undefined ? resize : border}
+                    {border}
                     class={['align-' + 'center', 'colIndex' + index]}
                     key={index}>
                     <div
@@ -943,12 +965,10 @@
               {/each}
 
               <Column
-                width={100}
-                flex={true}
-                border={border === undefined ? resize : border}
-                class={['align-' + 'center', 'colIndex' + 0]}
-                key={0}
-                colspan={operationsCount}>
+                width={operationsCount * 25}
+                flex={false}
+                {border}
+                class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <span>Actions</span>
                 <div
@@ -962,11 +982,10 @@
             </div>
             <div class="drag-tree-table-header">
               <Column
-                width={100}
+                width={25}
                 flex={false}
-                border={border === undefined ? resize : border}
-                class={['align-' + 'center', 'colIndex' + 0]}
-                key={0}>
+                {border}
+                class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <span />
                 <div
@@ -976,11 +995,10 @@
               </Column>
               {#if showRowNum}
                 <Column
-                  width={100}
+                  width={50}
                   flex={false}
-                  border={border === undefined ? resize : border}
-                  class={['align-' + 'center', 'colIndex' + 0]}
-                  key={0}>
+                  {border}
+                  class={['align-' + 'center', 'colIndex' + 0]}>
 
                   <input
                     type="number"
@@ -1001,9 +1019,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <select
                         bind:value={filterSettings[index]}
@@ -1021,9 +1038,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <input
                         type="search"
@@ -1040,9 +1056,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <input
                         type="checkbox"
@@ -1058,9 +1073,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <span>Date</span>
                       <div
@@ -1074,9 +1088,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <span />
                       <div
@@ -1088,9 +1101,8 @@
                     <Column
                       width={100}
                       flex={false}
-                      border={border === undefined ? resize : border}
-                      class={['align-' + 'center', 'colIndex' + 0]}
-                      key={0}>
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + 0]}>
 
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div
@@ -1103,12 +1115,10 @@
               {/each}
 
               <Column
-                width={100}
-                flex={true}
-                border={border === undefined ? resize : border}
-                class={['align-' + 'center', 'colIndex' + 0]}
-                key={0}
-                colspan={operationsCount}>
+                width={operationsCount * 25}
+                flex={false}
+                {border}
+                class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <div>
                   <!-- <div width="100px"></th> -->
@@ -1132,18 +1142,11 @@
             {#each items as r, rowIndex (getValue(r[0]))}
               <Row
                 depth="0"
-                columns={[]}
                 isdraggable={true}
-                model={r}
-                custom_field={{}}
-                onCheck={onSingleCheckChange}
-                border={border === undefined ? resize : border}
-                isContainChildren={false}
-                selected={selectedRowsKeys.includes(getValue(r[0]))}
-                isGlobal={isGlobal(r[0])}
+                {border}
+                isGlobalRow={isGlobal}
                 rowValue={r}
-                showQuickView={selectedRowsKeys.includes(getValue(r[0]))}
-                {rowDoms}
+                bind:rowDoms
                 {rowIndex}
                 {getValue}
                 {selectedRowsKeys}
@@ -1161,12 +1164,16 @@
                 {onItemClick}
                 {onDeleteClick}
                 {colCount}
-                {rowEditDoms}
+                bind:rowEditDoms
                 {onCancel}
                 {successSave}
                 {deleteRow}
                 {expandedRowsKeys}
-                {makeUrl} />
+                {makeUrl}
+                {onEditSvgKeyPress}
+                {onEditSvgClick}
+                {onDeleteSvgKeyPress}
+                {toggleexpandedRowsKeys} />
             {/each}
 
           </div>
