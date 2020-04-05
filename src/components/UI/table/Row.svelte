@@ -63,17 +63,17 @@
     }
   }
   function dragstart(e) {
-    if (navigator.userAgent.indexOf('Firefox') >= 0) {
-      // Firefox drag have a bug
-      e.dataTransfer.setData('Text', key)
-    }
-
-    window.dragId = e.target.children[0].getAttribute('tree-id')
-    window.dragPId = e.target.children[0].getAttribute('tree-p-id')
-    window.dragParentNode = e.target
+    console.log('start', e)
+    e.dataTransfer.setData('Text', {
+      key,
+      dragId: e.target.children[0].getAttribute('tree-id'),
+      dragPId: e.target.children[0].getAttribute('tree-p-id'),
+      dragParentNode: e.target
+    })
     e.target.style.opacity = 0.2
   }
   function dragend(e) {
+    console.log('drag eneded', e)
     e.target.style.opacity = 1
   }
   function setAllCheckData(curList, flag) {
