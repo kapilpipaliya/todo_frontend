@@ -64,7 +64,7 @@
   }
   function dragstart(e) {
     console.log('start', e)
-    e.dataTransfer.setData('Text', {
+    e.dataTransfer.setData('source', {
       key,
       dragId: e.target.children[0].getAttribute('tree-id'),
       dragPId: e.target.children[0].getAttribute('tree-p-id'),

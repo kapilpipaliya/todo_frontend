@@ -864,7 +864,7 @@
     dragX = e.pageX
     dragY = e.clientY
     targetId = undefined
-    filter(e.pageX, e.clientY)
+    filter(e.pageX, e.clientY, e.dataTransfer.getData('source'))
 
     if (e.clientY < 100) {
       window.scrollTo(0, scrollY - 6)
@@ -878,16 +878,17 @@
   async function drop(event) {
     console.log('drop', event)
     func.clearHoverStatus()
-    resetTreeData()
+    resetTreeData(ev.dataTransfer.getData('source'))
     isDragging = false
 
     if (targetId !== undefined) {
       if (hightRowChange !== undefined) {
         await tick()
 
-        const sourceData = event.dataTransfer.types.includes('source')
-        if (sourceData) {
-          let rowEle = document.querySelector(
+        const isSourceData = event.dataTransfer.types.includes('source')
+        if (isSourceData) {
+          const sourceData = ev.dataTransfer.getData('source')
+          const rowEle = document.querySelector(
             "[tree-id='" + sourceData.dragId + "']"
           )
           rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)'
@@ -900,12 +901,12 @@
   }
   let row
   // Find matching lines, handle drag and drop styles
-  function filter(x, y) {
+  function filter(x, y, sourceData) {
     let rows = document.querySelectorAll('.tree-row')
     targetId = undefined
-    const dragRect = window.dragParentNode.getBoundingClientRect()
-    const dragW = dragRect.left + window.dragParentNode.clientWidth
-    const dragH = dragRect.top + window.dragParentNode.clientHeight
+    const dragRect = sourceData.dragParentNode.getBoundingClientRect()
+    const dragW = dragRect.left + sourceData.dragParentNode.clientWidth
+    const dragH = dragRect.top + sourceData.dragParentNode.clientHeight
 
     if (x >= dragRect.left && x <= dragW && y >= dragRect.top && y <= dragH) {
       // The original block currently being dragged is not allowed to be inserted
@@ -928,7 +929,7 @@
         const diffY = y - ry
         const pId = row.getAttribute('tree-p-id') // It is not allowed to change the hierarchical structure, only the upper and lower order logic
 
-        if (onlySameLevelCanDrag !== undefined && pId !== window.dragPId) {
+        if (onlySameLevelCanDrag !== undefined && pId !== sourceData.dragPId) {
           return
         }
 
@@ -963,7 +964,7 @@
     let canDrag = true
 
     if (beforeDragOver) {
-      const curRow = getItemById(data.lists, window.dragId)
+      const curRow = getItemById(data.lists, sourceData.dragId)
       const targetRow = getItemById(data.lists, targetIdTemp)
       canDrag = beforeDragOver(curRow, targetRow, whereInsert)
     }
@@ -993,7 +994,7 @@
     whereInsert = whereInsert
   }
 
-  function resetTreeData() {
+  function resetTreeData(sourceData) {
     if (targetId === undefined) return
 
     const newList = []
@@ -1011,7 +1012,7 @@
         obj['lists'] = []
 
         if (_this.targetId == item['id']) {
-          curDragItem = _this.getItemById(_this.data.lists, window.dragId)
+          curDragItem = _this.getItemById(_this.data.lists, sourceData.dragId)
           taggetItem = _this.getItemById(_this.data.lists, _this.targetId)
 
           if (_this.whereInsert === 'top') {
@@ -1029,7 +1030,7 @@
             needPushList.push(curDragItem)
           }
         } else {
-          if (window.dragId != item['id']) {
+          if (sourceData.dragId != item['id']) {
             needPushList.push(obj)
           }
         }
