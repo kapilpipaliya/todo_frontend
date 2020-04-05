@@ -7,6 +7,7 @@
   import clsx from 'clsx'
   import { FormType, DisplayType } from '../../../enums'
   import { css } from '../../../css'
+  import { isArray } from 'ramda-adjunct'
   declare let $css
   import Text from '../display/Text.svelte'
   import Bool from '../display/Bool.svelte'
@@ -49,13 +50,16 @@
   export let onEditSvgClick
   export let onDeleteSvgKeyPress
   export let toggleexpandedRowsKeys
+  export let parentKey = null
+  export let setDragData
 
   let key
   $: key = getValue(rowValue[0])
   let isGlobal
   $: isGlobal = isGlobalRow(rowValue[0])
   let isFolder
-  $: isFolder = rowValue && rowValue[0][1] && rowValue[0][1].length
+  $: isFolder =
+    rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length
 
   function toggle() {
     if (isFolder) {
@@ -64,12 +68,15 @@
   }
   function dragstart(e) {
     console.log('start', e)
-    e.dataTransfer.setData('source', {
+    setDragData({
       key,
       dragId: e.target.children[0].getAttribute('tree-id'),
       dragPId: e.target.children[0].getAttribute('tree-p-id'),
       dragParentNode: e.target
     })
+    // The data is only available on drop, this is a security feature since a website could grab data when you happen to be dragging something across the webpage.
+    // Firefox drag have a bug // unused
+    e.dataTransfer.setData('source', key) // data should be string
     e.target.style.opacity = 0.2
   }
   function dragend(e) {
@@ -111,7 +118,7 @@
     on:click={toggle}
     data-level={depth}
     tree-id={key}
-    tree-p-id={rowValue['parent_id']}
+    tree-p-id={parentKey}
     class:highlight-row={highlight}>
     <Column
       class={['align-' + 'center', 'colIndex' + 0]}
@@ -134,7 +141,7 @@
         {border}>
         <span>
           <Space {depth} />
-          {#if rowValue[0][1] && rowValue[0][1].length}
+          {#if isFolder}
             <span
               class={clsx('zip-icon', expandedRowsKeys.includes(key) ? 'arrow-bottom' : 'arrow-right')} />
           {:else}
@@ -272,7 +279,7 @@
     </div>
   {/if}
 
-  {#if rowValue[0][1] && rowValue[0][1].length}
+  {#if rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length}
     {#each rowValue[0][1] as item, index}
       {#if expandedRowsKeys.includes(key)}
         {#if isFolder}
@@ -308,7 +315,9 @@
             {onEditSvgKeyPress}
             {onEditSvgClick}
             {onDeleteSvgKeyPress}
-            {toggleexpandedRowsKeys} />
+            {toggleexpandedRowsKeys}
+            parentKey={key}
+            {setDragData} />
         {/if}
       {/if}
     {/each}

@@ -1,6 +1,4 @@
 <script context="module">
-  import func from './table/func'
-
   document.body.ondrop = function(event) {
     event.preventDefault()
     event.stopPropagation()
@@ -40,6 +38,7 @@
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { clone } from 'rambda'
   import {
     IS_PRODUCTION,
     ET,
@@ -855,16 +854,25 @@
     height:
       fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
   }
+  let dragData = {}
+  function setDragData(d) {
+    dragData = d
+  }
 
   /* drag main function 1 */
   function onDraggingOver(e) {
     console.log('over', e)
+    const isSourceData = e.dataTransfer.types.includes('source')
+    if (!isSourceData) {
+      // drag and drop operaion from outside table.
+      return
+    }
     isDragging = true
     if (e.pageX == dragX && e.pageY == dragY) return
     dragX = e.pageX
     dragY = e.clientY
     targetId = undefined
-    filter(e.pageX, e.clientY, e.dataTransfer.getData('source'))
+    filter(e.pageX, e.clientY, dragData)
 
     if (e.clientY < 100) {
       window.scrollTo(0, scrollY - 6)
@@ -875,41 +883,51 @@
 
   /* drag main function 2 */
   /* dragend */
-  async function drop(event) {
-    console.log('drop', event)
-    func.clearHoverStatus()
-    resetTreeData(ev.dataTransfer.getData('source'))
+  async function drop(e) {
+    console.log('drop', e)
+    const isSourceData = e.dataTransfer.types.includes('source')
+    if (!isSourceData) {
+      // drag and drop operaion from outside table.
+      return
+    }
+    clearHoverStatus()
+
+    resetTreeData(dragData) /* Main Function */
     isDragging = false
 
     if (targetId !== undefined) {
       if (hightRowChange !== undefined) {
         await tick()
-
-        const isSourceData = event.dataTransfer.types.includes('source')
-        if (isSourceData) {
-          const sourceData = ev.dataTransfer.getData('source')
-          const rowEle = document.querySelector(
-            "[tree-id='" + sourceData.dragId + "']"
-          )
-          rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)'
-          setTimeout(() => {
-            rowEle.style.backgroundColor = 'rgba(64,158,255,0)'
-          }, 2000)
-        }
+        const rowEle = document.querySelector(
+          "[tree-id='" + dragData.dragId + "']"
+        )
+        rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)'
+        setTimeout(() => {
+          rowEle.style.backgroundColor = 'rgba(64,158,255,0)'
+        }, 2000)
       }
     }
   }
   let row
+  /* todo: fix only one line, this function is unsed while draggging over items.*/
+  /**
+   * 1. get all tree row
+   * 2.
+   *
+   */
+
   // Find matching lines, handle drag and drop styles
   function filter(x, y, sourceData) {
     let rows = document.querySelectorAll('.tree-row')
     targetId = undefined
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     const dragRect = sourceData.dragParentNode.getBoundingClientRect()
     const dragW = dragRect.left + sourceData.dragParentNode.clientWidth
     const dragH = dragRect.top + sourceData.dragParentNode.clientHeight
 
     if (x >= dragRect.left && x <= dragW && y >= dragRect.top && y <= dragH) {
       // The original block currently being dragged is not allowed to be inserted
+      console.log('same element !')
       return
     }
 
@@ -927,7 +945,8 @@
 
       if (x > rx && x < rx + rw && y > ry && y < ry + rh) {
         const diffY = y - ry
-        const pId = row.getAttribute('tree-p-id') // It is not allowed to change the hierarchical structure, only the upper and lower order logic
+        debugger
+        const pId = row.getAttribute('tree-p-id') /* todo: fix this line*/ // It is not allowed to change the hierarchical structure, only the upper and lower order logic
 
         if (onlySameLevelCanDrag !== undefined && pId !== sourceData.dragPId) {
           return
@@ -956,18 +975,18 @@
 
     if (targetIdTemp === undefined) {
       // Can't match to clear the previous state
-      func.clearHoverStatus()
+      clearHoverStatus()
       let whereInsert = ''
       return
     }
 
     let canDrag = true
 
-    if (beforeDragOver) {
+    /*if (beforeDragOver) { //todo fix this
       const curRow = getItemById(data.lists, sourceData.dragId)
       const targetRow = getItemById(data.lists, targetIdTemp)
       canDrag = beforeDragOver(curRow, targetRow, whereInsert)
-    }
+    }*/
 
     if (canDrag == false) return
     hoverBlock.style.display = 'block'
@@ -975,17 +994,17 @@
 
     if (whereInsert == 'bottom') {
       if (hoverBlock.children[2].style.opacity !== '0.5') {
-        func.clearHoverStatus()
+        clearHoverStatus()
         hoverBlock.children[2].style.opacity = 0.5
       }
     } else if (whereInsert == 'center') {
       if (hoverBlock.children[1].style.opacity !== '0.5') {
-        func.clearHoverStatus()
+        clearHoverStatus()
         hoverBlock.children[1].style.opacity = 0.5
       }
     } else {
       if (hoverBlock.children[0].style.opacity !== '0.5') {
-        func.clearHoverStatus()
+        clearHoverStatus()
         hoverBlock.children[0].style.opacity = 0.5
       }
     }
@@ -998,7 +1017,7 @@
     if (targetId === undefined) return
 
     const newList = []
-    const curList = data.lists
+    const curList = items
 
     const _this = this
 
@@ -1008,7 +1027,7 @@
     function pushData(curList, needPushList) {
       for (let i = 0; i < curList.length; i++) {
         const item = curList[i]
-        let obj = func.deepClone(item)
+        let obj = clone(item)
         obj['lists'] = []
 
         if (_this.targetId == item['id']) {
@@ -1090,7 +1109,7 @@
         const item = curList[i]
 
         if (item['id'] != id) {
-          let obj = func.deepClone(item)
+          let obj = clone(item)
           obj['order'] = order
           obj['lists'] = []
           needPushList.push(obj)
@@ -1108,7 +1127,7 @@
   }
 
   // Set properties recursively, only allowed to set component built-in properties
-  function deepSetAttr(key, val, list, ids) {
+  function deepSetAttr(key, val, list, ids = undefined) {
     for (let i = 0; i < list.length; i++) {
       if (ids !== undefined) {
         if (ids.includes(list[i]['id'])) {
@@ -1125,13 +1144,13 @@
   }
 
   function ZipAll(id, deep = true) {
-    let list = func.deepClone(data.lists)
+    let list = clone(data.lists)
     deepSetAttr('open', false, list)
     data.lists = list
   }
 
   function OpenAll(id, deep = true) {
-    let list = func.deepClone(data.lists)
+    let list = clone(data.lists)
     deepSetAttr('open', true, list)
     data.lists = list
   }
@@ -1143,7 +1162,7 @@
   }
 
   function HighlightRow(id, isHighlight = true, deep = false) {
-    let list = func.deepClone(data.lists)
+    let list = clone(data.lists)
     let ids = [id]
 
     if (deep == true) {
@@ -1155,7 +1174,7 @@
   }
 
   function AddRow(pId, data) {
-    const deepList = func.deepClone(data.lists)
+    const deepList = clone(data.lists)
 
     let _this = this
 
@@ -1187,7 +1206,7 @@
   }
 
   function EditRow(id, data) {
-    const deepList = func.deepClone(data.lists)
+    const deepList = clone(data.lists)
 
     let _this = this
 
@@ -1261,7 +1280,7 @@
   // Get all selected rows
   function getCheckedList(lists) {
     let checkedList = []
-    const deepList = func.deepClone(lists)
+    const deepList = clone(lists)
 
     function getchild(curList) {
       for (let i = 0; i < curList.length; i++) {
@@ -1307,7 +1326,7 @@
         element.style.width = lastWidth + 'px'
       } // Update data source
 
-      data.columns[mouse.curIndex].width = lastWidth
+      data.columns[mouse.curIndex].width = lastWidth /* todo: fix this line*/
     }
   }
   const mousemove = e => {
@@ -1319,6 +1338,39 @@
       let line = document.querySelector('.drag-line')
       line.style.left = endX - tableLeft + 'px'
     }
+  }
+
+  function clearHoverStatus() {
+    const rows: NodeListOf<HTMLElement> = document.querySelectorAll('.tree-row')
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i]
+      const hoverBlock = row.children[row.children.length - 1] as HTMLElement
+      hoverBlock.style.display = 'none'
+      // todo fix typescript errors
+      //hoverBlock.children[0].style.opacity = 0.1
+      //hoverBlock.children[1].style.opacity = 0.1
+      //hoverBlock.children[2].style.opacity = 0.1
+    }
+  }
+  function getElementTop(element, tableRef) {
+    // Fixed header, need special calculation
+    let scrollTop = tableRef.querySelector('.drag-tree-table-body').scrollTop
+    let actualTop = element.offsetTop - scrollTop
+    let current = element.offsetParent
+    while (current !== null) {
+      actualTop += current.offsetTop
+      current = current.offsetParent
+    }
+    return actualTop
+  }
+  function getElementLeft(element) {
+    let actualLeft = element.offsetLeft
+    let current = element.offsetParent
+    while (current !== null) {
+      actualLeft += current.offsetLeft
+      current = current.offsetParent
+    }
+    return actualLeft
   }
 
   onMount(() => {
@@ -1647,7 +1699,8 @@
                 {onEditSvgKeyPress}
                 {onEditSvgClick}
                 {onDeleteSvgKeyPress}
-                {toggleexpandedRowsKeys} />
+                {toggleexpandedRowsKeys}
+                {setDragData} />
             {/each}
 
           </div>
