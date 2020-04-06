@@ -912,7 +912,7 @@
   /* todo: fix only one line, this function is unsed while draggging over items.*/
   /**
    * 1. get all tree row
-   * 2.
+   * 2. this just show hover position
    *
    */
 
@@ -935,8 +935,9 @@
     let targetIdTemp = undefined
     let whereInsert = ''
 
+    let row
     for (let i = 0; i < rows.length; i++) {
-      const row = rows[i]
+      row = rows[i]
       const rect = row.getBoundingClientRect()
       const rx = rect.left
       const ry = rect.top
@@ -945,8 +946,7 @@
 
       if (x > rx && x < rx + rw && y > ry && y < ry + rh) {
         const diffY = y - ry
-        debugger
-        const pId = row.getAttribute('tree-p-id') /* todo: fix this line*/ // It is not allowed to change the hierarchical structure, only the upper and lower order logic
+        const pId = row.getAttribute('tree-p-id') // It is not allowed to change the hierarchical structure, only the upper and lower order logic
 
         if (onlySameLevelCanDrag !== undefined && pId !== sourceData.dragPId) {
           return
@@ -1347,9 +1347,9 @@
       const hoverBlock = row.children[row.children.length - 1] as HTMLElement
       hoverBlock.style.display = 'none'
       // todo fix typescript errors
-      //hoverBlock.children[0].style.opacity = 0.1
-      //hoverBlock.children[1].style.opacity = 0.1
-      //hoverBlock.children[2].style.opacity = 0.1
+      hoverBlock.children[0].style.opacity = 0.1
+      hoverBlock.children[1].style.opacity = 0.1
+      hoverBlock.children[2].style.opacity = 0.1
     }
   }
   function getElementTop(element, tableRef) {

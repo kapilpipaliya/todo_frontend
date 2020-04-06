@@ -75,6 +75,7 @@
       dragParentNode: e.target
     })
     // The data is only available on drop, this is a security feature since a website could grab data when you happen to be dragging something across the webpage.
+    // https://stackoverflow.com/questions/28487352/dragndrop-datatransfer-getdata-empty
     // Firefox drag have a bug // unused
     e.dataTransfer.setData('source', key) // data should be string
     e.target.style.opacity = 0.2
@@ -256,7 +257,17 @@
       </a>
     {/if}
     <!-- </div> -->
-
+    <div class="hover-model" style="display: none">
+      <div class="hover-block prev-block">
+        <i class="el-icon-caret-top" />
+      </div>
+      <div class="hover-block center-block">
+        <i class="el-icon-caret-right" />
+      </div>
+      <div class="hover-block next-block">
+        <i class="el-icon-caret-bottom" />
+      </div>
+    </div>
   </div>
 
   {#if quickViewKeys.includes(key)}
