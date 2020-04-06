@@ -196,7 +196,7 @@
     {#if !isGlobal}
       <Column
         class={['align-' + 'center', 'colIndex' + (2 + rowValue.length)]}
-        width={25}
+        width={100}
         flex={false}
         {border}>
         {#if quickcomponent && !quickViewKeys.includes(key)}
@@ -205,7 +205,7 @@
             on:keypress={onEditSvgKeyPress(key)}
             name="edit"
             {key}
-            on:click={onEditSvgClick(key)}
+            on:click|stopPropagation={onEditSvgClick(key)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
@@ -215,12 +215,6 @@
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         {/if}
-      </Column>
-      <Column
-        class={['align-' + 'center', 'colIndex' + (2 + rowValue.length + 1)]}
-        width={25}
-        flex={false}
-        {border}>
         {#if !isGlobal}
           <svg
             tabindex="0"
@@ -228,7 +222,7 @@
             name="delete"
             {key}
             type="button"
-            on:click={onDeleteRow(key)}
+            on:click|stopPropagation={onDeleteRow(key)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
@@ -299,7 +293,7 @@
             {isdraggable}
             {border}
             rowValue={item}
-            {rowIndex}
+            rowIndex={index}
             {isGlobalRow}
             {getValue}
             {selectedRowsKeys}

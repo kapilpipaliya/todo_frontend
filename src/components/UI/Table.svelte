@@ -38,6 +38,7 @@
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { isEmpty } from 'ramda'
   import { clone } from 'rambda'
   import {
     IS_PRODUCTION,
@@ -808,9 +809,9 @@
   const toggleexpandedRowsKeys = key => {
     const idx = expandedRowsKeys.findIndex(x => x === key)
     if (idx > -1) {
-      expandedRowsKeys.push(key)
-    } else {
       expandedRowsKeys.splice(idx)
+    } else {
+      expandedRowsKeys.push(key)
     }
     expandedRowsKeys = expandedRowsKeys
   }
@@ -825,15 +826,15 @@
   /*=====  End of Draggable  ======*/
 
   export let isdraggable = true // Boolean
-  export let data // Object
-  export let onDrag // Function
+
   export let fixed // String | Boolean
   export let height // String | Number
   export let border = true // String
   export let onlySameLevelCanDrag // String
   export let hightRowChange // String
   export let resize = true // String
-  export let beforeDragOver // Function
+  //export let beforeDragOver // Function
+  //export let onDrag // Function
 
   let dragX = 0
   let dragY = 0
@@ -849,11 +850,8 @@
   }
   let table = null
 
-  $: bodyStyle = {
-    overflow: fixed !== undefined && fixed !== false ? 'auto' : 'hidden',
-    height:
-      fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
-  }
+  $: bodyStyle = `overflow: ${fixed !== undefined && fixed !== false ? 'auto' : 'hidden'}; height: ${fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'};`
+  
   let dragData = {}
   function setDragData(d) {
     dragData = d
@@ -861,11 +859,14 @@
 
   /* drag main function 1 */
   function onDraggingOver(e) {
-    console.log('over', e)
+    //console.log('over', e)
     const isSourceData = e.dataTransfer.types.includes('source')
     if (!isSourceData) {
-      // drag and drop operaion from outside table.
+      console.log('drag and drop operaion from outside table.')
       return
+    }
+    if (isEmpty(dragData)) {
+      console.log('drag over operaion from outside table: empty dragData')
     }
     isDragging = true
     if (e.pageX == dragX && e.pageY == dragY) return
@@ -884,11 +885,15 @@
   /* drag main function 2 */
   /* dragend */
   async function drop(e) {
-    console.log('drop', e)
-    const isSourceData = e.dataTransfer.types.includes('source')
-    if (!isSourceData) {
-      // drag and drop operaion from outside table.
-      return
+    //console.log('drop', e)
+    // not work:
+    // const isSourceData = e.dataTransfer.types.includes('source')
+    // if (!isSourceData) {
+    //   console.log('drag and drop operaion from outside table.')
+    //   return
+    // }
+    if (isEmpty(dragData)) {
+      console.log('drop operaion from outside table: empty dragData')
     }
     clearHoverStatus()
 
@@ -907,6 +912,7 @@
         }, 2000)
       }
     }
+    dragData = {}
   }
   let row
   /* todo: fix only one line, this function is unsed while draggging over items.*/
@@ -933,7 +939,7 @@
 
     let hoverBlock = undefined
     let targetIdTemp = undefined
-    let whereInsert = ''
+    whereInsert = ''
 
     let row
     for (let i = 0; i < rows.length; i++) {
@@ -976,15 +982,15 @@
     if (targetIdTemp === undefined) {
       // Can't match to clear the previous state
       clearHoverStatus()
-      let whereInsert = ''
+      whereInsert = ''
       return
     }
 
     let canDrag = true
 
     /*if (beforeDragOver) { //todo fix this
-      const curRow = getItemById(data.lists, sourceData.dragId)
-      const targetRow = getItemById(data.lists, targetIdTemp)
+      const curRow = getItemById(items, sourceData.dragId)
+      const targetRow = getItemById(items, targetIdTemp)
       canDrag = beforeDragOver(curRow, targetRow, whereInsert)
     }*/
 
@@ -1019,54 +1025,70 @@
     const newList = []
     const curList = items
 
-    const _this = this
-
     let curDragItem = null
-    let taggetItem = null
+    let targetItem = null
+
+    let isExapndedModified = false
 
     function pushData(curList, needPushList) {
       for (let i = 0; i < curList.length; i++) {
         const item = curList[i]
         let obj = clone(item)
-        obj['lists'] = []
+        const key = getValue(item[0])
+        obj[0] = [key, []] //obj[0][1] = []
 
-        if (_this.targetId == item['id']) {
-          curDragItem = _this.getItemById(_this.data.lists, sourceData.dragId)
-          taggetItem = _this.getItemById(_this.data.lists, _this.targetId)
+        if (targetId == key) {
+          curDragItem = getItemById(items, sourceData.dragId)
+          targetItem = getItemById(items, targetId)
 
-          if (_this.whereInsert === 'top') {
-            curDragItem['parent_id'] = item['parent_id']
+          if (whereInsert === 'top') {
+            //curDragItem['parent_id'] = item['parent_id']
             needPushList.push(curDragItem)
             needPushList.push(obj)
-          } else if (_this.whereInsert === 'center') {
-            curDragItem['parent_id'] = item['id']
-            obj.open = true
-            obj['lists'].push(curDragItem)
+          } else if (whereInsert === 'center') {
+            //curDragItem['parent_id'] = key
+            //obj.open = true
+            if (!expandedRowsKeys.includes(key)) {
+              expandedRowsKeys.push(key)
+            }
+            isExapndedModified = true
+            if (isArray(obj[0])) {
+              obj[0][1].push(curDragItem)
+            } else {
+              obj[0] = [key, [curDragItem]]
+            }
             needPushList.push(obj)
+          } else if (whereInsert === 'bottom') {
+            //curDragItem['parent_id'] = item['parent_id']
+            needPushList.push(obj)
+            needPushList.push(curDragItem)
           } else {
-            curDragItem['parent_id'] = item['parent_id']
-            needPushList.push(obj)
+            console.log('whereInsert must be valid: ', whereInsert)
             needPushList.push(curDragItem)
+            needPushList.push(obj)
           }
         } else {
-          if (sourceData.dragId != item['id']) {
+          if (sourceData.dragId != key) {
             needPushList.push(obj)
           }
         }
 
-        if (item['lists'] && item['lists'].length) {
-          pushData(item['lists'], obj['lists'])
+        if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+          pushData(item[0][1], obj[0][1])
         }
       }
     }
 
     pushData(curList, newList)
-    resetOrder(newList)
-    onDrag(newList, curDragItem, taggetItem, _this.whereInsert)
+    items = newList
+    if(isExapndedModified) expandedRowsKeys = expandedRowsKeys
+    /////resetOrder(newList)
+    ////onDrag(newList, curDragItem, targetItem, _this.whereInsert)
   }
 
   // Reset all data order
-  function resetOrder(list) {
+  /* todo : fix this function */
+  /*function resetOrder(list) {
     for (let i = 0; i < list.length; i++) {
       list[i]['order'] = i
 
@@ -1074,7 +1096,7 @@
         resetOrder(list[i]['lists'])
       }
     }
-  }
+  }*/
 
   // Get current row based on id
   function getItemById(lists, id) {
@@ -1084,11 +1106,11 @@
       for (let i = 0; i < curList.length; i++) {
         let item = curList[i]
 
-        if (item['id'] == id) {
-          curItem = JSON.parse(JSON.stringify(item))
+        if (getValue(item[0]) == id) {
+          curItem = clone(item)
           break
-        } else if (item['lists'] && item['lists'].length) {
-          getchild(item['lists'])
+        } else if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+          getchild(item[0][1])
         }
       }
     }
@@ -1100,23 +1122,23 @@
   // Get current row based on id
   function DelById(id) {
     const newList = []
-    const curList = data.lists
+    const curList = items
 
     function pushData(curList, needPushList) {
-      let order = 0
+      //let order = 0
 
       for (let i = 0; i < curList.length; i++) {
         const item = curList[i]
 
-        if (item['id'] != id) {
+        if (getValue(item[0]) != id) {
           let obj = clone(item)
-          obj['order'] = order
-          obj['lists'] = []
+          //obj['order'] = order
+          obj[0] = [getValue(item[0]), []] //obj[0][1] = []
           needPushList.push(obj)
           order++
 
-          if (item['lists'] && item['lists'].length) {
-            pushData(item['lists'], obj['lists'])
+          if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+            pushData(item[0][1], obj[0][1])
           }
         }
       }
@@ -1129,30 +1151,49 @@
   // Set properties recursively, only allowed to set component built-in properties
   function deepSetAttr(key, val, list, ids = undefined) {
     for (let i = 0; i < list.length; i++) {
-      if (ids !== undefined) {
-        if (ids.includes(list[i]['id'])) {
-          list[i][key] = val
+      const item = list[i]
+      const changeAttribute = (k, v) => {
+        if (key == 'open') {
+          const idx = expandedRowsKeys.findIndex(x => x === k)
+          if (v) {
+            if (idx === -1) {
+              expandedRowsKeys.push(k)
+            }
+          } else {
+            if (idx > -1) {
+              expandedRowsKeys.splice(idx, 1)
+            }
+          }
+        } else if (key == 'highlight') {
+          // todo fix this
         }
-      } else {
-        list[i][key] = val
       }
 
-      if (list[i]['lists'] && list[i]['lists'].length) {
-        deepSetAttr(key, val, list[i]['lists'], ids)
+      if (ids !== undefined) {
+        if (ids.includes(getValue(item[0]))) {
+          changeAttribute(getValue(item[0]), val)
+        }
+      } else {
+        changeAttribute(getValue(item[0]), val)
       }
+
+      if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+        deepSetAttr(key, val, item[0][1], ids)
+      }
+    }
+    if (key == 'open') {
+      expandedRowsKeys = expandedRowsKeys
+    } else if (key == 'highlight') {
+      // todo fix this
     }
   }
 
   function ZipAll(id, deep = true) {
-    let list = clone(data.lists)
-    deepSetAttr('open', false, list)
-    data.lists = list
+    deepSetAttr('open', false, items)
   }
 
   function OpenAll(id, deep = true) {
-    let list = clone(data.lists)
-    deepSetAttr('open', true, list)
-    data.lists = list
+    deepSetAttr('open', true, items)
   }
 
   function GetLevelById(id) {
@@ -1162,7 +1203,7 @@
   }
 
   function HighlightRow(id, isHighlight = true, deep = false) {
-    let list = clone(data.lists)
+    let list = clone(items)
     let ids = [id]
 
     if (deep == true) {
@@ -1170,98 +1211,96 @@
     }
 
     deepSetAttr('highlight', isHighlight, list, ids)
-    data.lists = list
+    items = list
   }
 
   function AddRow(pId, data) {
-    const deepList = clone(data.lists)
-
-    let _this = this
+    // todo: note: data is json obj
+    const deepList = clone(items)
 
     function deep(list) {
       for (let i = 0; i < list.length; i++) {
-        if (list[i]['id'] == pId) {
-          list[i]['open'] = true
+        const item = list[i]
+        if (getValue(item[0]) == pId) {
+          item['open'] = true
           let newRow = Object.assign({}, data)
-          newRow['parent_id'] = pId
+          ////newRow['parent_id'] = pId
 
-          if (list[i]['lists']) {
-            newRow['order'] = list[i]['lists'].length
-            list[i]['lists'].push(newRow)
+          if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+            ////newRow['order'] = item['lists'].length
+            item[0][1].push(newRow)
           } else {
-            list[i]['lists'] = []
-            newRow['order'] = 0
-            list[i]['lists'].push(newRow)
+            item[0][1] = []
+            ////newRow['order'] = 0
+            item[0][1].push(newRow)
           }
         }
 
-        if (list[i]['lists'] && list[i]['lists'].length) {
-          deep(list[i]['lists'])
+        if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+          deep(item[0][1])
         }
       }
     }
 
     deep(deepList)
-    data.lists = deepList
+    items = deepList
   }
 
   function EditRow(id, data) {
-    const deepList = clone(data.lists)
-
-    let _this = this
+    const deepList = clone(items)
 
     function deep(list) {
       for (let i = 0; i < list.length; i++) {
-        if (list[i]['id'] == id) {
-          let newRow = Object.assign({}, list[i], data)
-          console.log(2222, newRow)
-          list[i] = newRow
+        const item = list[i]
+        if (getValue(item[0]) == id) {
+          let newRow = Object.assign({}, item, data)
+          //console.log(2222, newRow)
+          item = newRow
         }
 
-        if (list[i]['lists'] && list[i]['lists'].length) {
-          deep(list[i]['lists'])
+        if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+          deep(item[0][1])
         }
       }
     }
 
     deep(deepList)
-    console.log(deepList)
-    data.lists = deepList
+    //console.log(deepList)
+    items = deepList
   }
 
   function GetChildIds(id, deep = true) {
     let ids = []
 
-    const _this = this
-
-    function getChilds(list, id) {
+    function getChilds(list, id, addAll = false) {
       for (let i = 0; i < list.length; i++) {
+        const item = list[i]
         let currentPid = ''
-        let pid = list[i]['parent_id']
+        let pid = getValue(item[0]) // list[i]['parent_id']
 
-        if (id == pid) {
-          currentPid = list[i]['id']
+        if (addAll || id == pid) {
+          currentPid = getValue(item[0])
           ids.push(currentPid)
         } else {
           currentPid = id
         }
 
         if (deep == true || id == currentPid) {
-          if (list[i]['lists'] && list[i]['lists'].length) {
-            getChilds(list[i]['lists'], currentPid)
+          if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+            getChilds(item[0][1], currentPid, true)
           }
         }
       }
     }
 
-    getChilds(data.lists, id)
+    getChilds(items, id)
     return ids
   }
 
   // Select button event
   function onCheckAll(evt, func) {
-    setAllCheckData(data.lists, !!evt.target.checked)
-    const checkedList = getCheckedList(data.lists)
+    setAllCheckData(items, !!evt.target.checked)
+    const checkedList = getCheckedList(items)
     func && func(checkedList)
   }
 
@@ -1271,8 +1310,8 @@
       let item = curList[i]
       // this.$set(item, 'checked', flag); // todo fix this
 
-      if (item['lists'] && item['lists'].length) {
-        setAllCheckData(item['lists'], flag)
+      if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+        setAllCheckData(item[0][1], flag)
       }
     }
   }
@@ -1290,8 +1329,8 @@
           checkedList.push(item)
         }
 
-        if (item['lists'] && item['lists'].length) {
-          getchild(item['lists'])
+        if (isArray(item[0]) && item[0][1] && item[0][1].length) {
+          getchild(item[0][1])
         }
       }
     }
@@ -1301,6 +1340,7 @@
   }
 
   function mousedown(curIndex, e) {
+    console.log('mousedown', curIndex, e)
     const startX = e.target.getBoundingClientRect().x
     const curColWidth = e.target.parentElement.offsetWidth
     mouse = {
@@ -1326,7 +1366,7 @@
         element.style.width = lastWidth + 'px'
       } // Update data source
 
-      data.columns[mouse.curIndex].width = lastWidth /* todo: fix this line*/
+      ////data.columns[mouse.curIndex].width = lastWidth /* todo: fix this line*/
     }
   }
   const mousemove = e => {
@@ -1346,7 +1386,6 @@
       const row = rows[i]
       const hoverBlock = row.children[row.children.length - 1] as HTMLElement
       hoverBlock.style.display = 'none'
-      // todo fix typescript errors
       hoverBlock.children[0].style.opacity = 0.1
       hoverBlock.children[1].style.opacity = 0.1
       hoverBlock.children[2].style.opacity = 0.1
@@ -1428,6 +1467,8 @@
       {#if false}
         <button class="" on:click={refresh}>Refresh</button>
       {/if}
+      <button class="" on:click={ZipAll}>Collepse All</button>
+      <button class="" on:click={OpenAll}>Expand All</button>
       Page:
       <select bind:value={current_page} on:change={refresh}>
         {#each pages as p}
@@ -1473,7 +1514,7 @@
                   width={50}
                   flex={false}
                   {border}
-                  class={['align-' + 'center', 'colIndex' + 0]}>
+                  class={['align-' + 'center', 'colIndex' + 1]}>
                   <span>No</span>
                   <div
                     class="resize-line"
@@ -1486,7 +1527,7 @@
                     width={100}
                     flex={false}
                     {border}
-                    class={['align-' + 'center', 'colIndex' + index]}>
+                    class={['align-' + 'center', 'colIndex' + (2 + index)]}>
                     <div
                       on:click={e => onHandleSort(e, index)}
                       on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
@@ -1508,10 +1549,10 @@
               {/each}
 
               <Column
-                width={operationsCount * 25}
+                width={operationsCount * 50}
                 flex={false}
                 {border}
-                class={['align-' + 'center', 'colIndex' + 0]}>
+                class={['align-' + 'center', 'colIndex' + (2 + headerColTitlesRow.length)]}>
 
                 <span>Actions</span>
                 <div
@@ -1539,7 +1580,7 @@
                   width={50}
                   flex={false}
                   {border}
-                  class={['align-' + 'center', 'colIndex' + 0]}>
+                  class={['align-' + 'center', 'colIndex' + 1]}>
 
                   <span />
                   <div
@@ -1554,7 +1595,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <select
                         bind:value={filterSettings[index]}
@@ -1572,7 +1613,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="search"
@@ -1589,7 +1630,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="checkbox"
@@ -1605,7 +1646,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Date</span>
                       <div
@@ -1619,7 +1660,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span />
                       <div
@@ -1631,7 +1672,7 @@
                       width={100}
                       flex={false}
                       {border}
-                      class={['align-' + 'center', 'colIndex' + 0]}>
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div
@@ -1643,10 +1684,10 @@
               {/each}
 
               <Column
-                width={operationsCount * 25}
+                width={operationsCount * 50}
                 flex={false}
                 {border}
-                class={['align-' + 'center', 'colIndex' + 0]}>
+                class={['align-' + 'center', 'colIndex' + (2 + headerColTitlesRow.length)]}>
 
                 <div>
                   <!-- <div width="100px"></th> -->
@@ -1789,4 +1830,3 @@
     {/if}
   </div>
 {/if}
-{dragX}--{dragY}
