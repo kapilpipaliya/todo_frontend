@@ -41,7 +41,7 @@
   import { isEmpty } from 'ramda'
   import { clone } from 'rambda'
   import {
-    IS_PRODUCTION,
+    is_production,
     ET,
     E,
     schemaEvents,
@@ -50,6 +50,7 @@
     FormType,
     DisplayType
   } from '../../enums'
+  declare let $is_production
   declare let $ws_connected
   import { translation } from '../../translation'
   declare let $translation
@@ -288,7 +289,7 @@
     headerColEditableRow = d[4] ?? []
     headerColPropsRow = d[5] ?? []
     options = d[6]
-    if (IS_PRODUCTION && !options.k) {
+    if ($is_production && !options.k) {
       const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key')
       if (keyIdx > -1) {
         headerColIsvisibleRow[keyIdx] = 0
@@ -850,8 +851,12 @@
   }
   let table = null
 
-  $: bodyStyle = `overflow: ${fixed !== undefined && fixed !== false ? 'auto' : 'hidden'}; height: ${fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'};`
-  
+  $: bodyStyle = `overflow: ${
+    fixed !== undefined && fixed !== false ? 'auto' : 'hidden'
+  }; height: ${
+    fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
+  };`
+
   let dragData = {}
   function setDragData(d) {
     dragData = d
@@ -1081,7 +1086,7 @@
 
     pushData(curList, newList)
     items = newList
-    if(isExapndedModified) expandedRowsKeys = expandedRowsKeys
+    if (isExapndedModified) expandedRowsKeys = expandedRowsKeys
     /////resetOrder(newList)
     ////onDrag(newList, curDragItem, targetItem, _this.whereInsert)
   }
@@ -1422,7 +1427,7 @@
   })
 </script>
 
-{#if !IS_PRODUCTION}
+{#if !$is_production}
   <button on:click={unMountCss}>Unmount css</button>
 {/if}
 
@@ -1480,7 +1485,7 @@
         <button type="button" on:click={onDeleteSelected}>Delete</button>
       {/if}
       <!-- <button type="button" on:click={onShowRowNum}>Row Numbers</button> -->
-      {#if !IS_PRODUCTION}
+      {#if !$is_production}
         <button type="button" on:click={onConfigClicked}>Config</button>
       {/if}
       {#if config}

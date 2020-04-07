@@ -3,7 +3,8 @@
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
 
-  import { IS_PRODUCTION, ET, E } from '../enums'
+  import { is_production, ET, E } from '../enums'
+  declare let $is_production
   const onRestart = () => {
     S.bindT([ET.get, E.restart_server, S.uid], d => 0, null)
   }
@@ -47,7 +48,7 @@
   }
 </script>
 
-{#if !IS_PRODUCTION}
+{#if !$is_production}
   <div>
     <button on:click={onRestart}>Restart Server</button>
     <button on:click={onRecompileFrontend}>ReCompile Frontend</button>

@@ -4,9 +4,11 @@ declare const process
  * process.env.NODE_ENV is replaced
  *
  */
+import { writable } from 'svelte/store'
 export const IS_PRODUCTION =
   // @ts-ignore
   process.env.NODE_ENV == 'development' ? false : true
+export const is_production = writable(IS_PRODUCTION)
 
 export enum SortDirection {
   None,

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { IS_PRODUCTION } from '../../enums'
+  import { is_production } from '../../enums'
+  declare let $is_production
 </script>
 
-{#if !IS_PRODUCTION}NightMode Todo: Make it saving to the database{/if}
+{#if !$is_production}NightMode Todo: Make it saving to the database{/if}

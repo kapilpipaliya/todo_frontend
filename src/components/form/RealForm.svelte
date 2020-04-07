@@ -23,7 +23,8 @@
   import TableForm from './tableform/TableForm.svelte'
   import ArrayForm from './input/Array.svelte'
   import Url from './input/Url.svelte'
-  import { IS_PRODUCTION } from '../../enums'
+  //import { is_production } from '../../enums'
+  //declare let $is_production
   export let value
   export let type = FormType.text
   export let label = ''
@@ -108,7 +109,7 @@
   let comp = getComponent()
 </script>
 
-{#if comp && !(showKey && label !== ' key')}
+{#if comp && (showKey || (!showKey && label !== ' key'))}
   <div class="form-item">
     <svelte:component
       this={comp}

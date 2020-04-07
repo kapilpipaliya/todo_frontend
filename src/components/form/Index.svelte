@@ -12,7 +12,8 @@
   import { S, ws_connected } from '../../ws_events_dispatcher'
   declare let $ws_connected
   import { ET, E, schemaEvents } from '../../enums'
-  import { IS_PRODUCTION, ValueType } from '../../enums'
+  import { is_production, ValueType } from '../../enums'
+  declare let $is_production
   import { css_loading, css_count } from '../../css'
   import { Debug, showDebug } from '../UI/debug'
   import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
@@ -35,7 +36,7 @@
   export let buttonlabels = { save: 'Save', cancel: 'Cancel' }
   export let selector = []
   export let headerSchema = []
-  export let showdbg = !IS_PRODUCTION
+  export let showdbg = !$is_production
   let options = { disabled: false, notify: true }
   let headers = []
   let initial_form = []
@@ -117,7 +118,7 @@
     }
     return array2
   }
-  let showKey = false
+  let showKey = !$is_production
   function onDataGet(d) {
     if (!d[0]) {
       er = d[1]

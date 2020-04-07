@@ -14,7 +14,8 @@
   declare let $current_member
   import { css_loading, css_count } from './css'
   declare let $css_loading
-  import { ValueType, IS_PRODUCTION, ET, E } from './enums'
+  import { ValueType, is_production, ET, E } from './enums'
+  declare let $is_production
   import { S } from './ws_events_dispatcher'
   import TreeSidebar from './components/UI/TreeSidebar.svelte'
 
@@ -37,7 +38,7 @@
   let global_menu = []
   let home_menu = []
   let subdomain_guest_menu = []
-  const isSubdmomain = window.location.hostname.split('.').length > 1
+  const isSubdmomain = window.location.hostname.split('.').length > 2
 
   const getMenuDataGet = all => {
     // if (isLoading) isLoading = false
@@ -74,7 +75,7 @@
     if (idx > -1) public_menu = items[idx].menu
     idx = findIdx('top_right')
     if (idx > -1) top_right_menu = items[idx].menu
-    if (!IS_PRODUCTION) {
+    if (!$is_production) {
       idx = findIdx('global')
       if (idx > -1) global_menu = items[idx].menu
     }
@@ -88,7 +89,7 @@
         getMenuDataGet(d)
       },
       [
-        [`['top_right', ${!IS_PRODUCTION ? `'global'` : `''`}, 'home']`],
+        [`['top_right', ${!$is_production ? `'global'` : `''`}, 'home']`],
         [],
         [0, 0, 0],
         {
@@ -117,7 +118,7 @@
       <TreeSidebar class="top_right" menu={top_right_menu} />
     {/if}
 
-    {#if !IS_PRODUCTION && global_menu.length}
+    {#if !$is_production && global_menu.length}
       <TreeSidebar class="global" menu={global_menu} />
     {/if}
     {#if home_menu.length}

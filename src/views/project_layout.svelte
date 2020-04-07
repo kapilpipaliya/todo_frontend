@@ -2,8 +2,9 @@
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
   import { S, ws_connected } from '../ws_events_dispatcher'
-  import { IS_PRODUCTION, ET, E, ValueType } from '../enums'
+  import { is_production, ET, E, ValueType } from '../enums'
   declare let $ws_connected
+  declare let $is_production
   import { clone } from 'rambda'
   import { Route } from '../../thirdparty/svelte-router-spa/index'
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'
@@ -153,7 +154,7 @@
   //$: {menus = processMenu(clone(OldMenu), $org_id, project_id) }
 </script>
 
-{#if !IS_PRODUCTION}PROJECT LAYOUT{/if}
+{#if !$is_production}PROJECT LAYOUT{/if}
 <h4>Selected Project: {project_id}</h4>
 <div style="display: flex">
   <div>

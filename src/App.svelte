@@ -19,7 +19,8 @@
   import { css_loading, css_count } from './css'
   declare let $css_loading
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
-  import { IS_PRODUCTION, ET, E, form_schema_evt } from './enums'
+  import { is_production, ET, E, form_schema_evt } from './enums'
+  declare let $is_production
   import { S } from './ws_events_dispatcher'
   import TopMenu from './TopMenu.svelte'
   import LoadAwesome from './components/UI/LoadAwesome.svelte'
@@ -46,7 +47,7 @@
 
   let e$
   $: e$ = $current_member?.email
-  const isSubdmomain = window.location.hostname.split('.').length > 1
+  const isSubdmomain = window.location.hostname.split('.').length > 2
   let guest_menu = [
     {
       name: 'Register',
@@ -177,6 +178,12 @@
     navigator.serviceWorker.register('/service-worker.js')
   }
 </script>
+
+{#if process.env.NODE_ENV == 'development'}
+  <button on:click={_ => ($is_production = !$is_production)}>
+    Toogle Production
+  </button>
+{/if}
 
 <Notifications>
   {#if css_loaded}
