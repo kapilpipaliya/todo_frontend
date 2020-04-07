@@ -99,6 +99,9 @@ export class ServerEventsDispatcher {
     return ++this.id_
   }
   setupConnection() {
+    if (this.#conn) {
+        return;
+    }
     this.#conn = new WebSocket(this.#path, [])
     // dispatch to the right handlers
     this.#conn.onmessage = this.onmessage
@@ -161,10 +164,44 @@ export class ServerEventsDispatcher {
     }
     this.#isFirst = false
   }
+  private onopen(evt: Event) {
+    ws_connected.set(true)
+    this.#isFirst = true
+    //console.log(this.conn.extensions);
+    //console.log("Server Opened")
+    this.#firstCancelTimeout = setTimeout(this.delay_send, 50)
+    // if (token) {
+    //   this.sendMessage('authentication_challenge', {token});
+    // }
+    this.dispatch(['open', '', 0], [])
+    // const length = this.#callbacks.length;
+    //   for (let i = 0; i < length; i++) {
+    //     chain[i][1](...message)
+    //     if (chain[i][0] == 0) {
+    //       this.#callbacks[JSON.stringify(event)] = []
+    //     }
+    //   }
+  }
+  private onclose(evt: CloseEvent) {
+    ws_connected.set(false)
+    this.dispatch(['close', '', 0], [])
+    setTimeout(() => {
+      if (this.isOnline) {
+        this.setupConnection()
+      }
+    }, 1000)
+    // on reconnection all subscribtion needs to resubscribe.
+  }
+  private onerror(event) {
+    console.warn(event.message)
+    console.warn("WebSocket error:", event)
+    //todo depend on error try to reconnect
+    this.dispatch(['error', '', 0], [])
+  }
   trigger(payload) {
     const f = this.trigger
     switch (this.#conn.readyState) {
-      case 0: // CONNECTING
+      case WebSocket.CONNECTING:
         // code block
         //This will added to onopen list, take care
         //this.#conn.addEventListener('open', () => {
@@ -172,7 +209,7 @@ export class ServerEventsDispatcher {
         this.#firstPayload.push(...payload)
         //})
         return this
-      case 1: // OPEN
+      case WebSocket.OPEN:
         if (this.#isFirst) {
           for (let i = 0; i < payload.length; i++) {
             this.#firstPayload.push(payload[i])
@@ -183,8 +220,8 @@ export class ServerEventsDispatcher {
           this.#conn.send(JSON.stringify(payload)) // <= send JSON data to socket server
         }
         return this
-      case 2: // CLOSING
-      case 3: //CLOSED
+      case WebSocket.CLOSING:
+      case WebSocket.CLOSED:
         // try to reconnect/logout
         this.setupConnection()
         //this.#conn.addEventListener('open', () => {
@@ -217,7 +254,6 @@ export class ServerEventsDispatcher {
       }
     }
   }
-
   private async onmessage(evt: MessageEvent) {
     if (typeof evt.data === 'string') {
       const data = JSON.parse(evt.data)
@@ -237,37 +273,6 @@ export class ServerEventsDispatcher {
     //   console.log("Received arraybuffer");
     //   this.dispatch(this.event_name, buffer)
     // }
-  }
-  private onclose(evt: CloseEvent) {
-    ws_connected.set(false)
-    this.dispatch(['close', '', 0], [])
-    setTimeout(() => {
-      if (this.isOnline) {
-        this.setupConnection()
-      }
-    }, 1000)
-    // on reconnection all subscribtion needs to resubscribe.
-  }
-  private onopen(evt: Event) {
-    ws_connected.set(true)
-    this.#isFirst = true
-    //console.log(this.conn.extensions);
-    //console.log("Server Opened")
-    this.#firstCancelTimeout = setTimeout(this.delay_send, 50)
-    this.dispatch(['open', '', 0], [])
-    // const length = this.#callbacks.length;
-    //   for (let i = 0; i < length; i++) {
-    //     chain[i][1](...message)
-    //     if (chain[i][0] == 0) {
-    //       this.#callbacks[JSON.stringify(event)] = []
-    //     }
-    //   }
-  }
-  private onerror(error) {
-    console.warn(error.message)
-    console.warn(`[error] ${error}`)
-    //todo depend on error try to reconnect
-    this.dispatch(['error', '', 0], [])
   }
   private dispatch(event: event, message: Array<{}>) {
     const chain = this.#callbacks[JSON.stringify(event)]
