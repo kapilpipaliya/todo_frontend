@@ -1,14 +1,14 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher, tick } from 'svelte'
-  import Editor from '../../../../thirdparty/cl-editor/src/Editor.svelte'
-  import Label from '../Label.svelte'
-  export let name
-  export let required
-  export let disabled
-  export let value
-  export let props = {}
-  export let dom = null
-  let cleditorInstance
+  import { onMount, createEventDispatcher, tick } from 'svelte';
+  import Editor from '../../../../thirdparty/cl-editor/src/Editor.svelte';
+  import Label from '../Label.svelte';
+  export let name;
+  export let required;
+  export let disabled;
+  export let value;
+  export let props = {};
+  export let dom = null;
+  let cleditorInstance;
   // Initialize editor
   onMount(async () => {
     /*	await tick()
@@ -60,9 +60,9 @@
     //cleditorInstance.restoreRange() // restores cursor position or user selection
     // saveRange and restoreRange are useful when making custom actions
     // that demands that focus is shifted from editor to, for example, modal window.
-  })
+  });
   function onChange(event) {
-    value = event.detail
+    value = event.detail;
   }
 </script>
 

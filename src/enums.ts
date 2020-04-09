@@ -1,14 +1,14 @@
-declare const process
+declare const process;
 /**
  * const variable
  * process.env.NODE_ENV is replaced
  *
  */
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 export const IS_PRODUCTION =
   // @ts-ignore
-  process.env.NODE_ENV == 'development' ? false : true
-export const is_production = writable(IS_PRODUCTION)
+  process.env.NODE_ENV == 'development' ? false : true;
+export const is_production = writable(IS_PRODUCTION);
 
 export enum SortDirection {
   None,
@@ -280,33 +280,33 @@ export enum E {
   form_schema_mutate
   // routes
 }
-export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id]
+export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id];
 // generate event from schema:
 export const schemaEvents = (schema: string) => {
-  const h = E[`${schema}_list`]
+  const h = E[`${schema}_list`];
   if (h) {
-    return [E[`${schema}_list`], E[`${schema}_mutate`]]
+    return [E[`${schema}_list`], E[`${schema}_mutate`]];
   } else if (schema == 'register') {
-    return [null, E.register_user]
+    return [null, E.register_user];
   } else if (schema == 'mregister') {
-    return [null, E.register_member]
+    return [null, E.register_member];
   } else if (schema == 'login') {
-    return [null, E.login]
+    return [null, E.login];
   } else if (schema == 'mlogin') {
-    return [null, E.member_login]
+    return [null, E.member_login];
   } else if (schema == 'member_setting') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else if (schema == 'work_package_setting') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else if (schema == 'custom_fields') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else if (schema == 'system_setting') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else if (schema == 'email_setting') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else if (schema == 'auth_setting') {
-    return [null, E.setting_mutate]
+    return [null, E.setting_mutate];
   } else {
-    console.warn('cant generate events for schem key: ', schema)
+    console.warn('cant generate events for schem key: ', schema);
   }
-}
+};

@@ -4,7 +4,7 @@
     css_frameworks,
     selected_frameworks,
     css_count
-  } from '../../css'
+  } from '../../css';
   /* No Framework load
 {#each Object.entries($css_frameworks) as [framework, link], index (framework)}
 	{#each $selected_frameworks as f, index (f)}

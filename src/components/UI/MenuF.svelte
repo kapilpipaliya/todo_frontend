@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { compose, length, filter } from 'ramda'
-  export let menu = {}
+  import { compose, length, filter } from 'ramda';
+  export let menu = {};
   const h = compose(
     length,
     filter(x => !x.hidden)
-  )
-  $: tabsCount = h(menu.tabs)
+  );
+  $: tabsCount = h(menu.tabs);
 </script>
 
 {#if menu.tabs}

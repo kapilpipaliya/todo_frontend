@@ -1,6 +1,6 @@
 <script lang="ts">
-  export let value
-  export let props = {}
+  export let value;
+  export let props = {};
 </script>
 
 <span {...props}>

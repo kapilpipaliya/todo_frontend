@@ -29,5 +29,5 @@
     if (!m.children.length) {
       ///goto(m.path)
     }
-  }
+  };
 </script>

@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { quintOut } from 'svelte/easing'
-  import { crossfade } from 'svelte/transition'
-  import { flip } from 'svelte/animate'
+  import { quintOut } from 'svelte/easing';
+  import { crossfade } from 'svelte/transition';
+  import { flip } from 'svelte/animate';
   // FLIP ANIMATION
   const [send, receive] = crossfade({
     duration: d => Math.sqrt(d * 200),
     fallback(node, params) {
-      const style = getComputedStyle(node)
-      const transform = style.transform === 'none' ? '' : style.transform
+      const style = getComputedStyle(node);
+      const transform = style.transform === 'none' ? '' : style.transform;
       return {
         duration: 600,
         easing: quintOut,
@@ -15,46 +15,46 @@
 					transform: ${transform} scale(${t});
 					opacity: ${t}
 				`
-      }
+      };
     }
-  })
+  });
   // DRAG AND DROP
-  let isOver = false
+  let isOver = false;
   const getDraggedParent = node =>
-    (node.dataset.index && node.dataset) || getDraggedParent(node.parentNode)
+    (node.dataset.index && node.dataset) || getDraggedParent(node.parentNode);
   const start = ev => {
-    ev.dataTransfer.setData('source', ev.target.dataset.index)
-  }
+    ev.dataTransfer.setData('source', ev.target.dataset.index);
+  };
   const over = ev => {
-    ev.preventDefault()
-    let dragged = getDraggedParent(ev.target)
-    if (isOver !== dragged.id) isOver = JSON.parse(dragged.id)
-  }
+    ev.preventDefault();
+    let dragged = getDraggedParent(ev.target);
+    if (isOver !== dragged.id) isOver = JSON.parse(dragged.id);
+  };
   const leave = ev => {
-    let dragged = getDraggedParent(ev.target)
-    if (isOver === dragged.id) isOver = false
-  }
+    let dragged = getDraggedParent(ev.target);
+    if (isOver === dragged.id) isOver = false;
+  };
   const drop = ev => {
-    isOver = false
-    ev.preventDefault()
-    let dragged = getDraggedParent(ev.target)
-    let from = ev.dataTransfer.getData('source')
-    let to = dragged.index
-    reorder({ from, to })
-  }
+    isOver = false;
+    ev.preventDefault();
+    let dragged = getDraggedParent(ev.target);
+    let from = ev.dataTransfer.getData('source');
+    let to = dragged.index;
+    reorder({ from, to });
+  };
   // DISPATCH REORDER
-  import { createEventDispatcher } from 'svelte'
-  const dispatch = createEventDispatcher()
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
   const reorder = ({ from, to }) => {
-    let newList = [...list]
-    newList[from] = [newList[to], (newList[to] = newList[from])][0]
-    dispatch('sort', newList)
-  }
+    let newList = [...list];
+    newList[from] = [newList[to], (newList[to] = newList[from])][0];
+    dispatch('sort', newList);
+  };
   // UTILS
-  const getKey = item => (key ? item[key] : item)
+  const getKey = item => (key ? item[key] : item);
   // PROPS
-  export let list
-  export let key
+  export let list;
+  export let key;
 </script>
 
 {#if list && list.length}

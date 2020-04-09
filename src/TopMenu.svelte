@@ -9,22 +9,22 @@
    * Internal:
    * fetch menu
    */
-  import { onMount, onDestroy } from 'svelte'
-  import { current_member } from './current_member'
-  declare let $current_member
-  import { css_loading, css_count } from './css'
-  declare let $css_loading
-  import { ValueType, is_production, ET, E } from './enums'
-  declare let $is_production
-  import { Ws } from './ws_events_dispatcher'
-  import TreeSidebar from './components/UI/TreeSidebar.svelte'
+  import { onMount, onDestroy } from 'svelte';
+  import { current_member } from './current_member';
+  declare let $current_member;
+  import { css_loading, css_count } from './css';
+  declare let $css_loading;
+  import { ValueType, is_production, ET, E } from './enums';
+  declare let $is_production;
+  import { Ws } from './ws_events_dispatcher';
+  import TreeSidebar from './components/UI/TreeSidebar.svelte';
 
-  css_count.increase('all_menu')
-  let e$
-  $: e$ = $current_member?.email
-  let items = []
-  let public_menu = []
-  let top_right_menu = []
+  css_count.increase('all_menu');
+  let e$;
+  $: e$ = $current_member?.email;
+  let items = [];
+  let public_menu = [];
+  let top_right_menu = [];
   let guest_menu = [
     {
       name: 'Register',
@@ -34,59 +34,59 @@
       name: 'Login',
       path: '/super_login'
     }
-  ]
-  let global_menu = []
-  let home_menu = []
-  let subdomain_guest_menu = []
-  const isSubdmomain = window.location.hostname.split('.').length > 2
+  ];
+  let global_menu = [];
+  let home_menu = [];
+  let subdomain_guest_menu = [];
+  const isSubdmomain = window.location.hostname.split('.').length > 2;
 
   const getMenuDataGet = all => {
     // if (isLoading) isLoading = false
-    const [h, d] = all
+    const [h, d] = all;
     if (h === false) {
       //authorized = false
       //er = d
     }
     if (d.r) {
-      items = d.r.result ?? []
+      items = d.r.result ?? [];
     } else if (d.n) {
     } else if (d.m) {
       d.m.result.forEach(mod => {
         const findIndex = items.findIndex(i => {
-          return i._key == mod._key
-        })
+          return i._key == mod._key;
+        });
         if (findIndex !== -1) {
           // start, ?deleteCount, ...items
-          items.splice(findIndex, 1, mod)
+          items.splice(findIndex, 1, mod);
         }
-      })
-      items = items
+      });
+      items = items;
     } else if (d.d) {
     }
-  }
+  };
   const findIdx = name => {
     const findIndex = items.findIndex(i => {
-      return i._key == name
-    })
-    return findIndex
-  }
+      return i._key == name;
+    });
+    return findIndex;
+  };
   $: {
-    let idx = findIdx('public')
-    if (idx > -1) public_menu = items[idx].menu
-    idx = findIdx('top_right')
-    if (idx > -1) top_right_menu = items[idx].menu
+    let idx = findIdx('public');
+    if (idx > -1) public_menu = items[idx].menu;
+    idx = findIdx('top_right');
+    if (idx > -1) top_right_menu = items[idx].menu;
     if (!$is_production) {
-      idx = findIdx('global')
-      if (idx > -1) global_menu = items[idx].menu
+      idx = findIdx('global');
+      if (idx > -1) global_menu = items[idx].menu;
     }
-    idx = findIdx('home')
-    if (idx > -1) home_menu = items[idx].menu
+    idx = findIdx('home');
+    if (idx > -1) home_menu = items[idx].menu;
   }
   onDestroy(
     Ws.bindT(
       [ET.subscribe, E.menu_list, Ws.uid],
       d => {
-        getMenuDataGet(d)
+        getMenuDataGet(d);
       },
       [
         [`['top_right', ${!$is_production ? `'global'` : `''`}, 'home']`],
@@ -98,13 +98,13 @@
       ],
       1
     )
-  )
+  );
 
-  let css_loaded = false
+  let css_loaded = false;
   $: {
     if (!css_loaded) {
       if (!$css_loading) {
-        css_loaded = true
+        css_loaded = true;
       }
     }
   }

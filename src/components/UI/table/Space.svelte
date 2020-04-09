@@ -1,12 +1,12 @@
 <script>
-  export let depth
+  export let depth;
   $: spaces = (() => {
-    const aArr = []
+    const aArr = [];
     for (let i = 0; i < depth; i++) {
-      aArr.push('')
+      aArr.push('');
     }
-    return aArr
-  })()
+    return aArr;
+  })();
 </script>
 
 <span class="space-container">

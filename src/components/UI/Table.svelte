@@ -1,8 +1,8 @@
 <script context="module">
   document.body.ondrop = function(event) {
-    event.preventDefault()
-    event.stopPropagation()
-  }
+    event.preventDefault();
+    event.stopPropagation();
+  };
 </script>
 
 <script lang="ts">
@@ -33,13 +33,13 @@
     createEventDispatcher,
     getContext,
     tick
-  } from 'svelte'
-  import { view, lensPath, all, equals } from 'ramda'
-  import { isArray } from 'ramda-adjunct'
-  import { get, writable } from 'svelte/store'
-  import { Ws, ws_connected } from '../../ws_events_dispatcher'
-  import { isEmpty } from 'ramda'
-  import { clone } from 'rambda'
+  } from 'svelte';
+  import { view, lensPath, all, equals } from 'ramda';
+  import { isArray } from 'ramda-adjunct';
+  import { get, writable } from 'svelte/store';
+  import { Ws, ws_connected } from '../../ws_events_dispatcher';
+  import { isEmpty } from 'ramda';
+  import { clone } from 'rambda';
   import {
     is_production,
     ET,
@@ -49,75 +49,75 @@
     ValueType,
     FormType,
     DisplayType
-  } from '../../enums'
-  declare let $is_production
-  declare let $ws_connected
-  import { translation } from '../../translation'
-  declare let $translation
-  import Modal from '../UI/Model.svelte'
-  import Error from '../UI/Error.svelte'
-  import Skeleton from '../UI/Skeleton.svelte'
-  import { css_loading, css, css_count } from '../../css'
-  declare let $css_loading
+  } from '../../enums';
+  declare let $is_production;
+  declare let $ws_connected;
+  import { translation } from '../../translation';
+  declare let $translation;
+  import Modal from '../UI/Model.svelte';
+  import Error from '../UI/Error.svelte';
+  import Skeleton from '../UI/Skeleton.svelte';
+  import { css_loading, css, css_count } from '../../css';
+  declare let $css_loading;
   // import Card from "../components/Card.svelte";
-  import Config from './Config.svelte'
-  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index'
+  import Config from './Config.svelte';
+  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index';
 
-  import UrlPattern from 'url-pattern'
-  import Text from './display/Text.svelte'
-  import Bool from './display/Bool.svelte'
-  import Url from './display/Url.svelte'
-  import Color from './display/Color.svelte'
-  import Time from './display/Time.svelte'
-  import GeneralForm from '../form/Index.svelte'
-  import Column from './table/Column.svelte'
-  import Row from './table/Row.svelte'
+  import UrlPattern from 'url-pattern';
+  import Text from './display/Text.svelte';
+  import Bool from './display/Bool.svelte';
+  import Url from './display/Url.svelte';
+  import Color from './display/Color.svelte';
+  import Time from './display/Time.svelte';
+  import GeneralForm from '../form/Index.svelte';
+  import Column from './table/Column.svelte';
+  import Row from './table/Row.svelte';
 
-  export let modelcomponent = false
-  export let quickcomponent = false
-  export let schema_key = ''
-  export let pass = [] // [["context", "org_data", "_key", "org"]]
-  export let query = { limit: 0, page: 1, filter: [] } // To get arguments from ?limit=25&page=2
-  export let requiredFilter = [] // always add this filter when fetch // used when showing custom table
+  export let modelcomponent = false;
+  export let quickcomponent = false;
+  export let schema_key = '';
+  export let pass = []; // [["context", "org_data", "_key", "org"]]
+  export let query = { limit: 0, page: 1, filter: [] }; // To get arguments from ?limit=25&page=2
+  export let requiredFilter = []; // always add this filter when fetch // used when showing custom table
 
-  css_count.increase('table')
-  let project = getContext('project')
-  let project_ctx = project ? get(project) || [] : []
+  css_count.increase('table');
+  let project = getContext('project');
+  let project_ctx = project ? get(project) || [] : [];
   let fetchConfig = {
     type: ValueType.Array,
     project: project_ctx?.[project_ctx.length - 1]?._key ?? null
-  }
+  };
   function setPass() {
     if (Array.isArray(pass)) {
       for (let i = 0; i < pass.length; i++) {
         if (Array.isArray(pass[i]) && pass[i].length > 0) {
-          let e = pass[i]
+          let e = pass[i];
           if (Array.isArray(e) && e.length > 0) {
-            const func = e[0]
+            const func = e[0];
             if (typeof func == 'string') {
               if (func == 'context') {
                 if (e.length > 1) {
-                  const key = e[1]
-                  const data = get(getContext(key))
-                  let addKey = e.length > 2 ? e[2] : key
-                  fetchConfig[addKey] = data
-                  continue
+                  const key = e[1];
+                  const data = get(getContext(key));
+                  let addKey = e.length > 2 ? e[2] : key;
+                  fetchConfig[addKey] = data;
+                  continue;
                 }
               } else if (func == 'contextKey') {
                 if (e.length > 1) {
-                  const key = e[1]
-                  let objKey = e.length > 2 ? e[2] : '_key'
-                  let addKey = e.length > 3 ? e[3] : key
-                  const data = get(getContext(key))[objKey]
-                  fetchConfig[addKey] = data
-                  continue
+                  const key = e[1];
+                  let objKey = e.length > 2 ? e[2] : '_key';
+                  let addKey = e.length > 3 ? e[3] : key;
+                  const data = get(getContext(key))[objKey];
+                  fetchConfig[addKey] = data;
+                  continue;
                 }
               } else if (func == 'contextKeyInArray') {
                 if (e.length > 1) {
-                  const key = e[1]
-                  let objKey = e.length > 2 ? e[2] : '_key'
-                  pass[i] = [get(getContext(key))[objKey]]
-                  continue
+                  const key = e[1];
+                  let objKey = e.length > 2 ? e[2] : '_key';
+                  pass[i] = [get(getContext(key))[objKey]];
+                  continue;
                 }
               }
             }
@@ -126,105 +126,105 @@
       }
     }
   }
-  setPass()
+  setPass();
 
   /*==============================
   =            filter            =
   ==============================*/
-  let filterSettings = query.filter ? JSON.parse(query.filter) : []
+  let filterSettings = query.filter ? JSON.parse(query.filter) : [];
   const delay_refresh = () => {
     // when filter applied, change current_page to 1 before fetching data, to prevent
     // empty result
-    current_page = 1
-    refresh()
-  }
+    current_page = 1;
+    refresh();
+  };
   //store the timeout, cancel it on each change, then set a new one
-  let filter_timeout
+  let filter_timeout;
   const onHandleFilter = col => event => {
-    clearTimeout(filter_timeout)
-    filter_timeout = setTimeout(delay_refresh, 250)
-  }
+    clearTimeout(filter_timeout);
+    filter_timeout = setTimeout(delay_refresh, 250);
+  };
   const resetFilter_ = () => {
-    const array = new Array(headerColTitlesRow.length)
-    array.fill(null)
+    const array = new Array(headerColTitlesRow.length);
+    array.fill(null);
     for (let key in requiredFilter) {
-      array[key] = requiredFilter[key]
+      array[key] = requiredFilter[key];
     }
-    filterSettings = array
-  }
+    filterSettings = array;
+  };
   const onResetFilter = event => {
-    resetFilter_()
-    refresh()
-  }
+    resetFilter_();
+    refresh();
+  };
   /*=====  End of filter  ======*/
 
   /*==================================
   =            Pagination            =
   ==================================*/
-  let limit = Number(query.limit) || 0
-  let pages = [1, 2]
-  let current_page = Number(query.page) || 1
-  let total_pages = Math.max(current_page, 1)
-  let count = 0
+  let limit = Number(query.limit) || 0;
+  let pages = [1, 2];
+  let current_page = Number(query.page) || 1;
+  let total_pages = Math.max(current_page, 1);
+  let count = 0;
   const calc_pagination = () => {
     //console.log(count, limit, total_pages, pages, current_page)
     if (limit <= 0) {
-      limit = 0
-      total_pages = 1
-      pages = [1]
-      current_page = 1
+      limit = 0;
+      total_pages = 1;
+      pages = [1];
+      current_page = 1;
     } else {
-      total_pages = Math.ceil(count / limit)
-      const arr = []
+      total_pages = Math.ceil(count / limit);
+      const arr = [];
       for (let i = 1; i <= total_pages; i++) {
-        arr.push(i)
+        arr.push(i);
       }
-      pages = arr
+      pages = arr;
       if (!pages.includes(current_page)) {
-        current_page = 1
+        current_page = 1;
       }
     }
     //console.log(count, limit, total_pages, pages, current_page)
-  }
+  };
   const onLimitChange = () => {
-    calc_pagination()
-    refresh()
+    calc_pagination();
+    refresh();
     //note: after refresh calc_pagination() will be called again.
-  }
+  };
   /*=====  End of Pagination  ======*/
 
   /*=====================================
   =            Re Fetch Data            =
   =====================================*/
-  let er = ''
+  let er = '';
   if (!schema_key) {
-    er = 'schema key is invalid in table'
+    er = 'schema key is invalid in table';
   }
-  let events = schemaEvents(schema_key)
-  if (!events) er = 'events array must be defined'
-  const uid = Ws.uid
-  let data_evt = [ET.subscribe, events[0], uid]
-  let unsub_evt = [ET.unsubscribe, events[0], uid]
-  let mounted = false
+  let events = schemaEvents(schema_key);
+  if (!events) er = 'events array must be defined';
+  const uid = Ws.uid;
+  let data_evt = [ET.subscribe, events[0], uid];
+  let unsub_evt = [ET.unsubscribe, events[0], uid];
+  let mounted = false;
   onMount(() => {
-    mounted = true
-  })
+    mounted = true;
+  });
   onDestroy(() => {
-    unsub_evt && Ws.trigger([[unsub_evt, {}]])
-    events && Ws.unbind_(events)
-    css_count.decrease('table')
-  })
-  Ws.bind$(data_evt, onDataGet, 1)
+    unsub_evt && Ws.trigger([[unsub_evt, {}]]);
+    events && Ws.unbind_(events);
+    css_count.decrease('table');
+  });
+  Ws.bind$(data_evt, onDataGet, 1);
   const onWSConnect = () => {
-    refresh()
-  }
+    refresh();
+  };
   $: {
     if (mounted) {
       if ($ws_connected) {
-        er = ''
-        onWSConnect()
+        er = '';
+        onWSConnect();
       } else {
-        er = 'Reconnecting...'
+        er = 'Reconnecting...';
       }
     }
   }
@@ -237,7 +237,7 @@
         }
       }
     }*/
-    return f
+    return f;
   }
   export const refresh = () => {
     const args = [
@@ -245,130 +245,130 @@
       headerColSortSettingsRow,
       [limit, 0, current_page],
       fetchConfig
-    ]
-    const e1 = [data_evt, args]
-    Ws.trigger([e1])
-  }
+    ];
+    const e1 = [data_evt, args];
+    Ws.trigger([e1]);
+  };
   /*=====  End of Re Fetch Data  ======*/
 
   /*===================================================
   =            On Headers and Data Receive            =
   ===================================================*/
-  let items = []
-  let addnew_pos = 't'
-  let addnew_type = 'button'
-  let addnew_labels = { save: 'Save', cancel: 'Cancel' }
-  let rowType = 'table'
-  let showHeader = true
+  let items = [];
+  let addnew_pos = 't';
+  let addnew_type = 'button';
+  let addnew_labels = { save: 'Save', cancel: 'Cancel' };
+  let rowType = 'table';
+  let showHeader = true;
   // delete this function
-  let headerFetched = false
+  let headerFetched = false;
   const onHeaderGet = ([d]) => {
-    fillHeadersArray(d)
-    refresh()
-    headerFetched = true
-  }
-  let headerColTitlesRow = []
-  let headerColTypesRow = []
-  let headerColIsvisibleRow = []
-  let headerColSortSettingsRow = []
-  let headerColEditableRow = []
-  let headerColPropsRow = []
-  let headerColCustomFilter = [] // Todo Make it set by backend
-  let headerColWidthRow = []
-  let options = {}
-  let first_visibile_column = 0
-  let authorized = true
-  let selectedRowsKeys = []
-  let expandedRowsKeys = []
+    fillHeadersArray(d);
+    refresh();
+    headerFetched = true;
+  };
+  let headerColTitlesRow = [];
+  let headerColTypesRow = [];
+  let headerColIsvisibleRow = [];
+  let headerColSortSettingsRow = [];
+  let headerColEditableRow = [];
+  let headerColPropsRow = [];
+  let headerColCustomFilter = []; // Todo Make it set by backend
+  let headerColWidthRow = [];
+  let options = {};
+  let first_visibile_column = 0;
+  let authorized = true;
+  let selectedRowsKeys = [];
+  let expandedRowsKeys = [];
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
-    headerColTitlesRow = d[0] ?? []
-    headerColTypesRow = d[1] ?? []
-    headerColIsvisibleRow = d[2] ?? []
-    headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? []
-    headerColEditableRow = d[4] ?? []
-    headerColPropsRow = d[5] ?? []
-    options = d[6]
+    headerColTitlesRow = d[0] ?? [];
+    headerColTypesRow = d[1] ?? [];
+    headerColIsvisibleRow = d[2] ?? [];
+    headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? [];
+    headerColEditableRow = d[4] ?? [];
+    headerColPropsRow = d[5] ?? [];
+    options = d[6];
     if ($is_production && !options.k) {
-      const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key')
+      const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key');
       if (keyIdx > -1) {
-        headerColIsvisibleRow[keyIdx] = 0
+        headerColIsvisibleRow[keyIdx] = 0;
       }
     }
-    let i
+    let i;
     for (i = 0; i < headerColIsvisibleRow.length; i++) {
       if (headerColIsvisibleRow[i]) {
-        first_visibile_column = i
-        break
+        first_visibile_column = i;
+        break;
       }
     }
 
-    addnew_pos = options?.add?.pos ?? 't'
-    addnew_type = options?.add?.type ?? 'button'
-    const l = options?.add?.l
+    addnew_pos = options?.add?.pos ?? 't';
+    addnew_type = options?.add?.type ?? 'button';
+    const l = options?.add?.l;
     if (l) {
-      addnew_labels = l
+      addnew_labels = l;
     }
-    showHeader = options?.table?.header ?? true
-    rowType = options?.table?.row ?? 'table'
+    showHeader = options?.table?.header ?? true;
+    rowType = options?.table?.row ?? 'table';
     // resetFilter_() // Take care.... why this is needed?
-  }
+  };
   function dropNotExisting(a1: string[], b1: string[]) {
     // if a1 not contains element in b1 remove it from a1 and return it.
-    let newa1 = []
+    let newa1 = [];
     for (let x of a1) {
-      const idx = b1.indexOf(x)
+      const idx = b1.indexOf(x);
       // if(idx == -1){a1.splice(idx, 1) } } // cant modify array in loop
       if (idx != -1) {
-        newa1.push(x)
+        newa1.push(x);
       }
     }
-    return newa1
+    return newa1;
   }
-  let isLoading = true
+  let isLoading = true;
   function onDataGet(all) {
-    if (isLoading) isLoading = false
-    const [h, d] = all
+    if (isLoading) isLoading = false;
+    const [h, d] = all;
     if (h === false) {
-      authorized = false
-      er = d
+      authorized = false;
+      er = d;
     }
     if (h.length) {
-      fillHeadersArray(h)
+      fillHeadersArray(h);
     }
     if (d.r) {
       // reset quickViewKeys with empty array:
       // [...Array(20)].map(_=>0)
       // quickViewKeys = Array.from({length: d.length}, ()=>0);
 
-      items = d.r.result ?? []
-      count = d.r.fullCount
-      current_page = d.r.pagination[2] // change page if not same.
-      calc_pagination()
+      items = d.r.result ?? [];
+      count = d.r.fullCount;
+      current_page = d.r.pagination[2]; // change page if not same.
+      calc_pagination();
       // selectAll_(false)
       selectedRowsKeys = dropNotExisting(
         selectedRowsKeys,
         items.map(x => getValue(x[0]))
-      )
+      );
     } else if (d.n) {
-      items.push(...d.n.result)
-      count = count + 1
-      items = items
+      items.push(...d.n.result);
+      count = count + 1;
+      items = items;
     } else if (d.m) {
       // replace rows in table.
       // show on form that its updated...
       d.m.result.forEach(mod => {
         const findIndex = items.findIndex(i => {
-          return i[0] == mod[0]
-        })
+          return i[0] == mod[0];
+        });
         if (findIndex !== -1) {
           // start, ?deleteCount, ...items
-          items.splice(findIndex, 1, mod)
+          items.splice(findIndex, 1, mod);
         }
-      })
-      items = items
+      });
+      items = items;
     } else if (d.d) {
-      deleteRows_(d.d)
+      deleteRows_(d.d);
     }
   }
   /*=====  End of On Headers and Data Receive  ======*/
@@ -376,10 +376,10 @@
   /*========================================
   =            Set Query Params            =
   ========================================*/
-  let isFirstFSet = true
+  let isFirstFSet = true;
   $: {
     if (isFirstFSet) {
-      isFirstFSet = false
+      isFirstFSet = false;
     } else {
       const q =
         '?limit=' +
@@ -391,8 +391,8 @@
           ? JSON.stringify([])
           : JSON.stringify(headerColSortSettingsRow)) +
         '&filter=' +
-        JSON.stringify(filterSettings)
-      const pathAndSearch = window.location.pathname + q
+        JSON.stringify(filterSettings);
+      const pathAndSearch = window.location.pathname + q;
       if (
         pathAndSearch !== window.location.pathname + window.location.search &&
         q + q !== window.location.search
@@ -402,8 +402,8 @@
           window.location.search,
           'replaced url query',
           pathAndSearch
-        )
-        history.replaceState({ page: pathAndSearch }, '', pathAndSearch)
+        );
+        history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
       }
     }
   }
@@ -412,143 +412,143 @@
   /*====================================
   =            Add Edit Row            =
   ====================================*/
-  let doms = { addbutton: null }
-  let addnewform = false
-  let quickViewKeys = []
+  let doms = { addbutton: null };
+  let addnewform = false;
+  let quickViewKeys = [];
   const toogleAddForm = () => {
     if (addnew_type == 'button') {
-      addnewform = !addnewform
+      addnewform = !addnewform;
       if (doms.addbutton) {
-        doms.addbutton.focus()
+        doms.addbutton.focus();
       } else {
-        er = 'no dom for add button!'
+        er = 'no dom for add button!';
       }
     }
-  }
+  };
   const closeForm_ = key => {
-    const idx = quickViewKeys.findIndex(x => x == key)
+    const idx = quickViewKeys.findIndex(x => x == key);
     if (idx !== -1) {
-      quickViewKeys.splice(idx, 1)
-      quickViewKeys = quickViewKeys
+      quickViewKeys.splice(idx, 1);
+      quickViewKeys = quickViewKeys;
     }
-  }
+  };
   const closeForms_ = keys => {
-    let isFind = false
+    let isFind = false;
     keys.forEach(key => {
-      const idx = quickViewKeys.findIndex(x => x == key)
+      const idx = quickViewKeys.findIndex(x => x == key);
       if (idx !== -1) {
-        isFind = true
-        quickViewKeys.splice(idx, 1)
+        isFind = true;
+        quickViewKeys.splice(idx, 1);
       }
-    })
+    });
     if (isFind) {
-      quickViewKeys = quickViewKeys
+      quickViewKeys = quickViewKeys;
     }
-  }
+  };
   const editButtonFocus = async key => {
-    await tick()
+    await tick();
     const element: HTMLElement | null = document.querySelector(
       `button[key='${key}'][name='edit']`
-    )
+    );
     if (element) {
-      element.focus()
+      element.focus();
     }
-  }
+  };
   const successSave = e => {
     if (e.detail.key === null) {
-      toogleAddForm()
+      toogleAddForm();
     } else {
-      closeForm_(e.detail.key)
-      editButtonFocus(e.detail.key)
+      closeForm_(e.detail.key);
+      editButtonFocus(e.detail.key);
     }
-  }
+  };
   const onCancel = event => {
-    const key = event.detail
-    closeForm_(key)
-    editButtonFocus(key)
-  }
+    const key = event.detail;
+    closeForm_(key);
+    editButtonFocus(key);
+  };
   /*=====  End of Add Edit Row  ======*/
 
   /*==================================
   =            Delete Row            =
   ==================================*/
-  let rowEditDoms = []
+  let rowEditDoms = [];
   const deleteRows_ = keys => {
     keys.forEach(k => {
-      const index = selectedRowsKeys.findIndex(x => k === x)
+      const index = selectedRowsKeys.findIndex(x => k === x);
       if (index > -1) {
-        selectedRowsKeys.splice(index, 1)
+        selectedRowsKeys.splice(index, 1);
       }
-    })
-    selectedRowsKeys = selectedRowsKeys
-    closeForms_(keys)
+    });
+    selectedRowsKeys = selectedRowsKeys;
+    closeForms_(keys);
     keys.forEach(k => {
-      const findIndex = items.findIndex(i => i[0] == k)
+      const findIndex = items.findIndex(i => i[0] == k);
       if (findIndex !== -1) {
         // start, ?deleteCount, ...items
-        items.splice(findIndex, 1)
+        items.splice(findIndex, 1);
       }
-    })
-    items = items
-  }
+    });
+    items = items;
+  };
   const deleteRow = e => {
-    const { key } = e.detail
-    deleteRows_([key])
-  }
-  const { addNotification } = getNotificationsContext()
+    const { key } = e.detail;
+    deleteRows_([key]);
+  };
+  const { addNotification } = getNotificationsContext();
   const onDeleteRow = key => async () => {
-    const r = confirm('Are You Sure?')
+    const r = confirm('Are You Sure?');
     if (r == true) {
-      const mutate_evt = [ET.delete_, events[1], key]
-      const filter = [`="${key}"`]
+      const mutate_evt = [ET.delete_, events[1], key];
+      const filter = [`="${key}"`];
       const d = await new Promise((resolve, reject) => {
         /*send unsubscribe event if edit is open*/
-        const args = ['DEL', filter, fetchConfig]
+        const args = ['DEL', filter, fetchConfig];
         if (rowEditDoms[key]) {
-          const unsu_event = rowEditDoms[key]?.f?.unsub_evt ?? null
+          const unsu_event = rowEditDoms[key]?.f?.unsub_evt ?? null;
           if (unsu_event) {
-            args.push(unsu_event)
+            args.push(unsu_event);
           }
         }
         Ws.bindT(
           mutate_evt,
           d => {
-            resolve(d)
+            resolve(d);
           },
           args
-        )
-      })
+        );
+      });
       if (d[0]) {
-        const delete_msg = view(lensPath(['msg', 'delete']), $translation)
+        const delete_msg = view(lensPath(['msg', 'delete']), $translation);
         addNotification({
           text: delete_msg,
           position: 'bottom-right',
           type: 'danger',
           removeAfter: 4000
-        })
-        deleteRows_([key])
+        });
+        deleteRows_([key]);
       } else {
-        alert(d[1])
+        alert(d[1]);
       }
     }
-  }
+  };
   const onDeleteSelected = async () => {
-    const r = confirm('Are You Sure to delete selected rows?')
+    const r = confirm('Are You Sure to delete selected rows?');
     if (r == true) {
-      const mutate_evt = [ET.delete_, events[1], Ws.uid]
-      const filter = [JSON.stringify(selectedRowsKeys)]
+      const mutate_evt = [ET.delete_, events[1], Ws.uid];
+      const filter = [JSON.stringify(selectedRowsKeys)];
       const d = await new Promise((resolve, reject) => {
         Ws.bindT(
           mutate_evt,
           d => {
-            resolve(d)
+            resolve(d);
           },
           ['DEL', filter]
-        )
-      })
-      d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1])
+        );
+      });
+      d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1]);
     }
-  }
+  };
   /*=====  End of Delete Row  ======*/
 
   /*===============================
@@ -558,27 +558,27 @@
     if (e.ctrlKey) {
     } else {
       if (order !== undefined) {
-        headerColSortSettingsRow = []
-        headerColSortSettingsRow[col] = order
-        closeHeaderMenu()
+        headerColSortSettingsRow = [];
+        headerColSortSettingsRow[col] = order;
+        closeHeaderMenu();
       } else {
-        const sortOrder = headerColSortSettingsRow[col]
-        headerColSortSettingsRow = []
+        const sortOrder = headerColSortSettingsRow[col];
+        headerColSortSettingsRow = [];
         if (
           sortOrder === null ||
           sortOrder === undefined ||
           sortOrder === SortDirection.None
         ) {
-          console.warn('setting ass')
-          headerColSortSettingsRow[col] = SortDirection.Ascending
+          console.warn('setting ass');
+          headerColSortSettingsRow[col] = SortDirection.Ascending;
         } else if (sortOrder === SortDirection.Ascending) {
-          headerColSortSettingsRow[col] = SortDirection.Descending
+          headerColSortSettingsRow[col] = SortDirection.Descending;
         } else {
-          headerColSortSettingsRow[col] = SortDirection.None
+          headerColSortSettingsRow[col] = SortDirection.None;
         }
       }
     }
-    refresh()
+    refresh();
     // if (col.sortable === true && typeof col.value === "function") {
     //   if (sortKey === col.key) {
     //     sortOrder = sortOrder === 1 ? -1 : 1;
@@ -588,19 +588,19 @@
     //     sortBy = r => col.value(r);
     //   }
     // }
-  }
+  };
   /*=====  End of Sorting  ======*/
 
   /*======================================================
   =            Pass event to Parent. DISABLED            =
   ======================================================*/
 
-  const dp = createEventDispatcher()
+  const dp = createEventDispatcher();
   function onItemClick(litem) {
-    dp('onItemClick', { item: litem })
+    dp('onItemClick', { item: litem });
   }
   function onDeleteClick(litem) {
-    dp('onDeleteClick', { item: litem })
+    dp('onDeleteClick', { item: litem });
   }
 
   /*=====  End of Pass event to Parent. DISABLED  ======*/
@@ -608,83 +608,83 @@
   /*====================================
     =            context-menu            =
     ====================================*/
-  let headerMenuDisplayed = false
-  let inputheaderMenuDisplayed = false
-  let headerMenuColumn = 0
-  let inputHeaderMenuColumn = 0
+  let headerMenuDisplayed = false;
+  let inputheaderMenuDisplayed = false;
+  let headerMenuColumn = 0;
+  let inputHeaderMenuColumn = 0;
   const onHeaderContext = (e, col) => {
-    const left = event.clientX
-    const top = event.clientY
-    const menuBox: HTMLElement | null = window.document.querySelector('.menu')
+    const left = event.clientX;
+    const top = event.clientY;
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu');
     if (menuBox) {
-      menuBox.style.left = left + 'px'
-      menuBox.style.top = top + 'px'
-      menuBox.style.display = 'block'
-      headerMenuDisplayed = true
-      headerMenuColumn = col
+      menuBox.style.left = left + 'px';
+      menuBox.style.top = top + 'px';
+      menuBox.style.display = 'block';
+      headerMenuDisplayed = true;
+      headerMenuColumn = col;
     }
     // window.addEventListener("click", function() {
     //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
     //     }
-  }
+  };
   const onTextInputContext = (e, col) => {
-    const left = event.clientX
-    const top = event.clientY
+    const left = event.clientX;
+    const top = event.clientY;
     const menuBox: HTMLElement | null = window.document.querySelector(
       '.menu-input'
-    )
+    );
     if (menuBox) {
-      menuBox.style.left = left + 'px'
-      menuBox.style.top = top + 'px'
-      menuBox.style.display = 'block'
-      inputheaderMenuDisplayed = true
-      inputHeaderMenuColumn = col
+      menuBox.style.left = left + 'px';
+      menuBox.style.top = top + 'px';
+      menuBox.style.display = 'block';
+      inputheaderMenuDisplayed = true;
+      inputHeaderMenuColumn = col;
     }
     // window.addEventListener("click", function() {
     //     if(headerMenuDisplayed == true){
     //         menuBox.style.display = "none";
     //     }
-  }
+  };
   const closeHeaderMenu = () => {
-    const menuBox: HTMLElement | null = window.document.querySelector('.menu')
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu');
     if (headerMenuDisplayed == true) {
-      menuBox.style.display = 'none'
+      menuBox.style.display = 'none';
     }
-  }
+  };
   const closeInputMenu = () => {
     const menuBox: HTMLElement | null = window.document.querySelector(
       '.menu-input'
-    )
+    );
     if (inputheaderMenuDisplayed == true) {
-      menuBox.style.display = 'none'
+      menuBox.style.display = 'none';
     }
-  }
+  };
   /*=====  End of context-menu  ======*/
 
   /*=======================================
   =            multiple select            =
   =======================================*/
 
-  let allSelected
-  let multipleSelected
-  $: allSelected = selectedRowsKeys.length == items.length ? true : false
-  $: multipleSelected = selectedRowsKeys.length ? true : false
+  let allSelected;
+  let multipleSelected;
+  $: allSelected = selectedRowsKeys.length == items.length ? true : false;
+  $: multipleSelected = selectedRowsKeys.length ? true : false;
 
   const onSelectRowClick = e => {
-    const index = selectedRowsKeys.findIndex(x => e.target.value == x)
+    const index = selectedRowsKeys.findIndex(x => e.target.value == x);
     index > -1
       ? selectedRowsKeys.splice(index, 1)
-      : selectedRowsKeys.push(e.target.value)
-    selectedRowsKeys = selectedRowsKeys
+      : selectedRowsKeys.push(e.target.value);
+    selectedRowsKeys = selectedRowsKeys;
     //e.preventDefault();
     //e.stopPropagation();
-  }
+  };
   const selectAll_ = (v: boolean) =>
-    (selectedRowsKeys = v ? items.map(x => x[0]) : (selectedRowsKeys = []))
+    (selectedRowsKeys = v ? items.map(x => x[0]) : (selectedRowsKeys = []));
   const onSelectAllClick = e => {
-    selectAll_(e.target.checked)
-  }
+    selectAll_(e.target.checked);
+  };
 
   /*=====  End of multiple select  ======*/
 
@@ -692,19 +692,19 @@
   =            config            =
   ==============================*/
 
-  let config = false
+  let config = false;
   const onConfigClicked = async () => {
-    config = !config
-  }
+    config = !config;
+  };
   const onConfigApply = e => {
-    fetchConfig['columns'] = e.detail.list
-    config = false
+    fetchConfig['columns'] = e.detail.list;
+    config = false;
     // const e1 = [header_evt, fetchConfig] // fix this(config)
     // Ws.trigger([e1]) // fix this
     //resetFilter_(); onHeaderGet() will do this.
-    headerColSortSettingsRow = []
+    headerColSortSettingsRow = [];
     // refresh();
-  }
+  };
 
   /*=====  End of config  ======*/
 
@@ -712,56 +712,56 @@
   =            model functions            =
   =======================================*/
 
-  let modalIsVisible = false
-  let modelItem = []
+  let modalIsVisible = false;
+  let modelItem = [];
   // function onItemClick(litem) {
   //   item = litem;
   //   openModal();
   // }
   function closeModal() {
-    modalIsVisible = false
+    modalIsVisible = false;
   }
   function openModal() {
-    modalIsVisible = true
+    modalIsVisible = true;
   }
   function onNewClick() {
-    modelItem = []
-    openModal()
+    modelItem = [];
+    openModal();
   }
 
   /*=====  End of model functions  ======*/
 
   function isGlobal(v) {
-    return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false
+    return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false;
   }
 
-  let showButton = false
-  let showComponent = false
+  let showButton = false;
+  let showComponent = false;
   $: {
-    showButton = false
-    showComponent = false
+    showButton = false;
+    showComponent = false;
     if (addnew_type == 'button') {
-      showButton = true
+      showButton = true;
       if (addnewform) {
-        showComponent = true
+        showComponent = true;
       }
     } else {
-      showComponent = true
+      showComponent = true;
     }
   }
 
-  let showRowNum = true
+  let showRowNum = true;
   function onShowRowNum() {
-    showRowNum = !showRowNum
+    showRowNum = !showRowNum;
   }
-  $: colCount = headerColIsvisibleRow.filter(x => !!x).length
-  $: showResetFilterButton = filterSettings.filter(x => !!x).length > 0
-  $: operationsCount = 2
+  $: colCount = headerColIsvisibleRow.filter(x => !!x).length;
+  $: showResetFilterButton = filterSettings.filter(x => !!x).length > 0;
+  $: operationsCount = 2;
   // can pass null to display nothing.
   function getValue(v) {
-    return isArray(v) ? v[0] || '' : v
+    return isArray(v) ? v[0] || '' : v;
   }
-  let contextmenu = true
+  let contextmenu = true;
 
   function makeUrl(props, id) {
     if (id) {
@@ -769,56 +769,56 @@
         id,
         org: org_id,
         project: project_id
-      })
+      });
     } else {
-      return ''
+      return '';
     }
   }
 
-  const org_id_ctx = getContext('org_id')
-  const org_id = org_id_ctx ? get(org_id_ctx) : ''
-  const project_id_ctx = getContext('project_id')
-  const project_id = project_id_ctx ? get(project_id_ctx) : ''
+  const org_id_ctx = getContext('org_id');
+  const org_id = org_id_ctx ? get(org_id_ctx) : '';
+  const project_id_ctx = getContext('project_id');
+  const project_id = project_id_ctx ? get(project_id_ctx) : '';
 
-  css_count.increase('table_context_menu')
+  css_count.increase('table_context_menu');
   onDestroy(() => {
-    css_count.decrease('table_context_menu')
-  })
-  let css_loaded = false
+    css_count.decrease('table_context_menu');
+  });
+  let css_loaded = false;
   $: {
     if (!css_loaded) {
       if (!$css_loading) {
-        css_loaded = true
+        css_loaded = true;
       }
     }
   }
   const onEditSvgKeyPress = key => e => {
     if (e.keyCode == 13 || e.which == 13) {
-      quickViewKeys.push(key)
-      quickViewKeys = quickViewKeys
+      quickViewKeys.push(key);
+      quickViewKeys = quickViewKeys;
     }
-  }
+  };
   const onEditSvgClick = key => () => {
-    quickViewKeys.push(key)
-    quickViewKeys = quickViewKeys
-  }
+    quickViewKeys.push(key);
+    quickViewKeys = quickViewKeys;
+  };
   const onDeleteSvgKeyPress = key => e => {
     if (e.keyCode == 13 || e.which == 13) {
-      onDeleteRow(key)()
+      onDeleteRow(key)();
     }
-  }
+  };
   const toggleexpandedRowsKeys = key => {
-    const idx = expandedRowsKeys.findIndex(x => x === key)
+    const idx = expandedRowsKeys.findIndex(x => x === key);
     if (idx > -1) {
-      expandedRowsKeys.splice(idx)
+      expandedRowsKeys.splice(idx);
     } else {
-      expandedRowsKeys.push(key)
+      expandedRowsKeys.push(key);
     }
-    expandedRowsKeys = expandedRowsKeys
-  }
+    expandedRowsKeys = expandedRowsKeys;
+  };
   const unMountCss = () => {
-    css_count.decreaseNow('table')
-  }
+    css_count.decreaseNow('table');
+  };
 
   /*=================================
   =            Draggable            =
@@ -826,64 +826,64 @@
 
   /*=====  End of Draggable  ======*/
 
-  export let isdraggable = true // Boolean
+  export let isdraggable = true; // Boolean
 
-  export let fixed // String | Boolean
-  export let height // String | Number
-  export let border = true // String
-  export let onlySameLevelCanDrag // String
-  export let hightRowChange // String
-  export let resize = true // String
+  export let fixed; // String | Boolean
+  export let height; // String | Number
+  export let border = true; // String
+  export let onlySameLevelCanDrag; // String
+  export let hightRowChange; // String
+  export let resize = true; // String
   //export let beforeDragOver // Function
   //export let onDrag // Function
 
-  let dragX = 0
-  let dragY = 0
-  let dragId = ''
-  let targetId = ''
-  let whereInsert = ''
-  let isDragging = false
+  let dragX = 0;
+  let dragY = 0;
+  let dragId = '';
+  let targetId = '';
+  let whereInsert = '';
+  let isDragging = false;
   let mouse = {
     status: 0,
     startX: 0,
     curColWidth: 0,
     curIndex: 0
-  }
-  let table = null
+  };
+  let table = null;
 
   $: bodyStyle = `overflow: ${
     fixed !== undefined && fixed !== false ? 'auto' : 'hidden'
   }; height: ${
     fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
-  };`
+  };`;
 
-  let dragData = {}
+  let dragData = {};
   function setDragData(d) {
-    dragData = d
+    dragData = d;
   }
 
   /* drag main function 1 */
   function onDraggingOver(e) {
     //console.log('over', e)
-    const isSourceData = e.dataTransfer.types.includes('source')
+    const isSourceData = e.dataTransfer.types.includes('source');
     if (!isSourceData) {
-      console.log('drag and drop operaion from outside table.')
-      return
+      console.log('drag and drop operaion from outside table.');
+      return;
     }
     if (isEmpty(dragData)) {
-      console.log('drag over operaion from outside table: empty dragData')
+      console.log('drag over operaion from outside table: empty dragData');
     }
-    isDragging = true
-    if (e.pageX == dragX && e.pageY == dragY) return
-    dragX = e.pageX
-    dragY = e.clientY
-    targetId = undefined
-    filter(e.pageX, e.clientY, dragData)
+    isDragging = true;
+    if (e.pageX == dragX && e.pageY == dragY) return;
+    dragX = e.pageX;
+    dragY = e.clientY;
+    targetId = undefined;
+    filter(e.pageX, e.clientY, dragData);
 
     if (e.clientY < 100) {
-      window.scrollTo(0, scrollY - 6)
+      window.scrollTo(0, scrollY - 6);
     } else if (e.clientY > document.body.clientHeight - 160) {
-      window.scrollTo(0, scrollY + 6)
+      window.scrollTo(0, scrollY + 6);
     }
   }
 
@@ -898,28 +898,28 @@
     //   return
     // }
     if (isEmpty(dragData)) {
-      console.log('drop operaion from outside table: empty dragData')
+      console.log('drop operaion from outside table: empty dragData');
     }
-    clearHoverStatus()
+    clearHoverStatus();
 
-    resetTreeData(dragData) /* Main Function */
-    isDragging = false
+    resetTreeData(dragData); /* Main Function */
+    isDragging = false;
 
     if (targetId !== undefined) {
       if (hightRowChange !== undefined) {
-        await tick()
+        await tick();
         const rowEle = document.querySelector(
           "[tree-id='" + dragData.dragId + "']"
-        )
-        rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)'
+        );
+        rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)';
         setTimeout(() => {
-          rowEle.style.backgroundColor = 'rgba(64,158,255,0)'
-        }, 2000)
+          rowEle.style.backgroundColor = 'rgba(64,158,255,0)';
+        }, 2000);
       }
     }
-    dragData = {}
+    dragData = {};
   }
-  let row
+  let row;
   /* todo: fix only one line, this function is unsed while draggging over items.*/
   /**
    * 1. get all tree row
@@ -929,69 +929,69 @@
 
   // Find matching lines, handle drag and drop styles
   function filter(x, y, sourceData) {
-    let rows = document.querySelectorAll('.tree-row')
-    targetId = undefined
+    let rows = document.querySelectorAll('.tree-row');
+    targetId = undefined;
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
-    const dragRect = sourceData.dragParentNode.getBoundingClientRect()
-    const dragW = dragRect.left + sourceData.dragParentNode.clientWidth
-    const dragH = dragRect.top + sourceData.dragParentNode.clientHeight
+    const dragRect = sourceData.dragParentNode.getBoundingClientRect();
+    const dragW = dragRect.left + sourceData.dragParentNode.clientWidth;
+    const dragH = dragRect.top + sourceData.dragParentNode.clientHeight;
 
     if (x >= dragRect.left && x <= dragW && y >= dragRect.top && y <= dragH) {
       // The original block currently being dragged is not allowed to be inserted
-      console.log('same element !')
-      return
+      console.log('same element !');
+      return;
     }
 
-    let hoverBlock = undefined
-    let targetIdTemp = undefined
-    whereInsert = ''
+    let hoverBlock = undefined;
+    let targetIdTemp = undefined;
+    whereInsert = '';
 
-    let row
+    let row;
     for (let i = 0; i < rows.length; i++) {
-      row = rows[i]
-      const rect = row.getBoundingClientRect()
-      const rx = rect.left
-      const ry = rect.top
-      const rw = row.clientWidth
-      const rh = row.clientHeight
+      row = rows[i];
+      const rect = row.getBoundingClientRect();
+      const rx = rect.left;
+      const ry = rect.top;
+      const rw = row.clientWidth;
+      const rh = row.clientHeight;
 
       if (x > rx && x < rx + rw && y > ry && y < ry + rh) {
-        const diffY = y - ry
-        const pId = row.getAttribute('tree-p-id') // It is not allowed to change the hierarchical structure, only the upper and lower order logic
+        const diffY = y - ry;
+        const pId = row.getAttribute('tree-p-id'); // It is not allowed to change the hierarchical structure, only the upper and lower order logic
 
         if (onlySameLevelCanDrag !== undefined && pId !== sourceData.dragPId) {
-          return
+          return;
         }
 
-        targetIdTemp = row.getAttribute('tree-id')
-        hoverBlock = row.children[row.children.length - 1]
-        let rowHeight = row.offsetHeight
+        targetIdTemp = row.getAttribute('tree-id');
+        hoverBlock = row.children[row.children.length - 1];
+        let rowHeight = row.offsetHeight;
 
         if (diffY / rowHeight > 3 / 4) {
-          whereInsert = 'bottom'
+          whereInsert = 'bottom';
         } else if (diffY / rowHeight > 1 / 4) {
           if (onlySameLevelCanDrag !== undefined) {
             // It is not allowed to change the hierarchical structure, only the upper and lower order logic
-            return
+            return;
           }
 
-          whereInsert = 'center'
+          whereInsert = 'center';
         } else {
-          whereInsert = 'top'
+          whereInsert = 'top';
         }
 
-        break
+        break;
       }
     }
 
     if (targetIdTemp === undefined) {
       // Can't match to clear the previous state
-      clearHoverStatus()
-      whereInsert = ''
-      return
+      clearHoverStatus();
+      whereInsert = '';
+      return;
     }
 
-    let canDrag = true
+    let canDrag = true;
 
     // Todo can disable some row drag and drop. set canDrag == false.
     /*if (beforeDragOver) { //todo fix this
@@ -1000,94 +1000,94 @@
       canDrag = beforeDragOver(curRow, targetRow, whereInsert)
     }*/
 
-    if (canDrag == false) return
-    hoverBlock.style.display = 'block'
-    let rowHeight = row.offsetHeight
+    if (canDrag == false) return;
+    hoverBlock.style.display = 'block';
+    let rowHeight = row.offsetHeight;
 
     if (whereInsert == 'bottom') {
       if (hoverBlock.children[2].style.opacity !== '0.5') {
-        clearHoverStatus()
-        hoverBlock.children[2].style.opacity = 0.5
+        clearHoverStatus();
+        hoverBlock.children[2].style.opacity = 0.5;
       }
     } else if (whereInsert == 'center') {
       if (hoverBlock.children[1].style.opacity !== '0.5') {
-        clearHoverStatus()
-        hoverBlock.children[1].style.opacity = 0.5
+        clearHoverStatus();
+        hoverBlock.children[1].style.opacity = 0.5;
       }
     } else {
       if (hoverBlock.children[0].style.opacity !== '0.5') {
-        clearHoverStatus()
-        hoverBlock.children[0].style.opacity = 0.5
+        clearHoverStatus();
+        hoverBlock.children[0].style.opacity = 0.5;
       }
     }
 
-    targetId = targetIdTemp
-    whereInsert = whereInsert
+    targetId = targetIdTemp;
+    whereInsert = whereInsert;
   }
 
   function resetTreeData(sourceData) {
-    if (targetId === undefined) return
+    if (targetId === undefined) return;
 
-    const newList = []
-    const curList = items
+    const newList = [];
+    const curList = items;
 
-    let curDragItem = null
-    let targetItem = null
+    let curDragItem = null;
+    let targetItem = null;
 
-    let isExapndedModified = false
+    let isExapndedModified = false;
 
     function pushData(curList, needPushList) {
       for (let i = 0; i < curList.length; i++) {
-        const item = curList[i]
-        let obj = clone(item)
-        const key = getValue(item[0])
-        obj[0] = [key, []] //obj[0][1] = []
+        const item = curList[i];
+        let obj = clone(item);
+        const key = getValue(item[0]);
+        obj[0] = [key, []]; //obj[0][1] = []
 
         if (targetId == key) {
-          curDragItem = getItemById(items, sourceData.dragId)
-          targetItem = getItemById(items, targetId)
+          curDragItem = getItemById(items, sourceData.dragId);
+          targetItem = getItemById(items, targetId);
 
           if (whereInsert === 'top') {
             //curDragItem['parent_id'] = item['parent_id']
-            needPushList.push(curDragItem)
-            needPushList.push(obj)
+            needPushList.push(curDragItem);
+            needPushList.push(obj);
           } else if (whereInsert === 'center') {
             //curDragItem['parent_id'] = key
             //obj.open = true
             if (!expandedRowsKeys.includes(key)) {
-              expandedRowsKeys.push(key)
+              expandedRowsKeys.push(key);
             }
-            isExapndedModified = true
+            isExapndedModified = true;
             if (isArray(obj[0])) {
-              obj[0][1].push(curDragItem)
+              obj[0][1].push(curDragItem);
             } else {
-              obj[0] = [key, [curDragItem]]
+              obj[0] = [key, [curDragItem]];
             }
-            needPushList.push(obj)
+            needPushList.push(obj);
           } else if (whereInsert === 'bottom') {
             //curDragItem['parent_id'] = item['parent_id']
-            needPushList.push(obj)
-            needPushList.push(curDragItem)
+            needPushList.push(obj);
+            needPushList.push(curDragItem);
           } else {
-            console.log('whereInsert must be valid: ', whereInsert)
-            needPushList.push(curDragItem)
-            needPushList.push(obj)
+            console.log('whereInsert must be valid: ', whereInsert);
+            needPushList.push(curDragItem);
+            needPushList.push(obj);
           }
         } else {
           if (sourceData.dragId != key) {
-            needPushList.push(obj)
+            needPushList.push(obj);
           }
         }
 
         if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-          pushData(item[0][1], obj[0][1])
+          pushData(item[0][1], obj[0][1]);
         }
       }
     }
 
-    pushData(curList, newList)
-    items = newList
-    if (isExapndedModified) expandedRowsKeys = expandedRowsKeys
+    pushData(curList, newList);
+    items = newList;
+    if (isExapndedModified) expandedRowsKeys = expandedRowsKeys;
     /////resetOrder(newList)
     ////onDrag(newList, curDragItem, targetItem, _this.whereInsert)
   }
@@ -1106,326 +1106,328 @@
 
   // Get current row based on id
   function getItemById(lists, id) {
-    let curItem = null
+    let curItem = null;
 
     function getchild(curList) {
       for (let i = 0; i < curList.length; i++) {
-        let item = curList[i]
+        let item = curList[i];
 
         if (getValue(item[0]) == id) {
-          curItem = clone(item)
-          break
+          curItem = clone(item);
+          break;
         } else if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-          getchild(item[0][1])
+          getchild(item[0][1]);
         }
       }
     }
 
-    getchild(lists)
-    return curItem
+    getchild(lists);
+    return curItem;
   }
 
   // Get current row based on id
   function DelById(id) {
-    const newList = []
-    const curList = items
+    const newList = [];
+    const curList = items;
 
     function pushData(curList, needPushList) {
       //let order = 0
 
       for (let i = 0; i < curList.length; i++) {
-        const item = curList[i]
+        const item = curList[i];
 
         if (getValue(item[0]) != id) {
-          let obj = clone(item)
+          let obj = clone(item);
           //obj['order'] = order
-          obj[0] = [getValue(item[0]), []] //obj[0][1] = []
-          needPushList.push(obj)
-          order++
+          obj[0] = [getValue(item[0]), []]; //obj[0][1] = []
+          needPushList.push(obj);
+          order++;
 
           if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-            pushData(item[0][1], obj[0][1])
+            pushData(item[0][1], obj[0][1]);
           }
         }
       }
     }
 
-    pushData(curList, newList)
-    return newList
+    pushData(curList, newList);
+    return newList;
   }
 
   // Set properties recursively, only allowed to set component built-in properties
   function deepSetAttr(key, val, list, ids = undefined) {
     for (let i = 0; i < list.length; i++) {
-      const item = list[i]
+      const item = list[i];
       const changeAttribute = (k, v) => {
         if (key == 'open') {
-          const idx = expandedRowsKeys.findIndex(x => x === k)
+          const idx = expandedRowsKeys.findIndex(x => x === k);
           if (v) {
             if (idx === -1) {
-              expandedRowsKeys.push(k)
+              expandedRowsKeys.push(k);
             }
           } else {
             if (idx > -1) {
-              expandedRowsKeys.splice(idx, 1)
+              expandedRowsKeys.splice(idx, 1);
             }
           }
         } else if (key == 'highlight') {
           // todo fix this
         }
-      }
+      };
 
       if (ids !== undefined) {
         if (ids.includes(getValue(item[0]))) {
-          changeAttribute(getValue(item[0]), val)
+          changeAttribute(getValue(item[0]), val);
         }
       } else {
-        changeAttribute(getValue(item[0]), val)
+        changeAttribute(getValue(item[0]), val);
       }
 
       if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-        deepSetAttr(key, val, item[0][1], ids)
+        deepSetAttr(key, val, item[0][1], ids);
       }
     }
     if (key == 'open') {
-      expandedRowsKeys = expandedRowsKeys
+      expandedRowsKeys = expandedRowsKeys;
     } else if (key == 'highlight') {
       // todo fix this
     }
   }
 
   function ZipAll(id, deep = true) {
-    deepSetAttr('open', false, items)
+    deepSetAttr('open', false, items);
   }
 
   function OpenAll(id, deep = true) {
-    deepSetAttr('open', true, items)
+    deepSetAttr('open', true, items);
   }
 
   function GetLevelById(id) {
-    row = table.querySelector('[tree-id="' + id + '"]')
-    let level = row.getAttribute('data-level') * 1
-    return level
+    row = table.querySelector('[tree-id="' + id + '"]');
+    let level = row.getAttribute('data-level') * 1;
+    return level;
   }
 
   function HighlightRow(id, isHighlight = true, deep = false) {
-    let list = clone(items)
-    let ids = [id]
+    let list = clone(items);
+    let ids = [id];
 
     if (deep == true) {
-      ids = ids.concat(GetChildIds(id, true))
+      ids = ids.concat(GetChildIds(id, true));
     }
 
-    deepSetAttr('highlight', isHighlight, list, ids)
-    items = list
+    deepSetAttr('highlight', isHighlight, list, ids);
+    items = list;
   }
 
   function AddRow(pId, data) {
     // todo: note: data is json obj
-    const deepList = clone(items)
+    const deepList = clone(items);
 
     function deep(list) {
       for (let i = 0; i < list.length; i++) {
-        const item = list[i]
+        const item = list[i];
         if (getValue(item[0]) == pId) {
-          item['open'] = true
-          let newRow = Object.assign({}, data)
+          item['open'] = true;
+          let newRow = Object.assign({}, data);
           ////newRow['parent_id'] = pId
 
           if (isArray(item[0]) && item[0][1] && item[0][1].length) {
             ////newRow['order'] = item['lists'].length
-            item[0][1].push(newRow)
+            item[0][1].push(newRow);
           } else {
-            item[0][1] = []
+            item[0][1] = [];
             ////newRow['order'] = 0
-            item[0][1].push(newRow)
+            item[0][1].push(newRow);
           }
         }
 
         if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-          deep(item[0][1])
+          deep(item[0][1]);
         }
       }
     }
 
-    deep(deepList)
-    items = deepList
+    deep(deepList);
+    items = deepList;
   }
 
   function EditRow(id, data) {
-    const deepList = clone(items)
+    const deepList = clone(items);
 
     function deep(list) {
       for (let i = 0; i < list.length; i++) {
-        const item = list[i]
+        const item = list[i];
         if (getValue(item[0]) == id) {
-          let newRow = Object.assign({}, item, data)
+          let newRow = Object.assign({}, item, data);
           //console.log(2222, newRow)
-          item = newRow
+          item = newRow;
         }
 
         if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-          deep(item[0][1])
+          deep(item[0][1]);
         }
       }
     }
 
-    deep(deepList)
+    deep(deepList);
     //console.log(deepList)
-    items = deepList
+    items = deepList;
   }
 
   function GetChildIds(id, deep = true) {
-    let ids = []
+    let ids = [];
 
     function getChilds(list, id, addAll = false) {
       for (let i = 0; i < list.length; i++) {
-        const item = list[i]
-        let currentPid = ''
-        let pid = getValue(item[0]) // list[i]['parent_id']
+        const item = list[i];
+        let currentPid = '';
+        let pid = getValue(item[0]); // list[i]['parent_id']
 
         if (addAll || id == pid) {
-          currentPid = getValue(item[0])
-          ids.push(currentPid)
+          currentPid = getValue(item[0]);
+          ids.push(currentPid);
         } else {
-          currentPid = id
+          currentPid = id;
         }
 
         if (deep == true || id == currentPid) {
           if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-            getChilds(item[0][1], currentPid, true)
+            getChilds(item[0][1], currentPid, true);
           }
         }
       }
     }
 
-    getChilds(items, id)
-    return ids
+    getChilds(items, id);
+    return ids;
   }
 
   // Select button event
   function onCheckAll(evt, func) {
-    setAllCheckData(items, !!evt.target.checked)
-    const checkedList = getCheckedList(items)
-    func && func(checkedList)
+    setAllCheckData(items, !!evt.target.checked);
+    const checkedList = getCheckedList(items);
+    func && func(checkedList);
   }
 
   // Batch process data according to flag
   function setAllCheckData(curList, flag) {
     for (let i = 0; i < curList.length; i++) {
-      let item = curList[i]
+      let item = curList[i];
       // this.$set(item, 'checked', flag); // todo fix this
 
       if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-        setAllCheckData(item[0][1], flag)
+        setAllCheckData(item[0][1], flag);
       }
     }
   }
 
   // Get all selected rows
   function getCheckedList(lists) {
-    let checkedList = []
-    const deepList = clone(lists)
+    let checkedList = [];
+    const deepList = clone(lists);
 
     function getchild(curList) {
       for (let i = 0; i < curList.length; i++) {
-        let item = curList[i]
+        let item = curList[i];
 
         if (item.checked && item.isShowCheckbox != false) {
-          checkedList.push(item)
+          checkedList.push(item);
         }
 
         if (isArray(item[0]) && item[0][1] && item[0][1].length) {
-          getchild(item[0][1])
+          getchild(item[0][1]);
         }
       }
     }
 
-    getchild(deepList)
-    return checkedList
+    getchild(deepList);
+    return checkedList;
   }
 
   function mousedown(curIndex, e) {
-    console.log('mousedown', curIndex, e)
-    const startX = e.target.getBoundingClientRect().x
-    const curColWidth = e.target.parentElement.offsetWidth
+    console.log('mousedown', curIndex, e);
+    const startX = e.target.getBoundingClientRect().x;
+    const curColWidth = e.target.parentElement.offsetWidth;
     mouse = {
       status: 1,
       startX,
       curIndex,
       curColWidth
-    }
+    };
   }
   const mouseup = e => {
     if (mouse.status) {
-      const curX = e.clientX
-      let line = document.querySelector('.drag-line')
-      line.style.left = '-10000px'
-      mouse.status = 0
-      const curWidth = mouse.curColWidth
-      const subWidth = curX - mouse.startX
-      const lastWidth = curWidth + subWidth
-      const cols = document.querySelectorAll('.colIndex' + mouse.curIndex)
+      const curX = e.clientX;
+      let line = document.querySelector('.drag-line');
+      line.style.left = '-10000px';
+      mouse.status = 0;
+      const curWidth = mouse.curColWidth;
+      const subWidth = curX - mouse.startX;
+      const lastWidth = curWidth + subWidth;
+      const cols = document.querySelectorAll('.colIndex' + mouse.curIndex);
 
       for (let index = 0; index < cols.length; index++) {
-        const element = cols[index]
-        element.style.width = lastWidth + 'px'
+        const element = cols[index];
+        element.style.width = lastWidth + 'px';
       } // Update data source
 
       ////data.columns[mouse.curIndex].width = lastWidth /* todo: fix this line*/
     }
-  }
+  };
   const mousemove = e => {
     if (mouse.status) {
-      const endX = e.clientX
+      const endX = e.clientX;
       const tableLeft = document
         .querySelector('.drag-tree-table')
-        .getBoundingClientRect().left
-      let line = document.querySelector('.drag-line')
-      line.style.left = endX - tableLeft + 'px'
+        .getBoundingClientRect().left;
+      let line = document.querySelector('.drag-line');
+      line.style.left = endX - tableLeft + 'px';
     }
-  }
+  };
 
   function clearHoverStatus() {
-    const rows: NodeListOf<HTMLElement> = document.querySelectorAll('.tree-row')
+    const rows: NodeListOf<HTMLElement> = document.querySelectorAll(
+      '.tree-row'
+    );
     for (let i = 0; i < rows.length; i++) {
-      const row = rows[i]
-      const hoverBlock = row.children[row.children.length - 1] as HTMLElement
-      hoverBlock.style.display = 'none'
-      hoverBlock.children[0].style.opacity = 0.1
-      hoverBlock.children[1].style.opacity = 0.1
-      hoverBlock.children[2].style.opacity = 0.1
+      const row = rows[i];
+      const hoverBlock = row.children[row.children.length - 1] as HTMLElement;
+      hoverBlock.style.display = 'none';
+      hoverBlock.children[0].style.opacity = 0.1;
+      hoverBlock.children[1].style.opacity = 0.1;
+      hoverBlock.children[2].style.opacity = 0.1;
     }
   }
   function getElementTop(element, tableRef) {
     // Fixed header, need special calculation
-    let scrollTop = tableRef.querySelector('.drag-tree-table-body').scrollTop
-    let actualTop = element.offsetTop - scrollTop
-    let current = element.offsetParent
+    let scrollTop = tableRef.querySelector('.drag-tree-table-body').scrollTop;
+    let actualTop = element.offsetTop - scrollTop;
+    let current = element.offsetParent;
     while (current !== null) {
-      actualTop += current.offsetTop
-      current = current.offsetParent
+      actualTop += current.offsetTop;
+      current = current.offsetParent;
     }
-    return actualTop
+    return actualTop;
   }
   function getElementLeft(element) {
-    let actualLeft = element.offsetLeft
-    let current = element.offsetParent
+    let actualLeft = element.offsetLeft;
+    let current = element.offsetParent;
     while (current !== null) {
-      actualLeft += current.offsetLeft
-      current = current.offsetParent
+      actualLeft += current.offsetLeft;
+      current = current.offsetParent;
     }
-    return actualLeft
+    return actualLeft;
   }
 
   onMount(() => {
-    window.addEventListener('mouseup', mouseup)
-    window.addEventListener('mousemove', mousemove)
-  })
+    window.addEventListener('mouseup', mouseup);
+    window.addEventListener('mousemove', mousemove);
+  });
   onDestroy(() => {
-    window.removeEventListener('mouseup', mouseup)
-    window.removeEventListener('mousemove', mousemove)
-  })
+    window.removeEventListener('mouseup', mouseup);
+    window.removeEventListener('mousemove', mousemove);
+  });
 </script>
 
 {#if !$is_production}

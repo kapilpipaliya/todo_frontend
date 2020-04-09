@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
-  const dp = createEventDispatcher()
+  import { createEventDispatcher } from 'svelte';
+  const dp = createEventDispatcher();
 </script>
 
 <div class="modal-background" on:click={() => dp('close')} />

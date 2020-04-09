@@ -1,7 +1,7 @@
 <script lang="ts">
-  export let href
-  export let value
-  export let props = {}
+  export let href;
+  export let value;
+  export let props = {};
 </script>
 
 {#if href}

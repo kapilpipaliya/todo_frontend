@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { type } from 'rambdax'
-  export let options = []
-  export let keyIdx = 0
-  export let dp = [1, ' - ', 2]
+  import { onMount } from 'svelte';
+  import { type } from 'rambdax';
+  export let options = [];
+  export let keyIdx = 0;
+  export let dp = [1, ' - ', 2];
 
   // [1, ' - ',2], [...]
   function stringifyRawPattern(pattern: Array<number | string>, row: []) {
-    let str = ''
+    let str = '';
     pattern.forEach(x => {
       if (type(x) == 'Number') {
-        str += row[x as number]
+        str += row[x as number];
       } else {
-        str += x
+        str += x;
       }
-    })
-    return str
+    });
+    return str;
   }
 
   function render(r) {
-    return stringifyRawPattern(dp, r)
+    return stringifyRawPattern(dp, r);
   }
 </script>
 

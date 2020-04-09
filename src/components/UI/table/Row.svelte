@@ -1,112 +1,112 @@
 <script context="module">
-  import Column from './Column.svelte'
-  import Space from './Space.svelte'
+  import Column from './Column.svelte';
+  import Space from './Space.svelte';
 </script>
 
 <script lang="ts">
-  import clsx from 'clsx'
-  import { FormType, DisplayType } from '../../../enums'
-  import { css } from '../../../css'
-  import { isArray } from 'ramda-adjunct'
-  declare let $css
-  import Text from '../display/Text.svelte'
-  import Bool from '../display/Bool.svelte'
-  import Url from '../display/Url.svelte'
-  import Color from '../display/Color.svelte'
-  import Time from '../display/Time.svelte'
+  import clsx from 'clsx';
+  import { FormType, DisplayType } from '../../../enums';
+  import { css } from '../../../css';
+  import { isArray } from 'ramda-adjunct';
+  declare let $css;
+  import Text from '../display/Text.svelte';
+  import Bool from '../display/Bool.svelte';
+  import Url from '../display/Url.svelte';
+  import Color from '../display/Color.svelte';
+  import Time from '../display/Time.svelte';
   // import Modal from '../../UI/Model.svelte'
   // import Card from "../../UI/Card.svelte";
-  import GeneralForm from '../../form/Index.svelte'
+  import GeneralForm from '../../form/Index.svelte';
 
-  export let depth
-  export let isdraggable
-  export let border
-  export let rowValue
-  export let rowIndex
-  export let isGlobalRow
-  export let getValue
-  export let selectedRowsKeys
-  export let onSelectRowClick
-  export let showRowNum
-  export let headerColIsvisibleRow
-  export let headerColTypesRow
-  export let headerColEditableRow
-  export let headerColPropsRow
-  export let schema_key
-  export let fetchConfig
-  export let quickcomponent
-  export let quickViewKeys
-  export let onDeleteRow
-  export let onItemClick
-  export let onDeleteClick
-  export let colCount
-  export let rowEditDoms
-  export let onCancel
-  export let successSave
-  export let deleteRow
-  export let expandedRowsKeys
-  export let makeUrl
-  export let onEditSvgKeyPress
-  export let onEditSvgClick
-  export let onDeleteSvgKeyPress
-  export let toggleexpandedRowsKeys
-  export let parentKey = null
-  export let setDragData
+  export let depth;
+  export let isdraggable;
+  export let border;
+  export let rowValue;
+  export let rowIndex;
+  export let isGlobalRow;
+  export let getValue;
+  export let selectedRowsKeys;
+  export let onSelectRowClick;
+  export let showRowNum;
+  export let headerColIsvisibleRow;
+  export let headerColTypesRow;
+  export let headerColEditableRow;
+  export let headerColPropsRow;
+  export let schema_key;
+  export let fetchConfig;
+  export let quickcomponent;
+  export let quickViewKeys;
+  export let onDeleteRow;
+  export let onItemClick;
+  export let onDeleteClick;
+  export let colCount;
+  export let rowEditDoms;
+  export let onCancel;
+  export let successSave;
+  export let deleteRow;
+  export let expandedRowsKeys;
+  export let makeUrl;
+  export let onEditSvgKeyPress;
+  export let onEditSvgClick;
+  export let onDeleteSvgKeyPress;
+  export let toggleexpandedRowsKeys;
+  export let parentKey = null;
+  export let setDragData;
 
-  let key
-  $: key = getValue(rowValue[0])
-  let isGlobal
-  $: isGlobal = isGlobalRow(rowValue[0])
-  let isFolder
+  let key;
+  $: key = getValue(rowValue[0]);
+  let isGlobal;
+  $: isGlobal = isGlobalRow(rowValue[0]);
+  let isFolder;
   $: isFolder =
-    rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length
+    rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
 
   function toggle() {
     if (isFolder) {
-      toggleexpandedRowsKeys(key)
+      toggleexpandedRowsKeys(key);
     }
   }
   function dragstart(e) {
-    console.log('start', e)
+    console.log('start', e);
     setDragData({
       key,
       dragId: e.target.children[0].getAttribute('tree-id'),
       dragPId: e.target.children[0].getAttribute('tree-p-id'),
       dragParentNode: e.target
-    })
+    });
     // The data is only available on drop, this is a security feature since a website could grab data when you happen to be dragging something across the webpage.
     // https://stackoverflow.com/questions/28487352/dragndrop-datatransfer-getdata-empty
     // Firefox drag have a bug // unused
-    e.dataTransfer.setData('source', key) // data should be string
-    e.target.style.opacity = 0.2
+    e.dataTransfer.setData('source', key); // data should be string
+    e.target.style.opacity = 0.2;
   }
   function dragend(e) {
-    console.log('drag eneded', e)
-    e.target.style.opacity = 1
+    console.log('drag eneded', e);
+    e.target.style.opacity = 1;
   }
   function setAllCheckData(curList, flag) {
-    const listKey = 'lists'
+    const listKey = 'lists';
 
     for (let i = 0; i < curList.length; i++) {
-      var item = curList[i]
+      var item = curList[i];
       //this.$set(item, 'checked', flag); // todo fix this
 
       if (item[listKey] && item[listKey].length) {
-        setAllCheckData(item[listKey], flag)
+        setAllCheckData(item[listKey], flag);
       }
     }
   }
   function onCheckboxClick(evt) {
-    const list = rowValue['lists'] // Determine if there is a child node, recursively if necessary
+    const list = rowValue['lists']; // Determine if there is a child node, recursively if necessary
 
     if (list) {
-      setAllCheckData([rowValue] || [], !!evt.target.checked)
+      setAllCheckData([rowValue] || [], !!evt.target.checked);
     } else {
       //this.$set(rowValue, 'checked', !!evt.target.checked); //todo fix this
     }
   }
 
-  let highlight = false // todo: based on headerColPropsRow[index] logic
+  let highlight = false; // todo: based on headerColPropsRow[index] logic
 </script>
 
 <div

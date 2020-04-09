@@ -15,121 +15,121 @@
 // Using UMD pattern from
 // https://github.com/umdjs/umd#regular-module
 // `returnExports.js` version
-;(function (root, factory) {
+(function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     // AMD. Register as an anonymous module.
     define('i18n', function () {
-      return factory(root)
-    })
+      return factory(root);
+    });
   } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
-    module.exports = factory(root)
+    module.exports = factory(root);
   } else {
     // Browser globals (root is window)
-    root.I18n = factory(root)
+    root.I18n = factory(root);
   }
 })(this, function (global) {
-  'use strict'
+  'use strict';
 
   // Use previously defined object if exists in current scope
-  var I18n = (global && global.I18n) || {}
+  var I18n = (global && global.I18n) || {};
 
   // Just cache the Array#slice function.
-  var slice = Array.prototype.slice
+  var slice = Array.prototype.slice;
 
   // Apply number padding.
   var padding = function (number) {
-    return ('0' + number.toString()).substr(-2)
-  }
+    return ('0' + number.toString()).substr(-2);
+  };
 
   // Improved toFixed number rounding function with support for unprecise floating points
   // JavaScript's standard toFixed function does not round certain numbers correctly (for example 0.105 with precision 2).
   var toFixed = function (number, precision) {
-    return decimalAdjust('round', number, -precision).toFixed(precision)
-  }
+    return decimalAdjust('round', number, -precision).toFixed(precision);
+  };
 
   // Is a given variable an object?
   // Borrowed from Underscore.js
   var isObject = function (obj) {
-    var type = typeof obj
-    return type === 'function' || type === 'object'
-  }
+    var type = typeof obj;
+    return type === 'function' || type === 'object';
+  };
 
   var isFunction = function (func) {
-    var type = typeof func
-    return type === 'function'
-  }
+    var type = typeof func;
+    return type === 'function';
+  };
 
   // Check if value is different than undefined and null;
   var isSet = function (value) {
-    return typeof value !== 'undefined' && value !== null
-  }
+    return typeof value !== 'undefined' && value !== null;
+  };
 
   // Is a given value an array?
   // Borrowed from Underscore.js
   var isArray = function (val) {
     if (Array.isArray) {
-      return Array.isArray(val)
+      return Array.isArray(val);
     }
-    return Object.prototype.toString.call(val) === '[object Array]'
-  }
+    return Object.prototype.toString.call(val) === '[object Array]';
+  };
 
   var isString = function (val) {
     return (
       typeof val === 'string' ||
       Object.prototype.toString.call(val) === '[object String]'
-    )
-  }
+    );
+  };
 
   var isNumber = function (val) {
     return (
       typeof val === 'number' ||
       Object.prototype.toString.call(val) === '[object Number]'
-    )
-  }
+    );
+  };
 
   var isBoolean = function (val) {
-    return val === true || val === false
-  }
+    return val === true || val === false;
+  };
 
   var isNull = function (val) {
-    return val === null
-  }
+    return val === null;
+  };
 
   var decimalAdjust = function (type, value, exp) {
     // If the exp is undefined or zero...
     if (typeof exp === 'undefined' || +exp === 0) {
-      return Math[type](value)
+      return Math[type](value);
     }
-    value = +value
-    exp = +exp
+    value = +value;
+    exp = +exp;
     // If the value is not a number or the exp is not an integer...
     if (isNaN(value) || !(typeof exp === 'number' && exp % 1 === 0)) {
-      return NaN
+      return NaN;
     }
     // Shift
-    value = value.toString().split('e')
-    value = Math[type](+(value[0] + 'e' + (value[1] ? +value[1] - exp : -exp)))
+    value = value.toString().split('e');
+    value = Math[type](+(value[0] + 'e' + (value[1] ? +value[1] - exp : -exp)));
     // Shift back
-    value = value.toString().split('e')
-    return +(value[0] + 'e' + (value[1] ? +value[1] + exp : exp))
-  }
+    value = value.toString().split('e');
+    return +(value[0] + 'e' + (value[1] ? +value[1] + exp : exp));
+  };
 
   var lazyEvaluate = function (message, scope) {
     if (isFunction(message)) {
-      return message(scope)
+      return message(scope);
     } else {
-      return message
+      return message;
     }
-  }
+  };
 
   var merge = function (dest, obj) {
-    var key, value
+    var key, value;
     for (key in obj)
       if (obj.hasOwnProperty(key)) {
-        value = obj[key]
+        value = obj[key];
         if (
           isString(value) ||
           isNumber(value) ||
@@ -137,14 +137,14 @@
           isArray(value) ||
           isNull(value)
         ) {
-          dest[key] = value
+          dest[key] = value;
         } else {
-          if (dest[key] == null) dest[key] = {}
-          merge(dest[key], value)
+          if (dest[key] == null) dest[key] = {};
+          merge(dest[key], value);
         }
       }
-    return dest
-  }
+    return dest;
+  };
 
   // Set default days/months translations.
   var DATE = {
@@ -189,7 +189,7 @@
       'Dec'
     ],
     meridian: ['AM', 'PM']
-  }
+  };
 
   // Set default number format.
   var NUMBER_FORMAT = {
@@ -197,7 +197,7 @@
     separator: '.',
     delimiter: ',',
     strip_insignificant_zeros: false
-  }
+  };
 
   // Set default currency format.
   var CURRENCY_FORMAT = {
@@ -207,7 +207,7 @@
     sign_first: true,
     delimiter: ',',
     separator: '.'
-  }
+  };
 
   // Set default percentage format.
   var PERCENTAGE_FORMAT = {
@@ -216,10 +216,10 @@
     format: '%n%u',
     separator: '.',
     delimiter: ''
-  }
+  };
 
   // Set default size units.
-  var SIZE_UNITS = [null, 'kb', 'mb', 'gb', 'tb']
+  var SIZE_UNITS = [null, 'kb', 'mb', 'gb', 'tb'];
 
   // Other default options
   var DEFAULT_OPTIONS = {
@@ -244,26 +244,26 @@
     // string is actually missing for testing purposes, you can prefix the
     // guessed string by setting the value here. By default, no prefix!
     missingTranslationPrefix: ''
-  }
+  };
 
   // Set default locale. This locale will be used when fallback is enabled and
   // the translation doesn't exist in a particular locale.
   I18n.reset = function () {
-    var key
+    var key;
     for (key in DEFAULT_OPTIONS) {
-      this[key] = DEFAULT_OPTIONS[key]
+      this[key] = DEFAULT_OPTIONS[key];
     }
-  }
+  };
 
   // Much like `reset`, but only assign options if not already assigned
   I18n.initializeOptions = function () {
-    var key
+    var key;
     for (key in DEFAULT_OPTIONS)
       if (!isSet(this[key])) {
-        this[key] = DEFAULT_OPTIONS[key]
+        this[key] = DEFAULT_OPTIONS[key];
       }
-  }
-  I18n.initializeOptions()
+  };
+  I18n.initializeOptions();
 
   // Return a list of all locales that must be tried before returning the
   // missing translation message. By default, this will consider the inline option,
@@ -280,42 +280,42 @@
   //       return ["en"];
   //     };
   //
-  I18n.locales = {}
+  I18n.locales = {};
 
   // Retrieve locales based on inline locale, current locale or default to
   // I18n's detection.
   I18n.locales.get = function (locale) {
-    var result = this[locale] || this[I18n.locale] || this['default']
+    var result = this[locale] || this[I18n.locale] || this['default'];
 
     if (isFunction(result)) {
-      result = result(locale)
+      result = result(locale);
     }
 
     if (isArray(result) === false) {
-      result = [result]
+      result = [result];
     }
 
-    return result
-  }
+    return result;
+  };
 
   // The default locale list.
   I18n.locales['default'] = function (locale) {
     var locales = [],
-      list = []
+      list = [];
     // Handle the inline locale option that can be provided to
     // the `I18n.t` options.
     if (locale) {
-      locales.push(locale)
+      locales.push(locale);
     }
 
     // Add the current locale to the list.
     if (!locale && I18n.locale) {
-      locales.push(I18n.locale)
+      locales.push(I18n.locale);
     }
 
     // Add the default locale if fallback strategy is enabled.
     if (I18n.fallbacks && I18n.defaultLocale) {
-      locales.push(I18n.defaultLocale)
+      locales.push(I18n.defaultLocale);
     }
 
     // Locale code format 1:
@@ -358,127 +358,127 @@
     // `zh-hans-tw`, `zh-hans`, `zh`
     // locales.
     locales.forEach(function (locale) {
-      var localeParts = locale.split('-')
-      var firstFallback = null
-      var secondFallback = null
+      var localeParts = locale.split('-');
+      var firstFallback = null;
+      var secondFallback = null;
       if (localeParts.length === 3) {
-        firstFallback = [localeParts[0], localeParts[1]].join('-')
-        secondFallback = localeParts[0]
+        firstFallback = [localeParts[0], localeParts[1]].join('-');
+        secondFallback = localeParts[0];
       } else if (localeParts.length === 2) {
-        firstFallback = localeParts[0]
+        firstFallback = localeParts[0];
       }
 
       if (list.indexOf(locale) === -1) {
-        list.push(locale)
+        list.push(locale);
       }
 
       if (!I18n.fallbacks) {
-        return
+        return;
       }
 
-      ;[firstFallback, secondFallback].forEach(function (
+      [firstFallback, secondFallback].forEach(function (
         nullableFallbackLocale
       ) {
         // We don't want null values
         if (typeof nullableFallbackLocale === 'undefined') {
-          return
+          return;
         }
         if (nullableFallbackLocale === null) {
-          return
+          return;
         }
         // We don't want duplicate values
         //
         // Comparing with `locale` first is faster than
         // checking whether value's presence in the list
         if (nullableFallbackLocale === locale) {
-          return
+          return;
         }
         if (list.indexOf(nullableFallbackLocale) !== -1) {
-          return
+          return;
         }
 
-        list.push(nullableFallbackLocale)
-      })
-    })
+        list.push(nullableFallbackLocale);
+      });
+    });
 
     // No locales set? English it is.
     if (!locales.length) {
-      locales.push('en')
+      locales.push('en');
     }
 
-    return list
-  }
+    return list;
+  };
 
   // Hold pluralization rules.
-  I18n.pluralization = {}
+  I18n.pluralization = {};
 
   // Return the pluralizer for a specific locale.
   // If no specify locale is found, then I18n's default will be used.
   I18n.pluralization.get = function (locale) {
-    return this[locale] || this[I18n.locale] || this['default']
-  }
+    return this[locale] || this[I18n.locale] || this['default'];
+  };
 
   // The default pluralizer rule.
   // It detects the `zero`, `one`, and `other` scopes.
   I18n.pluralization['default'] = function (count) {
     switch (count) {
       case 0:
-        return ['zero', 'other']
+        return ['zero', 'other'];
       case 1:
-        return ['one']
+        return ['one'];
       default:
-        return ['other']
+        return ['other'];
     }
-  }
+  };
 
   // Return current locale. If no locale has been set, then
   // the current locale will be the default locale.
   I18n.currentLocale = function () {
-    return this.locale || this.defaultLocale
-  }
+    return this.locale || this.defaultLocale;
+  };
 
   // Check if value is different than undefined and null;
-  I18n.isSet = isSet
+  I18n.isSet = isSet;
 
   // Find and process the translation using the provided scope and options.
   // This is used internally by some functions and should not be used as an
   // public API.
   I18n.lookup = function (scope, options) {
-    options = options || {}
+    options = options || {};
 
     var locales = this.locales.get(options.locale).slice(),
       locale,
       scopes,
       fullScope,
-      translations
+      translations;
 
-    fullScope = this.getFullScope(scope, options)
+    fullScope = this.getFullScope(scope, options);
 
     while (locales.length) {
-      locale = locales.shift()
-      scopes = fullScope.split(this.defaultSeparator)
-      translations = this.translations[locale]
+      locale = locales.shift();
+      scopes = fullScope.split(this.defaultSeparator);
+      translations = this.translations[locale];
 
       if (!translations) {
-        continue
+        continue;
       }
       while (scopes.length) {
-        translations = translations[scopes.shift()]
+        translations = translations[scopes.shift()];
 
         if (translations === undefined || translations === null) {
-          break
+          break;
         }
       }
 
       if (translations !== undefined && translations !== null) {
-        return translations
+        return translations;
       }
     }
 
     if (isSet(options.defaultValue)) {
-      return lazyEvaluate(options.defaultValue, scope)
+      return lazyEvaluate(options.defaultValue, scope);
     }
-  }
+  };
 
   // lookup pluralization rule key into translations
   I18n.pluralizationLookupWithoutFallback = function (
@@ -489,55 +489,55 @@
     var pluralizer = this.pluralization.get(locale),
       pluralizerKeys = pluralizer(count),
       pluralizerKey,
-      message
+      message;
 
     if (isObject(translations)) {
       while (pluralizerKeys.length) {
-        pluralizerKey = pluralizerKeys.shift()
+        pluralizerKey = pluralizerKeys.shift();
         if (isSet(translations[pluralizerKey])) {
-          message = translations[pluralizerKey]
-          break
+          message = translations[pluralizerKey];
+          break;
         }
       }
     }
 
-    return message
-  }
+    return message;
+  };
 
   // Lookup dedicated to pluralization
   I18n.pluralizationLookup = function (count, scope, options) {
-    options = options || {}
+    options = options || {};
     var locales = this.locales.get(options.locale).slice(),
       locale,
       scopes,
       translations,
-      message
-    scope = this.getFullScope(scope, options)
+      message;
+    scope = this.getFullScope(scope, options);
 
     while (locales.length) {
-      locale = locales.shift()
-      scopes = scope.split(this.defaultSeparator)
-      translations = this.translations[locale]
+      locale = locales.shift();
+      scopes = scope.split(this.defaultSeparator);
+      translations = this.translations[locale];
 
       if (!translations) {
-        continue
+        continue;
       }
 
       while (scopes.length) {
-        translations = translations[scopes.shift()]
+        translations = translations[scopes.shift()];
         if (!isObject(translations)) {
-          break
+          break;
         }
         if (scopes.length === 0) {
           message = this.pluralizationLookupWithoutFallback(
             count,
             locale,
             translations
-          )
+          );
         }
       }
       if (typeof message !== 'undefined' && message !== null) {
-        break
+        break;
       }
     }
 
@@ -548,16 +548,16 @@
             count,
             options.locale,
             options.defaultValue
-          )
+          );
         } else {
-          message = options.defaultValue
+          message = options.defaultValue;
         }
-        translations = options.defaultValue
+        translations = options.defaultValue;
       }
     }
 
-    return { message: message, translations: translations }
-  }
+    return { message: message, translations: translations };
+  };
 
   // Rails changed the way the meridian is stored.
   // It started with `date.meridian` returning an array,
@@ -565,17 +565,17 @@
   // This function abstracts this difference and returns
   // the correct meridian or the default value when none is provided.
   I18n.meridian = function () {
-    var time = this.lookup('time')
-    var date = this.lookup('date')
+    var time = this.lookup('time');
+    var date = this.lookup('date');
 
     if (time && time.am && time.pm) {
-      return [time.am, time.pm]
+      return [time.am, time.pm];
     } else if (date && date.meridian) {
-      return date.meridian
+      return date.meridian;
     } else {
-      return DATE.meridian
+      return DATE.meridian;
     }
-  }
+  };
 
   // Merge serveral hash options, checking if value is set before
   // overwriting any value. The precedence is from left to right.
@@ -586,63 +586,63 @@
   I18n.prepareOptions = function () {
     var args = slice.call(arguments),
       options = {},
-      subject
+      subject;
 
     while (args.length) {
-      subject = args.shift()
+      subject = args.shift();
 
       if (typeof subject != 'object') {
-        continue
+        continue;
       }
 
       for (var attr in subject) {
         if (!subject.hasOwnProperty(attr)) {
-          continue
+          continue;
         }
 
         if (isSet(options[attr])) {
-          continue
+          continue;
         }
 
-        options[attr] = subject[attr]
+        options[attr] = subject[attr];
       }
     }
 
-    return options
-  }
+    return options;
+  };
 
   // Generate a list of translation options for default fallbacks.
   // `defaultValue` is also deleted from options as it is returned as part of
   // the translationOptions array.
   I18n.createTranslationOptions = function (scope, options) {
-    var translationOptions = [{ scope: scope }]
+    var translationOptions = [{ scope: scope }];
 
     // Defaults should be an array of hashes containing either
     // fallback scopes or messages
     if (isSet(options.defaults)) {
-      translationOptions = translationOptions.concat(options.defaults)
+      translationOptions = translationOptions.concat(options.defaults);
     }
 
     // Maintain support for defaultValue. Since it is always a message
     // insert it in to the translation options as such.
     if (isSet(options.defaultValue)) {
-      translationOptions.push({ message: options.defaultValue })
+      translationOptions.push({ message: options.defaultValue });
     }
 
-    return translationOptions
-  }
+    return translationOptions;
+  };
 
   // Translate the given scope with the provided options.
   I18n.translate = function (scope, options) {
-    options = options || {}
+    options = options || {};
 
-    var translationOptions = this.createTranslationOptions(scope, options)
+    var translationOptions = this.createTranslationOptions(scope, options);
 
-    var translation
-    var usedScope = scope
+    var translation;
+    var usedScope = scope;
 
-    var optionsWithoutDefault = this.prepareOptions(options)
-    delete optionsWithoutDefault.defaultValue
+    var optionsWithoutDefault = this.prepareOptions(options);
+    delete optionsWithoutDefault.defaultValue;
 
     // Iterate through the translation options until a translation
     // or message is found.
@@ -650,105 +650,105 @@
       translationOption
     ) {
       if (isSet(translationOption.scope)) {
-        usedScope = translationOption.scope
-        translation = this.lookup(usedScope, optionsWithoutDefault)
+        usedScope = translationOption.scope;
+        translation = this.lookup(usedScope, optionsWithoutDefault);
       } else if (isSet(translationOption.message)) {
-        translation = lazyEvaluate(translationOption.message, scope)
+        translation = lazyEvaluate(translationOption.message, scope);
       }
 
       if (translation !== undefined && translation !== null) {
-        return true
+        return true;
       }
     },
-    this)
+    this);
 
     if (!translationFound) {
-      return this.missingTranslation(scope, options)
+      return this.missingTranslation(scope, options);
     }
 
     if (typeof translation === 'string') {
-      translation = this.interpolate(translation, options)
+      translation = this.interpolate(translation, options);
     } else if (isArray(translation)) {
       translation = translation.map(function (t) {
-        return typeof t === 'string' ? this.interpolate(t, options) : t
-      }, this)
+        return typeof t === 'string' ? this.interpolate(t, options) : t;
+      }, this);
     } else if (isObject(translation) && isSet(options.count)) {
-      translation = this.pluralize(options.count, usedScope, options)
+      translation = this.pluralize(options.count, usedScope, options);
     }
 
-    return translation
-  }
+    return translation;
+  };
 
   // This function interpolates the all variables in the given message.
   I18n.interpolate = function (message, options) {
     if (message == null) {
-      return message
+      return message;
     }
 
-    options = options || {}
+    options = options || {};
     var matches = message.match(this.placeholder),
       placeholder,
       value,
       name,
-      regex
+      regex;
 
     if (!matches) {
-      return message
+      return message;
     }
 
     while (matches.length) {
-      placeholder = matches.shift()
-      name = placeholder.replace(this.placeholder, '$1')
+      placeholder = matches.shift();
+      name = placeholder.replace(this.placeholder, '$1');
 
       if (isSet(options[name])) {
-        value = options[name].toString().replace(/\$/gm, '_#$#_')
+        value = options[name].toString().replace(/\$/gm, '_#$#_');
       } else if (name in options) {
-        value = this.nullPlaceholder(placeholder, message, options)
+        value = this.nullPlaceholder(placeholder, message, options);
       } else {
-        value = this.missingPlaceholder(placeholder, message, options)
+        value = this.missingPlaceholder(placeholder, message, options);
       }
 
       regex = new RegExp(
         placeholder.replace(/{/gm, '\\{').replace(/}/gm, '\\}')
-      )
-      message = message.replace(regex, value)
+      );
+      message = message.replace(regex, value);
     }
 
-    return message.replace(/_#\$#_/g, '$')
-  }
+    return message.replace(/_#\$#_/g, '$');
+  };
 
   // Pluralize the given scope using the `count` value.
   // The pluralized translation may have other placeholders,
   // which will be retrieved from `options`.
   I18n.pluralize = function (count, scope, options) {
-    options = this.prepareOptions({ count: String(count) }, options)
-    var pluralizer, result
+    options = this.prepareOptions({ count: String(count) }, options);
+    var pluralizer, result;
 
-    result = this.pluralizationLookup(count, scope, options)
+    result = this.pluralizationLookup(count, scope, options);
     if (
       typeof result.translations === 'undefined' ||
       result.translations == null
     ) {
-      return this.missingTranslation(scope, options)
+      return this.missingTranslation(scope, options);
     }
 
     if (typeof result.message !== 'undefined' && result.message != null) {
-      return this.interpolate(result.message, options)
+      return this.interpolate(result.message, options);
     } else {
-      pluralizer = this.pluralization.get(options.locale)
+      pluralizer = this.pluralization.get(options.locale);
       return this.missingTranslation(
         scope + '.' + pluralizer(count)[0],
         options
-      )
+      );
     }
-  }
+  };
 
   // Return a missing translation message for the given parameters.
   I18n.missingTranslation = function (scope, options) {
     //guess intended string
     if (this.missingBehaviour === 'guess') {
       //get only the last portion of the scope
-      var s = scope.split('.').slice(-1)[0]
+      var s = scope.split('.').slice(-1)[0];
       //replace underscore with space && camelcase with space and lowercase letter
       return (
         (this.missingTranslationPrefix.length > 0
@@ -757,31 +757,31 @@
         s
           .replace('_', ' ')
           .replace(/([a-z])([A-Z])/g, function (match, p1, p2) {
-            return p1 + ' ' + p2.toLowerCase()
+            return p1 + ' ' + p2.toLowerCase();
           })
-      )
+      );
     }
 
     var localeForTranslation =
       options != null && options.locale != null
         ? options.locale
-        : this.currentLocale()
-    var fullScope = this.getFullScope(scope, options)
+        : this.currentLocale();
+    var fullScope = this.getFullScope(scope, options);
     var fullScopeWithLocale = [localeForTranslation, fullScope].join(
       this.defaultSeparator
-    )
+    );
 
-    return '[missing "' + fullScopeWithLocale + '" translation]'
-  }
+    return '[missing "' + fullScopeWithLocale + '" translation]';
+  };
 
   // Return a missing placeholder message for given parameters
   I18n.missingPlaceholder = function (placeholder, message, options) {
-    return '[missing ' + placeholder + ' value]'
-  }
+    return '[missing ' + placeholder + ' value]';
+  };
 
   I18n.nullPlaceholder = function () {
-    return I18n.missingPlaceholder.apply(I18n, arguments)
-  }
+    return I18n.missingPlaceholder.apply(I18n, arguments);
+  };
 
   // Format number using localization rules.
   // The options will be retrieved from the `number.format` scope.
@@ -799,7 +799,7 @@
       options,
       this.lookup('number.format'),
       NUMBER_FORMAT
-    )
+    );
 
     var negative = number < 0,
       string = toFixed(Math.abs(number), options.precision).toString(),
@@ -808,38 +808,38 @@
       buffer = [],
       formattedNumber,
       format = options.format || '%n',
-      sign = negative ? '-' : ''
-    number = parts[0]
-    precision = parts[1]
+      sign = negative ? '-' : '';
+    number = parts[0];
+    precision = parts[1];
 
     while (number.length > 0) {
-      buffer.unshift(number.substr(Math.max(0, number.length - 3), 3))
-      number = number.substr(0, number.length - 3)
+      buffer.unshift(number.substr(Math.max(0, number.length - 3), 3));
+      number = number.substr(0, number.length - 3);
     }
 
-    formattedNumber = buffer.join(options.delimiter)
+    formattedNumber = buffer.join(options.delimiter);
 
     if (options.strip_insignificant_zeros && precision) {
-      precision = precision.replace(/0+$/, '')
+      precision = precision.replace(/0+$/, '');
     }
 
     if (options.precision > 0 && precision) {
-      formattedNumber += options.separator + precision
+      formattedNumber += options.separator + precision;
     }
 
     if (options.sign_first) {
-      format = '%s' + format
+      format = '%s' + format;
     } else {
-      format = format.replace('%n', '%s%n')
+      format = format.replace('%n', '%s%n');
     }
 
     formattedNumber = format
       .replace('%u', options.unit)
       .replace('%n', formattedNumber)
-      .replace('%s', sign)
+      .replace('%s', sign);
 
-    return formattedNumber
-  }
+    return formattedNumber;
+  };
 
   // Format currency with localization rules.
   // The options will be retrieved from the `number.currency.format` and
@@ -862,10 +862,10 @@
       this.lookup('number.currency.format'),
       this.lookup('number.format'),
       CURRENCY_FORMAT
-    )
+    );
 
-    return this.toNumber(number, options)
-  }
+    return this.toNumber(number, options);
+  };
 
   // Localize several values.
   // You can provide the following scopes: `currency`, `number`, or `percentage`.
@@ -875,28 +875,28 @@
   // It will default to the value's `toString` function.
   //
   I18n.localize = function (scope, value, options) {
-    options || (options = {})
+    options || (options = {});
 
     switch (scope) {
       case 'currency':
-        return this.toCurrency(value)
+        return this.toCurrency(value);
       case 'number':
-        scope = this.lookup('number.format')
-        return this.toNumber(value, scope)
+        scope = this.lookup('number.format');
+        return this.toNumber(value, scope);
       case 'percentage':
-        return this.toPercentage(value)
+        return this.toPercentage(value);
       default:
-        var localizedValue
+        var localizedValue;
 
         if (scope.match(/^(date|time)/)) {
-          localizedValue = this.toTime(scope, value)
+          localizedValue = this.toTime(scope, value);
         } else {
-          localizedValue = value.toString()
+          localizedValue = value.toString();
         }
 
-        return this.interpolate(localizedValue, options)
+        return this.interpolate(localizedValue, options);
     }
-  }
+  };
 
   // Parse a given `date` string into a JavaScript Date object.
   // This function is time zone aware.
@@ -912,31 +912,31 @@
   //    yyyy-mm-dd[ T]hh:mm::ss.123Z
   //
   I18n.parseDate = function (date) {
-    var matches, convertedDate, fraction
+    var matches, convertedDate, fraction;
     // A date input of `null` or `undefined` will be returned as-is
     if (date == null) {
-      return date
+      return date;
     }
     // we have a date, so just return it.
     if (typeof date === 'object') {
-      return date
+      return date;
     }
 
     matches = date
       .toString()
       .match(
         /(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/
-      )
+      );
 
     if (matches) {
       for (var i = 1; i <= 6; i++) {
-        matches[i] = parseInt(matches[i], 10) || 0
+        matches[i] = parseInt(matches[i], 10) || 0;
       }
 
       // month starts on 0
-      matches[2] -= 1
+      matches[2] -= 1;
 
-      fraction = matches[7] ? 1000 * ('0' + matches[7]) : null
+      fraction = matches[7] ? 1000 * ('0' + matches[7]) : null;
 
       if (matches[8]) {
         convertedDate = new Date(
@@ -949,7 +949,7 @@
             matches[6],
             fraction
           )
-        )
+        );
       } else {
         convertedDate = new Date(
           matches[1],
@@ -959,12 +959,12 @@
           matches[5],
           matches[6],
           fraction
-        )
+        );
       }
     } else if (typeof date == 'number') {
       // UNIX timestamp
-      convertedDate = new Date()
-      convertedDate.setTime(date)
+      convertedDate = new Date();
+      convertedDate.setTime(date);
     } else if (
       date.match(
         /([A-Z][a-z]{2}) ([A-Z][a-z]{2}) (\d+) (\d+:\d+:\d+) ([+-]\d+) (\d+)/
@@ -972,7 +972,7 @@
     ) {
       // This format `Wed Jul 20 13:03:39 +0000 2011` is parsed by
       // webkit/firefox, but not by IE, so we must parse it manually.
-      convertedDate = new Date()
+      convertedDate = new Date();
       convertedDate.setTime(
         Date.parse(
           [
@@ -984,19 +984,19 @@
             RegExp.$5
           ].join(' ')
         )
-      )
+      );
     } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
       // a valid javascript format with timezone info
-      convertedDate = new Date()
-      convertedDate.setTime(Date.parse(date))
+      convertedDate = new Date();
+      convertedDate.setTime(Date.parse(date));
     } else {
       // an arbitrary javascript string
-      convertedDate = new Date()
-      convertedDate.setTime(Date.parse(date))
+      convertedDate = new Date();
+      convertedDate.setTime(Date.parse(date));
     }
 
-    return convertedDate
-  }
+    return convertedDate;
+  };
 
   // Formats time according to the directives in the given format string.
   // The directives begins with a percent (%) character. Any text not listed as a
@@ -1031,17 +1031,17 @@
   //
   I18n.strftime = function (date, format) {
     var options = this.lookup('date'),
-      meridianOptions = I18n.meridian()
+      meridianOptions = I18n.meridian();
     if (!options) {
-      options = {}
+      options = {};
     }
 
-    options = this.prepareOptions(options, DATE)
+    options = this.prepareOptions(options, DATE);
 
     if (isNaN(date.getTime())) {
       throw new Error(
         'I18n.strftime() requires a valid date object, but received an invalid date.'
-      )
+      );
     }
 
     var weekDay = date.getDay(),
@@ -1063,63 +1063,63 @@
           : absOffsetHours) +
         (absOffsetMinutes.toString().length < 2
           ? '0' + absOffsetMinutes
-          : absOffsetMinutes)
+          : absOffsetMinutes);
     if (hour12 > 12) {
-      hour12 = hour12 - 12
+      hour12 = hour12 - 12;
     } else if (hour12 === 0) {
-      hour12 = 12
+      hour12 = 12;
     }
 
-    format = format.replace('%a', options.abbr_day_names[weekDay])
-    format = format.replace('%A', options.day_names[weekDay])
-    format = format.replace('%b', options.abbr_month_names[month])
-    format = format.replace('%B', options.month_names[month])
-    format = format.replace('%d', padding(day))
-    format = format.replace('%e', day)
-    format = format.replace('%-d', day)
-    format = format.replace('%H', padding(hour))
-    format = format.replace('%-H', hour)
-    format = format.replace('%I', padding(hour12))
-    format = format.replace('%-I', hour12)
-    format = format.replace('%l', hour12)
-    format = format.replace('%m', padding(month))
-    format = format.replace('%-m', month)
-    format = format.replace('%M', padding(mins))
-    format = format.replace('%-M', mins)
-    format = format.replace('%p', meridianOptions[meridian])
-    format = format.replace('%P', meridianOptions[meridian].toLowerCase())
-    format = format.replace('%S', padding(secs))
-    format = format.replace('%-S', secs)
-    format = format.replace('%w', weekDay)
-    format = format.replace('%y', padding(year))
-    format = format.replace('%-y', padding(year).replace(/^0+/, ''))
-    format = format.replace('%Y', year)
-    format = format.replace('%z', timezoneoffset)
-    format = format.replace('%Z', timezoneoffset)
+    format = format.replace('%a', options.abbr_day_names[weekDay]);
+    format = format.replace('%A', options.day_names[weekDay]);
+    format = format.replace('%b', options.abbr_month_names[month]);
+    format = format.replace('%B', options.month_names[month]);
+    format = format.replace('%d', padding(day));
+    format = format.replace('%e', day);
+    format = format.replace('%-d', day);
+    format = format.replace('%H', padding(hour));
+    format = format.replace('%-H', hour);
+    format = format.replace('%I', padding(hour12));
+    format = format.replace('%-I', hour12);
+    format = format.replace('%l', hour12);
+    format = format.replace('%m', padding(month));
+    format = format.replace('%-m', month);
+    format = format.replace('%M', padding(mins));
+    format = format.replace('%-M', mins);
+    format = format.replace('%p', meridianOptions[meridian]);
+    format = format.replace('%P', meridianOptions[meridian].toLowerCase());
+    format = format.replace('%S', padding(secs));
+    format = format.replace('%-S', secs);
+    format = format.replace('%w', weekDay);
+    format = format.replace('%y', padding(year));
+    format = format.replace('%-y', padding(year).replace(/^0+/, ''));
+    format = format.replace('%Y', year);
+    format = format.replace('%z', timezoneoffset);
+    format = format.replace('%Z', timezoneoffset);
 
-    return format
-  }
+    return format;
+  };
 
   // Convert the given dateString into a formatted date.
   I18n.toTime = function (scope, dateString) {
     var date = this.parseDate(dateString),
-      format = this.lookup(scope)
+      format = this.lookup(scope);
     // A date input of `null` or `undefined` will be returned as-is
     if (date == null) {
-      return date
+      return date;
     }
 
-    var date_string = date.toString()
+    var date_string = date.toString();
     if (date_string.match(/invalid/i)) {
-      return date_string
+      return date_string;
     }
 
     if (!format) {
-      return date_string
+      return date_string;
     }
 
-    return this.strftime(date, format)
-  }
+    return this.strftime(date, format);
+  };
 
   // Convert a number into a formatted percentage value.
   I18n.toPercentage = function (number, options) {
@@ -1128,10 +1128,10 @@
       this.lookup('number.percentage.format'),
       this.lookup('number.format'),
       PERCENTAGE_FORMAT
-    )
+    );
 
-    return this.toNumber(number, options)
-  }
+    return this.toNumber(number, options);
+  };
 
   // Convert a number into a readable size representation.
   I18n.toHumanSize = function (number, options) {
@@ -1139,21 +1139,21 @@
       size = number,
       iterations = 0,
       unit,
-      precision
+      precision;
 
     while (size >= kb && iterations < 4) {
-      size = size / kb
-      iterations += 1
+      size = size / kb;
+      iterations += 1;
     }
 
     if (iterations === 0) {
-      unit = this.t('number.human.storage_units.units.byte', { count: size })
-      precision = 0
+      unit = this.t('number.human.storage_units.units.byte', { count: size });
+      precision = 0;
     } else {
       unit = this.t(
         'number.human.storage_units.units.' + SIZE_UNITS[iterations]
-      )
-      precision = size - Math.floor(size) === 0 ? 0 : 1
+      );
+      precision = size - Math.floor(size) === 0 ? 0 : 1;
     }
 
     options = this.prepareOptions(options, {
@@ -1161,17 +1161,17 @@
       precision: precision,
       format: '%n%u',
       delimiter: ''
-    })
+    });
 
-    return this.toNumber(size, options)
-  }
+    return this.toNumber(size, options);
+  };
 
   I18n.getFullScope = function (scope, options) {
-    options = options || {}
+    options = options || {};
 
     // Deal with the scope as an array.
     if (isArray(scope)) {
-      scope = scope.join(this.defaultSeparator)
+      scope = scope.join(this.defaultSeparator);
     }
 
     // Deal with the scope option provided through the second argument.
@@ -1179,11 +1179,11 @@
     //    I18n.t('hello', {scope: 'greetings'});
     //
     if (options.scope) {
-      scope = [options.scope, scope].join(this.defaultSeparator)
+      scope = [options.scope, scope].join(this.defaultSeparator);
     }
 
-    return scope
-  }
+    return scope;
+  };
   /**
    * Merge obj1 with obj2 (shallow merge), without modifying inputs
    * @param {Object} obj1
@@ -1196,15 +1196,15 @@
    */
   I18n.extend = function (obj1, obj2) {
     if (typeof obj1 === 'undefined' && typeof obj2 === 'undefined') {
-      return {}
+      return {};
     }
-    return merge(obj1, obj2)
-  }
+    return merge(obj1, obj2);
+  };
 
   // Set aliases, so we can save some typing.
-  I18n.t = I18n.translate
-  I18n.l = I18n.localize
-  I18n.p = I18n.pluralize
+  I18n.t = I18n.translate;
+  I18n.l = I18n.localize;
+  I18n.p = I18n.pluralize;
 
-  return I18n
-})
+  return I18n;
+});

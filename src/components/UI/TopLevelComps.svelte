@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { Ws } from '../../ws_events_dispatcher'
-  import { ET, E } from '../../enums'
+  import { Ws } from '../../ws_events_dispatcher';
+  import { ET, E } from '../../enums';
   // import Css from './Css.svelte'
-  import Navigate from './Navigate.svelte'
-  import ScrollTop from './ScrollTop.svelte'
+  import Navigate from './Navigate.svelte';
+  import ScrollTop from './ScrollTop.svelte';
 
-  import NightMode from './NightMode.svelte'
-  let maintenance = false
+  import NightMode from './NightMode.svelte';
+  let maintenance = false;
   Ws.bind$(
     [ET.get, E.maintenance_event, 0],
     function(data: boolean) {
-      maintenance = data
+      maintenance = data;
     },
     1
-  )
+  );
 </script>
 
 <!-- <Css /> -->

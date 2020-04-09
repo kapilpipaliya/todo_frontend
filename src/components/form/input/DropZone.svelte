@@ -1,10 +1,10 @@
 <script lang="ts">
-  import Dropzone from '../../../../thirdparty/svelte-dropzone/index.svelte'
-  import Label from '../Label.svelte'
-  export let name
-  const addedfile = file => console.log(file)
-  const drop = event => console.log(event.target)
-  const init = () => 0
+  import Dropzone from '../../../../thirdparty/svelte-dropzone/index.svelte';
+  import Label from '../Label.svelte';
+  export let name;
+  const addedfile = file => console.log(file);
+  const drop = event => console.log(event.target);
+  const init = () => 0;
 </script>
 
 <Label {name} />

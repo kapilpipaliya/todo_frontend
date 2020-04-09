@@ -12,7 +12,7 @@
     "pcj": "prettier  --write 'cypress/**/*.js'",
     "pid": "prettier  --write 'index.html'",
     "format": "prettier --write 'src/**/*.svelte'",
-    "formatts": "../svelteextra/node_modules/.bin/prettier --write 'src/**/*.{js,ts}'",
+    "formatts": "../config/node_modules/.bin/prettier --write 'src/**/*.{js,ts}'",
     "hbs": "http-server distrel",
     "cy": "cypress open -P cypress/"
   },

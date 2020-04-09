@@ -1,7 +1,7 @@
 <script lang="ts">
-  export let menu = []
-  let className
-  export { className as class }
+  export let menu = [];
+  let className;
+  export { className as class };
 </script>
 
 <ul class={className}>
