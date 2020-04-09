@@ -9,7 +9,7 @@
 */
   import { onMount, onDestroy, createEventDispatcher, getContext } from 'svelte'
   import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../../ws_events_dispatcher'
   declare let $ws_connected
   import { ET, E, schemaEvents } from '../../enums'
   import { is_production, ValueType } from '../../enums'
@@ -53,7 +53,7 @@
   let events = schemaEvents(schema_key)
   let unsub_evt
   let er = ''
-  const uid = S.uid
+  const uid = Ws.uid
   let data_evt
   let mutate_evt
   let schemaGetEvt = []
@@ -83,10 +83,10 @@
     }
 
     if (schemaGetEvt) {
-      S.bind$(schemaGetEvt, onDataGet, 1)
+      Ws.bind$(schemaGetEvt, onDataGet, 1)
     }
-    S.bind$(data_evt, onDataGet, 1)
-    S.bind$(mutate_evt, onMutateGet, 1)
+    Ws.bind$(data_evt, onDataGet, 1)
+    Ws.bind$(mutate_evt, onMutateGet, 1)
   }
 
   function fetch() {
@@ -98,12 +98,12 @@
     if (schemaGetEvt && schemaGetEvt.length) {
       const args = ['s', filter, { ...fetchConfig, schema: schema_key }]
       const e1 = [schemaGetEvt, args]
-      S.trigger([e1])
+      Ws.trigger([e1])
     } else {
       if (data_evt && data_evt.length) {
         const args = [filter, [], [], { ...fetchConfig, form: true }] // level: project_data_store[project_data_store.length - 1]?._key ?? ""
         const e1 = [data_evt, args]
-        S.trigger([e1])
+        Ws.trigger([e1])
       }
     }
   }
@@ -133,7 +133,7 @@
       if (newOptions.k) showKey = newOptions.k
       if (newOptions.replace && key) {
         mutate_evt[0] = ET.replace
-        S.bind$(mutate_evt, onMutateGet, 1)
+        Ws.bind$(mutate_evt, onMutateGet, 1)
       }
       const form_values = d[1]
       const form_new = onFormDataGetStatic(form_values)
@@ -191,10 +191,10 @@
   css_count.increase('submit_buttons')
   css_count.increase(schema_key)
   onDestroy(() => {
-    if (key && unsub_evt.length) S.trigger([[unsub_evt, {}]])
-    S.unbind_([data_evt, mutate_evt])
+    if (key && unsub_evt.length) Ws.trigger([[unsub_evt, {}]])
+    Ws.unbind_([data_evt, mutate_evt])
     if (schemaGetEvt.length) {
-      S.unbind(schemaGetEvt)
+      Ws.unbind(schemaGetEvt)
     }
     css_count.decrease('submit_buttons')
     css_count.decrease(schema_key)
@@ -221,7 +221,7 @@
     if (key) {
       args.push(unsub_evt)
     }
-    S.trigger([[mutate_evt, args]])
+    Ws.trigger([[mutate_evt, args]])
   }
 
   function onReset() {

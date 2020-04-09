@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { S } from '../../../ws_events_dispatcher'
+  import { Ws } from '../../../ws_events_dispatcher'
   import { clone } from 'rambdax'
   import Options from './Options.svelte'
   import BoolProperties from './BoolProperties.svelte'
@@ -68,9 +68,9 @@
   onMount(() => {
     let fetch_evt = e[0] ?? []
     if (fetch_evt.length) {
-      fetch_evt.push(S.uid)
-      S.bind$(fetch_evt, onFetchGet, 1)
-      S.trigger([[fetch_evt, []]])
+      fetch_evt.push(Ws.uid)
+      Ws.bind$(fetch_evt, onFetchGet, 1)
+      Ws.trigger([[fetch_evt, []]])
     } else {
       console.warn('cant get fetch_evt on TableForm component at e[0]', e)
     }

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
-  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../ws_events_dispatcher'
   import { ET, E } from '../enums'
   import Error from '../components/UI/Error.svelte'
   declare let $ws_connected
@@ -10,14 +10,14 @@
   let header = '' // initialised on onMount
   let subtitle = ''
   let loging_out = true
-  const fns = [[ET.insert, E.logout, S.uid]],
+  const fns = [[ET.insert, E.logout, Ws.uid]],
     [logout] = fns
-  S.bind$(logout, onLogout, 1)
+  Ws.bind$(logout, onLogout, 1)
   $: {
     if (mounted) {
       if ($ws_connected) {
         er = ''
-        S.trigger([[logout, query]])
+        Ws.trigger([[logout, query]])
       } else {
         er = 'Reconnecting...'
       }
@@ -29,7 +29,7 @@
     er = 'Please wait ...'
   })
   onDestroy(() => {
-    S.unbind_(fns)
+    Ws.unbind_(fns)
   })
   // some functions:============
   function onLogout(d) {

@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import { ET, E } from './enums'
-import { S } from './ws_events_dispatcher'
+import { Ws } from './ws_events_dispatcher'
 import { style } from 'dynamic-import'
 /**
  * currently not used this store anywhere and not using any css framework:
@@ -158,7 +158,7 @@ export const css_count = {
 }
 
 // {"table":{"classes":{},"link":"/table.5efd916f.css"}}
-S.bind$(
+Ws.bind$(
   [ET.get, E.css_event, 0],
   function (data: { table: { link: '' } }) {
     css_loading.set(true)

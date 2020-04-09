@@ -1,5 +1,5 @@
 {
-  "name": "svelte-typescript-rollup",
+  "name": "OKProject-svelte-typescript-rollup",
   "version": "1.0.0",
   "description": "Project Manangement Application",
   "main": "src/index.ts",
@@ -19,7 +19,7 @@
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^5.13.0",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
-    "@msgpack/msgpack": "^1.12.0",
+    "@msgpack/msgpack": "^1.12.1",
     "cachefactory": "^3.0.0",
     "clipboard": "^2.0.6",
     "clsx": "^1.1.0",
@@ -55,7 +55,7 @@
     "prettier-plugin-svelte": "^0.7.0",
     "replace-in-file": "^5.0.2",
     "rimraf": "^3.0.2",
-    "rollup": "2.3.3",
+    "rollup": "2.3.4",
     "rollup-plugin-analyzer": "^3.2.2",
     "rollup-plugin-bundle-html": "^0.2.2",
     "rollup-plugin-css-porter": "^1.0.2",

@@ -37,7 +37,7 @@
   import { view, lensPath, all, equals } from 'ramda'
   import { isArray } from 'ramda-adjunct'
   import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../../ws_events_dispatcher'
   import { isEmpty } from 'ramda'
   import { clone } from 'rambda'
   import {
@@ -202,7 +202,7 @@
   }
   let events = schemaEvents(schema_key)
   if (!events) er = 'events array must be defined'
-  const uid = S.uid
+  const uid = Ws.uid
   let data_evt = [ET.subscribe, events[0], uid]
   let unsub_evt = [ET.unsubscribe, events[0], uid]
   let mounted = false
@@ -210,11 +210,11 @@
     mounted = true
   })
   onDestroy(() => {
-    unsub_evt && S.trigger([[unsub_evt, {}]])
-    events && S.unbind_(events)
+    unsub_evt && Ws.trigger([[unsub_evt, {}]])
+    events && Ws.unbind_(events)
     css_count.decrease('table')
   })
-  S.bind$(data_evt, onDataGet, 1)
+  Ws.bind$(data_evt, onDataGet, 1)
   const onWSConnect = () => {
     refresh()
   }
@@ -247,7 +247,7 @@
       fetchConfig
     ]
     const e1 = [data_evt, args]
-    S.trigger([e1])
+    Ws.trigger([e1])
   }
   /*=====  End of Re Fetch Data  ======*/
 
@@ -510,7 +510,7 @@
             args.push(unsu_event)
           }
         }
-        S.bindT(
+        Ws.bindT(
           mutate_evt,
           d => {
             resolve(d)
@@ -535,10 +535,10 @@
   const onDeleteSelected = async () => {
     const r = confirm('Are You Sure to delete selected rows?')
     if (r == true) {
-      const mutate_evt = [ET.delete_, events[1], S.uid]
+      const mutate_evt = [ET.delete_, events[1], Ws.uid]
       const filter = [JSON.stringify(selectedRowsKeys)]
       const d = await new Promise((resolve, reject) => {
-        S.bindT(
+        Ws.bindT(
           mutate_evt,
           d => {
             resolve(d)
@@ -700,7 +700,7 @@
     fetchConfig['columns'] = e.detail.list
     config = false
     // const e1 = [header_evt, fetchConfig] // fix this(config)
-    // S.trigger([e1]) // fix this
+    // Ws.trigger([e1]) // fix this
     //resetFilter_(); onHeaderGet() will do this.
     headerColSortSettingsRow = []
     // refresh();
@@ -993,6 +993,7 @@
 
     let canDrag = true
 
+    // Todo can disable some row drag and drop. set canDrag == false.
     /*if (beforeDragOver) { //todo fix this
       const curRow = getItemById(items, sourceData.dragId)
       const targetRow = getItemById(items, targetIdTemp)

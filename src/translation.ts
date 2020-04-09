@@ -1,14 +1,14 @@
 // use function directly on ws_dispatcher..
 import { writable } from 'svelte/store'
-import { S } from './ws_events_dispatcher'
+import { Ws } from './ws_events_dispatcher'
 import { ET, E, form_schema_evt } from './enums'
 import { isString, isObject } from 'ramda-adjunct'
 
 export const translation = writable({})
 export const fetchTranslations = async () => {
   const trans = await new Promise((resolve, reject) =>
-    S.bindT(
-      form_schema_evt(S.uid),
+    Ws.bindT(
+      form_schema_evt(Ws.uid),
       (d: [[{}]]) => {
         resolve(d[0])
       },
@@ -20,7 +20,7 @@ export const fetchTranslations = async () => {
 }
 // Todo Make Live Translations work
 fetchTranslations()
-/*S.bind$( [ET.get, e.translation_event, 0],
+/*Ws.bind$( [ET.get, e.translation_event, 0],
 	function(data) {
 	  console.log(data)
 	},

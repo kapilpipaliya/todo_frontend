@@ -2,7 +2,7 @@
   import { Route } from '../../thirdparty/svelte-router-spa/index'
   import { onMount, onDestroy } from 'svelte'
   import { ValueType, ET, E } from '../enums'
-  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../ws_events_dispatcher'
   declare let $ws_connected
   import TreeSidebar from '../components/UI/TreeSidebar.svelte'
   import Skeleton from '../components/UI/Skeleton.svelte'
@@ -49,8 +49,8 @@
   }
 
   onDestroy(
-    S.bindT(
-      [ET.subscribe, E.menu_list, S.uid],
+    Ws.bindT(
+      [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d)
         fetch_data = true // not important on menu

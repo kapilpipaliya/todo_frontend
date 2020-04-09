@@ -16,7 +16,7 @@
   declare let $css_loading
   import { ValueType, is_production, ET, E } from './enums'
   declare let $is_production
-  import { S } from './ws_events_dispatcher'
+  import { Ws } from './ws_events_dispatcher'
   import TreeSidebar from './components/UI/TreeSidebar.svelte'
 
   css_count.increase('all_menu')
@@ -83,8 +83,8 @@
     if (idx > -1) home_menu = items[idx].menu
   }
   onDestroy(
-    S.bindT(
-      [ET.subscribe, E.menu_list, S.uid],
+    Ws.bindT(
+      [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d)
       },

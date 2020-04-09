@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy, createEventDispatcher } from 'svelte'
   import { flip } from 'svelte/animate'
-  import { S } from '../../ws_events_dispatcher'
+  import { Ws } from '../../ws_events_dispatcher'
   import { ET, E } from '../../enums'
   import { quintOut } from 'svelte/easing'
   import { crossfade } from 'svelte/transition'
@@ -111,8 +111,8 @@
   let isSaving = false
   onMount(async () => {
     const d = await new Promise((resolve, reject) => {
-      S.bindT(
-        [ET.get, E.my_schema_get, S.uid],
+      Ws.bindT(
+        [ET.get, E.my_schema_get, Ws.uid],
         d => {
           resolve(d)
         },
@@ -124,8 +124,8 @@
   async function onSave() {
     isSaving = true
     const d = await new Promise((resolve, reject) => {
-      S.bindT(
-        [ET.insert, E.my_schema_mutate, S.uid],
+      Ws.bindT(
+        [ET.insert, E.my_schema_mutate, Ws.uid],
         d => {
           resolve(d)
         },

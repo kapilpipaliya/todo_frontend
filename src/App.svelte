@@ -21,7 +21,7 @@
   import TopLevelComps from './components/UI/TopLevelComps.svelte'
   import { is_production, ET, E, form_schema_evt } from './enums'
   declare let $is_production
-  import { S } from './ws_events_dispatcher'
+  import { Ws } from './ws_events_dispatcher'
   import TopMenu from './TopMenu.svelte'
   import LoadAwesome from './components/UI/LoadAwesome.svelte'
   import { Router } from '../thirdparty/svelte-router-spa/index'
@@ -45,8 +45,8 @@
   import MyPage from './views/my_page.svelte'
   import AccountLayout from './views/account_layout.svelte'
 
-  let e$
-  $: e$ = $current_member?.email
+  let email
+  $: email = $current_member?.email
   const isSubdmomain = window.location.hostname.split('.').length > 2
   let guest_menu = [
     {
@@ -80,7 +80,7 @@
   ]
   css_count.increase('all_menu')
 
-  let r$ = []
+  let routes = []
 
   onMount(() => {
     const loading_div = document.getElementsByClassName(
@@ -90,19 +90,19 @@
   })
 
   onDestroy(
-    S.bindT(
-      form_schema_evt(S.uid),
+    Ws.bindT(
+      form_schema_evt(Ws.uid),
       d => {
-        if (d[0].routes) r$ = map(x => modifyObj(x), d[0].routes)
+        if (d[0].routes) routes = map(x => modifyObj(x), d[0].routes)
       },
       ['routes'],
       0
     )
   )
-  const isLoggedIn = async S =>
+  const isLoggedIn = async () =>
     await new Promise((resolve, reject) => {
-      S.bindT(
-        [ET.get, E.is_logged_in, S.uid],
+      Ws.bindT(
+        [ET.get, E.is_logged_in, Ws.uid],
         (d: [[]]) => {
           resolve(d)
         },
@@ -129,40 +129,40 @@
       MyPage: MyPage,
       AccountLayout: AccountLayout
     }
-    const G = {
+    const Guards = {
       userIsAdmin: () => true,
-      isNotLoggedIn: async () => !(await isLoggedIn(S))[0],
-      isLoggedIn: async () => (await isLoggedIn(S))[0]
+      isNotLoggedIn: async () => !(await isLoggedIn())[0],
+      isLoggedIn: async () => (await isLoggedIn())[0]
     }
-    const get_c = k => {
+    const get_component = k => {
       if (k == '' || k == undefined) return
       const c = C[k]
       if (!c) console.error('No Component Found For key: ', k)
       return c
     }
-    const get_g = k => {
-      const c = G[k]
+    const get_guard = k => {
+      const c = Guards[k]
       if (!c) console.error('No Guard Found For key: ', k)
       return c
     }
-    const mod_c = curry((k, o) => {
-      let c = get_c(o[k])
+    const modify_component = curry((k, o) => {
+      let c = get_component(o[k])
       if (c) o[k] = c
       return o
     })
-    const mod_g = o => {
+    const modify_guard = o => {
       if (o.onlyIf) {
-        let g = get_g(o.onlyIf.guard)
+        let g = get_guard(o.onlyIf.guard)
         if (g) o.onlyIf.guard = g
       }
       return o
     }
-    const mod_n = o => {
+    const modify_nested = o => {
       if (o.nestedRoutes)
         o.nestedRoutes = map(x => modifyObj(x), o.nestedRoutes)
       return o
     }
-    o = pipe(mod_c('component'), mod_c('layout'), mod_g, mod_n)(o)
+    o = pipe(modify_component('component'), modify_component('layout'), modify_guard, modify_nested)(o)
     return o
   }
   let css_loaded = false
@@ -191,7 +191,7 @@
     {#if public_menu.length}
       <TreeSidebar class="public" menu={public_menu} />
     {/if}
-    {#if e$}
+    {#if email}
       <TopMenu />
     {:else if isSubdmomain}
       <TreeSidebar class="subdomain_guest" menu={subdomain_guest_menu} />
@@ -199,8 +199,8 @@
       <TreeSidebar class="guest" menu={guest_menu} />
     {/if}
   {/if}
-  {#if r$.length}
-    <Router routes={r$} />
+  {#if routes.length}
+    <Router routes={routes} />
   {:else}
     <LoadAwesome />
   {/if}

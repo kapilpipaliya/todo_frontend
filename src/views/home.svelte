@@ -1,50 +1,50 @@
 <script lang="ts">
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../ws_events_dispatcher'
 
   import { is_production, ET, E } from '../enums'
   declare let $is_production
   const onRestart = () => {
-    S.bindT([ET.get, E.restart_server, S.uid], d => 0, null)
+    Ws.bindT([ET.get, E.restart_server, Ws.uid], d => 0, null)
   }
   const onRecompileFrontend = () => {
-    S.bindT([ET.get, E.recompile_frontend, S.uid], d => 0, null)
+    Ws.bindT([ET.get, E.recompile_frontend, Ws.uid], d => 0, null)
   }
   const onRecompileCSS = () => {
-    S.bindT([ET.get, E.recompile_css, S.uid], d => 0, null)
+    Ws.bindT([ET.get, E.recompile_css, Ws.uid], d => 0, null)
   }
   const onTestEmail = () => {
-    S.bindT([ET.get, E.test_mail, S.uid], d => 0, null)
+    Ws.bindT([ET.get, E.test_mail, Ws.uid], d => 0, null)
   }
   let log = ''
   const onReadLog = () => {
-    S.bindT([ET.get, E.read_log, S.uid], d => (log = d), null)
+    Ws.bindT([ET.get, E.read_log, Ws.uid], d => (log = d), null)
   }
   let pass = 'super'
   const onSuperPasswordCheck = () => {
-    S.bindT([ET.get, E.super_pass_check, S.uid], d => 0, pass)
+    Ws.bindT([ET.get, E.super_pass_check, Ws.uid], d => 0, pass)
   }
   const onCssSyncFilesToDB = () => {
-    S.bindT([ET.get, E.css_sync_files_to_db, S.uid], d => 0, 0)
+    Ws.bindT([ET.get, E.css_sync_files_to_db, Ws.uid], d => 0, 0)
   }
-  let online_user_evt = [ET.subscribe, E.subscribe_online_users, S.uid]
+  let online_user_evt = [ET.subscribe, E.subscribe_online_users, Ws.uid]
   let users = 0
   const onLineUsers = () => {
-    S.bindT(online_user_evt, d => (users = d), 0, 1)
+    Ws.bindT(online_user_evt, d => (users = d), 0, 1)
   }
   onLineUsers()
   onDestroy(() => {
-    S.unbind(online_user_evt)
+    Ws.unbind(online_user_evt)
   })
   const getCountries = () => {
-    S.bindT([ET.get, E.countries, S.uid], d => d, 0)
+    Ws.bindT([ET.get, E.countries, Ws.uid], d => d, 0)
   }
   const getLanguages = () => {
-    S.bindT([ET.get, E.languages, S.uid], d => d, 0)
+    Ws.bindT([ET.get, E.languages, Ws.uid], d => d, 0)
   }
   const getCollectionCount = () => {
-    S.bindT([ET.get, E.collections_size, S.uid], d => d, 0)
+    Ws.bindT([ET.get, E.collections_size, Ws.uid], d => d, 0)
   }
 </script>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../ws_events_dispatcher'
   import { is_production, ET, E, ValueType } from '../enums'
   declare let $ws_connected
   declare let $is_production
@@ -22,7 +22,7 @@
   setContext('project', project_ctx)
   let mounted = false
   let er = ''
-  let org_fetch_evt = [ET.get, E.organization_list, S.uid]
+  let org_fetch_evt = [ET.get, E.organization_list, Ws.uid]
   let items = []
   let organization_menu = []
   let fetch_data = false
@@ -33,7 +33,7 @@
     // be very careful: top level component unmount first.
     $project_ctx.pop()
   })
-  S.bind$(
+  Ws.bind$(
     org_fetch_evt,
     d => {
       const result = d[1].r.result
@@ -92,8 +92,8 @@
   }
 
   onDestroy(
-    S.bindT(
-      [ET.subscribe, E.menu_list, S.uid],
+    Ws.bindT(
+      [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d)
         fetch_data = true // not important on menu
@@ -120,7 +120,7 @@
           [0, 0, 1],
           { type: ValueType.Object }
         ]
-        S.trigger([[org_fetch_evt, args]])
+        Ws.trigger([[org_fetch_evt, args]])
       } else {
         er = 'Please Select Organization'
       }

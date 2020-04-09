@@ -1,13 +1,13 @@
 // use function directly on ws_dispatcher..
 import { writable } from 'svelte/store'
 import { ET, E } from './enums'
-import { S } from './ws_events_dispatcher'
+import { Ws } from './ws_events_dispatcher'
 /**
  * store used to save basic info of logged in memeber.
  *
  */
 export const current_member = writable({})
-S.bind$(
+Ws.bind$(
   [ET.get, E.current_member_event, 0],
   function (data: [[]]) {
     current_member.set(data)

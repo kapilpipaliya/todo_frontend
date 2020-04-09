@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy, getContext, setContext } from 'svelte'
   import { get, writable } from 'svelte/store'
-  import { S, ws_connected } from '../ws_events_dispatcher'
+  import { Ws, ws_connected } from '../ws_events_dispatcher'
   import { is_production, ET, E, ValueType } from '../enums'
   declare let $ws_connected
   declare let $is_production
@@ -23,7 +23,7 @@
   declare let $project_ctx
   let mounted = false
   let er = ''
-  let project_fetch_evt = [ET.get, E.project_list, S.uid]
+  let project_fetch_evt = [ET.get, E.project_list, Ws.uid]
   let items = []
   let project_menu = []
   let fetch_data = false
@@ -31,11 +31,11 @@
     mounted = true
   })
   onDestroy(() => {
-    S.unbind_([project_fetch_evt])
+    Ws.unbind_([project_fetch_evt])
     // be very careful: top level component unmount first.
     $project_ctx.pop()
   })
-  S.bind$(
+  Ws.bind$(
     project_fetch_evt,
     d => {
       const result = d[1].r.result
@@ -94,8 +94,8 @@
   }
 
   onDestroy(
-    S.bindT(
-      [ET.subscribe, E.menu_list, S.uid],
+    Ws.bindT(
+      [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d)
         fetch_data = true // not important on menu
@@ -125,7 +125,7 @@
             org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null
           }
         ]
-        S.trigger([[project_fetch_evt, args]])
+        Ws.trigger([[project_fetch_evt, args]])
       } else {
         er = 'Please Select Project'
       }
