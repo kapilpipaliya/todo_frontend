@@ -67,7 +67,7 @@
     }
   }
   function dragstart(e) {
-    console.log('start', e);
+    // console.log('drag start', e);
     setDragData({
       key,
       dragId: e.target.children[0].getAttribute('tree-id'),
@@ -82,7 +82,7 @@
     e.target.style.opacity = 0.2;
   }
   function dragend(e) {
-    console.log('drag eneded', e);
+    //console.log('drag eneded', e);
     e.target.style.opacity = 1;
   }
   function setAllCheckData(curList, flag) {

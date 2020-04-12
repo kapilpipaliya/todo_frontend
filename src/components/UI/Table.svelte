@@ -938,7 +938,7 @@
 
     if (x >= dragRect.left && x <= dragW && y >= dragRect.top && y <= dragH) {
       // The original block currently being dragged is not allowed to be inserted
-      console.log('same element !');
+      // console.log('same element !');
       return;
     }
 
