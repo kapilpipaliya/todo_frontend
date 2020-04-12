@@ -1711,8 +1711,8 @@
           <div
             class="drag-tree-table-body"
             style={bodyStyle}
-            on:dragover={onDraggingOver}
-            on:dragend={drop}
+            on:dragover|preventDefault={onDraggingOver}
+            on:dragend|preventDefault={drop}
             class:is-dragging={isDragging}>
 
             {#each items as r, rowIndex (getValue(r[0]))}

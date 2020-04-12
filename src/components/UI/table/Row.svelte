@@ -77,6 +77,7 @@
     // The data is only available on drop, this is a security feature since a website could grab data when you happen to be dragging something across the webpage.
     // https://stackoverflow.com/questions/28487352/dragndrop-datatransfer-getdata-empty
     // Firefox drag have a bug // unused
+    // Required to make it work in Firefox, but not used in this example.
     e.dataTransfer.setData('source', key); // data should be string
     e.target.style.opacity = 0.2;
   }
