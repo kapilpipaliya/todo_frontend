@@ -132,7 +132,7 @@
           type="checkbox"
           value={key}
           checked={selectedRowsKeys.includes(key)}
-          on:click={onSelectRowClick} />
+          on:click|stopPropagation={onSelectRowClick} />
       {/if}
     </Column>
     {#if showRowNum}
