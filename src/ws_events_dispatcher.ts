@@ -99,9 +99,9 @@ export class ServerEventsDispatcher {
     return ++this.id_;
   }
   setupConnection() {
-    if (this.#conn) {
-      return;
-    }
+    // if (this.#conn) {
+    //   return;
+    // }
     this.#conn = new WebSocket(this.#path, []);
     // dispatch to the right handlers
     this.#conn.onmessage = this.onmessage;

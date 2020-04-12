@@ -13,10 +13,9 @@
   let items = [];
   let admin_menu = [];
 
-  const getMenuDataGet = all => {
+  const getMenuDataGet = d => {
     // if (isLoading) isLoading = false
-    const [h, d] = all;
-    if (h === false) {
+    if (Array.isArray(d) && !d[0]) {
       //authorized = false
       //er = d
     }
