@@ -15,7 +15,7 @@
 
   const getMenuDataGet = d => {
     // if (isLoading) isLoading = false
-    if (Array.isArray(d) && !d[0]){
+    if (Array.isArray(d) && !d[0]) {
       //authorized = false
       //er = d
     }

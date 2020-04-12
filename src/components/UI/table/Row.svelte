@@ -265,7 +265,10 @@
   </div>
 
   {#if quickViewKeys.includes(key)}
-    <div class="tree-block">
+    <div
+      class="tree-block"
+      draggable="true"
+      on:dragstart|preventDefault|stopPropagation={_ => 0}>
       <div class="tree-row">
         <div colspan={colCount + (showRowNum ? 1 : 0) + 3}>
           {#if quickcomponent}
