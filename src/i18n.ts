@@ -1147,7 +1147,9 @@
     }
 
     if (iterations === 0) {
-      unit = this.t('number.human.storage_units.units.byte', { count: size });
+      unit = this.t('number.human.storage_units.units.byte', {
+        count: size
+      });
       precision = 0;
     } else {
       unit = this.t(
