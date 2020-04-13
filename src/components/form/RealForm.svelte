@@ -15,7 +15,9 @@
   import Textarea from './input/Textarea.svelte';
   import JsonEditor from './input/JsonEditor.svelte';
   import Flatpicker from './input/Flatpicker.svelte';
+  process.env.ns;
   import CodeMirror from './input/codemirror/CodeMirror.svelte';
+  process.env.ne;
   import DropZone from './input/DropZone.svelte';
   import DateRange from './input/DateRange.svelte';
   import Emoji from './input/Emoji.svelte';
@@ -82,8 +84,10 @@
         return TableForm;
       case FormType.jsoneditor:
         return JsonEditor;
+        process.env.ns;
       case FormType.codemirror:
         return CodeMirror;
+        process.env.ne;
       case FormType.flatpicker:
         return Flatpicker;
       case FormType.multi_select_hidden:

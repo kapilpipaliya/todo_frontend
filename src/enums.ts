@@ -310,3 +310,10 @@ export const schemaEvents = (schema: string) => {
     console.warn('cant generate events for schem key: ', schema);
   }
 };
+export enum NotificationType {
+  default_,
+  info,
+  success,
+  warning,
+  danger
+}

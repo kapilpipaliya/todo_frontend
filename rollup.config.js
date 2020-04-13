@@ -45,6 +45,9 @@ if(process.env.V == "micro"){
 } else if (process.env.V == "mini") {
   dest = `./dist${process.env.V}`
   entry = `src/test/index${process.env.V}.ts`
+} else if (process.env.V == "global") {
+  dest = `./dist${process.env.V}`
+  entry = `src/index.ts`
 }
 require('child_process').spawn('rm', ['-rf', dest], {
           stdio: ['ignore', 'inherit', 'inherit'],
@@ -86,14 +89,16 @@ const generateHtmlBuild = (options) => {
         }
     };
 };
-
+console.log(process.env.ns, process.env.ne)
 
 
 const plugins = [
   //analyze(),
   replace({
     'process.env.NODE_ENV': JSON.stringify(mode),
-    'process.env.b': JSON.stringify(process.env.b)
+    'process.env.b': JSON.stringify(process.env.b),
+    'process.env.ns': process.env.ns, // normal user start
+    'process.env.ne': process.env.ne // normal user end
   }),
   svelte({
     dev: process.env.NODE_ENV === "development",
