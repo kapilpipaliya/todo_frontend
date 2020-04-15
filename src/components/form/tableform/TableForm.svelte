@@ -54,9 +54,7 @@
       });
     } else {
       // ['abc','def']
-      return clone(data).filter(
-        x => !value.includes(x[keyIdx]) || value[valueIdx] == x[keyIdx]
-      );
+      return clone(data).filter(x => !value.includes(x[keyIdx]) || value[valueIdx] == x[keyIdx]);
     }
   };
   const onChange = v => e => {
@@ -131,31 +129,20 @@
               {/if}
             {:else}
               <td>
-                <select
-                  bind:value={v}
-                  required
-                  disabled={disabled || i < value.length - 1}
-                  on:change={onChange}>
+                <select bind:value={v} required disabled={disabled || i < value.length - 1} on:change={onChange}>
                   <Options {keyIdx} options={getOptions(i)} {dp} />
                 </select>
               </td>
             {/if}
             <td>
-              <button type="button" on:click={handleDelete(i)} {disabled}>
-                delete
-              </button>
+              <button type="button" on:click={handleDelete(i)} {disabled}>delete</button>
             </td>
           </tr>
         {/each}
       </tbody>
     </table>
   {/if}
-  <button
-    type="button"
-    on:click={handleAdd}
-    disabled={disabled || !newAvailableOps.length}>
-    Add
-  </button>
+  <button type="button" on:click={handleAdd} disabled={disabled || !newAvailableOps.length}>Add</button>
 {:else}
   <select bind:value required on:change={onChangeSingle} on:change>
     <Options {keyIdx} options={data} {dp} />

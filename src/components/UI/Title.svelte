@@ -32,9 +32,7 @@
   <title>{title}</title>
 </svelte:head>
 {#if currentRoute.queryParams.message}
-  <span class={currentRoute.queryParams.type}>
-    {currentRoute.queryParams.message}
-  </span>
+  <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
 {/if}
 {#if title}
   <div>

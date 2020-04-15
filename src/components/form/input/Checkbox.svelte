@@ -9,12 +9,4 @@
 </script>
 
 <Label {name} />
-<input
-  {name}
-  bind:this={dom}
-  type="checkbox"
-  bind:checked={value}
-  {required}
-  autocomplete={false}
-  {disabled}
-  {...props} />
+<input {name} bind:this={dom} type="checkbox" bind:checked={value} {required} autocomplete={false} {disabled} {...props} />

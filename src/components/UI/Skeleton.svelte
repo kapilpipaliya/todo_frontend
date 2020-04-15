@@ -16,6 +16,5 @@
 
 <div
   class="skeleton"
-  style="height: {height}; width: {width}; border-radius: {borderRadius};
-  --baseColor: {baseColor}; --highlightColor: {highlightColor};
+  style="height: {height}; width: {width}; border-radius: {borderRadius}; --baseColor: {baseColor}; --highlightColor: {highlightColor};
   --animationLength: {animationLength}" />

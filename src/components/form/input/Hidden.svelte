@@ -7,12 +7,4 @@
   export let dom = null;
 </script>
 
-<input
-  {name}
-  bind:this={dom}
-  type="hidden"
-  bind:value
-  {required}
-  autocomplete={false}
-  {disabled}
-  {...props} />
+<input {name} bind:this={dom} type="hidden" bind:value {required} autocomplete={false} {disabled} {...props} />

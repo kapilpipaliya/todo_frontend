@@ -1,10 +1,5 @@
 <script lang="ts">
-  import {
-    css,
-    css_frameworks,
-    selected_frameworks,
-    css_count
-  } from '../../css';
+  import { css, css_frameworks, selected_frameworks, css_count } from '../../css';
   /* No Framework load
 {#each Object.entries($css_frameworks) as [framework, link], index (framework)}
 	{#each $selected_frameworks as f, index (f)}

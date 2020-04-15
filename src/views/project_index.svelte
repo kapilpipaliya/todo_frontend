@@ -6,6 +6,4 @@
 </script>
 
 Project Dash Board
-{#if !$is_production}
-  {JSON.stringify(currentRoute)} {JSON.stringify(params)}
-{/if}
+{#if !$is_production}{JSON.stringify(currentRoute)} {JSON.stringify(params)}{/if}

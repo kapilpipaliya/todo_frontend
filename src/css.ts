@@ -43,9 +43,7 @@ class Toast {
             case 'js':
               return this.js(url);
             default:
-              return Promise.reject(
-                new Error(`Unable to detect extension of '${url}'`)
-              );
+              return Promise.reject(new Error(`Unable to detect extension of '${url}'`));
           }
         }
       )

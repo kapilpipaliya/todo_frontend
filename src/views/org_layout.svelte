@@ -113,12 +113,7 @@
     if ($ws_connected) {
       er = '';
       if (org_id) {
-        const args = [
-          [null, `="${org_id}"`],
-          [],
-          [0, 0, 1],
-          { type: ValueType.Object }
-        ];
+        const args = [[null, `="${org_id}"`], [], [0, 0, 1], { type: ValueType.Object }];
         Ws.trigger([[org_fetch_evt, args]]);
       } else {
         er = 'Please Select Organization';

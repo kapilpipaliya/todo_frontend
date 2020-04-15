@@ -14,11 +14,6 @@
   }
 </script>
 
-<button
-  {type}
-  class={classn}
-  disabled={isSaving || disabled}
-  {title}
-  on:click={save}>
+<button {type} class={classn} disabled={isSaving || disabled} {title} on:click={save}>
   <slot>{label}</slot>
 </button>

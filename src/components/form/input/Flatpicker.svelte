@@ -36,19 +36,14 @@
   onMount(async () => {
     //let flatpickr
     try {
-      /*const {default: flatpickr_} =*/ await import(
-        'https://unpkg.com/flatpickr/dist/flatpickr.js'
-      );
+      /*const {default: flatpickr_} =*/ await import('https://unpkg.com/flatpickr/dist/flatpickr.js');
       //flatpickr = flatpickr_
     } catch (err) {
       console.warn(err.message);
       return;
     }
     const elem = element || input;
-    fp = flatpickr(
-      elem,
-      Object.assign(addHooks(options), element ? { wrap: true } : {})
-    );
+    fp = flatpickr(elem, Object.assign(addHooks(options), element ? { wrap: true } : {}));
 
     return () => {
       fp.destroy();
@@ -81,17 +76,13 @@
       }
     }
 
-    if (opts.onChange && !opts.onChange.includes(updateValue))
-      opts.onChange.push(updateValue);
+    if (opts.onChange && !opts.onChange.includes(updateValue)) opts.onChange.push(updateValue);
 
     return opts;
   }
 
   function updateValue(newValue) {
-    value =
-      Array.isArray(newValue) && newValue.length === 1
-        ? newValue[0].getTime()
-        : newValue.getTime();
+    value = Array.isArray(newValue) && newValue.length === 1 ? newValue[0].getTime() : newValue.getTime();
   }
 
   function stripOn(hook) {

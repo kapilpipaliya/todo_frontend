@@ -28,10 +28,7 @@
   });
   // DRAG AND DROP
   let isOver = false;
-  const getDraggedParent = node =>
-    node.dataset && node.dataset.index
-      ? node.dataset
-      : getDraggedParent(node.parentNode);
+  const getDraggedParent = node => (node.dataset && node.dataset.index ? node.dataset : getDraggedParent(node.parentNode));
   const start = ev => {
     // console.log("start", ev);
     // dataset: DOMStringMap
@@ -173,11 +170,7 @@
   <Error {er} />
   <footer>
     <SubmitButton {isSaving} title="Save current changes" />
-    <button
-      type="button"
-      disabled={isSaving}
-      on:click={() => dp('configApply', { list })}
-      title="Apply changes without saving">
+    <button type="button" disabled={isSaving} on:click={() => dp('configApply', { list })} title="Apply changes without saving">
       Apply
     </button>
     {#if false}

@@ -116,13 +116,8 @@ export class ServerEventsDispatcher {
     this.#conn.close();
   }
   bind(event: event, callback: callBack, handleMultiple = 0, data = []) {
-    this.#callbacks[JSON.stringify(event)] =
-      this.#callbacks[JSON.stringify(event)] ?? [];
-    this.#callbacks[JSON.stringify(event)].push([
-      handleMultiple,
-      callback,
-      data
-    ]); // 0 means unsubscribe using first time
+    this.#callbacks[JSON.stringify(event)] = this.#callbacks[JSON.stringify(event)] ?? [];
+    this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback, data]); // 0 means unsubscribe using first time
     return this;
   }
   batchBind(events: Array<[event, callBack, any]> = []) {

@@ -27,29 +27,14 @@
    Make Filter Dialogs to easily input filter on table
    HOW JS TABLE drag and drop
  */
-  import {
-    onMount,
-    onDestroy,
-    createEventDispatcher,
-    getContext,
-    tick
-  } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher, getContext, tick } from 'svelte';
   import { view, lensPath, all, equals } from 'ramda';
   import { isArray } from 'ramda-adjunct';
   import { get, writable } from 'svelte/store';
   import { Ws, ws_connected } from '../../ws_events_dispatcher';
   import { isEmpty } from 'ramda';
   import { clone } from 'rambda';
-  import {
-    is_production,
-    ET,
-    E,
-    schemaEvents,
-    SortDirection,
-    ValueType,
-    FormType,
-    DisplayType
-  } from '../../enums';
+  import { is_production, ET, E, schemaEvents, SortDirection, ValueType, FormType, DisplayType } from '../../enums';
   declare let $is_production;
   declare let $ws_connected;
   import { translation } from '../../translation';
@@ -240,12 +225,7 @@
     return f;
   }
   export const refresh = () => {
-    const args = [
-      mergeFilter(filterSettings),
-      headerColSortSettingsRow,
-      [limit, 0, current_page],
-      fetchConfig
-    ];
+    const args = [mergeFilter(filterSettings), headerColSortSettingsRow, [limit, 0, current_page], fetchConfig];
     const e1 = [data_evt, args];
     Ws.trigger([e1]);
   };
@@ -393,16 +373,8 @@
         '&filter=' +
         JSON.stringify(filterSettings);
       const pathAndSearch = window.location.pathname + q;
-      if (
-        pathAndSearch !== window.location.pathname + window.location.search &&
-        q + q !== window.location.search
-      ) {
-        console.log(
-          window.location.pathname,
-          window.location.search,
-          'replaced url query',
-          pathAndSearch
-        );
+      if (pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
+        console.log(window.location.pathname, window.location.search, 'replaced url query', pathAndSearch);
         history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
       }
     }
@@ -447,9 +419,7 @@
   };
   const editButtonFocus = async key => {
     await tick();
-    const element: HTMLElement | null = document.querySelector(
-      `button[key='${key}'][name='edit']`
-    );
+    const element: HTMLElement | null = document.querySelector(`button[key='${key}'][name='edit']`);
     if (element) {
       element.focus();
     }
@@ -564,11 +534,7 @@
       } else {
         const sortOrder = headerColSortSettingsRow[col];
         headerColSortSettingsRow = [];
-        if (
-          sortOrder === null ||
-          sortOrder === undefined ||
-          sortOrder === SortDirection.None
-        ) {
+        if (sortOrder === null || sortOrder === undefined || sortOrder === SortDirection.None) {
           console.warn('setting ass');
           headerColSortSettingsRow[col] = SortDirection.Ascending;
         } else if (sortOrder === SortDirection.Ascending) {
@@ -631,9 +597,7 @@
   const onTextInputContext = (e, col) => {
     const left = event.clientX;
     const top = event.clientY;
-    const menuBox: HTMLElement | null = window.document.querySelector(
-      '.menu-input'
-    );
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu-input');
     if (menuBox) {
       menuBox.style.left = left + 'px';
       menuBox.style.top = top + 'px';
@@ -653,9 +617,7 @@
     }
   };
   const closeInputMenu = () => {
-    const menuBox: HTMLElement | null = window.document.querySelector(
-      '.menu-input'
-    );
+    const menuBox: HTMLElement | null = window.document.querySelector('.menu-input');
     if (inputheaderMenuDisplayed == true) {
       menuBox.style.display = 'none';
     }
@@ -673,15 +635,12 @@
 
   const onSelectRowClick = e => {
     const index = selectedRowsKeys.findIndex(x => e.target.value == x);
-    index > -1
-      ? selectedRowsKeys.splice(index, 1)
-      : selectedRowsKeys.push(e.target.value);
+    index > -1 ? selectedRowsKeys.splice(index, 1) : selectedRowsKeys.push(e.target.value);
     selectedRowsKeys = selectedRowsKeys;
     //e.preventDefault();
     //e.stopPropagation();
   };
-  const selectAll_ = (v: boolean) =>
-    (selectedRowsKeys = v ? items.map(x => x[0]) : (selectedRowsKeys = []));
+  const selectAll_ = (v: boolean) => (selectedRowsKeys = v ? items.map(x => x[0]) : (selectedRowsKeys = []));
   const onSelectAllClick = e => {
     selectAll_(e.target.checked);
   };
@@ -851,9 +810,7 @@
   };
   let table = null;
 
-  $: bodyStyle = `overflow: ${
-    fixed !== undefined && fixed !== false ? 'auto' : 'hidden'
-  }; height: ${
+  $: bodyStyle = `overflow: ${fixed !== undefined && fixed !== false ? 'auto' : 'hidden'}; height: ${
     fixed !== undefined && fixed !== false ? (height || 400) + 'px' : 'auto'
   };`;
 
@@ -908,9 +865,7 @@
     if (targetId !== undefined) {
       if (hightRowChange !== undefined) {
         await tick();
-        const rowEle = document.querySelector(
-          "[tree-id='" + dragData.dragId + "']"
-        );
+        const rowEle = document.querySelector("[tree-id='" + dragData.dragId + "']");
         rowEle.style.backgroundColor = 'rgba(64,158,255,0.5)';
         setTimeout(() => {
           rowEle.style.backgroundColor = 'rgba(64,158,255,0)';
@@ -1378,18 +1333,14 @@
   const mousemove = e => {
     if (mouse.status) {
       const endX = e.clientX;
-      const tableLeft = document
-        .querySelector('.drag-tree-table')
-        .getBoundingClientRect().left;
+      const tableLeft = document.querySelector('.drag-tree-table').getBoundingClientRect().left;
       let line = document.querySelector('.drag-line');
       line.style.left = endX - tableLeft + 'px';
     }
   };
 
   function clearHoverStatus() {
-    const rows: NodeListOf<HTMLElement> = document.querySelectorAll(
-      '.tree-row'
-    );
+    const rows: NodeListOf<HTMLElement> = document.querySelectorAll('.tree-row');
     for (let i = 0; i < rows.length; i++) {
       const row = rows[i];
       const hoverBlock = row.children[row.children.length - 1] as HTMLElement;
@@ -1438,11 +1389,7 @@
   <div class="table_wrap">
     {#if addnew_pos == 't'}
       {#if showButton}
-        <button
-          name="table_add"
-          class={addnewform ? 'pressed' : ''}
-          bind:this={doms.addbutton}
-          on:click={toogleAddForm}>
+        <button name="table_add" class={addnewform ? 'pressed' : ''} bind:this={doms.addbutton} on:click={toogleAddForm}>
           {!addnewform ? 'Add New' : 'Close'}
         </button>
       {/if}
@@ -1465,13 +1412,7 @@
 
       <span>{items.length}{items.length <= 1 ? ' item' : ' items'}</span>
       Page Size:
-      <input
-        class="w60"
-        type="number"
-        bind:value={limit}
-        on:change={onLimitChange}
-        min="0"
-        title="press Enter/Tab" />
+      <input class="w60" type="number" bind:value={limit} on:change={onLimitChange} min="0" title="press Enter/Tab" />
       {#if false}
         <button class="" on:click={refresh}>Refresh</button>
       {/if}
@@ -1492,10 +1433,7 @@
         <button type="button" on:click={onConfigClicked}>Config</button>
       {/if}
       {#if config}
-        <Config
-          {schema_key}
-          on:close={() => (config = !config)}
-          on:configApply={onConfigApply} />
+        <Config {schema_key} on:close={() => (config = !config)} on:configApply={onConfigApply} />
       {/if}
     {/if}
     {#if headerColTitlesRow.length}
@@ -1504,41 +1442,20 @@
           {#if showHeader}
             <div class="drag-tree-table-header">
 
-              <Column
-                width={25}
-                flex={false}
-                {border}
-                class={['align-' + 'center', 'colIndex' + 0]}>
-                <input
-                  type="checkbox"
-                  bind:checked={allSelected}
-                  on:click={onSelectAllClick} />
-                <div
-                  class="resize-line"
-                  on:mousedown={event => mousedown(0, event)} />
+              <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
+                <input type="checkbox" bind:checked={allSelected} on:click={onSelectAllClick} />
+                <div class="resize-line" on:mousedown={event => mousedown(0, event)} />
               </Column>
               {#if showRowNum}
-                <Column
-                  width={50}
-                  flex={false}
-                  {border}
-                  class={['align-' + 'center', 'colIndex' + 1]}>
+                <Column width={50} flex={false} {border} class={['align-' + 'center', 'colIndex' + 1]}>
                   <span>No</span>
-                  <div
-                    class="resize-line"
-                    on:mousedown={event => mousedown(1, event)} />
+                  <div class="resize-line" on:mousedown={event => mousedown(1, event)} />
                 </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
-                  <Column
-                    width={100}
-                    flex={false}
-                    {border}
-                    class={['align-' + 'center', 'colIndex' + (2 + index)]}>
-                    <div
-                      on:click={e => onHandleSort(e, index)}
-                      on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
+                  <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <div on:click={e => onHandleSort(e, index)} on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
                       {h}
                       {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
                         ▲
@@ -1549,9 +1466,7 @@
                       {/if}
                     </div>
 
-                    <div
-                      class="resize-line"
-                      on:mousedown={event => mousedown(index + 2, event)} />
+                    <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                   </Column>
                 {/if}
               {/each}
@@ -1563,65 +1478,39 @@
                 class={['align-' + 'center', 'colIndex' + (2 + headerColTitlesRow.length)]}>
 
                 <span>Actions</span>
-                <div
-                  class="resize-line"
-                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
+                <div class="resize-line" on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
               </Column>
 
               <!-- <div width="100px">Actions</div> -->
 
             </div>
             <div class="drag-tree-table-header">
-              <Column
-                width={25}
-                flex={false}
-                {border}
-                class={['align-' + 'center', 'colIndex' + 0]}>
+              <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <span />
-                <div
-                  class="resize-line"
-                  on:mousedown={event => mousedown(0, event)} />
+                <div class="resize-line" on:mousedown={event => mousedown(0, event)} />
               </Column>
               {#if showRowNum}
-                <Column
-                  width={50}
-                  flex={false}
-                  {border}
-                  class={['align-' + 'center', 'colIndex' + 1]}>
+                <Column width={50} flex={false} {border} class={['align-' + 'center', 'colIndex' + 1]}>
 
                   <span />
-                  <div
-                    class="resize-line"
-                    on:mousedown={event => mousedown(1, event)} />
+                  <div class="resize-line" on:mousedown={event => mousedown(1, event)} />
                 </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   {#if headerColCustomFilter[index]}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
-                      <select
-                        bind:value={filterSettings[index]}
-                        on:change={onHandleFilter(index)}>
+                      <select bind:value={filterSettings[index]} on:change={onHandleFilter(index)}>
                         {#each headerColCustomFilter[index] as f}
                           <option value={f[1]}>{f[0]}</option>
                         {/each}
                       </select>
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="search"
@@ -1629,63 +1518,37 @@
                         bind:value={filterSettings[index]}
                         on:input={onHandleFilter(index)}
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="checkbox"
                         bind:checked={filterSettings[index]}
                         on:change={onHandleFilter(index)}
                         on:contextmenu|preventDefault={e => onTextInputContext(e, index)} />
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Date</span>
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <div /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span />
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else}
-                    <Column
-                      width={100}
-                      flex={false}
-                      {border}
-                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Unknown Type {headerColTypesRow[index]}</span>
-                      <div
-                        class="resize-line"
-                        on:mousedown={event => mousedown(index + 2, event)} />
+                      <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {/if}
                 {/if}
@@ -1700,9 +1563,7 @@
                 <div>
                   <!-- <div width="100px"></th> -->
                 </div>
-                <div
-                  class="resize-line"
-                  on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
+                <div class="resize-line" on:mousedown={event => mousedown(2 + headerColTitlesRow.length, event)} />
               </Column>
 
             </div>
@@ -1760,11 +1621,7 @@
       <Error {er} />
       {#if addnew_pos == 'b'}
         {#if showButton}
-          <button
-            name="table_add"
-            class={addnewform ? 'pressed' : ''}
-            bind:this={doms.addbutton}
-            on:click={toogleAddForm}>
+          <button name="table_add" class={addnewform ? 'pressed' : ''} bind:this={doms.addbutton} on:click={toogleAddForm}>
             {!addnewform ? 'Add New' : 'Close'}
           </button>
         {/if}
@@ -1780,25 +1637,11 @@
       {/if}
       {#if contextmenu}
         <div class="table-context-menu">
-          <div
-            class="table-context-menu-item"
-            on:click={e => onHandleSort(e, headerMenuColumn, 0)}>
-            Sort Ascending
-          </div>
-          <div
-            class="table-context-menu-item"
-            on:click={e => onHandleSort(e, headerMenuColumn, 1)}>
-            Sort Descending
-          </div>
-          <div
-            class="table-context-menu-item"
-            on:click={e => onHandleSort(e, headerMenuColumn, null)}>
-            No Sorting
-          </div>
+          <div class="table-context-menu-item" on:click={e => onHandleSort(e, headerMenuColumn, 0)}>Sort Ascending</div>
+          <div class="table-context-menu-item" on:click={e => onHandleSort(e, headerMenuColumn, 1)}>Sort Descending</div>
+          <div class="table-context-menu-item" on:click={e => onHandleSort(e, headerMenuColumn, null)}>No Sorting</div>
           <hr />
-          <div class="table-context-menu-item" on:click={closeHeaderMenu}>
-            Close
-          </div>
+          <div class="table-context-menu-item" on:click={closeHeaderMenu}>Close</div>
         </div>
         <div class="table-context-menu-input">
           <div class="table-context-menu-item">Is NULL</div>
@@ -1814,9 +1657,7 @@
           <div class="table-context-menu-item">Less or equal...</div>
           <div class="table-context-menu-item">In range...</div>
           <hr />
-          <div class="table-context-menu-item" on:click={closeInputMenu}>
-            Close
-          </div>
+          <div class="table-context-menu-item" on:click={closeInputMenu}>Close</div>
         </div>
       {/if}
       {#if modalIsVisible}
@@ -1824,12 +1665,7 @@
           <header slot="header">
             <button class="" aria-label="close" on:click={closeModal}>X</button>
           </header>
-          <svelte:component
-            this={modelcomponent}
-            on:close={closeModal}
-            on:successSave={refresh}
-            {headerColTitlesRow}
-            {items} />
+          <svelte:component this={modelcomponent} on:close={closeModal} on:successSave={refresh} {headerColTitlesRow} {items} />
         </Modal>
       {/if}
     {/if}

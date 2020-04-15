@@ -67,9 +67,4 @@
 </script>
 
 <Label {name} />
-<Editor
-  bind:this={dom}
-  on:change={onChange}
-  height="300px"
-  html={value}
-  removeFormatTags={['h1', 'h2', 'blackquote']} />
+<Editor bind:this={dom} on:change={onChange} height="300px" html={value} removeFormatTags={['h1', 'h2', 'blackquote']} />

@@ -37,10 +37,4 @@
 </script>
 
 <svelte:window bind:scrollY={y} />
-<button
-  class={'scrolltop'}
-  on:click={topFunction}
-  bind:this={button}
-  title="Go to top">
-  Top
-</button>
+<button class={'scrolltop'} on:click={topFunction} bind:this={button} title="Go to top">Top</button>

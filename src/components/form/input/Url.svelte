@@ -13,14 +13,5 @@
 
 <Label {name} />
 http://
-<input
-  {name}
-  bind:this={dom}
-  type="text"
-  bind:value
-  {required}
-  autocomplete={false}
-  {disabled}
-  {placeholder}
-  {...props} />
+<input {name} bind:this={dom} type="text" bind:value {required} autocomplete={false} {disabled} {placeholder} {...props} />
 .{domain}

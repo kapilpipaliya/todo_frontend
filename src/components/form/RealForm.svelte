@@ -56,6 +56,7 @@
       case FormType.hidden:
         return null;
       case FormType.number:
+      case FormType.serial:
         return Number;
       case FormType.password:
         return Password;
@@ -115,15 +116,7 @@
 
 {#if comp && (showKey || (!showKey && label !== ' key'))}
   <div class="form-item">
-    <svelte:component
-      this={comp}
-      bind:value
-      name={label}
-      {required}
-      {disabled}
-      bind:dom={doms}
-      {...props}
-      {...extraProps} />
+    <svelte:component this={comp} bind:value name={label} {required} {disabled} bind:dom={doms} {...props} {...extraProps} />
     {#if description}
       {@html description}
     {/if}

@@ -7,12 +7,7 @@
   \todo make update & delete return preojection of inserted/updated members too
   \todo schema can be made to not make projection for inserted/updated/deleted members 
 */
-  import {
-    onMount,
-    onDestroy,
-    createEventDispatcher,
-    getContext
-  } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher, getContext } from 'svelte';
   import { get, writable } from 'svelte/store';
   import { Ws, ws_connected } from '../../ws_events_dispatcher';
   declare let $ws_connected;
@@ -214,9 +209,7 @@
   let isSaving = false;
   function onSave() {
     isSaving = true;
-    const filter = key
-      ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`]
-      : null;
+    const filter = key ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null;
     // Now auto unsubscribing no need to pass  , ...(key ?  {unsub: data_evt} : {})
     const saveConfig = { ...fetchConfig }; // , form: true, schema: schema_key
     if (selector.length) {
@@ -417,11 +410,7 @@
 
       <SubmitButton {isSaving} label={saveLabel} save={() => {}} />
       {#if applyLabel}
-        <SubmitButton
-          {isSaving}
-          type={'button'}
-          label={applyLabel}
-          save={onApply} />
+        <SubmitButton {isSaving} type={'button'} label={applyLabel} save={onApply} />
       {/if}
       {#if cancelLabel}
         <CancelButton {isSaving} {key} on:close label={cancelLabel} />

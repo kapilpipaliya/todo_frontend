@@ -58,8 +58,7 @@
   let isGlobal;
   $: isGlobal = isGlobalRow(rowValue[0]);
   let isFolder;
-  $: isFolder =
-    rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
+  $: isFolder = rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
 
   function toggle() {
     if (isFolder) {
@@ -110,11 +109,7 @@
   let highlight = false; // todo: based on headerColPropsRow[index] logic
 </script>
 
-<div
-  class="tree-block"
-  draggable={!!isdraggable}
-  on:dragstart={dragstart}
-  on:dragend={dragend}>
+<div class="tree-block" draggable={!!isdraggable} on:dragstart={dragstart} on:dragend={dragend}>
   <div
     class={clsx('tree-row', selectedRowsKeys.includes(key) ? $css.table.classes.selected || 'selected' : '')}
     on:click={toggle}
@@ -122,11 +117,7 @@
     tree-id={key}
     tree-p-id={parentKey}
     class:highlight-row={highlight}>
-    <Column
-      class={['align-' + 'center', 'colIndex' + 0]}
-      width={25}
-      flex={false}
-      {border}>
+    <Column class={['align-' + 'center', 'colIndex' + 0]} width={25} flex={false} {border}>
       {#if !isGlobal}
         <input
           type="checkbox"
@@ -136,16 +127,11 @@
       {/if}
     </Column>
     {#if showRowNum}
-      <Column
-        class={['align-' + 'center', 'colIndex' + 1]}
-        width={50}
-        flex={false}
-        {border}>
+      <Column class={['align-' + 'center', 'colIndex' + 1]} width={50} flex={false} {border}>
         <span>
           <Space {depth} />
           {#if isFolder}
-            <span
-              class={clsx('zip-icon', expandedRowsKeys.includes(key) ? 'arrow-bottom' : 'arrow-right')} />
+            <span class={clsx('zip-icon', expandedRowsKeys.includes(key) ? 'arrow-bottom' : 'arrow-right')} />
           {:else}
             <span class="zip-icon arrow-transparent" />
           {/if}
@@ -157,11 +143,7 @@
 
     {#each rowValue as c, index}
       {#if headerColIsvisibleRow[index]}
-        <Column
-          class={['align-' + 'center', 'colIndex' + (index + 2)]}
-          width={100}
-          flex={false}
-          {border}>
+        <Column class={['align-' + 'center', 'colIndex' + (index + 2)]} width={100} flex={false} {border}>
           <div>
             {#if headerColEditableRow[index]}
               <GeneralForm
@@ -176,9 +158,7 @@
               {#if headerColTypesRow[index] === DisplayType.DateTime}
                 {new Date(c).toLocaleString()}
               {:else if headerColTypesRow[index] === DisplayType.Url}
-                <Url
-                  href={makeUrl(headerColPropsRow[index], c)}
-                  value={getValue(c)} />
+                <Url href={makeUrl(headerColPropsRow[index], c)} value={getValue(c)} />
               {:else if headerColTypesRow[index] === DisplayType.Checkbox}
                 <Bool value={getValue(c)} />
               {:else if headerColTypesRow[index] === DisplayType.Color}
@@ -195,11 +175,7 @@
     {/each}
 
     {#if !isGlobal}
-      <Column
-        class={['align-' + 'center', 'colIndex' + (2 + rowValue.length)]}
-        width={100}
-        flex={false}
-        {border}>
+      <Column class={['align-' + 'center', 'colIndex' + (2 + rowValue.length)]} width={100} flex={false} {border}>
         {#if quickcomponent && !quickViewKeys.includes(key)}
           <svg
             tabindex="0"
@@ -210,9 +186,8 @@
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
             <path
-              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71
-              7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41
-              0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+              d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02
+              0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         {/if}
@@ -226,9 +201,7 @@
             on:click|stopPropagation={onDeleteRow(key)}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24">
-            <path
-              d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19
-              4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
             <path d="M0 0h24v24H0z" fill="none" />
           </svg>
         {/if}
@@ -266,10 +239,7 @@
   </div>
 
   {#if quickViewKeys.includes(key)}
-    <div
-      class="tree-block"
-      draggable="true"
-      on:dragstart|preventDefault|stopPropagation={_ => 0}>
+    <div class="tree-block" draggable="true" on:dragstart|preventDefault|stopPropagation={_ => 0}>
       <div class="tree-row">
         <div colspan={colCount + (showRowNum ? 1 : 0) + 3}>
           {#if quickcomponent}

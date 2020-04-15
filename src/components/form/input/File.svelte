@@ -66,8 +66,7 @@
       //
       progressBar.max = evt.total;
       progressBar.value = evt.loaded;
-      percentageDiv.innerHTML =
-        Math.round((evt.loaded / evt.total) * 100) + '%';
+      percentageDiv.innerHTML = Math.round((evt.loaded / evt.total) * 100) + '%';
     }
     let time = document.getElementById('time');
     let nt = new Date().getTime();
@@ -88,8 +87,7 @@
     }
     speed = speed.toFixed(1);
     let resttime = ((evt.total - evt.loaded) / bspeed).toFixed(1);
-    time.innerHTML =
-      ',Speed: ' + speed + units + ', the remaining time: ' + resttime + 's';
+    time.innerHTML = ',Speed: ' + speed + units + ', the remaining time: ' + resttime + 's';
     if (bspeed == 0) time.innerHTML = 'Upload cancelled';
   }
 </script>
@@ -98,14 +96,6 @@
 <progress bind:this={progressBar} value="0" max="100" style="width: 300px;" />
 <span bind:this={percentageDiv} />
 <span id="time" />
-<input
-  {name}
-  bind:this={dom}
-  type="file"
-  bind:value
-  {required}
-  autocomplete={false}
-  {disabled}
-  {...props} />
+<input {name} bind:this={dom} type="file" bind:value {required} autocomplete={false} {disabled} {...props} />
 <input type="button" on:click={UpladFile} value="Upload" />
 <input type="button" on:click={cancleUploadFile} value="Cancel" />

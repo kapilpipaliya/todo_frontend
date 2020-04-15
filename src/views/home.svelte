@@ -66,8 +66,7 @@
   </div>
   TODO WRITE COMPLETE HOME PAGE WITH CSS.
   <pre>
-    main tasks 1. Live Talk 2. Notification(Activity) 3. Search 4. Form 5. Wiki
-    6. Task Management 7. Git 8. Payment Gateway
+    main tasks 1. Live Talk 2. Notification(Activity) 3. Search 4. Form 5. Wiki 6. Task Management 7. Git 8. Payment Gateway
   </pre>
 {:else}
   <h1>O-K.TECH</h1>

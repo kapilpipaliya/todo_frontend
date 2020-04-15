@@ -37,11 +37,7 @@
 
 <td>
   {#if options.length}
-    <select
-      bind:value={value[0]}
-      required
-      on:change={onChange}
-      disabled={disabled || form_disabled}>
+    <select bind:value={value[0]} required on:change={onChange} disabled={disabled || form_disabled}>
       <Options {keyIdx} {options} {dp} />
     </select>
   {/if}
@@ -49,10 +45,7 @@
 <td>
   {#each boolkeys as r}
     <label>
-      <input
-        type="checkbox"
-        bind:checked={value[1][r]}
-        disabled={form_disabled} />
+      <input type="checkbox" bind:checked={value[1][r]} disabled={form_disabled} />
       {r}
     </label>
   {/each}

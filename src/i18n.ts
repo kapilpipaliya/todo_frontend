@@ -77,17 +77,11 @@
   };
 
   var isString = function (val) {
-    return (
-      typeof val === 'string' ||
-      Object.prototype.toString.call(val) === '[object String]'
-    );
+    return typeof val === 'string' || Object.prototype.toString.call(val) === '[object String]';
   };
 
   var isNumber = function (val) {
-    return (
-      typeof val === 'number' ||
-      Object.prototype.toString.call(val) === '[object Number]'
-    );
+    return typeof val === 'number' || Object.prototype.toString.call(val) === '[object Number]';
   };
 
   var isBoolean = function (val) {
@@ -130,13 +124,7 @@
     for (key in obj)
       if (obj.hasOwnProperty(key)) {
         value = obj[key];
-        if (
-          isString(value) ||
-          isNumber(value) ||
-          isBoolean(value) ||
-          isArray(value) ||
-          isNull(value)
-        ) {
+        if (isString(value) || isNumber(value) || isBoolean(value) || isArray(value) || isNull(value)) {
           dest[key] = value;
         } else {
           if (dest[key] == null) dest[key] = {};
@@ -148,15 +136,7 @@
 
   // Set default days/months translations.
   var DATE = {
-    day_names: [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ],
+    day_names: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     abbr_day_names: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
     month_names: [
       null,
@@ -173,21 +153,7 @@
       'November',
       'December'
     ],
-    abbr_month_names: [
-      null,
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ],
+    abbr_month_names: [null, 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     meridian: ['AM', 'PM']
   };
 
@@ -376,9 +342,7 @@
         return;
       }
 
-      [firstFallback, secondFallback].forEach(function (
-        nullableFallbackLocale
-      ) {
+      [firstFallback, secondFallback].forEach(function (nullableFallbackLocale) {
         // We don't want null values
         if (typeof nullableFallbackLocale === 'undefined') {
           return;
@@ -481,11 +445,7 @@
   };
 
   // lookup pluralization rule key into translations
-  I18n.pluralizationLookupWithoutFallback = function (
-    count,
-    locale,
-    translations
-  ) {
+  I18n.pluralizationLookupWithoutFallback = function (count, locale, translations) {
     var pluralizer = this.pluralization.get(locale),
       pluralizerKeys = pluralizer(count),
       pluralizerKey,
@@ -529,11 +489,7 @@
           break;
         }
         if (scopes.length === 0) {
-          message = this.pluralizationLookupWithoutFallback(
-            count,
-            locale,
-            translations
-          );
+          message = this.pluralizationLookupWithoutFallback(count, locale, translations);
         }
       }
       if (typeof message !== 'undefined' && message !== null) {
@@ -544,11 +500,7 @@
     if (typeof message === 'undefined' || message === null) {
       if (isSet(options.defaultValue)) {
         if (isObject(options.defaultValue)) {
-          message = this.pluralizationLookupWithoutFallback(
-            count,
-            options.locale,
-            options.defaultValue
-          );
+          message = this.pluralizationLookupWithoutFallback(count, options.locale, options.defaultValue);
         } else {
           message = options.defaultValue;
         }
@@ -646,9 +598,7 @@
 
     // Iterate through the translation options until a translation
     // or message is found.
-    var translationFound = translationOptions.some(function (
-      translationOption
-    ) {
+    var translationFound = translationOptions.some(function (translationOption) {
       if (isSet(translationOption.scope)) {
         usedScope = translationOption.scope;
         translation = this.lookup(usedScope, optionsWithoutDefault);
@@ -659,8 +609,7 @@
       if (translation !== undefined && translation !== null) {
         return true;
       }
-    },
-    this);
+    }, this);
 
     if (!translationFound) {
       return this.missingTranslation(scope, options);
@@ -708,9 +657,7 @@
         value = this.missingPlaceholder(placeholder, message, options);
       }
 
-      regex = new RegExp(
-        placeholder.replace(/{/gm, '\\{').replace(/}/gm, '\\}')
-      );
+      regex = new RegExp(placeholder.replace(/{/gm, '\\{').replace(/}/gm, '\\}'));
       message = message.replace(regex, value);
     }
 
@@ -725,10 +672,7 @@
     var pluralizer, result;
 
     result = this.pluralizationLookup(count, scope, options);
-    if (
-      typeof result.translations === 'undefined' ||
-      result.translations == null
-    ) {
+    if (typeof result.translations === 'undefined' || result.translations == null) {
       return this.missingTranslation(scope, options);
     }
 
@@ -736,10 +680,7 @@
       return this.interpolate(result.message, options);
     } else {
       pluralizer = this.pluralization.get(options.locale);
-      return this.missingTranslation(
-        scope + '.' + pluralizer(count)[0],
-        options
-      );
+      return this.missingTranslation(scope + '.' + pluralizer(count)[0], options);
     }
   };
 
@@ -751,25 +692,16 @@
       var s = scope.split('.').slice(-1)[0];
       //replace underscore with space && camelcase with space and lowercase letter
       return (
-        (this.missingTranslationPrefix.length > 0
-          ? this.missingTranslationPrefix
-          : '') +
-        s
-          .replace('_', ' ')
-          .replace(/([a-z])([A-Z])/g, function (match, p1, p2) {
-            return p1 + ' ' + p2.toLowerCase();
-          })
+        (this.missingTranslationPrefix.length > 0 ? this.missingTranslationPrefix : '') +
+        s.replace('_', ' ').replace(/([a-z])([A-Z])/g, function (match, p1, p2) {
+          return p1 + ' ' + p2.toLowerCase();
+        })
       );
     }
 
-    var localeForTranslation =
-      options != null && options.locale != null
-        ? options.locale
-        : this.currentLocale();
+    var localeForTranslation = options != null && options.locale != null ? options.locale : this.currentLocale();
     var fullScope = this.getFullScope(scope, options);
-    var fullScopeWithLocale = [localeForTranslation, fullScope].join(
-      this.defaultSeparator
-    );
+    var fullScopeWithLocale = [localeForTranslation, fullScope].join(this.defaultSeparator);
 
     return '[missing "' + fullScopeWithLocale + '" translation]';
   };
@@ -795,11 +727,7 @@
   // You can also override these options by providing the `options` argument.
   //
   I18n.toNumber = function (number, options) {
-    options = this.prepareOptions(
-      options,
-      this.lookup('number.format'),
-      NUMBER_FORMAT
-    );
+    options = this.prepareOptions(options, this.lookup('number.format'), NUMBER_FORMAT);
 
     var negative = number < 0,
       string = toFixed(Math.abs(number), options.precision).toString(),
@@ -833,10 +761,7 @@
       format = format.replace('%n', '%s%n');
     }
 
-    formattedNumber = format
-      .replace('%u', options.unit)
-      .replace('%n', formattedNumber)
-      .replace('%s', sign);
+    formattedNumber = format.replace('%u', options.unit).replace('%n', formattedNumber).replace('%s', sign);
 
     return formattedNumber;
   };
@@ -922,11 +847,7 @@
       return date;
     }
 
-    matches = date
-      .toString()
-      .match(
-        /(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/
-      );
+    matches = date.toString().match(/(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}):(\d{2})([\.,]\d{1,3})?)?(Z|\+00:?00)?/);
 
     if (matches) {
       for (var i = 1; i <= 6; i++) {
@@ -939,52 +860,19 @@
       fraction = matches[7] ? 1000 * ('0' + matches[7]) : null;
 
       if (matches[8]) {
-        convertedDate = new Date(
-          Date.UTC(
-            matches[1],
-            matches[2],
-            matches[3],
-            matches[4],
-            matches[5],
-            matches[6],
-            fraction
-          )
-        );
+        convertedDate = new Date(Date.UTC(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6], fraction));
       } else {
-        convertedDate = new Date(
-          matches[1],
-          matches[2],
-          matches[3],
-          matches[4],
-          matches[5],
-          matches[6],
-          fraction
-        );
+        convertedDate = new Date(matches[1], matches[2], matches[3], matches[4], matches[5], matches[6], fraction);
       }
     } else if (typeof date == 'number') {
       // UNIX timestamp
       convertedDate = new Date();
       convertedDate.setTime(date);
-    } else if (
-      date.match(
-        /([A-Z][a-z]{2}) ([A-Z][a-z]{2}) (\d+) (\d+:\d+:\d+) ([+-]\d+) (\d+)/
-      )
-    ) {
+    } else if (date.match(/([A-Z][a-z]{2}) ([A-Z][a-z]{2}) (\d+) (\d+:\d+:\d+) ([+-]\d+) (\d+)/)) {
       // This format `Wed Jul 20 13:03:39 +0000 2011` is parsed by
       // webkit/firefox, but not by IE, so we must parse it manually.
       convertedDate = new Date();
-      convertedDate.setTime(
-        Date.parse(
-          [
-            RegExp.$1,
-            RegExp.$2,
-            RegExp.$3,
-            RegExp.$6,
-            RegExp.$4,
-            RegExp.$5
-          ].join(' ')
-        )
-      );
+      convertedDate.setTime(Date.parse([RegExp.$1, RegExp.$2, RegExp.$3, RegExp.$6, RegExp.$4, RegExp.$5].join(' ')));
     } else if (date.match(/\d+ \d+:\d+:\d+ [+-]\d+ \d+/)) {
       // a valid javascript format with timezone info
       convertedDate = new Date();
@@ -1039,9 +927,7 @@
     options = this.prepareOptions(options, DATE);
 
     if (isNaN(date.getTime())) {
-      throw new Error(
-        'I18n.strftime() requires a valid date object, but received an invalid date.'
-      );
+      throw new Error('I18n.strftime() requires a valid date object, but received an invalid date.');
     }
 
     var weekDay = date.getDay(),
@@ -1058,12 +944,8 @@
       absOffsetMinutes = Math.abs(offset) - absOffsetHours * 60,
       timezoneoffset =
         (offset > 0 ? '-' : '+') +
-        (absOffsetHours.toString().length < 2
-          ? '0' + absOffsetHours
-          : absOffsetHours) +
-        (absOffsetMinutes.toString().length < 2
-          ? '0' + absOffsetMinutes
-          : absOffsetMinutes);
+        (absOffsetHours.toString().length < 2 ? '0' + absOffsetHours : absOffsetHours) +
+        (absOffsetMinutes.toString().length < 2 ? '0' + absOffsetMinutes : absOffsetMinutes);
     if (hour12 > 12) {
       hour12 = hour12 - 12;
     } else if (hour12 === 0) {
@@ -1152,9 +1034,7 @@
       });
       precision = 0;
     } else {
-      unit = this.t(
-        'number.human.storage_units.units.' + SIZE_UNITS[iterations]
-      );
+      unit = this.t('number.human.storage_units.units.' + SIZE_UNITS[iterations]);
       precision = size - Math.floor(size) === 0 ? 0 : 1;
     }
 

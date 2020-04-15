@@ -8,10 +8,4 @@
   $: buttonSaveClass = isSaving === true ? 'cancel disabled loading' : 'cancel';
 </script>
 
-<button
-  type="button"
-  class={buttonSaveClass}
-  disabled={isSaving}
-  on:click={() => dp('close', key)}>
-  {label}
-</button>
+<button type="button" class={buttonSaveClass} disabled={isSaving} on:click={() => dp('close', key)}>{label}</button>

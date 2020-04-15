@@ -38,9 +38,7 @@
       0
     )
   );
-  onDestroy(_ =>
-    Ws.trigger([[[ET.unsubscribe, E.confirm_email_status, uid], {}]])
-  );
+  onDestroy(_ => Ws.trigger([[[ET.unsubscribe, E.confirm_email_status, uid], {}]]));
 
   /** try to confirm email */
   if (currentRoute.queryParams.token) {

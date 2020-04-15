@@ -83,9 +83,7 @@
   let routes = [];
 
   onMount(() => {
-    const loading_div = document.getElementsByClassName(
-      'loading-placeholder'
-    )[0];
+    const loading_div = document.getElementsByClassName('loading-placeholder')[0];
     if (loading_div) loading_div.remove();
   });
 
@@ -158,16 +156,10 @@
       return o;
     };
     const modify_nested = o => {
-      if (o.nestedRoutes)
-        o.nestedRoutes = map(x => modifyObj(x), o.nestedRoutes);
+      if (o.nestedRoutes) o.nestedRoutes = map(x => modifyObj(x), o.nestedRoutes);
       return o;
     };
-    o = pipe(
-      modify_component('component'),
-      modify_component('layout'),
-      modify_guard,
-      modify_nested
-    )(o);
+    o = pipe(modify_component('component'), modify_component('layout'), modify_guard, modify_nested)(o);
     return o;
   };
   let css_loaded = false;
@@ -185,9 +177,7 @@
 </script>
 
 {#if process.env.NODE_ENV == 'development'}
-  <button on:click={_ => ($is_production = !$is_production)}>
-    Toogle Production
-  </button>
+  <button on:click={_ => ($is_production = !$is_production)}>Toogle Production</button>
 {/if}
 
 <Notifications>

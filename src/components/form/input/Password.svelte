@@ -10,13 +10,4 @@
 </script>
 
 <Label {name} />
-<input
-  {name}
-  bind:this={dom}
-  type="password"
-  bind:value
-  {required}
-  autocomplete={false}
-  {disabled}
-  {placeholder}
-  {...props} />
+<input {name} bind:this={dom} type="password" bind:value {required} autocomplete={false} {disabled} {placeholder} {...props} />

@@ -10,12 +10,4 @@
 </script>
 
 <Label {name} />
-<textarea
-  bind:value
-  bind:this={dom}
-  {required}
-  {disabled}
-  rows={5}
-  cols={20}
-  {placeholder}
-  {...props} />
+<textarea bind:value bind:this={dom} {required} {disabled} rows={5} cols={20} {placeholder} {...props} />

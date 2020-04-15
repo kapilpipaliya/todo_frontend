@@ -7,6 +7,5 @@
 
 Organization Dash Board
 {#if !$is_production}
-  make dashboard for admin, that show last 5 work_pacakages. {JSON.stringify(currentRoute)}
-  {JSON.stringify(params)}
+  make dashboard for admin, that show last 5 work_pacakages. {JSON.stringify(currentRoute)} {JSON.stringify(params)}
 {/if}

@@ -34,7 +34,4 @@
 </script>
 
 <Label {name} />
-<div
-  name="form"
-  bind:this={jsonediDom}
-  style="width: 600px; height: 400px; display: inline-block;" />
+<div name="form" bind:this={jsonediDom} style="width: 600px; height: 400px; display: inline-block;" />

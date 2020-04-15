@@ -10,14 +10,7 @@
 
 {#each props['options'] as v, i (i)}
   <label>
-    <input
-      {name}
-      bind:this={dom}
-      type="checkbox"
-      value={v}
-      bind:group={value}
-      {required}
-      {disabled} />
+    <input {name} bind:this={dom} type="checkbox" value={v} bind:group={value} {required} {disabled} />
     {v}
   </label>
 {/each}
