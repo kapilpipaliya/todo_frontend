@@ -190,6 +190,7 @@
   const uid = Ws.uid;
   let data_evt = [ET.subscribe, events[0], uid];
   let unsub_evt = [ET.unsubscribe, events[0], uid];
+  let drag_evt = [ET.changePosition, events[1], uid];
   let mounted = false;
   onMount(() => {
     mounted = true;
@@ -330,6 +331,8 @@
         selectedRowsKeys,
         items.map(x => getValue(x[0]))
       );
+
+      setQueryParams()
     } else if (d.n) {
       items.push(...d.n.result);
       count = count + 1;
@@ -351,35 +354,25 @@
       deleteRows_(d.d);
     }
   }
-  /*=====  End of On Headers and Data Receive  ======*/
-
-  /*========================================
-  =            Set Query Params            =
-  ========================================*/
-  let isFirstFSet = true;
-  $: {
-    if (isFirstFSet) {
-      isFirstFSet = false;
-    } else {
-      const q =
-        '?limit=' +
-        limit +
-        '&page=' +
-        current_page +
-        '&sort=' +
-        (all(equals(SortDirection.None), headerColSortSettingsRow)
-          ? JSON.stringify([])
-          : JSON.stringify(headerColSortSettingsRow)) +
-        '&filter=' +
-        JSON.stringify(filterSettings);
-      const pathAndSearch = window.location.pathname + q;
-      if (pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
-        console.log(window.location.pathname, window.location.search, 'replaced url query', pathAndSearch);
-        history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
-      }
+  function setQueryParams() {
+    const q =
+      '?limit=' +
+      limit +
+      '&page=' +
+      current_page +
+      '&sort=' +
+      (all(x=>x===SortDirection.None||x===null, headerColSortSettingsRow)
+        ? JSON.stringify([])
+        : JSON.stringify(headerColSortSettingsRow)) +
+      '&filter=' +
+      JSON.stringify(filterSettings);
+    const pathAndSearch = window.location.pathname + q;
+    if (pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
+      console.log(window.location.pathname, window.location.search, 'replaced url query', pathAndSearch);
+      history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
     }
   }
-  /*=====  End of Set Query Params  ======*/
+  /*=====  End of On Headers and Data Receive  ======*/
 
   /*====================================
   =            Add Edit Row            =
@@ -528,14 +521,13 @@
     if (e.ctrlKey) {
     } else {
       if (order !== undefined) {
-        headerColSortSettingsRow = [];
+        headerColSortSettingsRow = new Array(headerColTypesRow).fill(SortDirection.None) // []
         headerColSortSettingsRow[col] = order;
         closeHeaderMenu();
       } else {
         const sortOrder = headerColSortSettingsRow[col];
         headerColSortSettingsRow = [];
         if (sortOrder === null || sortOrder === undefined || sortOrder === SortDirection.None) {
-          console.warn('setting ass');
           headerColSortSettingsRow[col] = SortDirection.Ascending;
         } else if (sortOrder === SortDirection.Ascending) {
           headerColSortSettingsRow[col] = SortDirection.Descending;
@@ -784,7 +776,13 @@
   =================================*/
 
   /*=====  End of Draggable  ======*/
-
+enum dropPosition
+{
+    none = 0,
+    top,
+    center,
+    bottom
+};
   export let isdraggable = true; // Boolean
 
   export let fixed; // String | Boolean
@@ -800,7 +798,7 @@
   let dragY = 0;
   let dragId = '';
   let targetId = '';
-  let whereInsert = '';
+  let whereInsert = dropPosition.none;
   let isDragging = false;
   let mouse = {
     status: 0,
@@ -857,6 +855,25 @@
     if (isEmpty(dragData)) {
       console.log('drop operaion from outside table: empty dragData');
     }
+
+      // fix it should return in some time limit.
+      const d = await new Promise((resolve, reject) => {
+        Ws.bindT(
+          drag_evt,
+          d => {
+            resolve(d);
+          },
+          [[dragData.dragId, targetId, whereInsert]]
+        );
+      });
+      if(!d[0]){
+        clearHoverStatus();
+        isDragging = false;
+        return;
+      }
+
+
+
     clearHoverStatus();
 
     resetTreeData(dragData); /* Main Function */
@@ -899,7 +916,7 @@
 
     let hoverBlock = undefined;
     let targetIdTemp = undefined;
-    whereInsert = '';
+    whereInsert = dropPosition.none;
 
     let row;
     for (let i = 0; i < rows.length; i++) {
@@ -923,16 +940,16 @@
         let rowHeight = row.offsetHeight;
 
         if (diffY / rowHeight > 3 / 4) {
-          whereInsert = 'bottom';
+          whereInsert = dropPosition.bottom;
         } else if (diffY / rowHeight > 1 / 4) {
           if (onlySameLevelCanDrag !== undefined) {
             // It is not allowed to change the hierarchical structure, only the upper and lower order logic
             return;
           }
 
-          whereInsert = 'center';
+          whereInsert = dropPosition.center;
         } else {
-          whereInsert = 'top';
+          whereInsert = dropPosition.top;
         }
 
         break;
@@ -942,7 +959,7 @@
     if (targetIdTemp === undefined) {
       // Can't match to clear the previous state
       clearHoverStatus();
-      whereInsert = '';
+      whereInsert = dropPosition.none;
       return;
     }
 
@@ -959,12 +976,12 @@
     hoverBlock.style.display = 'block';
     let rowHeight = row.offsetHeight;
 
-    if (whereInsert == 'bottom') {
+    if (whereInsert == dropPosition.bottom) {
       if (hoverBlock.children[2].style.opacity !== '0.5') {
         clearHoverStatus();
         hoverBlock.children[2].style.opacity = 0.5;
       }
-    } else if (whereInsert == 'center') {
+    } else if (whereInsert == dropPosition.center) {
       if (hoverBlock.children[1].style.opacity !== '0.5') {
         clearHoverStatus();
         hoverBlock.children[1].style.opacity = 0.5;
@@ -1002,11 +1019,11 @@
           curDragItem = getItemById(items, sourceData.dragId);
           targetItem = getItemById(items, targetId);
 
-          if (whereInsert === 'top') {
+          if (whereInsert === dropPosition.top) {
             //curDragItem['parent_id'] = item['parent_id']
             needPushList.push(curDragItem);
             needPushList.push(obj);
-          } else if (whereInsert === 'center') {
+          } else if (whereInsert === dropPosition.center) {
             //curDragItem['parent_id'] = key
             //obj.open = true
             if (!expandedRowsKeys.includes(key)) {
@@ -1019,7 +1036,7 @@
               obj[0] = [key, [curDragItem]];
             }
             needPushList.push(obj);
-          } else if (whereInsert === 'bottom') {
+          } else if (whereInsert === dropPosition.bottom) {
             //curDragItem['parent_id'] = item['parent_id']
             needPushList.push(obj);
             needPushList.push(curDragItem);

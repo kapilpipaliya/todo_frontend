@@ -12,6 +12,6 @@
 </script>
 
 <Label {name} />
-http://
+<span>http://</span>
 <input {name} bind:this={dom} type="text" bind:value {required} autocomplete={false} {disabled} {placeholder} {...props} />
-.{domain}
+<span>.{domain}</span>

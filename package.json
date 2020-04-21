@@ -40,7 +40,7 @@
     "ramda-adjunct": "^2.26.0",
     "svelte-click-outside": "^1.0.0",
     "svelte-tabs": "^1.1.0",
-    "tippy.js": "^6.1.1",
+    "tippy.js": "^6.2.0",
     "url-params-parser": "^1.0.2",
     "url-pattern": "^1.0.3"
   },
@@ -62,7 +62,7 @@
     "rollup-plugin-css-porter": "^1.0.2",
     "rollup-plugin-gzip": "^2.4.0",
     "rollup-plugin-livereload": "^1.2.0",
-    "rollup-plugin-postcss": "^2.6.2",
+    "rollup-plugin-postcss": "^2.6.4",
     "rollup-plugin-serve": "^1.0.1",
     "rollup-plugin-svelte": "^5.2.1",
     "rollup-plugin-terser": "^5.3.0",

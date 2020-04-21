@@ -59,10 +59,10 @@
   resolved "https://registry.yarnpkg.com/@polka/url/-/url-0.5.0.tgz#b21510597fd601e5d7c95008b76bf0d254ebfd31"
   integrity sha512-oZLYFEAzUKyi3SKnXvj32ZCEGH6RDnao7COuCVhDydMS9NrCSVXhM79VaKyP5+Zc33m0QXEd2DN3UkU7OsHcfw==
 
-"@popperjs/core@^2.2.0":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.2.1.tgz#d7d1d7fbdc1f2aa24e62f4ef4b001be7727340c5"
-  integrity sha512-BChdj3idQiLi+7vPhE6gEDiPzpozvSrUqbSMoSTlRbOQkU0p6u4si0UBydegTyphsYSZC2AUHGYYICP0gqmEVg==
+"@popperjs/core@^2.3.2":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.3.3.tgz#8731722aeb7330e8fd9eb5d424be6b98dea7d6da"
+  integrity sha512-yEvVC8RfhRPkD9TUn7cFcLcgoJePgZRAOR7T21rcRY5I8tpuhzeWfGa7We7tB14fe9R7wENdqUABcMdwD4SQLw==
 
 "@rollup/plugin-commonjs@^11.1.0":
   version "11.1.0"
@@ -2814,10 +2814,10 @@ rollup-plugin-livereload@^1.2.0:
   dependencies:
     livereload "^0.9.1"
 
-rollup-plugin-postcss@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-postcss/-/rollup-plugin-postcss-2.6.2.tgz#1927bdaa5571432f01451dc44909611cdb5c8628"
-  integrity sha512-/ewXSvMbYPQrttSriTY1tYXV2sUm8ajKcEEmIV6htZ03yv01rlAYTe3vym7qjAJplyCysKq3aoMUmPY0u5fvWg==
+rollup-plugin-postcss@^2.6.4:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-postcss/-/rollup-plugin-postcss-2.6.4.tgz#d3e35aae95cc91c0319aaa2623b37edcd4928da1"
+  integrity sha512-/fK2uuzegL5nhqAHX7zl9VxDxSQ0JfJqjMxXgCspQwtMjUoAWFBVx+agTqZszYXgGTfSH359jq1UY09WTlXulQ==
   dependencies:
     chalk "^4.0.0"
     concat-with-sourcemaps "^1.1.0"
@@ -3297,12 +3297,12 @@ tinydate@^1.0.0:
   resolved "https://registry.yarnpkg.com/tinydate/-/tinydate-1.2.0.tgz#36b4bb02715f89743f3ef9073d3573d005a28d0e"
   integrity sha512-3GwPk8VhDFnUZ2TrgkhXJs6hcMAIIw4x/xkz+ayK6dGoQmp2nUwKzBXK0WnMsqkh6vfUhpqQicQF3rbshfyJkg==
 
-tippy.js@^6.1.1:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.1.1.tgz#9ed09aa4f9c47fb06a0e280e03055f898f5ddfff"
-  integrity sha512-Sk+FPihack9XFbPOc2jRbn6iRLA9my2a8qhaGY6wwD3EeW57/xY5PAPkZOutKVYDWLyNZ/laCkJqg7QJG/gqQw==
+tippy.js@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.0.tgz#b6c35dc15a9eb7fe91a562d65469c1a3277f26f6"
+  integrity sha512-xb7xq4vSkrhZHvbRx7l8otFL7z2id+U0VPDX+MHXa8B/4PtJ/nvap6/peLHjMk45VmRIvEhF0KFoqviJ6EEtug==
   dependencies:
-    "@popperjs/core" "^2.2.0"
+    "@popperjs/core" "^2.3.2"
 
 to-regex-range@^5.0.1:
   version "5.0.1"
