@@ -59,6 +59,7 @@ export class ServerEventsDispatcher {
   #isFirst: boolean;
   #firstCancelTimeout: number;
   #firstPayload: Array<[]>;
+  #lm_handle
   //https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine
   private isOnline = window.navigator.onLine;
   constructor(path: string, req: {}, res: {}) {
@@ -94,6 +95,8 @@ export class ServerEventsDispatcher {
     window.addEventListener('offline', () => {
       this.isOnline = false;
     });
+    
+    this.#lm_handle=null;
   }
   get uid() {
     return ++this.id_;
@@ -109,6 +112,13 @@ export class ServerEventsDispatcher {
     //this.conn.onopen = this.onopen;
     this.#conn.addEventListener('open', this.onopen);
   }
+  heartbeat () {
+      this.#conn.send(JSON.stringify([{
+        type: 'heartbeat',
+        localTs: Date.now()
+      }]));
+      this.#lm_handle = setTimeout(this.heartbeat, 30 * 1000);
+    };
   destroy() {
     this.#conn.onmessage = null;
     this.#conn.onclose = null;
@@ -160,6 +170,7 @@ export class ServerEventsDispatcher {
     this.#isFirst = false;
   }
   private onopen(evt: Event) {
+    clearTimeout(this.#lm_handle);
     ws_connected.set(true);
     this.#isFirst = true;
     //console.log(this.conn.extensions);
@@ -176,15 +187,22 @@ export class ServerEventsDispatcher {
     //       this.#callbacks[JSON.stringify(event)] = []
     //     }
     //   }
+    this.heartbeat();
   }
-  private onclose(evt: CloseEvent) {
+  private onclose(ev: CloseEvent) {
+    clearTimeout(this.#lm_handle);
     ws_connected.set(false);
     this.dispatch(['close', '', 0], []);
+    let waitMs = 2000;
+    console.log(`close ${ev.code}, trying to reconnect ${(new Date()).toISOString()}... (waiting ${waitMs}ms)`);
+    if (ev.code !== 1006 && ev.code !== 1001) {
+      console.log(ev);
+    }
     setTimeout(() => {
       if (this.isOnline) {
         this.setupConnection();
       }
-    }, 1000);
+    }, waitMs);
     // on reconnection all subscribtion needs to resubscribe.
   }
   private onerror(event) {
