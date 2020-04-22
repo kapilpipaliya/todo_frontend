@@ -10,10 +10,12 @@
   import GeneralForm from './form/Index.svelte';
   export let currentRoute;
   let schema_key = '';
+  let fetchConfig = {}
   // get schema_key From Route params or namedParams
   $: {
     if (currentRoute?.params && currentRoute?.params?.schema_key) {
       schema_key = currentRoute.params.schema_key;
+      fetchConfig = currentRoute.params.fetchConfig;
     } else {
       schema_key = currentRoute?.namedParams?.schema_key ?? '';
     }
@@ -46,6 +48,6 @@
 <Title {currentRoute} />
 {#if show}
   <div>
-    <Table {...options} />
+    <Table {...options} {fetchConfig}/>
   </div>
 {/if}

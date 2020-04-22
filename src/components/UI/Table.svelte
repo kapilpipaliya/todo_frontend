@@ -64,11 +64,12 @@
   export let pass = []; // [["context", "org_data", "_key", "org"]]
   export let query = { limit: 0, page: 1, filter: [] }; // To get arguments from ?limit=25&page=2
   export let requiredFilter = []; // always add this filter when fetch // used when showing custom table
+  export let fetchConfig = {}
 
   css_count.increase('table');
   let project = getContext('project');
   let project_ctx = project ? get(project) || [] : [];
-  let fetchConfig = {
+  fetchConfig = {...fetchConfig,
     type: ValueType.Array,
     project: project_ctx?.[project_ctx.length - 1]?._key ?? null
   };
