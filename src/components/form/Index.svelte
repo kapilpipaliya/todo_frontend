@@ -209,7 +209,8 @@
   let isSaving = false;
   function onSave() {
     isSaving = true;
-    const filter = key ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null;
+    //const filter = key ? [`="${fetchConfig.type == ValueType.Object ? form._key : form[0]}"`] : null;
+    const filter = key ? (fetchConfig.type == ValueType.Object ? [form._key, form._rev] : [form[0], form[1]] ) : null;
     // Now auto unsubscribing no need to pass  , ...(key ?  {unsub: data_evt} : {})
     const saveConfig = { ...fetchConfig }; // , form: true, schema: schema_key
     if (selector.length) {
