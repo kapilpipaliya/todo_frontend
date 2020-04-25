@@ -7,7 +7,7 @@
   import clsx from 'clsx';
   import { FormType, DisplayType } from '../../../enums';
   import { css } from '../../../css';
-  import { isArray } from 'ramda-adjunct';
+  import { isArray, isNumber } from 'ramda-adjunct';
   declare let $css;
   import Text from '../display/Text.svelte';
   import Bool from '../display/Bool.svelte';
@@ -58,7 +58,18 @@
   let isGlobal;
   $: isGlobal = isGlobalRow(rowValue[0]);
   let isFolder;
-  $: isFolder = rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
+  // $: isFolder = rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
+  $: {
+    if(rowValue) {
+      if(isArray(rowValue[0])){
+        if(isArray(rowValue[0][1]){
+          isFolder = !!rowValue[0][1].length;
+        } else if (isNumber(rowValue[0][1])) {
+          isFolder = !!rowValue[0][1]
+        }
+      } 
+    } 
+  }
 
   function toggle() {
     if (isFolder) {
@@ -70,6 +81,7 @@
     setDragData({
       key,
       dragId: e.target.children[0].getAttribute('tree-id'),
+      dragRevId: e.target.children[0].getAttribute('tree-rev-id'),
       dragPId: e.target.children[0].getAttribute('tree-p-id'),
       dragParentNode: e.target
     });
@@ -115,6 +127,7 @@
     on:click={toggle}
     data-level={depth}
     tree-id={key}
+    tree-rev-id={rowValue[1]}
     tree-p-id={parentKey}
     class:highlight-row={highlight}>
     <Column class={['align-' + 'center', 'colIndex' + 0]} width={25} flex={false} {border}>

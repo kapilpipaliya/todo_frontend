@@ -104,6 +104,8 @@ export enum ET {
   update,
   replace,
   delete_,
+  batchUpdate,
+  batchDelete,
   changePosition
 }
 export enum E {
