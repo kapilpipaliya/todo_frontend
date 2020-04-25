@@ -308,6 +308,29 @@
     return newa1;
   }
   let isLoading = true;
+  function updateModified(newData) {
+      // show on form that its updated...
+      newData.forEach(mod => {
+        const modify = (curList, modRow) => {
+          for(let i = 0; i < curList.length; i++){
+              if(getValue(curList[i][0]) == getValue(modRow[0])){
+                if(Array.isArray(curList[i][0]) && curList[i][0].length > 1 && Array.isArray(curList[i][0][1]) && curList[i][0][1].length){
+                  if(Array.isArray(modRow[0])){
+                    modRow[0][1] = curList[i][0][1]
+                  }
+                }
+                // start, ?deleteCount, ...items
+                curList.splice(i, 1, modRow);
+                break;
+              }
+              if(Array.isArray(curList[i][0]) && curList[i][0].length > 1 && Array.isArray(curList[i][0][1]) && curList[i][0][1].length){
+                modify(curList[i][0][1], modRow)
+              }
+          }
+        }
+        modify(items, mod)
+      });
+  }
   function onDataGet(all) {
     if (isLoading) isLoading = false;
     const [h, d] = all;
@@ -339,17 +362,7 @@
       count = count + 1;
       items = items;
     } else if (d.m) {
-      // replace rows in table.
-      // show on form that its updated...
-      d.m.result.forEach(mod => {
-        const findIndex = items.findIndex(i => {
-          return i[0] == mod[0];
-        });
-        if (findIndex !== -1) {
-          // start, ?deleteCount, ...items
-          items.splice(findIndex, 1, mod);
-        }
-      });
+      updateModified(d.m.result)
       items = items;
     } else if (d.d) {
       deleteRows_(d.d);
@@ -799,6 +812,7 @@ enum dropPosition
   let dragY = 0;
   let dragId = '';
   let targetId = '';
+  let targetRevId = '';
   let whereInsert = dropPosition.none;
   let isDragging = false;
   let mouse = {
@@ -834,6 +848,7 @@ enum dropPosition
     dragX = e.pageX;
     dragY = e.clientY;
     targetId = undefined;
+    targetRevId = undefined;
     filter(e.pageX, e.clientY, dragData);
 
     if (e.clientY < 100) {
@@ -864,7 +879,7 @@ enum dropPosition
           d => {
             resolve(d);
           },
-          [[dragData.dragId, targetId, whereInsert]]
+          [[dragData.dragId, dragData.dragRevId, targetId, targetRevId, whereInsert]]
         );
       });
       if(!d[0]){
@@ -904,6 +919,7 @@ enum dropPosition
   function filter(x, y, sourceData) {
     let rows = document.querySelectorAll('.tree-row');
     targetId = undefined;
+    targetRevId = undefined;
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     const dragRect = sourceData.dragParentNode.getBoundingClientRect();
     const dragW = dragRect.left + sourceData.dragParentNode.clientWidth;
@@ -917,6 +933,7 @@ enum dropPosition
 
     let hoverBlock = undefined;
     let targetIdTemp = undefined;
+    let targetIdRevTemp = undefined;
     whereInsert = dropPosition.none;
 
     let row;
@@ -937,6 +954,7 @@ enum dropPosition
         }
 
         targetIdTemp = row.getAttribute('tree-id');
+        targetIdRevTemp = row.getAttribute('tree-rev-id');
         hoverBlock = row.children[row.children.length - 1];
         let rowHeight = row.offsetHeight;
 
@@ -995,6 +1013,7 @@ enum dropPosition
     }
 
     targetId = targetIdTemp;
+    targetRevId = targetIdRevTemp;
     whereInsert = whereInsert;
   }
 
@@ -1014,7 +1033,7 @@ enum dropPosition
         const item = curList[i];
         let obj = clone(item);
         const key = getValue(item[0]);
-        obj[0] = [key, []]; //obj[0][1] = []
+        obj[0] = [key, []]; //obj[0][1] = [] // empty_logic
 
         if (targetId == key) {
           curDragItem = getItemById(items, sourceData.dragId);
@@ -1048,10 +1067,11 @@ enum dropPosition
           }
         } else {
           if (sourceData.dragId != key) {
-            needPushList.push(obj);
+            needPushList.push(obj); // empty_logic
           }
         }
 
+        // empty_logic
         if (isArray(item[0]) && item[0][1] && item[0][1].length) {
           pushData(item[0][1], obj[0][1]);
         }
