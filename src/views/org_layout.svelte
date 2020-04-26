@@ -36,9 +36,10 @@
   Ws.bind$(
     org_fetch_evt,
     d => {
-      const result = d[1].r.result;
+      const result = d.r.result;
       if (result.length == 0) {
         er = 'no organization found';
+        window.location.href = "/"
       } else if (result[0]) {
         const org_data = result[0];
         $org_data_ctx = org_data;
@@ -113,7 +114,7 @@
     if ($ws_connected) {
       er = '';
       if (org_id) {
-        const args = [[null, `="${org_id}"`], [], [0, 0, 1], { type: ValueType.Object }];
+        const args = [[null, null, null, null, `="${org_id}"`], [], [0, 0, 1], { type: ValueType.Object }];
         Ws.trigger([[org_fetch_evt, args]]);
       } else {
         er = 'Please Select Organization';
@@ -141,6 +142,7 @@
 </script>
 
 {#if !$is_production}ORGANIZATION LAYOUT{/if}
+{JSON.stringify($org_data_ctx)}
 <div style="display: flex">
   <h4>Selected Organization:&nbsp</h4>
   <h3>{org_id}</h3>

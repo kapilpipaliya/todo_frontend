@@ -17,6 +17,7 @@
   // import Modal from '../../UI/Model.svelte'
   // import Card from "../../UI/Card.svelte";
   import GeneralForm from '../../form/Index.svelte';
+  import Table from '../Table.svelte'
 
   export let depth;
   export let isdraggable;
@@ -59,17 +60,7 @@
   $: isGlobal = isGlobalRow(rowValue[0]);
   let isFolder;
   // $: isFolder = rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
-  $: {
-    if(rowValue) {
-      if(isArray(rowValue[0])){
-        if(isArray(rowValue[0][1]){
-          isFolder = !!rowValue[0][1].length;
-        } else if (isNumber(rowValue[0][1])) {
-          isFolder = !!rowValue[0][1]
-        }
-      } 
-    } 
-  }
+  $: isFolder = rowValue && rowValue[2] ? true : false;
 
   function toggle() {
     if (isFolder) {
@@ -271,7 +262,7 @@
     </div>
   {/if}
 
-  {#if rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length}
+<!--   {#if isFolder}
     {#each rowValue[0][1] as item, index}
       {#if expandedRowsKeys.includes(key)}
         {#if isFolder}
@@ -313,6 +304,13 @@
         {/if}
       {/if}
     {/each}
+  {/if} -->
+
+  {#if isFolder}
+    {#if expandedRowsKeys.includes(key)}
+      <Table {schema_key} fetchConfig={{parent: rowValue[0], ...fetchConfig}} syncQueryParams={false} 
+      modelcomponent={quickcomponent}    {quickcomponent}/>
+    {/if}
   {/if}
 
 </div>

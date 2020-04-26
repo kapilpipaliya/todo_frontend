@@ -62,9 +62,10 @@
   export let quickcomponent = false;
   export let schema_key = '';
   export let pass = []; // [["context", "org_data", "_key", "org"]]
-  export let query = { limit: 0, page: 1, filter: [] }; // To get arguments from ?limit=25&page=2
+  export let query = { limit: 0, page: 1 }; // To get arguments from ?limit=25&page=2
   export let requiredFilter = []; // always add this filter when fetch // used when showing custom table
   export let fetchConfig = {}
+  export let syncQueryParams = true
 
   css_count.increase('table');
   let project = getContext('project');
@@ -308,27 +309,15 @@
     return newa1;
   }
   let isLoading = true;
-  function updateModified(newData) {
-      // show on form that its updated...
+  function updateModifiedRow(newData) {
       newData.forEach(mod => {
-        const modify = (curList, modRow) => {
-          for(let i = 0; i < curList.length; i++){
-              if(getValue(curList[i][0]) == getValue(modRow[0])){
-                if(Array.isArray(curList[i][0]) && curList[i][0].length > 1 && Array.isArray(curList[i][0][1]) && curList[i][0][1].length){
-                  if(Array.isArray(modRow[0])){
-                    modRow[0][1] = curList[i][0][1]
-                  }
-                }
-                // start, ?deleteCount, ...items
-                curList.splice(i, 1, modRow);
-                break;
-              }
-              if(Array.isArray(curList[i][0]) && curList[i][0].length > 1 && Array.isArray(curList[i][0][1]) && curList[i][0][1].length){
-                modify(curList[i][0][1], modRow)
-              }
-          }
+        const findIndex = items.findIndex(i => {
+          return getValue(i[0]) == getValue(mod[0]);
+        });
+        if (findIndex !== -1) {
+          // start, ?deleteCount, ...items
+          items.splice(findIndex, 1, mod);
         }
-        modify(items, mod)
       });
   }
   function onDataGet(all) {
@@ -362,28 +351,30 @@
       count = count + 1;
       items = items;
     } else if (d.m) {
-      updateModified(d.m.result)
+      updateModifiedRow(d.m.result)
       items = items;
     } else if (d.d) {
       deleteRows_(d.d);
     }
   }
   function setQueryParams() {
-    const q =
-      '?limit=' +
-      limit +
-      '&page=' +
-      current_page +
-      '&sort=' +
-      (all(x=>x===SortDirection.None||x===null, headerColSortSettingsRow)
-        ? JSON.stringify([])
-        : JSON.stringify(headerColSortSettingsRow)) +
-      '&filter=' +
-      JSON.stringify(filterSettings);
-    const pathAndSearch = window.location.pathname + q;
-    if (pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
-      console.log(window.location.pathname, window.location.search, 'replaced url query', pathAndSearch);
-      history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
+    if(syncQueryParams){
+      const q =
+        '?limit=' +
+        limit +
+        '&page=' +
+        current_page +
+        '&sort=' +
+        (all(x=>x===SortDirection.None||x===null, headerColSortSettingsRow)
+          ? JSON.stringify([])
+          : JSON.stringify(headerColSortSettingsRow)) +
+        '&filter=' +
+        JSON.stringify(filterSettings);
+      const pathAndSearch = window.location.pathname + q;
+      if (pathAndSearch !== window.location.pathname + window.location.search && q + q !== window.location.search) {
+        console.log(window.location.pathname, window.location.search, 'replaced url query', pathAndSearch);
+        history.replaceState({ page: pathAndSearch }, '', pathAndSearch);
+      }
     }
   }
   /*=====  End of On Headers and Data Receive  ======*/

@@ -77,7 +77,7 @@ export enum FormType {
   select,
   jsoneditor,
   internal_true_edge,
-  multi_select, // enum_string
+  multi_select,
   multi_select_hidden,
   text_array,
   multi_select_bool_properties,

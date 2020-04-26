@@ -92,6 +92,7 @@
       case FormType.flatpicker:
         return Flatpicker;
       case FormType.multi_select_hidden:
+        return Hidden;
       case FormType.save_time:
       //return Empty
       case FormType.dropzone:
