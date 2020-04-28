@@ -9,12 +9,12 @@
     <link rel="manifest" href="/manifest.json" />
 
     <!-- favicons for all -->
-    <link rel="apple-touch-icon"sizes="180x180"href="/assets/apple-touch-icon.png"/>
-    <link rel="icon"type="image/png"sizes="32x32"href="/assets/favicon-32x32.png"/>
-    <link rel="icon"type="image/png"sizes="16x16"href="/assets/favicon-16x16.png"/>
-    <link rel="mask-icon"href="/assets/safari-pinned-tab.svg"color="#5bbad5"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png" />
+    <link rel="mask-icon" href="/assets/safari-pinned-tab.svg" color="#5bbad5" />
     <link rel="shortcut icon" href="/assets/favicon.ico" />
-    
+
     <meta name="msapplication-TileColor" content="#b91d47" />
     <meta name="msapplication-config" content="/assets/browserconfig.xml" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -55,7 +55,7 @@
     <!--Set browser chrome theme color here-->
     <meta name="theme-color" content="#5bd1d7" />
     <!--Load google fonts here-->
-<!--     <link
+    <!--     <link
       href="https://fonts.googleapis.com/css?family=Oswald|Roboto&display=swap"
       rel="stylesheet"
     /> -->
@@ -75,37 +75,33 @@
     <!-- Main Data -->
     <meta name="application-name" content="OK Project Management" />
     <meta name="msapplication-tooltip" content="OK Project Management" />
-    <meta name="msapplication-TileColor" content="#6176ff"/>
-    <meta name="msapplication-TileImage" content="tile_image.png"/>
+    <meta name="msapplication-TileColor" content="#6176ff" />
+    <meta name="msapplication-TileImage" content="tile_image.png" />
     <meta name="msapplication-starturl" content="/" />
 
     <!-- Pinned Site Tasks -->
-    <meta content="name=Inbox;
-      action-uri=./inbox;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
-    <meta content="name=Starred;
-      action-uri=./starred;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
-    <meta content="name=Today;
-      action-uri=./today;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
-    <meta content="name=Week;
-      action-uri=./week;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
-    <meta content="name=All;
-      action-uri=./all;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
-    <meta content="name=Completed;
-      action-uri=./completed;
-      icon-uri=//o-k.tech/favicon.ico;
-      window-type=self;" name="msapplication-task" />
+    <meta
+      content="name=Inbox; action-uri=./inbox; icon-uri=//o-k.tech/favicon.ico; window-type=self;"
+      name="msapplication-task"
+    />
+    <meta
+      content="name=Starred; action-uri=./starred; icon-uri=//o-k.tech/favicon.ico; window-type=self;"
+      name="msapplication-task"
+    />
+    <meta
+      content="name=Today; action-uri=./today; icon-uri=//o-k.tech/favicon.ico; window-type=self;"
+      name="msapplication-task"
+    />
+    <meta
+      content="name=Week; action-uri=./week; icon-uri=//o-k.tech/favicon.ico; window-type=self;"
+      name="msapplication-task"
+    />
+    <meta content="name=All; action-uri=./all; icon-uri=//o-k.tech/favicon.ico; window-type=self;" name="msapplication-task" />
+    <meta
+      content="name=Completed; action-uri=./completed; icon-uri=//o-k.tech/favicon.ico; window-type=self;"
+      name="msapplication-task"
+    />
     <!-- End Pinned Site -->
-
 
     <!-- https://www.seoptimer.com/meta-tag-generator -->
     <meta name="title" content="Project Management" />
@@ -180,19 +176,17 @@
         animation: fade-in 0.5s steps(30) 1;
       }
     </style>
-    <script>
+    <!--     <script>
       !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","debug","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t,e){var n=document.createElement("script");n.type="text/javascript";n.async=!0;n.src="https://cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(n,a);analytics._loadOptions=e};analytics.SNIPPET_VERSION="4.1.0";
       analytics.load("qbSqw6QXp8jXTQDVO0qZRFx3EzOd3PND");
       analytics.page();
       }}();
-    </script>
+    </script> -->
   </head>
 
   <body>
     <!-- Sample loading styles -->
-    <div
-      class="loading-placeholder"
-    >
+    <div class="loading-placeholder">
       <svg
         version="1.1"
         x="0px"
@@ -262,7 +256,7 @@
 
     <!-- Replaces "Welcome!" message periodically with a random quote -->
     <script>
-      ;(function() {
+      (function() {
         var messageOptions = [
           "If I'm not back in five minutes... just wait longer.", // Ace Ventura: Pet Detective
           "And that's why you always leave a note.", // Arrested Development
@@ -279,14 +273,13 @@
           "I'd like to add you to my professional network",
           'Reticulating splines', // Simcity 2000
           'They mostly come at night. Mostly.' // Aliens
-        ]
+        ];
 
         if (Math.random() < 0.02) {
-          var idx = Math.floor(Math.random() * messageOptions.length)
-          document.querySelector('#welcome-message').innerHTML =
-            messageOptions[idx]
+          var idx = Math.floor(Math.random() * messageOptions.length);
+          document.querySelector('#welcome-message').innerHTML = messageOptions[idx];
         }
-      })()
+      })();
     </script>
 
     <script type="text/javascript" src="/index.REPLACE_HASH.js"></script>

@@ -64,16 +64,13 @@
   export let pass = []; // [["context", "org_data", "_key", "org"]]
   export let query = { limit: 0, page: 1 }; // To get arguments from ?limit=25&page=2
   export let requiredFilter = []; // always add this filter when fetch // used when showing custom table
-  export let fetchConfig = {}
-  export let syncQueryParams = true
+  export let fetchConfig = {};
+  export let syncQueryParams = true;
 
   css_count.increase('table');
   let project = getContext('project');
   let project_ctx = project ? get(project) || [] : [];
-  fetchConfig = {...fetchConfig,
-    type: ValueType.Array,
-    project: project_ctx?.[project_ctx.length - 1]?._key ?? null
-  };
+  fetchConfig = { ...fetchConfig, type: ValueType.Array, project: project_ctx?.[project_ctx.length - 1]?._key ?? null };
   function setPass() {
     if (Array.isArray(pass)) {
       for (let i = 0; i < pass.length; i++) {
@@ -310,16 +307,17 @@
   }
   let isLoading = true;
   function updateModifiedRow(newData) {
-      newData.forEach(mod => {
-        const findIndex = items.findIndex(i => {
-          return getValue(i[0]) == getValue(mod[0]);
-        });
-        if (findIndex !== -1) {
-          // start, ?deleteCount, ...items
-          items.splice(findIndex, 1, mod);
-        }
+    newData.forEach(mod => {
+      const findIndex = items.findIndex(i => {
+        return getValue(i[0]) == getValue(mod[0]);
       });
+      if (findIndex !== -1) {
+        // start, ?deleteCount, ...items
+        items.splice(findIndex, 1, mod);
+      }
+    });
   }
+  const doLocalSorting = () => {};
   function onDataGet(all) {
     if (isLoading) isLoading = false;
     const [h, d] = all;
@@ -345,27 +343,29 @@
         items.map(x => getValue(x[0]))
       );
 
-      setQueryParams()
+      setQueryParams();
     } else if (d.n) {
       items.push(...d.n.result);
       count = count + 1;
+      doLocalSorting();
       items = items;
     } else if (d.m) {
-      updateModifiedRow(d.m.result)
+      updateModifiedRow(d.m.result);
       items = items;
     } else if (d.d) {
-      deleteRows_(d.d);
+      doLocalSorting();
+      deleteRows_(d.d.result);
     }
   }
   function setQueryParams() {
-    if(syncQueryParams){
+    if (syncQueryParams) {
       const q =
         '?limit=' +
         limit +
         '&page=' +
         current_page +
         '&sort=' +
-        (all(x=>x===SortDirection.None||x===null, headerColSortSettingsRow)
+        (all(x => x === SortDirection.None || x === null, headerColSortSettingsRow)
           ? JSON.stringify([])
           : JSON.stringify(headerColSortSettingsRow)) +
         '&filter=' +
@@ -526,7 +526,7 @@
     if (e.ctrlKey) {
     } else {
       if (order !== undefined) {
-        headerColSortSettingsRow = new Array(headerColTypesRow).fill(SortDirection.None) // []
+        headerColSortSettingsRow = new Array(headerColTypesRow).fill(SortDirection.None); // []
         headerColSortSettingsRow[col] = order;
         closeHeaderMenu();
       } else {
@@ -781,13 +781,12 @@
   =================================*/
 
   /*=====  End of Draggable  ======*/
-enum dropPosition
-{
+  enum dropPosition {
     none = 0,
     top,
     center,
     bottom
-};
+  }
   export let isdraggable = true; // Boolean
 
   export let fixed; // String | Boolean
@@ -863,23 +862,21 @@ enum dropPosition
       console.log('drop operaion from outside table: empty dragData');
     }
 
-      // fix it should return in some time limit.
-      const d = await new Promise((resolve, reject) => {
-        Ws.bindT(
-          drag_evt,
-          d => {
-            resolve(d);
-          },
-          [[dragData.dragId, dragData.dragRevId, targetId, targetRevId, whereInsert]]
-        );
-      });
-      if(!d[0]){
-        clearHoverStatus();
-        isDragging = false;
-        return;
-      }
-
-
+    // fix it should return in some time limit.
+    const d = await new Promise((resolve, reject) => {
+      Ws.bindT(
+        drag_evt,
+        d => {
+          resolve(d);
+        },
+        [[dragData.dragId, dragData.dragRevId, targetId, targetRevId, whereInsert]]
+      );
+    });
+    if (!d[0]) {
+      clearHoverStatus();
+      isDragging = false;
+      return;
+    }
 
     clearHoverStatus();
 

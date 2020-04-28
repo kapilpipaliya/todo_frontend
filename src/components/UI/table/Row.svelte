@@ -17,7 +17,7 @@
   // import Modal from '../../UI/Model.svelte'
   // import Card from "../../UI/Card.svelte";
   import GeneralForm from '../../form/Index.svelte';
-  import Table from '../Table.svelte'
+  import Table from '../Table.svelte';
 
   export let depth;
   export let isdraggable;
@@ -262,7 +262,7 @@
     </div>
   {/if}
 
-<!--   {#if isFolder}
+  <!--   {#if isFolder}
     {#each rowValue[0][1] as item, index}
       {#if expandedRowsKeys.includes(key)}
         {#if isFolder}
@@ -308,8 +308,12 @@
 
   {#if isFolder}
     {#if expandedRowsKeys.includes(key)}
-      <Table {schema_key} fetchConfig={{parent: rowValue[0], ...fetchConfig}} syncQueryParams={false} 
-      modelcomponent={quickcomponent}    {quickcomponent}/>
+      <Table
+        {schema_key}
+        fetchConfig={{ parent: rowValue[0], ...fetchConfig }}
+        syncQueryParams={false}
+        modelcomponent={quickcomponent}
+        {quickcomponent} />
     {/if}
   {/if}
 

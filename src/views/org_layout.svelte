@@ -39,7 +39,7 @@
       const result = d.r.result;
       if (result.length == 0) {
         er = 'no organization found';
-        window.location.href = "/"
+        window.location.href = '/';
       } else if (result[0]) {
         const org_data = result[0];
         $org_data_ctx = org_data;
