@@ -269,11 +269,15 @@
     headerColEditableRow = d[4] ?? [];
     headerColPropsRow = d[5] ?? [];
     options = d[6];
-    if ($is_production && !options.k) {
-      const keyIdx = headerColTitlesRow.findIndex(x => x === 'Key');
+    const addKeyToHiddenList = (k) => {
+      const keyIdx = headerColTitlesRow.findIndex(x => x === k);
       if (keyIdx > -1) {
         headerColIsvisibleRow[keyIdx] = 0;
       }
+    }
+    if ($is_production && !options.k) {
+      addKeyToHiddenList('Key')
+      addKeyToHiddenList('Rev')
     }
     let i;
     for (i = 0; i < headerColIsvisibleRow.length; i++) {
@@ -1062,17 +1066,18 @@
             needPushList.push(curDragItem);
             needPushList.push(obj);
           } else if (whereInsert === dropPosition.center) {
-            //curDragItem['parent_id'] = key
-            //obj.open = true
-            if (!expandedRowsKeys.includes(key)) {
-              expandedRowsKeys.push(key);
-            }
-            isExapndedModified = true;
-            if (isArray(obj[0])) {
-              obj[0][1].push(curDragItem);
-            } else {
-              obj[0] = [key, [curDragItem]];
-            }
+            // Dont expand automatically:
+            // if (!expandedRowsKeys.includes(key)) {
+            //   expandedRowsKeys.push(key);
+            // }
+            // isExapndedModified = true;
+            
+            // Now not need this:
+            // if (isArray(obj[0])) {
+            //   obj[0][1].push(curDragItem);
+            // } else {
+            //   obj[0] = [key, [curDragItem]];
+            // }
             needPushList.push(obj);
           } else if (whereInsert === dropPosition.bottom) {
             //curDragItem['parent_id'] = item['parent_id']
