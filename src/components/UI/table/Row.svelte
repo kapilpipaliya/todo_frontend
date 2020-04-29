@@ -309,6 +309,7 @@
   {#if isFolder}
     {#if expandedRowsKeys.includes(key)}
       <Table
+        depth={depth + 1}
         {schema_key}
         fetchConfig={{ ...fetchConfig, parent: rowValue[0] }}
         syncQueryParams={false}

@@ -823,6 +823,7 @@
   export let onlySameLevelCanDrag; // String
   export let hightRowChange; // String
   export let resize = true; // String
+  export let depth = 0;
   //export let beforeDragOver // Function
   //export let onDrag // Function
 
@@ -1436,12 +1437,11 @@
   });
 </script>
 
-{#if !$is_production}
-  <button on:click={unMountCss}>Unmount css</button>
-{/if}
-
 {#if css_loaded}
-  <div class="table_wrap">
+  <div class="table_wrap" style={`margin-left: ${depth*10}px`}>
+    {#if !$is_production}
+      <button on:click={unMountCss}>Unmount css</button>
+    {/if}
     {#if addnew_pos == 't'}
       {#if showButton}
         <button name="table_add" class={addnewform ? 'pressed' : ''} bind:this={doms.addbutton} on:click={toogleAddForm}>
@@ -1633,7 +1633,7 @@
 
             {#each items as r, rowIndex (getValue(r[0]))}
               <Row
-                depth="0"
+                depth={depth}
                 {isdraggable}
                 {border}
                 isGlobalRow={isGlobal}
