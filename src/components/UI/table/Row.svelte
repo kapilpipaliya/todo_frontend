@@ -310,7 +310,7 @@
     {#if expandedRowsKeys.includes(key)}
       <Table
         {schema_key}
-        fetchConfig={{ parent: rowValue[0], ...fetchConfig }}
+        fetchConfig={{ ...fetchConfig, parent: rowValue[0] }}
         syncQueryParams={false}
         modelcomponent={quickcomponent}
         {quickcomponent} />

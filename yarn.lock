@@ -2806,10 +2806,10 @@ rollup-plugin-gzip@^2.4.0:
   resolved "https://registry.yarnpkg.com/rollup-plugin-gzip/-/rollup-plugin-gzip-2.4.0.tgz#ca07e91f756e7e4b40368ed5bf7673e29954e19a"
   integrity sha512-n28zIxYqiQO25BN/JpC0KrOXmDYuVHmUbuDqsNo6It3m5kmCDaZ08SglHo9Bu0/fn5EvhP4PrIFGcJkiAJlsgw==
 
-rollup-plugin-livereload@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/rollup-plugin-livereload/-/rollup-plugin-livereload-1.2.0.tgz#cda0d6435cf01cabfa01a92654d3c8eacee96fe0"
-  integrity sha512-zKcS4D8ElSFj9Mv6OAM1kGB3o5LkCtEClewO8CDPEacj6p4DSvTOm6WlKSc8/WtsD0d3Q33Y96c5Jqzyaxo/8g==
+rollup-plugin-livereload@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-livereload/-/rollup-plugin-livereload-1.3.0.tgz#8da90df13df6502b9d982997d6ac871092f15fdd"
+  integrity sha512-abyqXaB21+nFHo+vJULBqfzNx6zXABC19UyvqgDfdoxR/8pFAd041GO+GIUe8ZYC2DbuMUmioh1Lvbk14YLZgw==
   dependencies:
     livereload "^0.9.1"
 
@@ -2879,10 +2879,10 @@ rollup-pluginutils@^2.4.1, rollup-pluginutils@^2.8.2:
   dependencies:
     estree-walker "^0.6.1"
 
-rollup@2.7.2:
-  version "2.7.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.7.2.tgz#0f8ee6216d33e83c0750116312c2c92b94cc7f72"
-  integrity sha512-SdtTZVMMVSPe7SNv4exUyPXARe5v/p3TeeG3LRA5WabLPJt4Usi3wVrvVlyAUTG40JJmqS6zbIHt2vWTss2prw==
+rollup@2.7.3:
+  version "2.7.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-2.7.3.tgz#24ebb08533b9ca6bc5a7aef8100e155e50035c31"
+  integrity sha512-lAWJGZ5BQzcu/5fhMKGJrh5oy9LQUoaCid8cQV8k+E2vE9E/UWptzcM+bSBg+u8akORsvnybsqQUE/wVChIazg==
   optionalDependencies:
     fsevents "~2.1.2"
 
@@ -3296,10 +3296,10 @@ tinydate@^1.0.0:
   resolved "https://registry.yarnpkg.com/tinydate/-/tinydate-1.2.0.tgz#36b4bb02715f89743f3ef9073d3573d005a28d0e"
   integrity sha512-3GwPk8VhDFnUZ2TrgkhXJs6hcMAIIw4x/xkz+ayK6dGoQmp2nUwKzBXK0WnMsqkh6vfUhpqQicQF3rbshfyJkg==
 
-tippy.js@^6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.0.tgz#b6c35dc15a9eb7fe91a562d65469c1a3277f26f6"
-  integrity sha512-xb7xq4vSkrhZHvbRx7l8otFL7z2id+U0VPDX+MHXa8B/4PtJ/nvap6/peLHjMk45VmRIvEhF0KFoqviJ6EEtug==
+tippy.js@^6.2.3:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.3.tgz#0a5db67dc6bd9129233b26052b7ae2b2047fd73e"
+  integrity sha512-MzqHMrr2C0IC8ZUnG5kLQPxonWJ7V+Usqiy2W5b+dCvAfousio0mA85h+Ea5wRq94AQGd8mbFGeciRgkP+F+7w==
   dependencies:
     "@popperjs/core" "^2.3.2"
 

@@ -317,7 +317,35 @@
       }
     });
   }
-  const doLocalSorting = () => {};
+  const doLocalSorting = () => {
+    const col = headerColSortSettingsRow.findIndex(x => x == SortDirection.Ascending || x == SortDirection.Descending);
+    if (col == -1) {
+      return;
+    }
+    if (headerColSortSettingsRow[col] == SortDirection.Ascending) {
+      items.sort((first, second) => {
+        if (first[col] < second[col]) {
+          return -1;
+        }
+        if (first[col] > second[col]) {
+          return 1;
+        }
+
+        return 0;
+      });
+    } else if (headerColSortSettingsRow[col] == SortDirection.Ascending) {
+      items.sort((first, second) => {
+        if (first[col] < second[col]) {
+          return 1;
+        }
+        if (first[col] > second[col]) {
+          return -1;
+        }
+
+        return 0;
+      });
+    }
+  };
   function onDataGet(all) {
     if (isLoading) isLoading = false;
     const [h, d] = all;
@@ -851,7 +879,7 @@
   /* drag main function 2 */
   /* dragend */
   async function drop(e) {
-    //console.log('drop', e)
+    console.log('drop', e.target);
     // not work:
     // const isSourceData = e.dataTransfer.types.includes('source')
     // if (!isSourceData) {
@@ -863,6 +891,7 @@
     }
 
     // fix it should return in some time limit.
+    console.log(fetchConfig);
     const d = await new Promise((resolve, reject) => {
       Ws.bindT(
         drag_evt,
@@ -1599,7 +1628,7 @@
             class="drag-tree-table-body"
             style={bodyStyle}
             on:dragover|preventDefault={onDraggingOver}
-            on:dragend|preventDefault={drop}
+            on:dragend|preventDefault|stopPropagation={drop}
             class:is-dragging={isDragging}>
 
             {#each items as r, rowIndex (getValue(r[0]))}
