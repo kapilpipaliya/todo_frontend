@@ -306,6 +306,9 @@
     {/each}
   {/if} -->
 
+
+
+</div>
   {#if isFolder}
     {#if expandedRowsKeys.includes(key)}
       <Table
@@ -317,5 +320,3 @@
         {quickcomponent} />
     {/if}
   {/if}
-
-</div>

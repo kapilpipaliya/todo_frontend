@@ -1357,7 +1357,6 @@
   }
 
   function mousedown(curIndex, e) {
-    console.log('mousedown', curIndex, e);
     const startX = e.target.getBoundingClientRect().x;
     const curColWidth = e.target.parentElement.offsetWidth;
     mouse = {
@@ -1428,12 +1427,12 @@
   }
 
   onMount(() => {
-    window.addEventListener('mouseup', mouseup);
-    window.addEventListener('mousemove', mousemove);
+    // window.addEventListener('mouseup', mouseup);
+    // window.addEventListener('mousemove', mousemove);
   });
   onDestroy(() => {
-    window.removeEventListener('mouseup', mouseup);
-    window.removeEventListener('mousemove', mousemove);
+    // window.removeEventListener('mouseup', mouseup);
+    // window.removeEventListener('mousemove', mousemove);
   });
 </script>
 
@@ -1495,16 +1494,20 @@
       {#if authorized}
         <div class="drag-tree-table" bind:this={table} class:border>
           {#if showHeader}
-            <div class="drag-tree-table-header">
+            <div class="drag-tree-table-header" on:mousemove={mousemove}  >
 
               <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
                 <input type="checkbox" bind:checked={allSelected} on:click={onSelectAllClick} />
-                <div class="resize-line" on:mousedown={event => mousedown(0, event)} />
+                {#if true}
+                  <div class="resize-line" on:mousedown={event => mousedown(0, event)} />
+                {/if}
               </Column>
               {#if showRowNum}
                 <Column width={50} flex={false} {border} class={['align-' + 'center', 'colIndex' + 1]}>
                   <span>No</span>
-                  <div class="resize-line" on:mousedown={event => mousedown(1, event)} />
+                  {#if true}
+                    <div class="resize-line" on:mousedown={event => mousedown(1, event)} />
+                  {/if}
                 </Column>
               {/if}
               {#each headerColTitlesRow as h, index}
@@ -1539,7 +1542,7 @@
               <!-- <div width="100px">Actions</div> -->
 
             </div>
-            <div class="drag-tree-table-header">
+            <div class="drag-tree-table-header" >
               <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <span />
@@ -1670,7 +1673,7 @@
 
           </div>
 
-          <div class="drag-line" />
+          <div class="drag-line" on:mouseup={mouseup}/>
         </div>
       {/if}
       <Error {er} />
