@@ -115,7 +115,7 @@
   let comp = getComponent();
 </script>
 
-{#if comp && (showKey || (!showKey && label !== ' key'))}
+{#if comp && (showKey || !['Key', 'Rev'].includes(label))}
   <div class="form-item">
     <svelte:component this={comp} bind:value name={label} {required} {disabled} bind:dom={doms} {...props} {...extraProps} />
     {#if description}
