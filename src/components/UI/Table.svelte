@@ -240,6 +240,8 @@
   let addnew_labels = { save: 'Save', cancel: 'Cancel' };
   let rowType = 'table';
   let showHeader = true;
+  let isTree = false;
+  export let isdraggable = false; 
   // delete this function
   let headerFetched = false;
   const onHeaderGet = ([d]) => {
@@ -295,6 +297,12 @@
       addnew_labels = l;
     }
     showHeader = options?.table?.header ?? true;
+    if('tree' in options){
+      isTree = options.tree;
+    }
+    if('drag' in options){
+      isdraggable = options.drag;
+    }
     rowType = options?.table?.row ?? 'table';
     // resetFilter_() // Take care.... why this is needed?
   };
@@ -820,7 +828,7 @@
     center,
     bottom
   }
-  export let isdraggable = true; // Boolean
+  
 
   export let fixed; // String | Boolean
   export let height; // String | Number
@@ -1443,6 +1451,15 @@
     // window.removeEventListener('mouseup', mouseup);
     // window.removeEventListener('mousemove', mousemove);
   });
+  let sortedByPosition = false;
+  $: {
+    const idx = headerColTitlesRow.findIndex(x=>x==='Position')
+    if(idx > -1 && headerColSortSettingsRow[idx] == SortDirection.Ascending){
+        sortedByPosition = true
+    } else {
+      sortedByPosition = false
+    }
+  }
 </script>
 
 {#if css_loaded}
@@ -1646,7 +1663,9 @@
             {#each items as r, rowIndex (getValue(r[0]))}
               <Row
                 depth={depth}
+                {isTree}
                 {isdraggable}
+                {sortedByPosition}
                 {border}
                 isGlobalRow={isGlobal}
                 rowValue={r}

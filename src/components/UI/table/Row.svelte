@@ -20,7 +20,9 @@
   import Table from '../Table.svelte';
 
   export let depth;
+  export let isTree;
   export let isdraggable;
+  export let sortedByPosition;
   export let border;
   export let rowValue;
   export let rowIndex;
@@ -61,7 +63,7 @@
   $: isGlobal = isGlobalRow(rowValue[0]);
   let isFolder;
   // $: isFolder = rowValue && isArray(rowValue[0]) && rowValue[0][1] && rowValue[0][1].length;
-  $: isFolder = rowValue && rowValue[2] ? true : false;
+  $: isFolder = isTree && rowValue && rowValue[2] ? true : false;
 
   function toggle() {
     if (isFolder) {
@@ -113,7 +115,7 @@
   let highlight = false; // todo: based on headerColPropsRow[index] logic
 </script>
 
-<div class="tree-block" draggable={!!isdraggable} on:dragstart={dragstart} on:dragend={dragend}>
+<div class="tree-block" draggable={!!isdraggable && sortedByPosition} on:dragstart={dragstart} on:dragend={dragend}>
   <div
     class={clsx('tree-row', selectedRowsKeys.includes(key) ? $css.table.classes.selected || 'selected' : '')}
     on:click={toggle}
