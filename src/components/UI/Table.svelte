@@ -27,7 +27,7 @@
    Make Filter Dialogs to easily input filter on table
    HOW JS TABLE drag and drop
  */
-  import { onMount, onDestroy, createEventDispatcher, getContext, tick } from 'svelte';
+  import { onMount, onDestroy, createEventDispatcher, getContext, setContext, tick } from 'svelte';
   import { view, lensPath, all, equals } from 'ramda';
   import { isArray } from 'ramda-adjunct';
   import { get, writable } from 'svelte/store';
@@ -66,6 +66,14 @@
   export let requiredFilter = []; // always add this filter when fetch // used when showing custom table
   export let fetchConfig = {};
   export let syncQueryParams = true;
+
+  let table_parent_ctx = writable('')
+  declare let $table_parent_ctx;
+  const is_table_parent_ctx = getContext('table_parent_ctx');
+  if(!is_table_parent_ctx && fetchConfig?.parent){
+    table_parent_ctx = writable(fetchConfig.parent);
+    setContext('table_parent_ctx', table_parent_ctx);
+  }
 
   css_count.increase('table');
   let project = getContext('project');
@@ -1478,6 +1486,7 @@
           this={quickcomponent}
           key={null}
           {schema_key}
+          fetchConfig={{ type: ValueType.Array, project: null, parent: $table_parent_ctx }}
           buttonlabels={addnew_labels}
           on:close={toogleAddForm}
           on:successSave={successSave} />
@@ -1717,6 +1726,7 @@
             this={quickcomponent}
             key={null}
             {schema_key}
+            fetchConfig={{ type: ValueType.Array, project: null, parent: $table_parent_ctx }}
             buttonlabels={addnew_labels}
             on:close={toogleAddForm}
             on:successSave={successSave} />
