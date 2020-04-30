@@ -268,7 +268,8 @@
     headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? [];
     headerColEditableRow = d[4] ?? [];
     headerColPropsRow = d[5] ?? [];
-    options = d[6];
+    headerColWidthRow = d[6] ?? [];
+    options = d[7];
     const addKeyToHiddenList = (k) => {
       const keyIdx = headerColTitlesRow.findIndex(x => x === k);
       if (keyIdx > -1) {
@@ -1218,6 +1219,7 @@
     deepSetAttr('open', true, items);
   }
 
+  // not used function:
   function GetLevelById(id) {
     row = table.querySelector('[tree-id="' + id + '"]');
     let level = row.getAttribute('data-level') * 1;
@@ -1371,31 +1373,32 @@
       curColWidth
     };
   }
+  let dragLine = null;
   const mouseup = e => {
+    console.log('mouseup', e)
     if (mouse.status) {
       const curX = e.clientX;
-      let line = document.querySelector('.drag-line');
-      line.style.left = '-10000px';
+      //let dragLine = document.querySelector('.drag-line');
+      dragLine.style.left = '-10000px';
       mouse.status = 0;
       const curWidth = mouse.curColWidth;
       const subWidth = curX - mouse.startX;
       const lastWidth = curWidth + subWidth;
-      const cols = document.querySelectorAll('.colIndex' + mouse.curIndex);
+      // const cols = document.querySelectorAll('.colIndex' + mouse.curIndex);
+      // for (let index = 0; index < cols.length; index++) {
+      //   const element = cols[index];
+      //   element.style.width = lastWidth + 'px';
+      // } 
 
-      for (let index = 0; index < cols.length; index++) {
-        const element = cols[index];
-        element.style.width = lastWidth + 'px';
-      } // Update data source
-
-      ////data.columns[mouse.curIndex].width = lastWidth /* todo: fix this line*/
+      headerColWidthRow[mouse.curIndex - 2] = lastWidth;
     }
   };
   const mousemove = e => {
     if (mouse.status) {
       const endX = e.clientX;
-      const tableLeft = document.querySelector('.drag-tree-table').getBoundingClientRect().left;
-      let line = document.querySelector('.drag-line');
-      line.style.left = endX - tableLeft + 'px';
+      const tableLeft = table.getBoundingClientRect().left;
+      //let dragLine = document.querySelector('.drag-line');
+      dragLine.style.left = endX - tableLeft + 'px';
     }
   };
 
@@ -1410,6 +1413,7 @@
       hoverBlock.children[2].style.opacity = 0.1;
     }
   }
+  // not used elsewhere
   function getElementTop(element, tableRef) {
     // Fixed header, need special calculation
     let scrollTop = tableRef.querySelector('.drag-tree-table-body').scrollTop;
@@ -1517,7 +1521,7 @@
               {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
-                  <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                  <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
                     <div on:click={e => onHandleSort(e, index)} on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
                       {h}
                       {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
@@ -1563,7 +1567,7 @@
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   {#if headerColCustomFilter[index]}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <select bind:value={filterSettings[index]} on:change={onHandleFilter(index)}>
                         {#each headerColCustomFilter[index] as f}
@@ -1573,7 +1577,7 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="search"
@@ -1584,7 +1588,7 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="checkbox"
@@ -1594,7 +1598,7 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Date</span>
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
@@ -1602,13 +1606,13 @@
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <div /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span />
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else}
-                    <Column width={100} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
@@ -1655,6 +1659,7 @@
                 {headerColTypesRow}
                 {headerColEditableRow}
                 {headerColPropsRow}
+                {headerColWidthRow}
                 {schema_key}
                 {fetchConfig}
                 {quickcomponent}
@@ -1678,7 +1683,7 @@
 
           </div>
 
-          <div class="drag-line" on:mouseup={mouseup}/>
+          <div class="drag-line" bind:this={dragLine} on:mouseup={mouseup}/>
         </div>
       {/if}
       <Error {er} />

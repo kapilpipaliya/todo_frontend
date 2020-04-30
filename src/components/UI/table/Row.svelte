@@ -33,6 +33,7 @@
   export let headerColTypesRow;
   export let headerColEditableRow;
   export let headerColPropsRow;
+  export let headerColWidthRow
   export let schema_key;
   export let fetchConfig;
   export let quickcomponent;
@@ -147,7 +148,7 @@
 
     {#each rowValue as c, index}
       {#if headerColIsvisibleRow[index]}
-        <Column class={['align-' + 'center', 'colIndex' + (index + 2)]} width={100} flex={false} {border}>
+        <Column class={['align-' + 'center', 'colIndex' + (index + 2)]} width={headerColWidthRow[index]} flex={false} {border}>
           <div>
             {#if headerColEditableRow[index]}
               <GeneralForm
