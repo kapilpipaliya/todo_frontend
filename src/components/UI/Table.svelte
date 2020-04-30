@@ -535,7 +535,7 @@
   const onDeleteSelected = async () => {
     const r = confirm('Are You Sure to delete selected rows?');
     if (r == true) {
-      const mutate_evt = [ET.delete_, events[1], Ws.uid];
+      const mutate_evt = [selectedRowsKeys.length > 1 ? ET.batchDelete : ET.delete_, events[1], Ws.uid];
       const filter = [JSON.stringify(selectedRowsKeys)];
       const d = await new Promise((resolve, reject) => {
         Ws.bindT(
@@ -546,7 +546,7 @@
           ['DEL', filter]
         );
       });
-      d[0] ? deleteRows_(selectedRowsKeys) : alert(d[1]);
+      d[0] ? deleteRows_(clone(selectedRowsKeys)) : alert(d[1]);
     }
   };
   /*=====  End of Delete Row  ======*/
