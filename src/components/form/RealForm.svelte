@@ -113,6 +113,10 @@
     }
   }
   let comp = getComponent();
+  if(props.h)
+  {
+    comp = false
+  }
 </script>
 
 {#if comp && (showKey || !['Key', 'Rev'].includes(label))}
