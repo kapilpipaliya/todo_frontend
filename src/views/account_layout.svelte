@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Route } from '../../thirdparty/svelte-router-spa/index';
+  import { Route } from '../utils/svelte-router-spa/index.ts';
   import { onMount, onDestroy } from 'svelte';
   import { ValueType, ET, E } from '../enums';
   import { Ws, ws_connected } from '../ws_events_dispatcher';

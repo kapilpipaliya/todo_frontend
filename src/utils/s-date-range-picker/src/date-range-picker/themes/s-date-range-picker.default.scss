@@ -1,0 +1,36 @@
+@import "./variables.scss";
+
+
+
+.s-date-range-picker {
+  font-family: $font-family;
+  background-color: #fff;
+  padding: 16px;
+  border: 1px solid $borderColor;
+  border-radius: $borderRadius;
+  user-select: none;
+
+  & > label {
+    display: block;
+    margin-bottom: 1em;
+  }
+
+  .s-picker-btn, .s-picker-select {
+    height: 30px;
+    min-width: 30px;
+    margin: 2px;
+    background-color: transparent;
+    border: 1px solid $borderColor;
+    border-radius: $borderRadius;
+  }
+
+  select, button {
+    font-family: $font-family;
+    cursor: pointer;
+  }
+
+  :disabled {
+    cursor: not-allowed;
+  }
+}
+

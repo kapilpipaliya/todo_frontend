@@ -7,6 +7,7 @@
   export let props = {};
   export let dom = null;
   export let options = [];
+  export let error = '';
 </script>
 
 <Label {name} />
@@ -14,3 +15,6 @@
   <input {name} bind:this={dom} type="radio" bind:value {required} autocomplete={false} {disabled} {...props} />
   <label>{v}</label>
 {/each}
+{#if error}
+  <span>{error}</span>
+{/if}

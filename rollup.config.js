@@ -4,7 +4,7 @@ import resolve from "@rollup/plugin-node-resolve"
 //import serve from "rollup-plugin-serve" // use my own serve function
 //import css from "rollup-plugin-css-porter" // now use postcss
 import postcss from "rollup-plugin-postcss"
-import typescript from "rollup-plugin-typescript2"
+import typescript from '@rollup/plugin-typescript';
 import typescriptCompiler from "typescript"
 import { terser } from "rollup-plugin-terser"
 import livereload from "rollup-plugin-livereload"
@@ -20,7 +20,6 @@ import findFreePort from 'find-free-port-sync'
 import replaceInFile from 'replace-in-file'
 import path from 'path'
 import fs from 'fs'
-
 
 const liveport = findFreePort({
     start: 35000,
@@ -45,7 +44,7 @@ if(process.env.V == "micro"){
 } else if (process.env.V == "mini") {
   dest = `./dist${process.env.V}`
   entry = `src/test/index${process.env.V}.ts`
-} else if (process.env.V == "global") {
+} else if (process.env.V == "global") { // for just global folder output
   dest = `./dist${process.env.V}`
   entry = `src/index.ts`
 }

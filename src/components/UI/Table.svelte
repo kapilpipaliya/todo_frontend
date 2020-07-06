@@ -34,7 +34,7 @@
   import { Ws, ws_connected } from '../../ws_events_dispatcher';
   import { isEmpty } from 'ramda';
   import { clone } from 'rambda';
-  import { is_production, ET, E, schemaEvents, SortDirection, ValueType, FormType, DisplayType } from '../../enums';
+  import { is_production, ET, E, schemaEvents, SortDirection, ValueType, DisplayType, TableSchemaDataIndex } from '../../enums';
   declare let $is_production;
   declare let $ws_connected;
   import { translation } from '../../translation';
@@ -46,7 +46,8 @@
   declare let $css_loading;
   // import Card from "../components/Card.svelte";
   import Config from './Config.svelte';
-  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index';
+  import { getNotificationsContext } from '../../utils/svelte-notifications/src/index';
+  import { dropNotExisting, doLocalSorting, clearHoverStatus } from './table';
 
   import UrlPattern from 'url-pattern';
   import Text from './display/Text.svelte';
@@ -67,10 +68,10 @@
   export let fetchConfig = {};
   export let syncQueryParams = true;
 
-  let table_parent_ctx = writable('')
+  let table_parent_ctx = writable('');
   declare let $table_parent_ctx;
   const is_table_parent_ctx = getContext('table_parent_ctx');
-  if(!is_table_parent_ctx && fetchConfig?.parent){
+  if (!is_table_parent_ctx && fetchConfig?.parent) {
     table_parent_ctx = writable(fetchConfig.parent);
     setContext('table_parent_ctx', table_parent_ctx);
   }
@@ -79,6 +80,7 @@
   let project = getContext('project');
   let project_ctx = project ? get(project) || [] : [];
   fetchConfig = { ...fetchConfig, type: ValueType.Array, project: project_ctx?.[project_ctx.length - 1]?._key ?? null };
+  // This options are passed from route props:
   function setPass() {
     if (Array.isArray(pass)) {
       for (let i = 0; i < pass.length; i++) {
@@ -249,7 +251,7 @@
   let rowType = 'table';
   let showHeader = true;
   let isTree = false;
-  export let isdraggable = false; 
+  export let isdraggable = false;
   // delete this function
   let headerFetched = false;
   const onHeaderGet = ([d]) => {
@@ -272,23 +274,23 @@
   let expandedRowsKeys = [];
   const fillHeadersArray = d => {
     // see getJsonHeaderData() on server:
-    headerColTitlesRow = d[0] ?? [];
-    headerColTypesRow = d[1] ?? [];
-    headerColIsvisibleRow = d[2] ?? [];
-    headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[3] ?? [];
-    headerColEditableRow = d[4] ?? [];
-    headerColPropsRow = d[5] ?? [];
-    headerColWidthRow = d[6] ?? [];
-    options = d[7];
-    const addKeyToHiddenList = (k) => {
+    headerColTitlesRow = d[TableSchemaDataIndex.LABEL] ?? [];
+    headerColTypesRow = d[TableSchemaDataIndex.TYPE] ?? [];
+    headerColIsvisibleRow = d[TableSchemaDataIndex.IS_VISIBLE] ?? [];
+    headerColSortSettingsRow = query.sort ? JSON.parse(query.sort) : d[TableSchemaDataIndex.SORT_DIRECTION] ?? [];
+    headerColEditableRow = d[TableSchemaDataIndex.IS_EDITABALE] ?? [];
+    headerColPropsRow = d[TableSchemaDataIndex.PROPS] ?? [];
+    headerColWidthRow = d[TableSchemaDataIndex.WIDTH] ?? [];
+    options = d[TableSchemaDataIndex.TABLE_OPTIONS];
+    const addKeyToHiddenList = k => {
       const keyIdx = headerColTitlesRow.findIndex(x => x === k);
       if (keyIdx > -1) {
         headerColIsvisibleRow[keyIdx] = 0;
       }
-    }
+    };
     if ($is_production && !options.k) {
-      addKeyToHiddenList('Key')
-      addKeyToHiddenList('Rev')
+      addKeyToHiddenList('Key');
+      addKeyToHiddenList('Rev');
     }
     let i;
     for (i = 0; i < headerColIsvisibleRow.length; i++) {
@@ -305,27 +307,15 @@
       addnew_labels = l;
     }
     showHeader = options?.table?.header ?? true;
-    if('tree' in options){
+    if ('tree' in options) {
       isTree = options.tree;
     }
-    if('drag' in options){
+    if ('drag' in options) {
       isdraggable = options.drag;
     }
     rowType = options?.table?.row ?? 'table';
     // resetFilter_() // Take care.... why this is needed?
   };
-  function dropNotExisting(a1: string[], b1: string[]) {
-    // if a1 not contains element in b1 remove it from a1 and return it.
-    let newa1 = [];
-    for (let x of a1) {
-      const idx = b1.indexOf(x);
-      // if(idx == -1){a1.splice(idx, 1) } } // cant modify array in loop
-      if (idx != -1) {
-        newa1.push(x);
-      }
-    }
-    return newa1;
-  }
   let isLoading = true;
   function updateModifiedRow(newData) {
     newData.forEach(mod => {
@@ -338,39 +328,11 @@
       }
     });
   }
-  const doLocalSorting = () => {
-    const col = headerColSortSettingsRow.findIndex(x => x == SortDirection.Ascending || x == SortDirection.Descending);
-    if (col == -1) {
-      return;
-    }
-    if (headerColSortSettingsRow[col] == SortDirection.Ascending) {
-      items.sort((first, second) => {
-        if (first[col] < second[col]) {
-          return -1;
-        }
-        if (first[col] > second[col]) {
-          return 1;
-        }
-
-        return 0;
-      });
-    } else if (headerColSortSettingsRow[col] == SortDirection.Ascending) {
-      items.sort((first, second) => {
-        if (first[col] < second[col]) {
-          return 1;
-        }
-        if (first[col] > second[col]) {
-          return -1;
-        }
-
-        return 0;
-      });
-    }
-  };
+ 
   function onDataGet(all) {
     if (isLoading) isLoading = false;
     const [h, d] = all;
-    if (h === false) {
+    if (!h) {
       authorized = false;
       er = d;
     }
@@ -396,13 +358,13 @@
     } else if (d.n) {
       items.push(...d.n.result);
       count = count + 1;
-      doLocalSorting();
+      doLocalSorting(items, headerColSortSettingsRow);
       items = items;
     } else if (d.m) {
       updateModifiedRow(d.m.result);
+      doLocalSorting(items, headerColSortSettingsRow);
       items = items;
     } else if (d.d) {
-      doLocalSorting();
       deleteRows_(d.d.result);
     }
   }
@@ -512,12 +474,12 @@
     const { key } = e.detail;
     deleteRows_([key]);
   };
-  const { addNotification } = getNotificationsContext();
+  //const { addNotification } = getNotificationsContext();
   const onDeleteRow = key => async () => {
     const r = confirm('Are You Sure?');
     if (r == true) {
       const mutate_evt = [ET.delete_, events[1], key];
-      const filter = [`="${key}"`];
+      const filter = [key, '']; // pass _rev later
       const d = await new Promise((resolve, reject) => {
         /*send unsubscribe event if edit is open*/
         const args = ['DEL', filter, fetchConfig];
@@ -537,12 +499,12 @@
       });
       if (d[0]) {
         const delete_msg = view(lensPath(['msg', 'delete']), $translation);
-        addNotification({
+        /*addNotification({
           text: delete_msg,
           position: 'bottom-right',
           type: 'danger',
           removeAfter: 4000
-        });
+        });*/
         deleteRows_([key]);
       } else {
         alert(d[1]);
@@ -553,7 +515,7 @@
     const r = confirm('Are You Sure to delete selected rows?');
     if (r == true) {
       const mutate_evt = [selectedRowsKeys.length > 1 ? ET.batchDelete : ET.delete_, events[1], Ws.uid];
-      const filter = [JSON.stringify(selectedRowsKeys)];
+      const filter = selectedRowsKeys.length > 1 ? [JSON.stringify(selectedRowsKeys)] : [selectedRowsKeys[0], '']; // pass _rev later
       const d = await new Promise((resolve, reject) => {
         Ws.bindT(
           mutate_evt,
@@ -625,8 +587,8 @@
   let headerMenuColumn = 0;
   let inputHeaderMenuColumn = 0;
   const onHeaderContext = (e, col) => {
-    const left = event.clientX;
-    const top = event.clientY;
+    const left = e.clientX;
+    const top = e.clientY;
     const menuBox: HTMLElement | null = window.document.querySelector('.menu');
     if (menuBox) {
       menuBox.style.left = left + 'px';
@@ -641,8 +603,8 @@
     //     }
   };
   const onTextInputContext = (e, col) => {
-    const left = event.clientX;
-    const top = event.clientY;
+    const left = e.clientX;
+    const top = e.clientY;
     const menuBox: HTMLElement | null = window.document.querySelector('.menu-input');
     if (menuBox) {
       menuBox.style.left = left + 'px';
@@ -735,7 +697,7 @@
   }
 
   /*=====  End of model functions  ======*/
-
+  // todo fix: its now not used
   function isGlobal(v) {
     return isArray(v) ? (v.length >= 2 ? v[1] === 'global' : false) : false;
   }
@@ -768,6 +730,11 @@
   }
   let contextmenu = true;
 
+  const org_id_ctx = getContext('org_id');
+  const org_id = org_id_ctx ? get(org_id_ctx) : '';
+  const project_id_ctx = getContext('project_id');
+  const project_id = project_id_ctx ? get(project_id_ctx) : '';
+
   function makeUrl(props, id) {
     if (id) {
       return new UrlPattern(props.dp).stringify({
@@ -779,11 +746,6 @@
       return '';
     }
   }
-
-  const org_id_ctx = getContext('org_id');
-  const org_id = org_id_ctx ? get(org_id_ctx) : '';
-  const project_id_ctx = getContext('project_id');
-  const project_id = project_id_ctx ? get(project_id_ctx) : '';
 
   css_count.increase('table_context_menu');
   onDestroy(() => {
@@ -836,7 +798,6 @@
     center,
     bottom
   }
-  
 
   export let fixed; // String | Boolean
   export let height; // String | Number
@@ -1088,7 +1049,7 @@
             //   expandedRowsKeys.push(key);
             // }
             // isExapndedModified = true;
-            
+
             // Now not need this:
             // if (isArray(obj[0])) {
             //   obj[0][1].push(curDragItem);
@@ -1391,7 +1352,7 @@
   }
   let dragLine = null;
   const mouseup = e => {
-    console.log('mouseup', e)
+    console.log('mouseup', e);
     if (mouse.status) {
       const curX = e.clientX;
       //let dragLine = document.querySelector('.drag-line');
@@ -1404,7 +1365,7 @@
       // for (let index = 0; index < cols.length; index++) {
       //   const element = cols[index];
       //   element.style.width = lastWidth + 'px';
-      // } 
+      // }
 
       headerColWidthRow[mouse.curIndex - 2] = lastWidth;
     }
@@ -1418,40 +1379,7 @@
     }
   };
 
-  function clearHoverStatus() {
-    const rows: NodeListOf<HTMLElement> = document.querySelectorAll('.tree-row');
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      const hoverBlock = row.children[row.children.length - 1] as HTMLElement;
-      hoverBlock.style.display = 'none';
-      hoverBlock.children[0].style.opacity = 0.1;
-      hoverBlock.children[1].style.opacity = 0.1;
-      hoverBlock.children[2].style.opacity = 0.1;
-    }
-  }
-  // not used elsewhere
-  function getElementTop(element, tableRef) {
-    // Fixed header, need special calculation
-    let scrollTop = tableRef.querySelector('.drag-tree-table-body').scrollTop;
-    let actualTop = element.offsetTop - scrollTop;
-    let current = element.offsetParent;
-    while (current !== null) {
-      actualTop += current.offsetTop;
-      current = current.offsetParent;
-    }
-    return actualTop;
-  }
-  function getElementLeft(element) {
-    let actualLeft = element.offsetLeft;
-    let current = element.offsetParent;
-    while (current !== null) {
-      actualLeft += current.offsetLeft;
-      current = current.offsetParent;
-    }
-    return actualLeft;
-  }
-
-  onMount(() => {
+onMount(() => {
     // window.addEventListener('mouseup', mouseup);
     // window.addEventListener('mousemove', mousemove);
   });
@@ -1461,17 +1389,17 @@
   });
   let sortedByPosition = false;
   $: {
-    const idx = headerColTitlesRow.findIndex(x=>x==='Position')
-    if(idx > -1 && headerColSortSettingsRow[idx] == SortDirection.Ascending){
-        sortedByPosition = true
+    const idx = headerColTitlesRow.findIndex(x => x === 'Position');
+    if (idx > -1 && headerColSortSettingsRow[idx] == SortDirection.Ascending) {
+      sortedByPosition = true;
     } else {
-      sortedByPosition = false
+      sortedByPosition = false;
     }
   }
 </script>
 
 {#if css_loaded}
-  <div class="table_wrap" style={`margin-left: ${depth*10}px`}>
+  <div class="table_wrap" style={`margin-left: ${depth * 10}px`}>
     {#if !$is_production}
       <button on:click={unMountCss}>Unmount css</button>
     {/if}
@@ -1529,7 +1457,7 @@
       {#if authorized}
         <div class="drag-tree-table" bind:this={table} class:border>
           {#if showHeader}
-            <div class="drag-tree-table-header" on:mousemove={mousemove}  >
+            <div class="drag-tree-table-header" on:mousemove={mousemove}>
 
               <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
                 <input type="checkbox" bind:checked={allSelected} on:click={onSelectAllClick} />
@@ -1547,7 +1475,11 @@
               {/if}
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
-                  <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                  <Column
+                    width={headerColWidthRow[index]}
+                    flex={false}
+                    {border}
+                    class={['align-' + 'center', 'colIndex' + (2 + index)]}>
                     <div on:click={e => onHandleSort(e, index)} on:contextmenu|preventDefault={e => onHeaderContext(e, index)}>
                       {h}
                       {#if headerColSortSettingsRow[index] === SortDirection.Ascending}
@@ -1577,7 +1509,7 @@
               <!-- <div width="100px">Actions</div> -->
 
             </div>
-            <div class="drag-tree-table-header" >
+            <div class="drag-tree-table-header">
               <Column width={25} flex={false} {border} class={['align-' + 'center', 'colIndex' + 0]}>
 
                 <span />
@@ -1593,7 +1525,11 @@
               {#each headerColTitlesRow as h, index}
                 {#if headerColIsvisibleRow[index]}
                   {#if headerColCustomFilter[index]}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <select bind:value={filterSettings[index]} on:change={onHandleFilter(index)}>
                         {#each headerColCustomFilter[index] as f}
@@ -1603,7 +1539,11 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Number || headerColTypesRow[index] === DisplayType.Text || headerColTypesRow[index] === DisplayType.Double || headerColTypesRow[index] === DisplayType.Url}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="search"
@@ -1614,7 +1554,11 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.Checkbox}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <input
                         type="checkbox"
@@ -1624,7 +1568,11 @@
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else if headerColTypesRow[index] === DisplayType.DateTime}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Date</span>
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
@@ -1632,13 +1580,21 @@
                     <!-- {:else if headerColTypesRow[index] === DisplayType.Url}
                     <div /> -->
                   {:else if headerColTypesRow[index] === DisplayType.Color}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span />
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
                     </Column>
                   {:else}
-                    <Column width={headerColWidthRow[index]} flex={false} {border} class={['align-' + 'center', 'colIndex' + (2 + index)]}>
+                    <Column
+                      width={headerColWidthRow[index]}
+                      flex={false}
+                      {border}
+                      class={['align-' + 'center', 'colIndex' + (2 + index)]}>
 
                       <span>Unknown Type {headerColTypesRow[index]}</span>
                       <div class="resize-line" on:mousedown={event => mousedown(index + 2, event)} />
@@ -1671,7 +1627,7 @@
 
             {#each items as r, rowIndex (getValue(r[0]))}
               <Row
-                depth={depth}
+                {depth}
                 {isTree}
                 {isdraggable}
                 {sortedByPosition}
@@ -1711,7 +1667,7 @@
 
           </div>
 
-          <div class="drag-line" bind:this={dragLine} on:mouseup={mouseup}/>
+          <div class="drag-line" bind:this={dragLine} on:mouseup={mouseup} />
         </div>
       {/if}
       <Error {er} />

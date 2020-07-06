@@ -6,7 +6,7 @@
   declare let $ws_connected;
   declare let $is_production;
   import { clone } from 'rambda';
-  import { Route } from '../../thirdparty/svelte-router-spa/index';
+  import { Route } from '../utils/svelte-router-spa/index.ts';
   import TreeSidebar from '../components/UI/TreeSidebar.svelte';
   import UrlPattern from 'url-pattern';
   import Skeleton from '../components/UI/Skeleton.svelte';
@@ -26,6 +26,7 @@
   let items = [];
   let organization_menu = [];
   let fetch_data = false;
+  let fetch_menu = false;
   onMount(() => {
     mounted = true;
   });
@@ -96,7 +97,7 @@
       [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d);
-        fetch_data = true; // not important on menu
+        fetch_menu = true;
       },
       [
         [`['organization']`],
@@ -114,7 +115,7 @@
     if ($ws_connected) {
       er = '';
       if (org_id) {
-        const args = [[null, null, null, null, `="${org_id}"`], [], [0, 0, 1], { type: ValueType.Object }];
+        const args = [[null, `="${org_id}"`], [], [0, 0, 1], { col: ['_key', 'id'], type: ValueType.Object }];
         Ws.trigger([[org_fetch_evt, args]]);
       } else {
         er = 'Please Select Organization';
@@ -153,7 +154,7 @@
       <TreeSidebar menu={organization_menu} />
     {/if}
   </div>
-  {#if fetch_data}
+  {#if fetch_data && fetch_menu}
     <Route {currentRoute} />
   {:else}
     <Skeleton />

@@ -7,7 +7,7 @@
   import Label from '../Label.svelte';
   import { isArray } from 'ramda-adjunct';
   export let name;
-  export let dp = "r[1]+' - '+r[2]"; // display pattern
+  export let dp = [1, ' - ', 2]; // display pattern
   export let keyIdx = 0;
   export let value = [];
   export let e = [];

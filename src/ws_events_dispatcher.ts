@@ -5,22 +5,13 @@ Simplified WebSocket events dispatcher
 import { writable } from 'svelte/store'; // no
 import { map } from 'ramda';
 import * as M from '@msgpack/msgpack';
-import { ET, E } from './enums';
+import { ET, E, IS_PRODUCTION } from './enums';
 
 const http_proto = location.protocol;
 const domain = window.location.hostname;
 
 declare const process;
-const port =
-  location.protocol == 'http:'
-    ? // @ts-ignore
-      process.env.NODE_ENV == 'development'
-      ? ':8500'
-      : ''
-    : // @ts-ignore
-    process.env.NODE_ENV == 'development'
-    ? ':8504'
-    : '';
+const port = location.protocol == 'http:' ? (IS_PRODUCTION ? '' : ':8500') : IS_PRODUCTION ? '' : ':8504';
 const ws_proto = http_proto == 'http:' ? 'ws' : 'wss';
 
 // @ts-ignore
@@ -49,28 +40,30 @@ for $ prefix use always check if(mounted) first.
 type callBack = (d: any) => void;
 type event = Array<number | string>;
 export class ServerEventsDispatcher {
-  readonly #path: string;
   private id_ = 0;
-  #req: {};
-  #res: {};
-  #callbacks: Record<string, any>;
-  #fetchOnce; // handle at component level, until i found solution.
-  #conn: WebSocket;
-  #isFirst: boolean;
-  #firstCancelTimeout: number;
-  #firstPayload: Array<[]>;
-  #lm_handle;
+
   //https://developer.mozilla.org/en-US/docs/Web/API/NavigatorOnLine/onLine
   private isOnline = window.navigator.onLine;
+  path: string;
+  req: {};
+  res: {};
+  callbacks: Record<string, any>;
+  isFirst: boolean;
+  firstCancelTimeout: number;
+  firstPayload: Array<[]>;
+  conn: WebSocket;
+  lm_handle: null | number;
+
   constructor(path: string, req: {}, res: {}) {
-    this.#path = path;
-    this.#req = req;
-    this.#res = res;
-    this.#callbacks = {};
-    this.#isFirst = false;
-    this.#firstCancelTimeout = null;
-    this.#firstPayload = [];
-    this.#fetchOnce = [];
+    this.path = path;
+    this.req = req;
+    this.res = res;
+    this.callbacks = {};
+    this.isFirst = false;
+    this.firstCancelTimeout = null;
+    this.firstPayload = [];
+    this.lm_handle = null;
+
     this.bind = this.bind.bind(this);
     this.bind$ = this.bind$.bind(this);
     this.bindT = this.bindT.bind(this);
@@ -88,45 +81,47 @@ export class ServerEventsDispatcher {
     this.batchBindT = this.batchBindT.bind(this);
     this.delay_send = this.delay_send.bind(this);
     this.heartbeat = this.heartbeat.bind(this);
+
     this.setupConnection();
+
     window.addEventListener('online', () => {
+      console.log('going online')
       this.isOnline = true;
       this.setupConnection();
     });
     window.addEventListener('offline', () => {
+      console.log('going offline')
       this.isOnline = false;
     });
-
-    this.#lm_handle = null;
   }
   get uid() {
     return ++this.id_;
   }
   setupConnection() {
-    // if (this.#conn) {
+    // if (this.conn) {
     //   return;
     // }
-    this.#conn = new WebSocket(this.#path, []);
+    this.conn = new WebSocket(this.path, []);
     // dispatch to the right handlers
-    this.#conn.onmessage = this.onmessage;
-    this.#conn.onclose = this.onclose;
+    this.conn.onmessage = this.onmessage;
+    this.conn.onclose = this.onclose;
     //this.conn.onopen = this.onopen;
-    this.#conn.addEventListener('open', this.onopen);
+    this.conn.addEventListener('open', this.onopen);
   }
   heartbeat() {
     // console.log("heartbeat send");
     // this.trigger(['heartbeat', Date.now()]);
-    this.#lm_handle = setTimeout(this.heartbeat, 30 * 1000);
+    this.lm_handle = setTimeout(this.heartbeat, 30 * 1000);
   }
   destroy() {
-    this.#conn.onmessage = null;
-    this.#conn.onclose = null;
-    this.#conn.removeEventListener('open', this.onopen);
-    this.#conn.close();
+    this.conn.onmessage = null;
+    this.conn.onclose = null;
+    this.conn.removeEventListener('open', this.onopen);
+    this.conn.close();
   }
   bind(event: event, callback: callBack, handleMultiple = 0, data = []) {
-    this.#callbacks[JSON.stringify(event)] = this.#callbacks[JSON.stringify(event)] ?? [];
-    this.#callbacks[JSON.stringify(event)].push([handleMultiple, callback, data]); // 0 means unsubscribe using first time
+    this.callbacks[JSON.stringify(event)] = this.callbacks[JSON.stringify(event)] ?? [];
+    this.callbacks[JSON.stringify(event)].push([handleMultiple, callback, data]); // 0 means unsubscribe using first time
     return this;
   }
   batchBind(events: Array<[event, callBack, any]> = []) {
@@ -154,7 +149,7 @@ export class ServerEventsDispatcher {
     return () => this.unbind(event);
   }
   unbind(event: event) {
-    this.#callbacks[JSON.stringify(event)] = [];
+    this.callbacks[JSON.stringify(event)] = [];
   }
   unbind_(event_names: Array<event> = []) {
     map((event: event) => {
@@ -163,33 +158,33 @@ export class ServerEventsDispatcher {
     return this;
   }
   private delay_send() {
-    if (this.#firstPayload) {
-      this.#conn.send(JSON.stringify(this.#firstPayload));
+    if (this.firstPayload) {
+      this.conn.send(JSON.stringify(this.firstPayload));
     }
-    this.#isFirst = false;
+    this.isFirst = false;
   }
   private onopen(evt: Event) {
-    clearTimeout(this.#lm_handle);
+    clearTimeout(this.lm_handle);
     ws_connected.set(true);
-    this.#isFirst = true;
+    this.isFirst = true;
     //console.log(this.conn.extensions);
     //console.log("Server Opened")
-    this.#firstCancelTimeout = setTimeout(this.delay_send, 50);
+    this.firstCancelTimeout = setTimeout(this.delay_send, 50);
     // if (token) {
     //   this.sendMessage('authentication_challenge', {token});
     // }
     this.dispatch(['open', '', 0], []);
-    // const length = this.#callbacks.length;
+    // const length = this.callbacks.length;
     //   for (let i = 0; i < length; i++) {
     //     chain[i][1](...message)
     //     if (chain[i][0] == 0) {
-    //       this.#callbacks[JSON.stringify(event)] = []
+    //       this.callbacks[JSON.stringify(event)] = []
     //     }
     //   }
     this.heartbeat();
   }
   private onclose(ev: CloseEvent) {
-    clearTimeout(this.#lm_handle);
+    clearTimeout(this.lm_handle);
     ws_connected.set(false);
     this.dispatch(['close', '', 0], []);
     let waitMs = 2000;
@@ -212,32 +207,32 @@ export class ServerEventsDispatcher {
   }
   trigger(payload) {
     const f = this.trigger;
-    switch (this.#conn.readyState) {
+    switch (this.conn.readyState) {
       case WebSocket.CONNECTING:
         // code block
         //This will added to onopen list, take care
-        //this.#conn.addEventListener('open', () => {
+        //this.conn.addEventListener('open', () => {
         //f(payload)
-        this.#firstPayload.push(...payload);
+        this.firstPayload.push(...payload);
         //})
         return this;
       case WebSocket.OPEN:
-        if (this.#isFirst) {
+        if (this.isFirst) {
           for (let i = 0; i < payload.length; i++) {
-            this.#firstPayload.push(payload[i]);
+            this.firstPayload.push(payload[i]);
           }
-          clearTimeout(this.#firstCancelTimeout);
-          this.#firstCancelTimeout = setTimeout(this.delay_send, 50);
+          clearTimeout(this.firstCancelTimeout);
+          this.firstCancelTimeout = setTimeout(this.delay_send, 50);
         } else {
-          this.#conn.send(JSON.stringify(payload)); // <= send JSON data to socket server
+          this.conn.send(JSON.stringify(payload)); // <= send JSON data to socket server
         }
         return this;
       case WebSocket.CLOSING:
       case WebSocket.CLOSED:
         // try to reconnect/logout
         this.setupConnection();
-        //this.#conn.addEventListener('open', () => {
-        this.#firstPayload.push(...payload);
+        //this.conn.addEventListener('open', () => {
+        this.firstPayload.push(...payload);
         //f(payload)
         //})
         return this;
@@ -287,7 +282,7 @@ export class ServerEventsDispatcher {
     // }
   }
   private dispatch(event: event, message: Array<{}>) {
-    const chain = this.#callbacks[JSON.stringify(event)];
+    const chain = this.callbacks[JSON.stringify(event)];
     if (typeof chain == 'undefined') {
       console.warn('no callbacks for this event: ', event);
     } else {
@@ -295,12 +290,13 @@ export class ServerEventsDispatcher {
       for (let i = 0; i < length; i++) {
         chain[i][1](...message);
         if (chain[i][0] == 0) {
-          this.#callbacks[JSON.stringify(event)] = [];
+          this.callbacks[JSON.stringify(event)] = [];
         }
       }
     }
   }
 }
+
 export const Ws = new ServerEventsDispatcher(WS_PATH, {}, {});
 
 // read more: https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie

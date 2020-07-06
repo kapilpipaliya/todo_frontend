@@ -5,6 +5,7 @@
   export let value;
   export let props;
   export let dom = null;
+  export let error = '';
   $: props.options = props.options ?? [];
 </script>
 
@@ -14,3 +15,6 @@
     {v}
   </label>
 {/each}
+{#if error}
+  <span>{error}</span>
+{/if}

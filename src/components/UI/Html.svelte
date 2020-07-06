@@ -21,7 +21,7 @@
         const result = d[1].r.result;
         if (Array.isArray(result)) {
           for (let i = 0; i < result.length; i++) {
-            htmlResult.push(result[i][2]);
+            htmlResult.push(result[i][1]);
           }
           htmlResult = htmlResult;
         }
@@ -30,7 +30,7 @@
     1
   );
   if (html.length) {
-    Ws.trigger([[template_evt, [[null, join(html)], [], [], { h: false }]]]);
+    Ws.trigger([[template_evt, [[join(html)], [], [], { col: ['name', 'template'], h: false }]]]);
   }
   $: if (mounted) {
     if ($ws_connected) {

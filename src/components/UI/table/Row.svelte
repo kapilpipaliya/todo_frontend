@@ -35,7 +35,7 @@
   export let headerColTypesRow;
   export let headerColEditableRow;
   export let headerColPropsRow;
-  export let headerColWidthRow
+  export let headerColWidthRow;
   export let schema_key;
   export let fetchConfig;
   export let quickcomponent;
@@ -136,7 +136,7 @@
     {#if showRowNum}
       <Column class={['align-' + 'center', 'colIndex' + 1]} width={50} flex={false} {border}>
         <span>
-          <Space {depth} />
+          <!-- <Space {depth} /> -->
           {#if isFolder}
             <span class={clsx('zip-icon', expandedRowsKeys.includes(key) ? 'arrow-bottom' : 'arrow-right')} />
           {:else}
@@ -309,17 +309,15 @@
     {/each}
   {/if} -->
 
-
-
 </div>
-  {#if isFolder}
-    {#if expandedRowsKeys.includes(key)}
-      <Table
-        depth={depth + 1}
-        {schema_key}
-        fetchConfig={{ ...fetchConfig, parent: rowValue[0] }}
-        syncQueryParams={false}
-        modelcomponent={quickcomponent}
-        {quickcomponent} />
-    {/if}
+{#if isFolder}
+  {#if expandedRowsKeys.includes(key)}
+    <Table
+      depth={depth + 1}
+      {schema_key}
+      fetchConfig={{ ...fetchConfig, parent: rowValue[0] }}
+      syncQueryParams={false}
+      modelcomponent={quickcomponent}
+      {quickcomponent} />
   {/if}
+{/if}

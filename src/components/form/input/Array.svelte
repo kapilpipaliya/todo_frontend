@@ -1,22 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Debug } from '../../UI/debug';
+  import { Debug } from '../../UI/debug.ts';
   import Label from '../Label.svelte';
   export let name;
   export let value = [];
   export let disabled = false;
   export let ar = false;
+  export let error = '';
   value = value ?? [];
   let doms = [];
   function handleAdd() {
-    value.push('');
-    value = value;
-    setTimeout(function() {
-      if (doms[value.length - 1]) doms[value.length - 1].focus();
-    }, 50);
-
-    //const itemSchema = (isFixedItems(schema) && allowAdditionalItems(schema)) ? schema.allowAdditionalItems : schema.items
-    //formData = [...formData, getDefaultFormState(itemSchema, undefined, definitions)]
+    if(!disabled){
+      value.push('');
+      value = value;
+      setTimeout(function() {
+        if (doms[value.length - 1]) doms[value.length - 1].focus();
+      }, 50);
+    }
   }
   const handleDelete = row => e => {
     e.stopPropagation();
@@ -24,7 +24,6 @@
   };
   const onReorder = (from, to) => event => {
     event.stopPropagation();
-
     value = value.map((item, i, array) => (i === from ? array[to] : i === to ? array[from] : item));
   };
 </script>
@@ -59,3 +58,6 @@
   </tbody>
 </table>
 <button type="button" on:click={handleAdd} {disabled}>Add</button>
+{#if error}
+  <span>{error}</span>
+{/if}

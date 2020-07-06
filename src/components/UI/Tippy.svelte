@@ -4,7 +4,7 @@
   import { followCursor } from 'tippy.js';
 
   function mytippy(node, { props, plugins }) {
-    tippy(node, props, plugins);
+    tippy(node, { ...props, plugins: plugins });
   }
 
   let props = {

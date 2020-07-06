@@ -110,6 +110,7 @@ export enum ET {
 }
 export enum E {
   // routes
+  uninitialized = 0,
   css_event = 1,
   notification_event,
   cookie_event,
@@ -225,11 +226,12 @@ export enum E {
   setting_list,
   setting_mutate,
   my = 140,
-  schema_get,
-  my_schema_mutate,
+  get_member_setting,
+  member_setting_mutate,
   fields_schema_mutate,
   form_schema_get,
-  form_schema_mutate
+  form_schema_mutate,
+  end = 160
   // routes
 }
 export const form_schema_evt = (id) => [ET.get, E.form_schema_get, id];
@@ -268,4 +270,51 @@ export enum NotificationType {
   success,
   warning,
   danger
+}
+export enum FormArgumentIndex
+{
+  DATA,
+  FILTER,
+  CONFIG_OBJECT
+};
+export enum FormSchemaDataIndex
+{
+  LABEL,
+  TYPE,
+  IS_REQUIRED,
+  SORT_DISABLED,
+  DESCRIPTION,
+  PROPS,
+  FORM_OPTIONS
+};
+export enum TableArgumentIndex
+{
+  FILTER,
+  SORT,
+  PAGINATION,
+  CONFIG_OBJECT
+};
+export enum TableSchemaDataIndex
+{
+  LABEL,
+  TYPE,
+  IS_VISIBLE,
+  SORT_DIRECTION,
+  IS_EDITABALE,
+  PROPS,
+  WIDTH,
+  TABLE_OPTIONS
+};
+export enum Success {
+  FAIL,
+  SUCCESS
+}
+export enum FormErrorIndex {
+  Message = 1,
+  FieldErrors
+}
+export enum Pagination{
+  limit,
+  offset,
+  currentPage
 }

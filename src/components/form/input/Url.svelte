@@ -7,7 +7,7 @@
   export let props = {};
   export let placeholder = '';
   export let dom = null;
-
+  export let error = '';
   export let domain;
 </script>
 
@@ -15,3 +15,6 @@
 <span>http://</span>
 <input {name} bind:this={dom} type="text" bind:value {required} autocomplete={false} {disabled} {placeholder} {...props} />
 <span>.{domain}</span>
+{#if error}
+  <span>{error}</span>
+{/if}

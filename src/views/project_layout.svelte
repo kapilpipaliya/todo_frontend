@@ -6,7 +6,7 @@
   declare let $ws_connected;
   declare let $is_production;
   import { clone } from 'rambda';
-  import { Route } from '../../thirdparty/svelte-router-spa/index';
+  import { Route } from '../utils/svelte-router-spa/index.ts';
   import TreeSidebar from '../components/UI/TreeSidebar.svelte';
   import UrlPattern from 'url-pattern';
   import Skeleton from '../components/UI/Skeleton.svelte';
@@ -27,6 +27,7 @@
   let items = [];
   let project_menu = [];
   let fetch_data = false;
+  let fetch_menu = false;
   onMount(() => {
     mounted = true;
   });
@@ -38,7 +39,7 @@
   Ws.bind$(
     project_fetch_evt,
     d => {
-      const result = d[1].r.result;
+      const result = d.r.result;
       if (result.length == 0) {
         er = 'no project found';
       } else if (result[0]) {
@@ -97,7 +98,7 @@
       [ET.subscribe, E.menu_list, Ws.uid],
       d => {
         getMenuDataGet(d);
-        fetch_data = true; // not important on menu
+        fetch_menu = true;
       },
       [
         [`['project']`],
@@ -120,6 +121,7 @@
           [],
           [0, 0, 1],
           {
+            col: ['_key', 'id'],
             type: ValueType.Object,
             org: $project_ctx?.[$project_ctx.length - 1]?._key ?? null
           }
@@ -154,6 +156,7 @@
 </script>
 
 {#if !$is_production}PROJECT LAYOUT{/if}
+{JSON.stringify($project_data_ctx)}
 <h4>Selected Project: {project_id}</h4>
 <div style="display: flex">
   <div>
@@ -161,7 +164,7 @@
       <TreeSidebar menu={project_menu} />
     {/if}
   </div>
-  {#if fetch_data}
+  {#if fetch_data && fetch_menu}
     <Route {currentRoute} />
   {:else}
     <Skeleton />

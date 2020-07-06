@@ -8,8 +8,9 @@
   import { addHours, endOfWeek, startOfWeek, startOfDay, endOfDay } from 'date-fns';
   import Label from '../Label.svelte';
   import * as locales from 'date-fns/locale';
-  import SDateRangePicker from '../../../../thirdparty/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte';
+  import SDateRangePicker from '../../../utils/s-date-range-picker/src/date-range-picker/SDateRangePicker.svelte';
   export let name;
+  export let error = '';
   const random = false;
   const localesArray = Object.keys(locales).map(i => locales[i]);
   const locale = random ? localesArray[Math.floor(Math.random() * localesArray.length)] : undefined;
@@ -44,3 +45,6 @@
   {startDate}
   {endDate}
   on:apply={onApply} />
+{#if error}
+  <span>{error}</span>
+{/if}

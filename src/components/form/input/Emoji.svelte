@@ -1,6 +1,8 @@
 <script lang="ts">
-  import EmojiSelector from '../../../../thirdparty/svelte-emoji-selector/src/index.svelte';
+  import EmojiSelector from '../../../utils/svelte-emoji-selector/src/index.svelte';
   export let value = '';
+  export let error = '';
+
   function onEmoji(event) {
     value += event.detail;
   }
@@ -10,3 +12,6 @@
 
 <input bind:value type="text" />
 <EmojiSelector on:emoji={onEmoji} />
+{#if error}
+  <span>{error}</span>
+{/if}

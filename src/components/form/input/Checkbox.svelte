@@ -6,7 +6,11 @@
   export let value;
   export let props = {};
   export let dom = null;
+  export let error = '';
 </script>
 
 <Label {name} />
 <input {name} bind:this={dom} type="checkbox" bind:checked={value} {required} autocomplete={false} {disabled} {...props} />
+{#if error}
+  <span>{error}</span>
+{/if}

@@ -7,7 +7,11 @@
   export let props = {};
   export let placeholder = '';
   export let dom = null;
+  export let error = '';
 </script>
 
 <Label {name} />
 <textarea bind:value bind:this={dom} {required} {disabled} rows={5} cols={20} {placeholder} {...props} />
+{#if error}
+  <span>{error}</span>
+{/if}

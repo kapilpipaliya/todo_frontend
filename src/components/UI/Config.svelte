@@ -109,13 +109,13 @@
   onMount(async () => {
     const d = await new Promise((resolve, reject) => {
       Ws.bindT(
-        [ET.get, E.my_schema_get, Ws.uid],
+        [ET.get, E.form_schema_get, Ws.uid],
         d => {
           resolve(d);
         },
         [schema_key]
       );
-    }, 0);
+    });
     list = d;
   });
   async function onSave() {
@@ -128,16 +128,16 @@
         },
         [schema_key, { columns: list }]
       );
-    }, 0);
+    });
     isSaving = false;
-    if (d.ok) {
+    if (d[0]) {
       er = 'Settings saved';
       setTimeout(function() {
         er = '';
       }, 1500);
       // dp("successSave", { key, d });
     } else {
-      er = d.error;
+      er = d[1];
     }
   }
   // {JSON.stringify(list)}

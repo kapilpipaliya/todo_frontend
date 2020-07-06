@@ -23,8 +23,8 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
-Cypress.Commands.add('login', (email = 'test@o-k.tech', password = '1') => {
-  cy.visit('/account/login', { failOnStatusCode: false })
+Cypress.Commands.add('login', (email = 'reg130@o-k.tech', password = 'a123456') => {
+  cy.visit('http://localhost:8500/super_login', { failOnStatusCode: false })
   cy.get("input[name='Email']")
     .focus()
     .type(email)

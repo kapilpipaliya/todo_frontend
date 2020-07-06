@@ -5,6 +5,7 @@
   import { css_count } from '../../../css';
   export let name;
   export let disabled;
+  export let error = '';
 
   const hooks = new Set([
     'onChange',
@@ -20,7 +21,7 @@
   export let value = '';
   export let element = null;
   export let dateFormat = null;
-
+  value = value || '';
   declare let $$props;
   let allProps = $$props;
 
@@ -34,14 +35,6 @@
 
   css_count.increase('flatpickr');
   onMount(async () => {
-    //let flatpickr
-    try {
-      /*const {default: flatpickr_} =*/ await import('https://unpkg.com/flatpickr/dist/flatpickr.js');
-      //flatpickr = flatpickr_
-    } catch (err) {
-      console.warn(err.message);
-      return;
-    }
     const elem = element || input;
     fp = flatpickr(elem, Object.assign(addHooks(options), element ? { wrap: true } : {}));
 
@@ -94,3 +87,6 @@
 <slot>
   <input bind:this={input} {...props} {disabled} />
 </slot>
+{#if error}
+  <span>{error}</span>
+{/if}

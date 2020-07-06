@@ -1,16 +1,16 @@
 describe('Login Test', () => {
   it('Login 5 Times', () => {
-    cy.visit('/account/login', { failOnStatusCode: false })
+    cy.visit('/login', { failOnStatusCode: false })
     const login = () => {
       cy.get("input[name='Email']")
         .focus()
-        .type('test@o-k.tech')
+        .type('reg137@o-k.tech')
       cy.get("input[name='Pass']")
         .focus()
-        .type('1')
+        .type('a123456')
       cy.get("button.success[type='submit']").click()
-      cy.get("[href='/account/logout']").click()
-      cy.get("[href='/account/login']").click()
+      cy.get("[href='/logout']").click()
+      cy.get("[href='/super_login']").click()
     }
     login()
     login()

@@ -26,13 +26,15 @@
   let subtitle;
   $: title = view(lensPath([schema_key, 'title']), $translation);
   $: subtitle = view(lensPath([schema_key, 'subtitle']), $translation);
+  $: type = currentRoute?.queryParams?.type ?? ''
+  $: message = currentRoute?.queryParams?.message ?? ''
 </script>
 
 <svelte:head>
   <title>{title}</title>
 </svelte:head>
-{#if currentRoute.queryParams.message}
-  <span class={currentRoute.queryParams.type}>{currentRoute.queryParams.message}</span>
+{#if message}
+  <span class={type}>{message}</span>
 {/if}
 {#if title}
   <div>

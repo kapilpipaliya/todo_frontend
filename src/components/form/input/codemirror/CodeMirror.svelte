@@ -8,6 +8,7 @@
   const dispatch = createEventDispatcher();
   export let name;
   export let value = '';
+  export let error = '';
   export let readonly = false;
   export let errorLoc = null;
   // export let flex = false;
@@ -330,4 +331,7 @@
 <textarea tabindex="0" bind:this={refs.editor} readonly {value} />
 {#if !CodeMirror}
   <pre>{value}</pre>
+{/if}
+{#if error}
+  <span>{error}</span>
 {/if}

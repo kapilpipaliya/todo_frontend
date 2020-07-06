@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, createEventDispatcher, tick } from 'svelte';
-  import Editor from '../../../../thirdparty/cl-editor/src/Editor.svelte';
+  import Editor from '../../../utils/cl-editor/src/Editor.svelte';
   import Label from '../Label.svelte';
   export let name;
   export let required;
@@ -8,6 +8,7 @@
   export let value;
   export let props = {};
   export let dom = null;
+  export let error = '';
   let cleditorInstance;
   // Initialize editor
   onMount(async () => {
@@ -68,3 +69,6 @@
 
 <Label {name} />
 <Editor bind:this={dom} on:change={onChange} height="300px" html={value} removeFormatTags={['h1', 'h2', 'blackquote']} />
+{#if error}
+  <span>{error}</span>
+{/if}

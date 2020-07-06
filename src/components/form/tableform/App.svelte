@@ -8,7 +8,7 @@
   ];
   let values = [1, 10];
 
-  let dp = "r[1]+' '+r[2]";
+  let dp = [1, ' - ', 2];
   let keyIdx = 0;
 </script>
 

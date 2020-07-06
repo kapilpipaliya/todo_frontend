@@ -12,6 +12,7 @@
   export let value;
   export let props = {};
   export let dom = null;
+  export let error = '';
   let er = '';
   let progressBar;
   let percentageDiv;
@@ -99,3 +100,6 @@
 <input {name} bind:this={dom} type="file" bind:value {required} autocomplete={false} {disabled} {...props} />
 <input type="button" on:click={UpladFile} value="Upload" />
 <input type="button" on:click={cancleUploadFile} value="Cancel" />
+{#if error}
+  <span>{error}</span>
+{/if}

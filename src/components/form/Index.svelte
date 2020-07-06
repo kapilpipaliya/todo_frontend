@@ -11,18 +11,17 @@
   import { get, writable } from 'svelte/store';
   import { Ws, ws_connected } from '../../ws_events_dispatcher';
   declare let $ws_connected;
-  import { ET, E, schemaEvents } from '../../enums';
-  import { is_production, ValueType } from '../../enums';
+  import { ET, E, schemaEvents, is_production, ValueType, FormSchemaDataIndex, Success, FormErrorIndex } from '../../enums';
   declare let $is_production;
   import { css_loading, css_count } from '../../css';
   import { Debug, showDebug } from '../UI/debug';
-  import { getNotificationsContext } from '../../../thirdparty/svelte-notifications/src/index';
+  import { getNotificationsContext } from '../../utils/svelte-notifications/src/index';
   import { translation } from '../../translation';
   import { isNumber, isString, isPlainObj } from 'ramda-adjunct';
   import { view, lensPath } from 'ramda';
   import { clone } from 'rambda';
   import Html from '../UI/Html.svelte';
-  import GeneralInput from './RealForm.svelte';
+  import GeneralInput from './GeneralInput.svelte';
   import SubmitButton from './SubmitButton.svelte';
   import CancelButton from './CancelButton.svelte';
   // import Error from '../UI/Error.svelte'
@@ -77,7 +76,7 @@
       mutate_evt = [ET.insert, events[1], uid];
     }
     if (!data_evt) {
-      schemaGetEvt = [ET.get, E.form_schema_get, key];
+      schemaGetEvt = [ET.get, E.form_schema_get, uid];
     } else {
       schemaGetEvt = [];
     }
@@ -119,32 +118,39 @@
     return array2;
   }
   let showKey = !$is_production;
-  function onDataGet(d) {
-    if (!d[0]) {
-      er = d[1];
-    } else if (Array.isArray(d[0])) {
-      const schema = d[0][0];
-      const options_new = d[0][1] ?? {};
-      const newOptions = { ...options, ...options_new };
-      options = newOptions;
-      headers = schema;
-      if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels;
-      if (newOptions.l) layout = newOptions.l;
-      if (newOptions.k) showKey = newOptions.k;
-      if (newOptions.replace && key) {
-        mutate_evt[0] = ET.replace;
-        Ws.bind$(mutate_evt, onMutateGet, 1);
-      }
-      const form_values = d[1];
-      const form_new = onFormDataGetStatic(form_values);
-      if (!form_new) {
-        er = 'form_values is invalid';
-      }
-      const new_form = merge(form, form_new);
-      form = new_form;
-      initial_form = clone(new_form);
+  function onDagaGetSuccess([schema, data]) {
+    const options_new = schema[FormSchemaDataIndex.FORM_OPTIONS] ?? {};
+    const newOptions = { ...options, ...options_new };
+    options = newOptions;
+    headers = schema;
+    if (newOptions.buttonlabels) buttonlabels = newOptions.buttonlabels;
+    if (newOptions.l) layout = newOptions.l;
+    if (newOptions.k) showKey = newOptions.k;
+    if (newOptions.replace && key) {
+      mutate_evt[0] = ET.replace;
+      Ws.bind$(mutate_evt, onMutateGet, 1);
+    }
+    const form_values = data;
+    const form_new = onFormDataGetStatic(form_values);
+    if (!form_new) {
+      er = 'form_values is invalid';
+    }
+    const new_form = merge(form, form_new);
+    form = new_form;
+    initial_form = clone(new_form);
 
-      form_disabled = options.ds ?? false; // options.disabled
+    form_disabled = options.ds ?? false; // options.disabled
+  }
+  let fieldErrors = [];
+  function onDataGet(d) {
+    if (!Array.isArray(d)) {
+      console.log('cant process form data');
+      return;
+    }
+    if (d[0] === Success.FAIL) {
+      er = d[1];
+    } else {
+      onDagaGetSuccess(d);
     }
   }
   function onFormDataGetStatic(d) {
@@ -181,12 +187,12 @@
   let description = [];
   let props = [];
   $: {
-    labels = headers[0] ?? [];
-    types = headers[1] ?? [];
-    required = headers[2] ?? [];
-    disabled = headers[3] ?? [];
-    description = headers[4] ?? [];
-    props = headers[5] ?? [];
+    labels = headers[FormSchemaDataIndex.LABEL] ?? [];
+    types = headers[FormSchemaDataIndex.TYPE] ?? [];
+    required = headers[FormSchemaDataIndex.IS_REQUIRED] ?? [];
+    disabled = headers[FormSchemaDataIndex.SORT_DISABLED] ?? [];
+    description = headers[FormSchemaDataIndex.DESCRIPTION] ?? [];
+    props = headers[FormSchemaDataIndex.PROPS] ?? [];
   }
   css_count.increase('submit_buttons');
   css_count.increase(schema_key);
@@ -228,19 +234,19 @@
       form = clone(initial_form);
     }
   }
-  const { addNotification } = getNotificationsContext();
+  //const { addNotification } = getNotificationsContext();
   const dp = createEventDispatcher();
   function onMutateGet(d) {
     isSaving = false;
     if (d[0]) {
       const save_msg = view(lensPath(['msg', 'save']), $translation);
       if (options.notify) {
-        addNotification({
+        /*addNotification({
           text: save_msg,
           position: 'bottom-right',
           type: 'success',
           removeAfter: 4000
-        });
+        });*/
       }
       er = '';
       if (emitEvent) {
@@ -249,6 +255,7 @@
       onReset();
     } else {
       er = d[1];
+      fieldErrors = d[FormErrorIndex.FieldErrors] || [];
     }
   }
 
@@ -377,6 +384,7 @@
             {#if isNumber(i)}
               {#if types[i]}
                 <GeneralInput
+                  {showKey}
                   bind:value={form[i]}
                   type={types[i]}
                   label={labels[i]}
@@ -384,7 +392,8 @@
                   disabled={isDisabled(form_disabled, i)}
                   description={description[i]}
                   bind:dom={doms[i]}
-                  props={props[i]} />
+                  props={props[i]}
+                  error={fieldErrors[i]} />
               {/if}
             {:else if isPlainObj(i)}
               {@html i.l}
@@ -404,7 +413,8 @@
               disabled={isDisabled(form_disabled, i)}
               description={description[i]}
               bind:dom={doms[i]}
-              props={props[i]} />
+              props={props[i]}
+              error={fieldErrors[i]} />
           {/if}
         {/each}
       {/if}
